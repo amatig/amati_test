@@ -1,6 +1,6 @@
 #!/usr/bin/python -O
 
-import socket, random
+import socket, re, random
 
 class IrcBot():
     delimeter = "\r\n";
@@ -15,9 +15,12 @@ class IrcBot():
         self.s.connect((self.server, self.port))
         
         self.send("NICK %s" % self.nick)
-        self.send("USER 666 %s PythonBot :%s" % (self.server, self.nick))
+        self.send("USER %s %s %s :%s" % (self.nick, 
+                                         self.server,
+                                         self.server, 
+                                         self.nick))
         self.send("JOIN %s" % self.channel)
-        self.send("TOPIC %s dsadsadsadsa" % self.channel)
+        self.send("TOPIC %s GdrTest" % self.channel)
         
         while 1:
             ricev = self.s.recv(1024)
@@ -27,27 +30,33 @@ class IrcBot():
             cmd = ""
             chan = ""
             msg = ""
+            
+            m = re.search("^:(.*)!(.*)\ (.*)\ (.*)\ :(.*)$", ricev)
             try:
-                tmp = ricev.split("!")
-                user = tmp[0].lstrip(":")
-                data = tmp[1].split(" ")
-                cmd = data[1]
-                chan = data[2]
-                msg = data[3].lstrip(":")
+                msg = m.group(5)
+                user = m.group(1)
+                cmd = m.group(3)
+                chan = m.group(4)
             except:
-                pass
+                m = re.search("^:(.*)!(.*)\ (.*)\ :(.*)$", ricev)
+                try:
+                    user = m.group(1)
+                    cmd = m.group(3)
+                    chan = m.group(4)
+                except:
+                    pass
             
             if ricev.startswith("PING "):
                 self.send("PONG " + ricev.split()[1])            
             elif cmd == "KICK":
                 self.send("JOIN %s" % self.channel)
-            #elif cmd == "JOIN":
-            #    if user != self.nick:
-            #        self.send("PRIVMSG %s :Benvenuto..." % user)
+            elif cmd == "JOIN":
+                if user != self.nick:
+                    self.send("PRIVMSG %s :Benvenuto..." % user)
             elif msg.find("ciao") != -1:
-                self.send("PRIVMSG %s :Sto dormendo..." % self.channel)
+                self.send("PRIVMSG %s :Sto dormendo..." % user)
             elif msg.find("vito") != -1:
-                self.send("PRIVMSG %s :Vito e' nei campi" % self.channel)
+                self.send("PRIVMSG %s :Vito e' nei campi" % user)
         
     def send(self, msg):
         self.s.send(msg + self.delimeter)
@@ -56,4 +65,4 @@ class IrcBot():
 if __name__ == "__main__":
     IrcBot("gmbot_%s" % random.randint(0, 1000), 
            "irc.freenode.net", 
-           "#example")
+           "#amati2010")
