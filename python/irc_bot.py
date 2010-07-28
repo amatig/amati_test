@@ -1,6 +1,12 @@
 #!/usr/bin/python -O
 
-import sys, socket, re, random
+# Questo BOT e' implementato per poter non essere sempre presente nel canale.
+# Funziona tenedo il ChanServ come operatore nella stanza che, alla connessione 
+# del BOT, gli assegna diritti di operatore. 
+# Il BOT deve essere aggiunto al GROUP del creatore della stanza o comunque 
+# avere diritti sul ChanServ.
+
+import sys, socket, re, random, time
 
 class IrcBot():
     delimeter = "\r\n";
@@ -21,9 +27,12 @@ class IrcBot():
                                          self.nick,
                                          self.server, 
                                          self.realname))
-        self.send("NS identify %s" % self.password)
+        if self.password:
+            self.send("NS identify %s" % self.password)
+        
+        time.sleep(15)
         self.send("JOIN %s" % self.channel)
-        self.send("CS op %s %s" % self.channel, self.nick)
+        self.send("CS op %s %s" % (self.channel, self.nick))
         #self.send("TOPIC %s Test" % self.channel)
         
         while 1:
@@ -71,6 +80,6 @@ class IrcBot():
 if __name__ == "__main__":
     IrcBot("game_master",
            "Game Master",
-           len(sys.argv) > 1 and sys.argv[1] or "",
+           len(sys.argv) > 1 and sys.argv[1] or None,
            "irc.freenode.net", 
            "#sleipnir")
