@@ -1,10 +1,12 @@
 #!/usr/bin/python -O
 
-# Questo BOT e' implementato per poter non essere sempre presente nel canale.
-# Funziona tenedo il ChanServ come operatore nella stanza che, alla connessione 
-# del BOT, gli assegna diritti di operatore. 
-# Il BOT deve essere aggiunto al GROUP del creatore della stanza o comunque 
-# avere diritti sul ChanServ.
+""" 
+Questo BOT e' implementato per poter non essere sempre presente nel canale.
+Funziona tenedo il ChanServ come operatore nella stanza che, alla connessione 
+del BOT, gli assegna diritti di operatore. 
+Il BOT deve essere aggiunto al GROUP del creatore della stanza o comunque 
+avere diritti sul ChanServ.
+"""
 
 import sys, socket, re, random, time
 
@@ -30,7 +32,6 @@ class IrcBot():
         if self.password:
             self.send("NS identify %s" % self.password)
         
-        time.sleep(15)
         self.send("JOIN %s" % self.channel)
         self.send("CS op %s %s" % (self.channel, self.nick))
         #self.send("TOPIC %s Test" % self.channel)
@@ -42,39 +43,43 @@ class IrcBot():
             if ricev.startswith("PING "):
                 self.send("PONG " + ricev.split()[1])            
             else:
-                user = ""
-                cmd = ""
-                chan = ""
-                msg = ""
-                
-                m = re.search("^:(.*)!(.*)\ (.*)\ (.*)\ :(.*)$", ricev)
-                try:
-                    msg = m.group(5)
-                    user = m.group(1)
-                    cmd = m.group(3)
-                    chan = m.group(4)
-                except:
-                    m = re.search("^:(.*)!(.*)\ (.*)\ :(.*)$", ricev)
-                    try:
-                        user = m.group(1)
-                        cmd = m.group(3)
-                        chan = m.group(4)
-                    except:
-                        pass
+                prefix, cmd, args = self.parse(ricev)
+                user = prefix.split("!")[0]
                 
                 if cmd == "KICK":
-                    self.send("JOIN %s" % self.channel)
+                    if args[1] == self.nick:
+                        self.send("JOIN %s" % args[0])
+                        self.send("CS op %s %s" % (args[0], self.nick))
                 elif cmd == "JOIN":
                     if user != self.nick:
                         self.send("PRIVMSG %s :Benvenuto..." % user)
-                elif msg.find("ciao") != -1:
-                    if chan != self.nick:
-                        self.send("PRIVMSG %s :Sto dormendo..." % chan)
-                    else:
-                        self.send("PRIVMSG %s :Sto dormendo..." % user)
-        
+                elif cmd == "NOTICE":
+                    pass
+                elif cmd == "PRIVMSG":
+                    if args[1].find("ciao") != -1:
+                        if args[0] != self.nick:
+                            self.send("PRIVMSG %s :Sto dormendo..." % args[0])
+                        else:
+                            self.send("PRIVMSG %s :Sto dormendo..." % user)
+    
     def send(self, msg):
         self.s.send(msg + self.delimeter)
+    
+    def parse(self, s):
+        if not s:
+            return "", "", ""
+        prefix = ""
+        trailing = []
+        if s[0] == ":":
+            prefix, s = s[1:].split(" ", 1)
+        if s.find(" :") != -1:
+            s, trailing = s.split(" :", 1)
+            args = s.split()
+            args.append(trailing)
+        else:
+            args = s.split()
+        command = args.pop(0)
+        return prefix, command, args        
 
 
 if __name__ == "__main__":
