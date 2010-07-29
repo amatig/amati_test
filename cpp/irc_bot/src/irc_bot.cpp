@@ -22,5 +22,16 @@ IrcBot::~IrcBot()
 
 void IrcBot::start()
 {
-  cout << "ciao" << endl;
+  Socket s;
+  s.create();
+  s.connect("irc.azzurra.org", 6667);
+  
+  string reply;
+  
+  s.send("NICK amatig\r\n");
+  s.send("USER amatig amatig bla :amatig\r\n");
+  s.send("JOIN #casd\r\n");
+  
+  s.recv(reply);
+  cout << reply << endl;
 }

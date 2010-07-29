@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 
+#include "my_socket.h"
+
 using namespace std;
 
 class IrcBot
