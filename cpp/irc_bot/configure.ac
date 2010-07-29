@@ -1,12 +1,12 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 
-AC_PREREQ([2.63])
+AC_PREREQ([2.61])
 AC_INIT([irc_bot], [0.1], [amatig@gmail.com])
 
 AC_CONFIG_HEADERS([config.h])
 
-AM_INIT_AUTOMAKE()
+AM_INIT_AUTOMAKE([1.10])
 
 # Checks for programs.
 AC_PROG_CXX
@@ -19,6 +19,5 @@ AC_PROG_CXX
 
 # Checks for library functions.
 
-AC_CONFIG_FILES([Makefile])
-AC_CONFIG_FILES([src/Makefile])
+AC_CONFIG_FILES([Makefile src/Makefile])
 AC_OUTPUT
