@@ -1,5 +1,5 @@
-//#include <iostream>
-//#include <string>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
@@ -14,6 +14,7 @@ class IrcBot
   string channel;
   
  public:
-  IrcBot();
-  //  ~IrcBot();
+  IrcBot(string, string, string, string, int, string);
+  ~IrcBot();
+  void start();
 };

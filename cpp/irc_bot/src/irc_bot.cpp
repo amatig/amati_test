@@ -1,16 +1,26 @@
 #include "irc_bot.h"
 
-IrcBot::IrcBot(string nick,
-	       string realname,
-	       string password,
-	       string server,
-	       int port,
-	       string channel)
+IrcBot::IrcBot(string name,
+	       string realn,
+	       string passwd,
+	       string serv,
+	       int p,
+	       string chan)
 {
-  /*this.nick = nick;
-  this.realname = realname;
-  this.password = password;
-  this.server = server;
-  this.port = port;
-  this.channel = channel;*/
+  nick = name;
+  realname = realn;
+  password = passwd;
+  server = serv;
+  port = p;
+  channel = chan;
+}
+
+IrcBot::~IrcBot() 
+{
+
+}
+
+void IrcBot::start()
+{
+  cout << "ciao" << endl;
 }
