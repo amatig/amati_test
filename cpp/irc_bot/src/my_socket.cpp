@@ -50,7 +50,7 @@ int Socket::recv(std::string& s)
   
   if (status == -1)
     {
-      //std::cout << "status == -1   errno == " << errno << "  in Socket::recv\n";
+      //std::cout << "status == -1 errno == " << errno << " in Socket::recv" << std::endl;
       return 0;
     }
   else if (status == 0)

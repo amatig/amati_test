@@ -24,10 +24,8 @@ class Socket
   
   // Server initialization
   bool create();
-  
   // Client initialization
   bool connect(std::string, int);
-  
   // Data Transimission
   bool send(std::string);
   int recv(std::string&);
