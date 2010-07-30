@@ -86,5 +86,5 @@ if __name__ == "__main__":
     IrcBot("game_master",
            "Game Master",
            len(sys.argv) > 1 and sys.argv[1] or None,
-           "irc.freenode.net", 
-           "#sleipnir")
+           "irc.astrolink.org", 
+           "#provola")

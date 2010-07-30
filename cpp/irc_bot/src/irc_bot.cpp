@@ -31,8 +31,8 @@ void IrcBot::connect()
     exit(0);
   }
   
-  s.send("NICK " + nick);
   s.send("USER " + nick + " " + nick + " " + server + " :" + realname);
+  s.send("NICK " + nick);
   s.send("JOIN " + channel); // passwd canale?
   
   std::string reply;

@@ -2,7 +2,7 @@
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
-//#include <iostream>
+#include <iostream>
 
 Socket::Socket():
   m_sock(-1)
@@ -28,6 +28,7 @@ bool Socket::connect(std::string host, int port)
   
   m_addr.sin_family = AF_INET;
   m_addr.sin_port = htons(port);
+  
   hostent *h = gethostbyname(host.c_str());
   m_addr.sin_addr.s_addr = ((in_addr*)h->h_addr)->s_addr;
   //m_addr.sin_addr.s_addr = inet_addr("62.211.73.232");
@@ -64,7 +65,7 @@ int Socket::recv(std::string& s)
   
   if (status == -1)
     {
-      //std::cout << "status == -1 errno == " << errno << " in Socket::recv" << std::endl;
+      std::cout << "status == -1 errno == " << errno << " in Socket::recv" << std::endl;
       return 0;
     }
   else if (status == 0)
