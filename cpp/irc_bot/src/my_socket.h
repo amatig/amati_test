@@ -9,8 +9,8 @@
 #include <arpa/inet.h>
 #include <string>
 
-const int MAXHOSTNAME = 200;
-const int MAXRECV = 500;
+const int MAX_RECV = 1024;
+const std::string DELIMETER = "\r\n";
 
 class Socket
 {
@@ -24,14 +24,15 @@ class Socket
   
   // Server initialization
   bool create();
+  
   // Client initialization
-  bool connect(const std::string, const int);
+  bool connect(std::string, int);
   
   // Data Transimission
-  bool send(const std::string) const;
-  int recv(std::string&) const;
-  void set_non_blocking(const bool);
-  bool is_valid() const { return m_sock != -1; }
+  bool send(std::string);
+  int recv(std::string&);
+  void set_non_blocking(bool);
+  bool is_valid() { return m_sock != -1; }
 };
 
 #endif

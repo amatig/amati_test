@@ -7,9 +7,9 @@ int main(int argc, char *argv[])
 	     "",
 	     "irc.azzurra.org",
 	     6667,
-	     "#zero0");
+	     "#casd");
   
-  bot.start();
+  bot.connect();
   
   return 0;
 }

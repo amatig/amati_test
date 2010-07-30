@@ -1,11 +1,12 @@
 #include "irc_bot.h"
+#include <iostream>
 
-IrcBot::IrcBot(string name,
-	       string realn,
-	       string passwd,
-	       string serv,
+IrcBot::IrcBot(std::string name,
+	       std::string realn,
+	       std::string passwd,
+	       std::string serv,
 	       int p,
-	       string chan)
+	       std::string chan)
 {
   nick = name;
   realname = realn;
@@ -20,18 +21,22 @@ IrcBot::~IrcBot()
 
 }
 
-void IrcBot::start()
+void IrcBot::connect()
 {
   Socket s;
   s.create();
-  s.connect("irc.azzurra.org", 6667);
+  s.connect(server, port);
   
-  string reply;
+  s.send("NICK " + nick);
+  s.send("USER " + nick + " " + nick + " " + server + " :" + realname);
+  s.send("JOIN " + channel);
   
-  s.send("NICK amatig201\r\n");
-  s.send("USER amatig201 amatig201 bla :amatig\r\n");
-  s.send("JOIN #casd\r\n");
+  std::string reply;
   
-  s.recv(reply);
-  cout << reply << endl;
+  bool running = true;
+  while (running)
+    {
+      s.recv(reply);
+      std::cout << reply << std::endl;
+    }
 }

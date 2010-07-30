@@ -1,8 +1,8 @@
 #include "my_socket.h"
-
 #include <string.h>
 #include <errno.h>
 #include <fcntl.h>
+//#include <iostream>
 
 Socket::Socket():
   m_sock(-1)
@@ -12,27 +12,26 @@ Socket::Socket():
 
 Socket::~Socket()
 {
-  if (is_valid())
-    ::close(m_sock);
+  if (is_valid()) ::close(m_sock);
 }
 
 bool Socket::create()
 {
   m_sock = socket(AF_INET, SOCK_STREAM, 0);
   
-  if (!is_valid())
-    return false;
+  if (!is_valid()) return false;
   
   // TIME_WAIT - argh
   int on = 1;
   if (setsockopt(m_sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&on, sizeof(on)) == -1)
     return false;
-  
-  return true;
+  else
+    return true;
 }
 
-bool Socket::send(const std::string s) const
+bool Socket::send(std::string s)
 {
+  s += DELIMETER;
   int status = ::send(m_sock, s.c_str(), s.size(), MSG_NOSIGNAL);
   
   if (status == -1)
@@ -41,15 +40,13 @@ bool Socket::send(const std::string s) const
     return true;
 }
 
-int Socket::recv(std::string& s) const
+int Socket::recv(std::string& s)
 {
-  char buf[MAXRECV + 1];
-  
   s = "";
+  char buf[MAX_RECV + 1];  
+  memset(buf, 0, MAX_RECV + 1);
   
-  memset(buf, 0, MAXRECV + 1);
-  
-  int status = ::recv(m_sock, buf, MAXRECV, 0);
+  int status = ::recv(m_sock, buf, MAX_RECV, 0);
   
   if (status == -1)
     {
@@ -65,13 +62,15 @@ int Socket::recv(std::string& s) const
     }
 }
 
-bool Socket::connect(const std::string host, const int port)
+bool Socket::connect(std::string host, int port)
 {
   if (!is_valid()) return false;
   
   m_addr.sin_family = AF_INET;
   m_addr.sin_port = htons(port);
-  m_addr.sin_addr.s_addr = inet_addr("85.94.194.111");
+  
+  hostent *h = gethostbyname(host.c_str());
+  m_addr.sin_addr.s_addr = ((in_addr*)h->h_addr)->s_addr;
   
   int status = inet_pton(AF_INET, host.c_str(), &m_addr.sin_addr);
   
@@ -85,7 +84,7 @@ bool Socket::connect(const std::string host, const int port)
     return false;
 }
 
-void Socket::set_non_blocking(const bool b)
+void Socket::set_non_blocking(bool b)
 {
   int opts;
   opts = fcntl(m_sock, F_GETFL);
@@ -96,5 +95,5 @@ void Socket::set_non_blocking(const bool b)
   else
     opts = (opts & ~O_NONBLOCK);
   
-  fcntl(m_sock, F_SETFL,opts);
+  fcntl(m_sock, F_SETFL, opts);
 }

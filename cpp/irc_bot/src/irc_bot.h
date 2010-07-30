@@ -1,22 +1,18 @@
-#include <iostream>
 #include <string>
-
 #include "my_socket.h"
-
-using namespace std;
 
 class IrcBot
 {
  private:
-  string nick;
-  string realname;
-  string password;
-  string server;
+  std::string nick;
+  std::string realname;
+  std::string password;
+  std::string server;
   int port;
-  string channel;
+  std::string channel;
   
  public:
-  IrcBot(string, string, string, string, int, string);
-  ~IrcBot();
-  void start();
+  IrcBot(std::string, std::string, std::string, std::string, int, std::string);
+  virtual ~IrcBot();
+  void connect();
 };
