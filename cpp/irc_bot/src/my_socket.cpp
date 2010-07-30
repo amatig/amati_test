@@ -15,18 +15,32 @@ Socket::~Socket()
   if (is_valid()) ::close(m_sock);
 }
 
-bool Socket::create()
+bool Socket::connect(std::string host, int port)
 {
   m_sock = socket(AF_INET, SOCK_STREAM, 0);
-  
   if (!is_valid()) return false;
   
   // TIME_WAIT - argh
   int on = 1;
   if (setsockopt(m_sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&on, sizeof(on)) == -1)
     return false;
-  else
+  if (!is_valid()) return false;
+  
+  m_addr.sin_family = AF_INET;
+  m_addr.sin_port = htons(port);
+  hostent *h = gethostbyname(host.c_str());
+  m_addr.sin_addr.s_addr = ((in_addr*)h->h_addr)->s_addr;
+  //m_addr.sin_addr.s_addr = inet_addr("62.211.73.232");
+  
+  int status = inet_pton(AF_INET, host.c_str(), &m_addr.sin_addr);
+  if (errno == EAFNOSUPPORT) return false;
+  
+  status = ::connect(m_sock, (sockaddr*)&m_addr, sizeof(m_addr));
+  
+  if (status == 0)
     return true;
+  else
+    return false;
 }
 
 bool Socket::send(std::string s)
@@ -60,40 +74,4 @@ int Socket::recv(std::string& s)
       s = buf;
       return status;
     }
-}
-
-bool Socket::connect(std::string host, int port)
-{
-  if (!is_valid()) return false;
-  
-  m_addr.sin_family = AF_INET;
-  m_addr.sin_port = htons(port);
-  
-  hostent *h = gethostbyname(host.c_str());
-  m_addr.sin_addr.s_addr = ((in_addr*)h->h_addr)->s_addr;
-  
-  int status = inet_pton(AF_INET, host.c_str(), &m_addr.sin_addr);
-  
-  if (errno == EAFNOSUPPORT) return false;
-  
-  status = ::connect(m_sock, (sockaddr*)&m_addr, sizeof(m_addr));
-  
-  if (status == 0)
-    return true;
-  else
-    return false;
-}
-
-void Socket::set_non_blocking(bool b)
-{
-  int opts;
-  opts = fcntl(m_sock, F_GETFL);
-  if (opts < 0) return;
-  
-  if (b)
-    opts = (opts | O_NONBLOCK);
-  else
-    opts = (opts & ~O_NONBLOCK);
-  
-  fcntl(m_sock, F_SETFL, opts);
 }

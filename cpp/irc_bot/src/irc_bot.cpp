@@ -1,4 +1,5 @@
 #include "irc_bot.h"
+#include <stdlib.h>
 #include <iostream>
 
 IrcBot::IrcBot(std::string name,
@@ -16,7 +17,7 @@ IrcBot::IrcBot(std::string name,
   channel = chan;
 }
 
-IrcBot::~IrcBot() 
+IrcBot::~IrcBot()
 {
 
 }
@@ -24,12 +25,15 @@ IrcBot::~IrcBot()
 void IrcBot::connect()
 {
   Socket s;
-  s.create();
-  s.connect(server, port);
+  if (!s.connect(server, port))
+  {
+    std::cout << "Error connecting to server..." << std::endl;
+    exit(0);
+  }
   
   s.send("NICK " + nick);
   s.send("USER " + nick + " " + nick + " " + server + " :" + realname);
-  s.send("JOIN " + channel);
+  s.send("JOIN " + channel); // passwd canale?
   
   std::string reply;
   

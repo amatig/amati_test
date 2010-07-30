@@ -1,5 +1,8 @@
-#include <string>
+#ifndef __IRC_BOT__
+#define __IRC_BOT__
+
 #include "my_socket.h"
+#include <string>
 
 class IrcBot
 {
@@ -16,3 +19,5 @@ class IrcBot
   virtual ~IrcBot();
   void connect();
 };
+
+#endif

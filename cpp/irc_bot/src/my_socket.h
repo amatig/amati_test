@@ -21,15 +21,9 @@ class Socket
  public:
   Socket();
   virtual ~Socket();
-  
-  // Server initialization
-  bool create();
-  // Client initialization
   bool connect(std::string, int);
-  // Data Transimission
   bool send(std::string);
   int recv(std::string&);
-  void set_non_blocking(bool);
   bool is_valid() { return m_sock != -1; }
 };
 
