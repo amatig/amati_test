@@ -28,8 +28,8 @@ void IrcBot::start()
   
   string reply;
   
-  s.send("NICK amatig\r\n");
-  s.send("USER amatig amatig bla :amatig\r\n");
+  s.send("NICK amatig201\r\n");
+  s.send("USER amatig201 amatig201 bla :amatig\r\n");
   s.send("JOIN #casd\r\n");
   
   s.recv(reply);

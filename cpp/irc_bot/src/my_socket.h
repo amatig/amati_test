@@ -10,7 +10,6 @@
 #include <string>
 
 const int MAXHOSTNAME = 200;
-const int MAXCONNECTIONS = 5;
 const int MAXRECV = 500;
 
 class Socket
@@ -25,10 +24,6 @@ class Socket
   
   // Server initialization
   bool create();
-  bool bind(const int);
-  bool listen() const;
-  bool accept(Socket&) const;
-  
   // Client initialization
   bool connect(const std::string, const int);
   
