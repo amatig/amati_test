@@ -1,8 +1,10 @@
+
 #ifndef __IRC_BOT__
 #define __IRC_BOT__
 
 #include "my_socket.h"
 #include <string>
+#include <vector>
 
 class IrcBot
 {
@@ -12,7 +14,8 @@ class IrcBot
   std::string realname;
   std::string password;
   
-  void auth(std::string, std::string);
+  void authentication();
+  std::vector<std::string> split(const std::string&, const char*);
   void dispatcher(std::string);
   
  public:
