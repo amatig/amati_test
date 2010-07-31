@@ -9,8 +9,8 @@
 #include <arpa/inet.h>
 #include <string>
 
-const int MAX_RECV = 1024;
-const std::string DELIMETER = "\r\n";
+#define MAX_RECV 1024
+#define DELIMETER "\r\n"
 
 class Socket
 {
