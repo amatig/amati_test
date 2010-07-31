@@ -24,11 +24,11 @@ class IrcBot():
         self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.s.connect((self.server, self.port))
         
-        self.send("NICK %s" % self.nick)
         self.send("USER %s %s %s :%s" % (self.nick, 
                                          self.nick,
                                          self.server, 
                                          self.realname))
+        self.send("NICK %s" % self.nick)        
         if self.password:
             self.send("NS identify %s" % self.password)
         
@@ -64,6 +64,7 @@ class IrcBot():
     
     def send(self, msg):
         self.s.send(msg + self.delimeter)
+        time.sleep(2)
     
     def parse(self, s):
         if not s:
@@ -86,5 +87,5 @@ if __name__ == "__main__":
     IrcBot("game_master",
            "Game Master",
            len(sys.argv) > 1 and sys.argv[1] or None,
-           "irc.astrolink.org", 
-           "#provola")
+           "127.0.0.1", 
+           "#test")

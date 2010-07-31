@@ -2,14 +2,8 @@
 
 int main(int argc, char *argv[])
 {
-  IrcBot bot("game_master", 
-	     "Game Master",
-	     "",
-	     "irc.astrolink.org",
-	     6667,
-	     "#provola");
-  
-  bot.connect();
+  IrcBot bot("game_master", "Game Master", "");
+  bot.connect("127.0.0.1", 6667);
   
   return 0;
 }

@@ -4,17 +4,11 @@
 
 IrcBot::IrcBot(std::string name,
 	       std::string realn,
-	       std::string passwd,
-	       std::string serv,
-	       int p,
-	       std::string chan)
+	       std::string passwd)
 {
   nick = name;
   realname = realn;
   password = passwd;
-  server = serv;
-  port = p;
-  channel = chan;
 }
 
 IrcBot::~IrcBot()
@@ -22,25 +16,32 @@ IrcBot::~IrcBot()
 
 }
 
-void IrcBot::connect()
+void IrcBot::connect(std::string server, int port)
 {
-  Socket s;
-  if (!s.connect(server, port))
+  Socket sock;
+  if (!sock.connect(server, port))
   {
     std::cout << "Error connecting to server..." << std::endl;
     exit(0);
   }
   
-  s.send("USER " + nick + " " + nick + " " + server + " :" + realname);
-  s.send("NICK " + nick);
-  s.send("JOIN " + channel); // passwd canale?
+  sock.send("NICK " + nick + "\r\n" + 
+	    "USER " + nick + " " + nick + " " + server + " :" + realname);
+  //sleep(2);
+  //sock.send("JOIN #channel");
   
   std::string reply;
   
   bool running = true;
   while (running)
     {
-      s.recv(reply);
+      sock.recv(reply);
       std::cout << reply << std::endl;
+      
+      std::string prefix("PING ");
+      if (!reply.compare(0, prefix.size(), prefix))
+	sock.send("PONG " + reply.substr(reply.find(" ") + 1, reply.length()));
+      else if (reply.find("ciao") != -1)
+	sock.send("PRIVMSG " + reply.substr(1, reply.find("!") - 1) + " :sto dormendo...");
     }
 }

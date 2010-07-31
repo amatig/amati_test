@@ -10,14 +10,11 @@ class IrcBot
   std::string nick;
   std::string realname;
   std::string password;
-  std::string server;
-  int port;
-  std::string channel;
   
  public:
-  IrcBot(std::string, std::string, std::string, std::string, int, std::string);
+  IrcBot(std::string, std::string, std::string);
   virtual ~IrcBot();
-  void connect();
+  void connect(std::string, int);
 };
 
 #endif

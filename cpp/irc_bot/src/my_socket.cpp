@@ -25,10 +25,10 @@ bool Socket::connect(std::string host, int port)
   if (setsockopt(m_sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&on, sizeof(on)) == -1)
     return false;
   if (!is_valid()) return false;
+  // end argh
   
   m_addr.sin_family = AF_INET;
   m_addr.sin_port = htons(port);
-  
   hostent *h = gethostbyname(host.c_str());
   m_addr.sin_addr.s_addr = ((in_addr*)h->h_addr)->s_addr;
   //m_addr.sin_addr.s_addr = inet_addr("62.211.73.232");
@@ -46,6 +46,7 @@ bool Socket::connect(std::string host, int port)
 
 bool Socket::send(std::string s)
 {
+  //sleep(2); // si incastra a volte
   s += DELIMETER;
   int status = ::send(m_sock, s.c_str(), s.size(), MSG_NOSIGNAL);
   
