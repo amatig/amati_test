@@ -3,7 +3,6 @@
 
 #include "my_socket.h"
 #include <string>
-#include <vector>
 
 class IrcBot
 {
@@ -15,9 +14,6 @@ class IrcBot
   std::string password;
   
   void authentication();
-  void split(const std::string&, 
-	     std::vector<std::string>&, 
-	     const std::string& = " ");
   void dispatcher(std::string);
   void pong(std::string);
   void privmsg(std::string, std::string);
