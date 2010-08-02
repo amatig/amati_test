@@ -24,6 +24,7 @@ class Socket
   bool connect(std::string, int);
   bool send(std::string);
   int recv(std::string&);
+  void set_non_blocking(bool);
   bool is_valid() { return m_sock != -1; }
 };
 

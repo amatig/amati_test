@@ -8,6 +8,8 @@ IrcBot::IrcBot(std::string name, std::string realn, std::string passwd)
   nick = name;
   realname = realn;
   password = passwd;
+  
+  running = false;
 }
 
 void IrcBot::connect(std::string server, int port)
@@ -15,13 +17,14 @@ void IrcBot::connect(std::string server, int port)
   if (!sock.connect(server, port))
   {
     std::cout << "Error connecting to server..." << std::endl;
-    exit(0);
+    exit(1);
   }
   
+  sleep(1);
   authentication();
+  running = true;
   
   std::string data;
-  bool running = true;
   while (running)
     {
       sock.recv(data);
@@ -29,31 +32,40 @@ void IrcBot::connect(std::string server, int port)
     }
 }
 
-std::vector<std::string> IrcBot::split(const std::string &str, const char* delim)
+void IrcBot::split(const std::string& str, 
+		   std::vector<std::string>& tokens, 
+		   const std::string& delimiters)
 {
-  std::vector<std::string> vs;
-  char* token;
-  token = strtok((char*)str.c_str(), delim);
-  while (token != NULL)
+  // Skip delimiters at beginning.
+  std::string::size_type lastPos = str.find_first_not_of(delimiters, 0);
+  // Find first "non-delimiter".
+  std::string::size_type pos = str.find_first_of(delimiters, lastPos);
+  
+  while (std::string::npos != pos || std::string::npos != lastPos)
     {
-      vs.push_back(std::string(token));
-      token = strtok(NULL, delim);
+      // Found a token, add it to the vector.
+      tokens.push_back(str.substr(lastPos, pos - lastPos));
+      // Skip delimiters. Note the "not_of"
+      lastPos = str.find_first_not_of(delimiters, pos);
+      // Find next "non-delimiter"
+      pos = str.find_first_of(delimiters, lastPos);
     }
-  return vs;
 }
 
 void IrcBot::dispatcher(std::string data)
 {
-  std::vector<std::string> lines = split(data, DELIMETER);
+  std::vector<std::string> lines;
+  split(data, lines, DELIMETER);
+  
   for (int i = 0; i < lines.size(); i++)
     {
-      std::string row = lines[i];
+      std::string row = lines.at(i);
       std::cout << row << std::endl;
       
       int s = 0;
       std::string prefix;
       
-      if (row[0] == ':')
+      if (row.at(0) == ':')
 	{
 	  s = row.find(" ");
 	  prefix = row.substr(0, s);
@@ -70,8 +82,11 @@ void IrcBot::dispatcher(std::string data)
 	  if (cmd == "PRIVMSG")
 	    {
 	      std::string msg = row.substr(row.find(":") + 1, row.length());
+	      
 	      if (msg.find("ciao") != -1)
 		privmsg(target, "sto dormendo...");
+	      else if (msg.find("\\esci") != -1)
+		running = false;
 	    }
 	}
       else

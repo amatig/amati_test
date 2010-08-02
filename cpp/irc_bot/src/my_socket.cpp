@@ -12,7 +12,10 @@ Socket::Socket():
 
 Socket::~Socket()
 {
-  if (is_valid()) ::close(m_sock);
+  if (is_valid()) {
+    ::shutdown(m_sock, SHUT_RDWR); // interrompe tutti e due i flussu in/out
+    ::close(m_sock); // chiude il socket
+  }
 }
 
 bool Socket::connect(std::string host, int port)
@@ -32,11 +35,14 @@ bool Socket::connect(std::string host, int port)
   hostent *h = gethostbyname(host.c_str());
   m_addr.sin_addr.s_addr = ((in_addr*)h->h_addr)->s_addr;
   //m_addr.sin_addr.s_addr = inet_addr("62.211.73.232");
+  bzero(&(m_addr.sin_zero), 8);
   
   int status = inet_pton(AF_INET, host.c_str(), &m_addr.sin_addr);
   if (errno == EAFNOSUPPORT) return false;
   
   status = ::connect(m_sock, (sockaddr*)&m_addr, sizeof(m_addr));
+  
+  //set_non_blocking(true); // se si fa multi-thread
   
   if (status == 0)
     return true;
@@ -76,4 +82,15 @@ int Socket::recv(std::string& s)
       s = buf;
       return status;
     }
+}
+
+void Socket::set_non_blocking(bool b)
+{
+  int opts = fcntl(m_sock, F_GETFL); 
+  if (opts < 0) return;
+  if (b)
+    opts = (opts | O_NONBLOCK);
+  else
+    opts = (opts & ~O_NONBLOCK);
+  fcntl(m_sock, F_SETFL, opts);
 }
