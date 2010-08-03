@@ -1,35 +1,30 @@
 #include "irc_bot.h"
 #include "utils.h"
-#include <stdlib.h>
 #include <vector>
 #include <iostream>
 
-IrcBot::IrcBot(std::string name, std::string realn, std::string passwd)
+void IrcBot::run(std::string server, int port)
 {
-  nick = name;
-  realname = realn;
-  password = passwd;
-  running = false;
+  if (sock.connect(server, port))
+    {
+      //sleep(1);
+      authentication();
+      running = true;
+      
+      std::string data;
+      while (running)
+	{
+	  sock.recv(data);
+	  dispatcher(data);
+	}
+    }
+  else
+    std::cout << "Error connecting to server..." << std::endl;
 }
 
-void IrcBot::connect(std::string server, int port)
+void IrcBot::stop()
 {
-  if (!sock.connect(server, port))
-  {
-    std::cout << "Error connecting to server..." << std::endl;
-    exit(1);
-  }
-  
-  sleep(1);
-  authentication();
-  running = true;
-  
-  std::string data;
-  while (running)
-    {
-      sock.recv(data);
-      dispatcher(data);
-    }
+  running = false;
 }
 
 void IrcBot::dispatcher(std::string &data)
@@ -65,8 +60,8 @@ void IrcBot::dispatcher(std::string &data)
 	      
 	      if (msg.find("ciao") != -1)
 		privmsg(target, "sto dormendo...");
-	      //else if (msg.find("\\esci") != -1)
-	      //running = false;
+	      else if (msg.find("\\esci") != -1)
+		stop();
 	    }
 	}
       else

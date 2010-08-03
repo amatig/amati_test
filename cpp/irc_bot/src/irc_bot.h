@@ -19,9 +19,14 @@ class IrcBot
   void privmsg(std::string, std::string);
   
  public:
-  IrcBot(std::string, std::string, std::string = "");
+  IrcBot(std::string name, std::string realn, std::string passwd = ""):
+    nick(name),
+    realname(realn),
+    password(passwd),
+    running(false) {};
   virtual ~IrcBot() {};
-  void connect(std::string, int);
+  void run(std::string, int);
+  void stop();
 };
 
 #endif
