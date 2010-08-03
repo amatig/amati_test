@@ -41,8 +41,8 @@ bool Socket::connect(std::string host, int port)
   if (errno == EAFNOSUPPORT) return false;
   
   status = ::connect(m_sock, (sockaddr*)&m_addr, sizeof(m_addr));
-  
-  //set_non_blocking(true); // se si fa multi-thread
+  //set_non_blocking(true);
+  // se si fa multi-thread a + socket ma credo solo x il server
   
   if (status == 0)
     return true;
@@ -52,7 +52,7 @@ bool Socket::connect(std::string host, int port)
 
 bool Socket::send(std::string s)
 {
-  //sleep(2); // si incastra a volte
+  //sleep(1); // se si incastra per il Flooding
   s += DELIMETER;
   int status = ::send(m_sock, s.c_str(), s.size(), MSG_NOSIGNAL);
   
@@ -72,6 +72,7 @@ int Socket::recv(std::string& s)
   
   if (status == -1)
     {
+      // in caso di non blocking va a canna qui
       std::cout << "status == -1 errno == " << errno << " in Socket::recv" << std::endl;
       return 0;
     }
@@ -86,7 +87,7 @@ int Socket::recv(std::string& s)
 
 void Socket::set_non_blocking(bool b)
 {
-  int opts = fcntl(m_sock, F_GETFL); 
+  int opts = fcntl(m_sock, F_GETFL);
   if (opts < 0) return;
   if (b)
     opts = (opts | O_NONBLOCK);
