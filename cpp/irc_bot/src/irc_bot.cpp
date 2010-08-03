@@ -1,6 +1,5 @@
 #include "irc_bot.h"
 #include "utils.h"
-#include <string.h>
 #include <stdlib.h>
 #include <vector>
 #include <iostream>
@@ -10,7 +9,6 @@ IrcBot::IrcBot(std::string name, std::string realn, std::string passwd)
   nick = name;
   realname = realn;
   password = passwd;
-  
   running = false;
 }
 
@@ -34,7 +32,7 @@ void IrcBot::connect(std::string server, int port)
     }
 }
 
-void IrcBot::dispatcher(std::string data)
+void IrcBot::dispatcher(std::string &data)
 {
   std::vector<std::string> lines;
   split(data, lines, DELIMETER);
@@ -67,8 +65,8 @@ void IrcBot::dispatcher(std::string data)
 	      
 	      if (msg.find("ciao") != -1)
 		privmsg(target, "sto dormendo...");
-	      else if (msg.find("\\esci") != -1)
-		running = false;
+	      //else if (msg.find("\\esci") != -1)
+	      //running = false;
 	    }
 	}
       else

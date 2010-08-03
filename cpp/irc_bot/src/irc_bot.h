@@ -14,7 +14,7 @@ class IrcBot
   std::string password;
   
   void authentication();
-  void dispatcher(std::string);
+  void dispatcher(std::string&);
   void pong(std::string);
   void privmsg(std::string, std::string);
   
