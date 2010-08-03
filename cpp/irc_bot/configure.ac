@@ -14,6 +14,31 @@ AC_PROG_CXX
 
 # Checks for libraries.
 
+AC_ARG_ENABLE(pthread,
+	[--disable-pthread pthread support (default enable).],
+	[PTHREAD="$enableval"],
+	[PTHREAD="yes"])
+
+if test "$PTHREAD" = "yes"; then
+   AC_DEFINE(POSIX_MULTITHREAD_SUPPORT, 1,
+   [Define to 1 to build with pthreads support (--enable-pthreads)])
+   AC_DEFINE(_REENTRANT, 1,
+   [Define _REENTRANT for several plaforms])
+   AC_CHECK_LIB(pthreads, pthread_create, [],
+   [AC_CHECK_LIB(pthread, pthread_create)])
+   AC_CHECK_FUNCS(localtime_r strtok_r strerror_r pthread_mutexattr_settype)
+   if test x"$ac_cv_func_pthread_mutexattr_settype" = xyes; then
+      AC_TRY_COMPILE([#include <pthread.h>],
+      [ int i = PTHREAD_MUTEX_RECURSIVE;],
+      [AC_DEFINE(PG_RECURSIVE_MUTEXATTR, PTHREAD_MUTEX_RECURSIVE,
+      [Define if you have PTHREAD_MUTEX_RECURSIVE])], [
+      AC_TRY_COMPILE([#include <pthread.h>],
+      [ int i = PTHREAD_MUTEX_RECURSIVE_NP;],
+      [AC_DEFINE(PG_RECURSIVE_MUTEXATTR, PTHREAD_MUTEX_RECURSIVE_NP,
+      [Define if you have PTHREAD_MUTEX_RECURSIVE_NP])])])
+  fi
+fi
+
 # Checks for header files.
 
 # Checks for typedefs, structures, and compiler characteristics.

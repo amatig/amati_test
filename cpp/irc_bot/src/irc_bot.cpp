@@ -1,36 +1,21 @@
 #include "irc_bot.h"
 #include "utils.h"
+#include <pthread.h>
+#include <stdio.h>
 #include <vector>
 #include <iostream>
 
-void IrcBot::run(std::string server, int port)
+void *dispatcher(void *args)
 {
-  if (sock.connect(server, port))
-    {
-      //sleep(1);
-      authentication();
-      running = true;
-      
-      std::string data;
-      while (running)
-	{
-	  sock.recv(data);
-	  dispatcher(data);
-	}
-    }
-  else
-    std::cout << "Error connecting to server..." << std::endl;
-}
-
-void IrcBot::stop()
-{
-  running = false;
-}
-
-void IrcBot::dispatcher(std::string &data)
-{
+  pthread_t tid = pthread_self();
+  printf("THREAD 0x%x\n", tid);
+  
+  struct Args *a = (struct Args *)args;
+  IrcBot *self = (IrcBot *)a->object;
+  std::string *data = (std::string*)a->data;
+  
   std::vector<std::string> lines;
-  split(data, lines, DELIMETER);
+  split(*data, lines, DELIMETER);
   
   for (int i = 0; i < lines.size(); i++)
     {
@@ -59,17 +44,47 @@ void IrcBot::dispatcher(std::string &data)
 	      std::string msg = row.substr(row.find(":") + 1, row.length());
 	      
 	      if (msg.find("ciao") != -1)
-		privmsg(target, "sto dormendo...");
+		self->privmsg(target, "sto dormendo...");
 	      else if (msg.find("\\esci") != -1)
-		stop();
+		self->stop();
 	    }
 	}
       else
 	{
 	  if (cmd == "PING")
-	    pong(row);
+	    self->pong(row);
 	}
     }
+  pthread_exit((void *)0);
+}
+
+void IrcBot::run(std::string server, int port)
+{
+  if (sock.connect(server, port))
+    {
+      //sleep(1);
+      authentication();
+      running = true;
+      
+
+      std::string data;
+      while (running)
+	{
+	  sock.recv(data);
+	  struct Args args = {this, &data};
+	  pthread_t th;
+	  int temp = pthread_create(&th, NULL, dispatcher, &args);
+	  pthread_join(th, NULL);
+	  //dispatcher(data);
+	}
+    }
+  else
+    std::cout << "Error connecting to server..." << std::endl;
+}
+
+void IrcBot::stop()
+{
+  running = false;
 }
 
 void IrcBot::authentication()

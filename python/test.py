@@ -33,7 +33,7 @@ class IrcBot(Thread):
         self.s.send(msg + self.delimeter)
 
 if __name__ == "__main__":
-    n = 10
+    n = 4
     c = []
     t = time.time()
     for i in xrange(n):

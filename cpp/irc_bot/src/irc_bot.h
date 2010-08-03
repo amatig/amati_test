@@ -13,8 +13,9 @@ class IrcBot
   std::string realname;
   std::string password;
   
+  friend void *dispatcher(void *);
+  
   void authentication();
-  void dispatcher(std::string&);
   void pong(std::string);
   void privmsg(std::string, std::string);
   
@@ -27,6 +28,11 @@ class IrcBot
   virtual ~IrcBot() {};
   void run(std::string, int);
   void stop();
+};
+
+struct Args {
+  IrcBot *object;
+  std::string *data;
 };
 
 #endif
