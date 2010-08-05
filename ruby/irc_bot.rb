@@ -33,10 +33,14 @@ class IRC
     case s.strip
     when /^PING :(.+)$/i
       send "PONG :#{$1}"
-    when /^:(.+)!(.+)@(.+)\sPRIVMSG\s(.+)\s:(.+)$/i
-      send "PRIVMSG #{$1} :sto dormendo..."
+    when /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
+      process($1, $2, $3, $4)
     end
     puts s
+  end
+  
+  def process(user, extra, target, msg)
+    send "PRIVMSG #{user} :sto dormendo..."
   end
   
   def main_loop()
