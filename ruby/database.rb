@@ -22,12 +22,18 @@ class Database
     return nil
   end
   
-  def get_users()
+  def select(colums, tables, conditions = 1)
     row = []
     @mutex_db.synchronize do
-      row = @conn.execute("select * from users")
+      row = @conn.execute("select #{colums} from #{tables} where #{conditions}")
     end
+    return row
+  end
+  
+  def get_users()
+    row = select("*", "users")
     n = row.length > 1 ? "ci sono" : "c'e'"
     return "Nella zona #{n} " + row.join(", ")
   end
+  
 end
