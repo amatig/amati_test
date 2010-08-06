@@ -14,8 +14,8 @@ class Database
     #puts Thread.current
     case msg.strip
     when /ciao/i
-      return "PRIVMSG #{user} :sto dormendo..."
-    when /^chi.*qui?/i
+      return "PRIVMSG #{user} :Ciao..."
+    when /^chi.*qui\?$/i
       return "PRIVMSG #{user} :#{get_users}"
     end
     
