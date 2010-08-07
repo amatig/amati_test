@@ -6,21 +6,21 @@ class IrcBot
   def initialize(nick, realname)
     @nick = nick
     @realname = realname
-    
     @buffer = ""
     @delim = "\r\n"
-    @mutex = Mutex.new
     
+    @mutex = Mutex.new
     Thread.abort_on_exception = true
+    
     Thread.new do
       while true do
-        real_send
+        socket_send
         sleep 1.5
       end
     end
   end
   
-  def real_send
+  def socket_send
     @mutex.synchronize do
       if @buffer != ""
         #puts @buffer

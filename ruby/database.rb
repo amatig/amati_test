@@ -5,8 +5,8 @@ class Database
   
   def initialize(filename)
     @conn = SQLite3::Database.new filename
-    @mutex_db = Mutex.new
     
+    @mutex_conn = Mutex.new
     Thread.abort_on_exception = true
   end
   
@@ -24,7 +24,7 @@ class Database
   
   def select(colums, tables, conditions = 1)
     row = []
-    @mutex_db.synchronize do
+    @mutex_conn.synchronize do
       row = @conn.execute("select #{colums} from #{tables} where #{conditions}")
     end
     return row
