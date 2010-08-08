@@ -3,33 +3,33 @@
 require "ircbot.rb"
 require "database.rb"
 
-$SAFE=1
+$SAFE = 1
 
 class Mud < IrcBot
   
-  def initialize(db_name, nick, realname)
-    @db = Database.new db_name
+  def initialize(nick, realname, db_name)
     super(nick, realname)
+    @db = Database.new db_name
   end
   
-  def parse(s)
+  def parse(msg)
     #puts Thread.current
-    case s
+    case msg
     when /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
-      info = @db.process($1, $2, $3, $4)
-      if info
-        send info
+      data = @db.process($1, $2, $3, $4)
+      if data
+        send data
       else
         send "PRIVMSG #{$1} :Non ho capito..."
       end
     end
-    puts s
+    puts "receive: #{msg}"
   end
   
 end
 
 
-app = Mud.new("mud.db", "game_master", "Game Master")
+app = Mud.new("game_master", "Game Master", "./mud.db")
 app.connect("127.0.0.1", 6667)
 
 begin

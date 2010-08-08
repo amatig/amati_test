@@ -4,10 +4,11 @@ require "thread"
 class IrcBot
   
   def initialize(nick, realname)
+    @delim = "\r\n"
+    
     @nick = nick
     @realname = realname
     @buffer = ""
-    @delim = "\r\n"
     
     @mutex = Mutex.new
     Thread.abort_on_exception = true
@@ -15,15 +16,15 @@ class IrcBot
     Thread.new do
       while true do
         socket_send
-        sleep 1.5
+        sleep 1
       end
     end
   end
   
   def socket_send
     @mutex.synchronize do
-      if @buffer != ""
-        #puts @buffer
+      if not @buffer.empty?
+        puts "send: #{@buffer}"
         @irc.send(@buffer, 0)
         @buffer = ""
       end
@@ -38,8 +39,7 @@ class IrcBot
   def send(s)
     #puts Thread.current
     @mutex.synchronize do
-      # @irc.send(s + @delim, 0)
-      @buffer += s + @delim
+      @buffer += "#{s}#{@delim}"
     end
   end
   
