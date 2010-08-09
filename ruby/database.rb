@@ -12,14 +12,15 @@ class Database
   
   def process(user, extra, target, msg)
     #puts Thread.current
+    data = nil
     case msg.strip
     when /ciao/i
-      return "PRIVMSG #{user} :Ciao..."
+      data = "PRIVMSG #{user} :Ciao..."
     when /^chi.*qui\?$/i
-      return "PRIVMSG #{user} :#{get_users}"
+      data = "PRIVMSG #{user} :#{get_users}"
     end
     
-    return nil
+    return data
   end
   
   def select(colums, tables, conditions = 1)

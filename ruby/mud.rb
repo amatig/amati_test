@@ -23,7 +23,7 @@ class Mud < IrcBot
         send "PRIVMSG #{$1} :Non ho capito..."
       end
     end
-    puts "receive: #{msg}"
+    puts msg
   end
   
 end

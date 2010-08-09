@@ -24,7 +24,7 @@ class IrcBot
   def socket_send
     @mutex.synchronize do
       if not @buffer.empty?
-        puts "send: #{@buffer}"
+        #puts ">>> SEND >>> #{@buffer}"
         @irc.send(@buffer, 0)
         @buffer = ""
       end
@@ -39,7 +39,7 @@ class IrcBot
   def send(s)
     #puts Thread.current
     @mutex.synchronize do
-      @buffer += "#{s}#{@delim}"
+      @buffer += s + @delim
     end
   end
   
@@ -52,13 +52,13 @@ class IrcBot
       return if @irc.eof
       Thread.new do
         #puts "test loop"
-        s = @irc.gets
-        case s.strip
+        msg = @irc.gets
+        case msg.strip
         when /^PING :(.+)$/i
           puts "[ Server Ping ]"
           send "PONG :#{$1}"
         else
-          parse s
+          parse msg
         end
       end
     end
