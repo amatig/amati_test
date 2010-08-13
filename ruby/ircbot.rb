@@ -21,13 +21,19 @@ class IrcBot
     end
   end
   
-  def socket_send
+  def socket_send()
     @mutex.synchronize do
       if not @buffer.empty?
-        #puts ">>> SEND >>> #{@buffer}"
         @irc.send(@buffer, 0)
         @buffer = ""
       end
+    end
+  end
+  
+  def send(msg)
+    #puts Thread.current
+    @mutex.synchronize do
+      @buffer += msg + @delim
     end
   end
   
@@ -36,14 +42,7 @@ class IrcBot
     send "USER #{@nick} #{@nick} bla :#{@realname}#{@delim}NICK #{@nick}"
   end
   
-  def send(s)
-    #puts Thread.current
-    @mutex.synchronize do
-      @buffer += s + @delim
-    end
-  end
-  
-  def parse(s)
+  def parse(msg)
     # da implementare
   end
   

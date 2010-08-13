@@ -8,15 +8,20 @@ $SAFE = 1
 class Mud < IrcBot
   
   def initialize(nick, realname, db_name)
-    super(nick, realname)
     @db = Database.new db_name
+    super(nick, realname)
   end
   
   def parse(msg)
     #puts Thread.current
+    data = nil
     case msg
     when /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
-      data = @db.process($1, $2, $3, $4)
+      begin
+        data = @db.process($1, $2, $3, $4)
+      rescue Exception => detail
+        puts detail.message
+      end
       if data
         send data
       else
