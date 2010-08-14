@@ -6,35 +6,39 @@ class Database
   def initialize(filename)
     @conn = SQLite3::Database.new filename
     
-    @mutex_conn = Mutex.new
+    @mutex = Mutex.new
     Thread.abort_on_exception = true
   end
   
-  def process(user, extra, target, msg)
-    #puts Thread.current
-    data = nil
-    case msg.strip
-    when /ciao/i
-      data = "PRIVMSG #{user} :Ciao..."
-    when /^chi.*qui\?$/i
-      data = "PRIVMSG #{user} :#{get_users}"
+  def select(hash_type, colums, tables, conditions = 1)
+    rows = []
+    @mutex.synchronize do
+      @conn.results_as_hash = hash_type # boolean
+      rows = @conn.execute("select #{colums} from #{tables} where #{conditions}")
     end
-    
-    return data
+    return rows
   end
   
-  def select(colums, tables, conditions = 1)
-    row = []
-    @mutex_conn.synchronize do
-      row = @conn.execute("select #{colums} from #{tables} where #{conditions}")
-    end
-    return row
+  # game
+  
+  def welcome()
+    pk_msgs = [3] # lista degli id dei messaggi nella tabella messages
+    pk = pk_msgs[rand(pk_msgs.length)]
+    rows = select(true, "text", "messages", "id = #{pk}")
+    return rows[0]["text"]
+  end
+  
+  def cmd_not_found()
+    cnf = [1, 2] # lista degli id dei messaggi nella tabella messages
+    pk = cnf[rand(cnf.length)]
+    rows = select(true, "text", "messages", "id = #{pk}")
+    return rows[0]["text"]
   end
   
   def get_users()
-    row = select("*", "users")
-    n = row.length > 1 ? "ci sono" : "c'e'"
-    return "Nella zona #{n} " + row.join(", ")
+    rows = select(false, "nick", "users")
+    n = rows.length > 1 ? "ci sono" : "c'e'"
+    return "Nella zona #{n} " + rows.join(", ")
   end
   
 end

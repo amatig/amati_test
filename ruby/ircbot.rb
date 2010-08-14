@@ -31,7 +31,7 @@ class IrcBot
   end
   
   def send(msg)
-    #puts Thread.current
+    # puts Thread.current
     @mutex.synchronize do
       @buffer += msg + @delim
     end

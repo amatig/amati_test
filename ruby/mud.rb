@@ -13,22 +13,36 @@ class Mud < IrcBot
   end
   
   def parse(msg)
-    #puts Thread.current
-    data = nil
+    # puts Thread.current
+    data = ""
     case msg
     when /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
       begin
-        data = @db.process($1, $2, $3, $4)
+        data = process($1, $2, $3, $4)
       rescue Exception => detail
         puts detail.message
       end
-      if data
-        send data
+      if not data.empty?
+        send "PRIVMSG #{$1} :#{data}"
       else
-        send "PRIVMSG #{$1} :Non ho capito..."
+        begin
+          send "PRIVMSG #{$1} :" + @db.cmd_not_found
+        rescue Exception => detail
+          puts detail.message
+        end
       end
     end
     puts msg
+  end
+  
+  def process(user, extra, target, msg)
+    case msg.strip
+    when /ciao/i
+      return @db.welcome
+    when /^chi.*qui\?$/i
+      return @db.get_users
+    end
+    return ""
   end
   
 end
