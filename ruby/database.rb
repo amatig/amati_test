@@ -22,14 +22,12 @@ class Database
   # game
   
   def welcome()
-    pk_msgs = [3] # lista degli id dei messaggi nella tabella messages
-    pk = pk_msgs[rand(pk_msgs.length)]
-    rows = select(true, "text", "messages", "id = #{pk}")
+    rows = select(true, "text", "messages", "label = 'benvenuto'")
     return rows[0]["text"]
   end
   
   def cmd_not_found()
-    cnf = [1, 2] # lista degli id dei messaggi nella tabella messages
+    cnf = [1, 2] # lista degli id dei messaggi di command not found
     pk = cnf[rand(cnf.length)]
     rows = select(true, "text", "messages", "id = #{pk}")
     return rows[0]["text"]
@@ -37,8 +35,10 @@ class Database
   
   def get_users()
     rows = select(false, "nick", "users")
-    n = rows.length > 1 ? "ci sono" : "c'e'"
-    return "Nella zona #{n} " + rows.join(", ")
+    part1 = select(true, "text", "messages", "label = 'gu'")
+    label = rows.length > 1 ? "gu_molti" : "gu_uno"
+    part2 = select(true, "text", "messages", "label = '#{label}'")
+    return part1[0]["text"] + " " + part2[0]["text"] + " " + rows.join(", ")
   end
   
 end
