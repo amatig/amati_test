@@ -12,13 +12,6 @@ class IrcBot
     
     @mutex = Mutex.new
     Thread.abort_on_exception = true
-    
-    Thread.new do
-      while true do
-        socket_send
-        sleep 1
-      end
-    end
   end
   
   def socket_send()
@@ -40,23 +33,30 @@ class IrcBot
   def connect(server, port)
     @irc = TCPSocket.open(server, port)
     send "USER #{@nick} #{@nick} bla :#{@realname}#{@delim}NICK #{@nick}"
+    
+    Thread.new do
+      while true do
+        socket_send
+        sleep 1
+      end
+    end
   end
   
   def parse(msg)
-    # da implementare
+    # non implementata
   end
   
   def main_loop()
     while true
       return if @irc.eof
-      Thread.new do
-        #puts "test loop"
-        msg = @irc.gets
-        case msg.strip
-        when /^PING :(.+)$/i
-          puts "[ Server Ping ]"
-          send "PONG :#{$1}"
-        else
+      #puts "test loop"
+      msg = @irc.gets
+      case msg.strip
+      when /^PING :(.+)$/i
+        puts "[ Server Ping ]"
+        send "PONG :#{$1}"
+      else
+        Thread.new do
           parse msg
         end
       end

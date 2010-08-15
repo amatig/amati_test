@@ -12,6 +12,16 @@ class Mud < IrcBot
     super(nick, realname)
   end
   
+  def connect(server, port)
+    super(server, port)
+    Thread.new do
+      while true
+        puts "< cose a tempo >"
+        sleep 2
+      end
+    end
+  end
+  
   def parse(msg)
     # puts Thread.current
     data = ""
@@ -36,9 +46,14 @@ class Mud < IrcBot
   end
   
   def process(user, extra, target, msg)
-    case msg.strip
-    when /ciao/i
-      return @db.welcome
+    msg = msg.strip
+    if /^ciao$/i.match(msg)
+      return @db.welcome user if not @db.is_welcome? user
+    else
+      return @db.need_welcome if not @db.is_welcome? user
+    end
+    
+    case msg
     when /^chi.*qui\?$/i
       return @db.get_users
     end

@@ -1,10 +1,13 @@
 require "sqlite3"
 require "thread"
+require "user.rb"
 
 class Database
   
   def initialize(filename)
     @conn = SQLite3::Database.new filename
+    
+    @user_list = []
     
     @mutex = Mutex.new
     Thread.abort_on_exception = true
@@ -21,7 +24,17 @@ class Database
   
   # game
   
-  def welcome()
+  def is_welcome?(user)
+    return @user_list.include? user
+  end
+  
+  def need_welcome()
+    rows = select(true, "text", "messages", "label = 'rich_benvenuto'")
+    return rows[0]["text"]
+  end
+  
+  def welcome(user)
+    @user_list.push user
     rows = select(true, "text", "messages", "label = 'benvenuto'")
     return rows[0]["text"]
   end
