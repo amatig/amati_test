@@ -4,6 +4,7 @@ require "thread"
 class IrcBot
   
   def initialize(nick, realname)
+    @irc = nil
     @delim = "\r\n"
     
     @nick = nick
@@ -24,7 +25,6 @@ class IrcBot
   end
   
   def send(msg)
-    # puts Thread.current
     @mutex.synchronize do
       @buffer += msg + @delim
     end
@@ -32,7 +32,7 @@ class IrcBot
   
   def connect(server, port)
     @irc = TCPSocket.open(server, port)
-    send "USER #{@nick} #{@nick} bla :#{@realname}#{@delim}NICK #{@nick}"
+    @irc.send("USER #{@nick} #{@nick} bla :#{@realname}#{@delim}NICK #{@nick}#{@delim}", 0)
     
     Thread.new do
       while true do
@@ -49,12 +49,13 @@ class IrcBot
   def main_loop()
     while true
       return if @irc.eof
-      msg = @irc.gets.strip
-      if msg =~ /^PING :(.+)$/i
-        puts "[ Server ping ]"
-        send "PONG :#{$1}"
-      else
-        Thread.new do
+      msg = @irc.gets
+      Thread.new do
+        msg = msg.strip 
+        if msg =~ /^PING :(.+)$/i
+          puts "[ Server ping ]"
+          send "PONG :#{$1}"
+        else
           parse msg
         end
       end

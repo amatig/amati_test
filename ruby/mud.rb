@@ -25,6 +25,7 @@ class Mud < IrcBot
   
   def parse(msg)
     # puts Thread.current
+    puts msg
     if msg =~ /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
       data = evaluate($1, $2, $3, $4)
       if not data.empty?
@@ -34,7 +35,6 @@ class Mud < IrcBot
         send "PRIVMSG #{$1} :#{temp}" if not temp.empty?
       end
     end
-    puts msg
   end
   
   def evaluate(user, extra, target, msg)
@@ -67,8 +67,8 @@ app.connect("127.0.0.1", 6667)
 begin
   app.main_loop
 rescue Interrupt
-rescue Exception => detail
-  puts detail.message
-  print detail.backtrace.join("\n")
+rescue Exception => e
+  puts "MainLoop: " + e.message
+  print e.backtrace.join("\n")
   #retry # ritenta dal begin
 end
