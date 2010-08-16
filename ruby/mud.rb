@@ -49,6 +49,10 @@ class Mud < IrcBot
     case msg
     when /^chi.*qui\?$/i
       return @core.get_users
+    when /^mi alzo|mi sveglio$/i
+      return @core.up user
+    when /^mi siedo|dormo|mi sdraio|mi riposo|mi distendo$/i
+      return @core.down user
     end
     
     return ""
