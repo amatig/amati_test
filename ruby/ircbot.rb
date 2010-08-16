@@ -49,11 +49,9 @@ class IrcBot
   def main_loop()
     while true
       return if @irc.eof
-      #puts "test loop"
-      msg = @irc.gets
-      case msg.strip
-      when /^PING :(.+)$/i
-        puts "[ Server Ping ]"
+      msg = @irc.gets.strip
+      if msg =~ /^PING :(.+)$/i
+        puts "[ Server ping ]"
         send "PONG :#{$1}"
       else
         Thread.new do

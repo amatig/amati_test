@@ -1,62 +1,56 @@
 #!/usr/bin/ruby
 
 require "ircbot.rb"
-require "database.rb"
+require "core.rb"
 
 $SAFE = 1
 
 class Mud < IrcBot
   
-  def initialize(nick, realname, db_name)
-    @db = Database.new db_name
+  def initialize(nick, realname, db_filename)
+    @core = Core.new db_filename
     super(nick, realname)
   end
   
   def connect(server, port)
     super(server, port)
-    Thread.new do
-      while true
-        puts "< cose a tempo >"
-        sleep 2
-      end
-    end
+    
+    #Thread.new do
+    #  while true
+    #    puts "< cose a tempo >"
+    #    sleep 1
+    #  end
+    #end
   end
   
   def parse(msg)
     # puts Thread.current
-    data = ""
-    case msg
-    when /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
-      begin
-        data = process($1, $2, $3, $4)
-      rescue Exception => detail
-        puts detail.message
-      end
+    if msg =~ /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
+      data = evaluate($1, $2, $3, $4)
       if not data.empty?
         send "PRIVMSG #{$1} :#{data}"
       else
-        begin
-          send "PRIVMSG #{$1} :" + @db.cmd_not_found
-        rescue Exception => detail
-          puts detail.message
-        end
+        temp = @core.cmd_not_found
+        send "PRIVMSG #{$1} :#{temp}" if not temp.empty?
       end
     end
     puts msg
   end
   
-  def process(user, extra, target, msg)
+  def evaluate(user, extra, target, msg)
     msg = msg.strip
-    if /^ciao$/i.match(msg)
-      return @db.welcome user if not @db.is_welcome? user
+    if msg =~ /^ciao$/i
+      return @core.welcome user if not @core.is_welcome? user
     else
-      return @db.need_welcome if not @db.is_welcome? user
+      return @core.need_welcome if not @core.is_welcome? user
     end
     
+    # tutti i comandi
     case msg
     when /^chi.*qui\?$/i
-      return @db.get_users
+      return @core.get_users
     end
+    
     return ""
   end
   
