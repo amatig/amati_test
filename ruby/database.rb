@@ -23,8 +23,8 @@ class Database
     return rows
   end
   
-  def select(hash_type, colums, tables, conditions = 1)
-    return execute("select #{colums} from #{tables} where #{conditions}", hash_type)
+  def select(hash_type, cols, tables, conds = 1)
+    return execute("select #{cols} from #{tables} where #{conds}", hash_type)
   end
   
 end

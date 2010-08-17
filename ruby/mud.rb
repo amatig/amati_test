@@ -31,15 +31,14 @@ class Mud < IrcBot
       if not data.empty?
         send "PRIVMSG #{$1} :#{data}"
       else
-        temp = @core.cmd_not_found
-        send "PRIVMSG #{$1} :#{temp}" if not temp.empty?
+        send "PRIVMSG #{$1} :" + @core.cmd_not_found
       end
     end
   end
   
   def evaluate(user, extra, target, msg)
     msg = msg.strip
-    if msg =~ /^ciao$/i
+    if msg =~ /^(ciao|salve)$/i
       return @core.welcome user if not @core.is_welcome? user
     else
       return @core.need_welcome if not @core.is_welcome? user
@@ -47,11 +46,11 @@ class Mud < IrcBot
     
     # tutti i comandi
     case msg
-    when /^chi.*qui\?$/i
+    when /^chi.+(qui|in zona)\?$/i
       return @core.get_users
-    when /^mi alzo|mi sveglio$/i
+    when /^mi\s(alzo|sveglio)$/i
       return @core.up user
-    when /^mi siedo|dormo|mi sdraio|mi riposo|mi distendo$/i
+    when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
       return @core.down user
     end
     
