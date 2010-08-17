@@ -32,7 +32,9 @@ class IrcBot
   
   def connect(server, port)
     @irc = TCPSocket.open(server, port)
-    @irc.send("USER #{@nick} #{@nick} bla :#{@realname}#{@delim}NICK #{@nick}#{@delim}", 0)
+    temp = "USER #{@nick} #{@nick} bla :#{@realname}#{@delim}"
+    temp += "NICK #{@nick}#{@delim}"
+    @irc.send(temp, 0)
     
     Thread.new do
       while true do

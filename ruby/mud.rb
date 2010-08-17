@@ -61,9 +61,10 @@ class Mud < IrcBot
 end
 
 
+# Main
+
 app = Mud.new("game_master", "Game Master", "./mud.db")
 app.connect("127.0.0.1", 6667)
-
 begin
   app.main_loop
 rescue Interrupt
