@@ -36,6 +36,7 @@ class IrcBot
     temp += "NICK #{@nick}#{@delim}"
     @irc.send(temp, 0)
     
+    # buffer send loop
     Thread.new do
       while true do
         socket_send
@@ -53,7 +54,7 @@ class IrcBot
       return if @irc.eof
       msg = @irc.gets
       Thread.new do
-        msg = msg.strip 
+        msg = msg.strip
         if msg =~ /^PING :(.+)$/i
           puts "[ Server ping ]"
           send "PONG :#{$1}"
@@ -62,6 +63,11 @@ class IrcBot
         end
       end
     end
+  end
+  
+  # messaggi complessi
+  def privmsg(target, msg)
+    send "PRIVMSG #{target} :#{msg}"
   end
   
 end

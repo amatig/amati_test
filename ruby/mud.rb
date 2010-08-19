@@ -29,21 +29,21 @@ class Mud < IrcBot
     if msg =~ /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
       data = evaluate($1, $2, $3, $4)
       if not data.empty?
-        send "PRIVMSG #{$1} :#{data}"
+        privmsg($1, data)
       else
-        send "PRIVMSG #{$1} :" + @core.cmd_not_found
+        privmsg($1, @core.cmd_not_found)
       end
     end
   end
   
   def evaluate(user, extra, target, msg)
     msg = msg.strip
+    # riconoscimento utente
     if msg =~ /^(ciao|salve)$/i
       return @core.welcome user if not @core.is_welcome? user
     else
       return @core.need_welcome if not @core.is_welcome? user
     end
-    
     # tutti i comandi
     case msg
     when /^chi.+(qui|in zona)\?$/i
@@ -62,9 +62,9 @@ end
 
 # Main
 
-app = Mud.new("game_master", "Game Master", "./mud.db")
-app.connect("127.0.0.1", 6667)
 begin
+  app = Mud.new("game_master", "Game Master", "./mud.db")
+  app.connect("127.0.0.1", 6667)
   app.main_loop
 rescue Interrupt
 rescue Exception => e
