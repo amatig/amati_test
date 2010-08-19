@@ -37,4 +37,8 @@ class Database
     return execute "select #{cols} from #{tables} where #{conds}"
   end
   
+  def read(cols, tables, conds = 1)
+    return execute_lock "select #{cols} from #{tables} where #{conds}"
+  end
+  
 end

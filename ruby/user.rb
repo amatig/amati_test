@@ -2,7 +2,12 @@ class User
   
   def initialize(nick)
     @nick = nick
+    @place = 1
     @stand_up = true 
+  end
+  
+  def place()
+    return @place
   end
   
   def up()
