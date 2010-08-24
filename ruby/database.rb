@@ -1,44 +1,31 @@
-require "sqlite3"
-require "thread"
+require "pg"
 
 class Database
   
-  def initialize(filename)
-    @conn = SQLite3::Database.new filename
-    # @conn.results_as_hash = true
-    
-    @mutex = Mutex.new
-    Thread.abort_on_exception = true
+  def initialize(host, port, db_name, user, pass)
+    @conn = PGconn.connect(host, port, "", "", db_name, user, pass)
   end
   
-  def execute_lock(query)
-    rows = []
-    @mutex.synchronize do
-      begin
-        rows = @conn.execute(query)
-      rescue Exception => e
-        puts "Database: " + e.message
+  def exec(query)
+    result = []
+    res = @conn.exec query
+    res.each do |row|
+      temp = []
+      row.each do |col|
+        temp.push col[1].strip
       end
+      result.push temp
     end
-    return rows
+    res.clear
+    return result
   end
   
-  def execute(query)
-    rows = []
-    begin
-      rows = @conn.execute(query)
-    rescue Exception => e
-      puts "Database: " + e.message
-    end
-    return rows
+  def read(cols, tables, conds = "true")
+    return exec "select #{cols} from #{tables} where #{conds};"
   end
   
-  def only_read(cols, tables, conds = 1)
-    return execute "select #{cols} from #{tables} where #{conds}"
-  end
-  
-  def read(cols, tables, conds = 1)
-    return execute_lock "select #{cols} from #{tables} where #{conds}"
+  def close()
+    @conn.close if @conn
   end
   
 end

@@ -3,15 +3,15 @@ require "user.rb"
 
 class Core < Database
   
-  def initialize(filename)
-    super filename
+  def initialize(*args)
+    super *args
     @user_list = {}
   end
   
   def cmd_not_found()
     cnf = [1, 2] # id dei messaggi di command not found
     pk = cnf[rand cnf.length]
-    r = only_read("text", "messages", "id=#{pk}")
+    r = read("text", "messages", "id=#{pk}")
     return r[0][0]
   end
   
@@ -20,7 +20,7 @@ class Core < Database
   end
   
   def need_welcome()
-    r = only_read("text", "messages", "label='rich_benv'")
+    r = read("text", "messages", "label='rich_benv'")
     return r[0][0]
   end
   
@@ -30,9 +30,9 @@ class Core < Database
     if not r.empty?
       @user_list[user] = User.new user
       flag = true
-      r = only_read("text", "messages", "label='benv'")
+      r = read("text", "messages", "label='benv'")
     else
-      r = only_read("text", "messages", "label='non_reg'")
+      r = read("text", "messages", "label='non_reg'")
     end
     temp = r[0][0]
     temp += " #{place user}" if flag
@@ -40,30 +40,30 @@ class Core < Database
   end
   
   def place(user)
-    p1 = only_read("text", "messages", "label='pl'")
+    p1 = read("text", "messages", "label='pl'")
     temp = @user_list[user].place
-    p2 = only_read("name, desc", "places", "id=#{temp}")
+    p2 = read("name, descr", "places", "id=#{temp}")
     return p1[0][0] + " " + p2[0].join(", ")
   end
   
   def up(user)
     temp = @user_list[user].up
-    r = only_read("text", "messages", "label='up_#{temp}'")
+    r = read("text", "messages", "label='up_#{temp}'")
     return r[0][0]
   end
   
   def down(user)
     temp = @user_list[user].down
-    r = only_read("text", "messages", "label='down_#{temp}'")
+    r = read("text", "messages", "label='down_#{temp}'")
     return r[0][0]
   end
   
   # test
   def get_users()
-    p1 = only_read("text", "messages", "label='gu'")
+    p1 = read("text", "messages", "label='gu'")
     r = read("nick", "users")
     n = r.length > 1 ? "gu_molti" : "gu_uno"
-    p2 = only_read("text", "messages", "label='#{n}'")
+    p2 = read("text", "messages", "label='#{n}'")
     return p1[0][0] + " " + p2[0][0] + " " + r.join(", ")
   end
   

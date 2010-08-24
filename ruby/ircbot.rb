@@ -3,7 +3,7 @@ require "thread"
 
 class IrcBot
   
-  def initialize(nick, realname)
+  def initialize(nick, realname = "bla")
     @irc = nil
     @delim = "\r\n"
     
@@ -30,7 +30,7 @@ class IrcBot
     end
   end
   
-  def connect(server, port)
+  def connectIRC(server, port)
     @irc = TCPSocket.open(server, port)
     temp = "USER #{@nick} #{@nick} bla :#{@realname}#{@delim}"
     temp += "NICK #{@nick}#{@delim}"

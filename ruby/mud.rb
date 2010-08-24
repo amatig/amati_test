@@ -7,13 +7,16 @@ $SAFE = 1
 
 class Mud < IrcBot
   
-  def initialize(nick, realname, db_filename)
-    @core = Core.new db_filename
-    super(nick, realname)
+  def connectDB(*args)
+    @core = Core.new *args
   end
   
-  def connect(server, port)
-    super(server, port)
+  def closeDB()
+    @core.close
+  end
+  
+  def connectIRC(*args)
+    super *args
     
     #Thread.new do
     #  while true
@@ -65,12 +68,15 @@ end
 # Main
 
 begin
-  app = Mud.new("game_master", "Game Master", "./mud.db")
-  app.connect("127.0.0.1", 6667)
+  app = Mud.new("game_master", "Game Master")
+  app.connectDB("127.0.0.1", 5432, "mud_db", "postgres", "caliostro")
+  app.connectIRC("127.0.0.1", 6667)
   app.main_loop
 rescue Interrupt
 rescue Exception => e
   puts "MainLoop: " + e.message
   print e.backtrace.join("\n")
   #retry # ritenta dal begin
+ensure
+  app.closeDB
 end
