@@ -66,7 +66,7 @@ class IrcBot
   end
   
   # messaggi complessi
-  def privmsg(target, msg)
+  def message(target, msg)
     send "PRIVMSG #{target} :#{msg}"
   end
   

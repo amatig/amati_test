@@ -10,7 +10,7 @@ class Core < Database
   
   def cmd_not_found()
     cnf = [1, 2] # id dei messaggi di command not found
-    pk = cnf[rand cnf.length]
+    pk = cnf[rand(cnf.length)]
     r = read("text", "messages", "id=#{pk}")
     return r[0][0]
   end
@@ -26,7 +26,7 @@ class Core < Database
   
   def welcome(user)
     flag = false
-    r = read("nick", "users", "nick='#{user}'")
+    r = read("*", "users", "nick='#{user}'")
     if not r.empty?
       @user_list[user] = User.new user
       flag = true
@@ -43,7 +43,7 @@ class Core < Database
     p1 = read("text", "messages", "label='pl'")
     temp = @user_list[user].place
     p2 = read("name, descr", "places", "id=#{temp}")
-    return p1[0][0] + " " + p2[0].join(", ")
+    return "#{p1[0][0]} " + p2[0].join(", ")
   end
   
   def up(user)
@@ -64,7 +64,7 @@ class Core < Database
     r = read("nick", "users")
     n = r.length > 1 ? "gu_molti" : "gu_uno"
     p2 = read("text", "messages", "label='#{n}'")
-    return p1[0][0] + " " + p2[0][0] + " " + r.join(", ")
+    return "#{p1[0][0]} #{p2[0][0]} " + r.join(", ")
   end
   
 end

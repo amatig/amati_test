@@ -12,9 +12,9 @@ class Database
     res.each do |row|
       temp = []
       row.each do |col|
-        temp.push col[1].strip
+        temp << col[1].strip
       end
-      result.push temp
+      result << temp
     end
     res.clear
     return result
