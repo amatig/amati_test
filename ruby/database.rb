@@ -22,7 +22,7 @@ class Database
   
   def get(*args)
     temp = read(*args)
-    return (temp.length > 0) ? temp[0] : []
+    return (temp.length > 0) ? temp[0] : temp
   end
   
   def close()
