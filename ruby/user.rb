@@ -17,7 +17,7 @@ class User
   end
   
   def down()
-    return false if not @stand_up
+    return false unless @stand_up
     @stand_up = false
     return true
   end

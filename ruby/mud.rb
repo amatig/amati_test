@@ -31,7 +31,7 @@ class Mud < IrcBot
     puts msg
     if msg =~ /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
       text = evaluate($1, $2, $3, $4)
-      if not text.empty?
+      unless text.empty?
         message($1, text.capitalize)
       else
         message($1, @core.cmd_not_found.capitalize)
@@ -42,7 +42,7 @@ class Mud < IrcBot
   def evaluate(user, extra, target, msg)
     msg = msg.strip
     # riconoscimento utente
-    if not (@core.is_welcome? user)
+    unless (@core.is_welcome? user)
       if msg =~ /^(ciao|salve)$/i
         return @core.welcome(user)
       else

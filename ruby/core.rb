@@ -27,7 +27,7 @@ class Core < Database
   def welcome(user)
     flag = false
     r = read("*", "users", "nick='#{user}'")
-    if not r.empty?
+    unless r.empty?
       @user_list[user] = User.new(user)
       flag = true
       r = read("text", "messages", "label='benv'")

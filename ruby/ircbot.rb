@@ -17,7 +17,7 @@ class IrcBot
   
   def socket_send()
     @mutex.synchronize do
-      if not @buffer.empty?
+      unless @buffer.empty?
         @irc.send(@buffer, 0)
         @buffer = ""
       end
