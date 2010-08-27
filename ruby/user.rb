@@ -1,7 +1,7 @@
 class User
-  
-  def initialize(nick)
-    @nick = nick
+    
+  def initialize(data)
+    @nick = data[0]
     @place = 1
     @stand_up = true 
   end

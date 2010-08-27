@@ -26,7 +26,7 @@ class IrcBot
   
   def send(msg)
     @mutex.synchronize do
-      @buffer += msg + @delim
+      @buffer += "#{msg}#{@delim}"
     end
   end
   

@@ -16,10 +16,14 @@ class Database
     return result
   end
   
-  def read(cols, tables, conds = "true")
-    return exec("select #{cols} from #{tables} where #{conds}")
+  # ritorna un array di tuple, ognuna e' 
+  # un array di campi della select
+  def read(fields, tables, conds = "true")
+    return exec("select #{fields} from #{tables} where #{conds}")
   end
   
+  # ritorna la prima tupla della query, 
+  # un array dei campi della select
   def get(*args)
     temp = read(*args)
     return (temp.length > 0) ? temp[0] : temp

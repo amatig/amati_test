@@ -19,19 +19,19 @@ class Core < Database
   end
   
   def need_welcome()
-    return get("text", "messages", "label='rich_benv'")[0]
+    return get("text", "messages", "label='r_benv'")[0]
   end
   
   def welcome(user)
-    temp = "benv"
     r = get("*", "users", "nick='#{user}'")
     unless r.empty?
-      @user_list[user] = User.new(user)
+      @user_list[user] = User.new(r)
+      r = get("text", "messages", "label='benv'")[0] % user
+      r += " #{place user}"
     else
-      temp = "non_reg"
+      r = get("text", "messages", "label='no_reg'")[0]
     end
-    r = get("text", "messages", "label='#{temp}'")[0]
-    return (temp == "benv") ? "#{r} #{place user}" : r
+    return r
   end
   
   def place(user)
@@ -55,7 +55,7 @@ class Core < Database
   def get_users()
     p1 = get("text", "messages", "label='gu'")[0]
     r = read("nick", "users")
-    n = (r.length > 1) ? "gu_molti" : "gu_uno"
+    n = (r.length > 1) ? "ci_sono" : "c_e"
     p2 = get("text", "messages", "label='#{n}'")[0]
     return "#{p1} #{p2} " + r.join(", ")
   end

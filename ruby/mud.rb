@@ -1,5 +1,4 @@
 #!/usr/bin/ruby
-
 require "ircbot.rb"
 require "core.rb"
 
@@ -51,14 +50,14 @@ class Mud < IrcBot
     end
     # tutti i comandi
     case msg
-    when /^chi.+(qui|in zona)\?$/i
-      return @core.get_users
     when /^mi\s(alzo|sveglio)$/i
       return @core.up(user)
     when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
       return @core.down(user)
     when /^dove.+(sono|sono\sfinito|mi\strovo)\?$/i
       return @core.place(user)
+    when /^chi.+(qui|in zona)\?$/i
+      return @core.get_users
     end    
     return ""
   end
