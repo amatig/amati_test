@@ -8,7 +8,7 @@ $SAFE = 1
 class Mud < IrcBot
   
   def connectDB(*args)
-    @core = Core.new *args
+    @core = Core.new(*args)
   end
   
   def closeDB()
@@ -42,9 +42,9 @@ class Mud < IrcBot
   def evaluate(user, extra, target, msg)
     msg = msg.strip
     # riconoscimento utente
-    if not @core.is_welcome? user
+    if not (@core.is_welcome? user)
       if msg =~ /^(ciao|salve)$/i
-        return @core.welcome user
+        return @core.welcome(user)
       else
         return @core.need_welcome
       end
@@ -54,11 +54,11 @@ class Mud < IrcBot
     when /^chi.+(qui|in zona)\?$/i
       return @core.get_users
     when /^mi\s(alzo|sveglio)$/i
-      return @core.up user
+      return @core.up(user)
     when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
-      return @core.down user
+      return @core.down(user)
     when /^dove.+(sono|sono\sfinito|mi\strovo)\?$/i
-      return @core.place user
+      return @core.place(user)
     end    
     return ""
   end

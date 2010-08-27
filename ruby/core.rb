@@ -16,7 +16,7 @@ class Core < Database
   end
   
   def is_welcome?(user)
-    return @user_list.key? user
+    return (@user_list.key? user)
   end
   
   def need_welcome()
@@ -28,7 +28,7 @@ class Core < Database
     flag = false
     r = read("*", "users", "nick='#{user}'")
     if not r.empty?
-      @user_list[user] = User.new user
+      @user_list[user] = User.new(user)
       flag = true
       r = read("text", "messages", "label='benv'")
     else
@@ -62,7 +62,7 @@ class Core < Database
   def get_users()
     p1 = read("text", "messages", "label='gu'")
     r = read("nick", "users")
-    n = r.length > 1 ? "gu_molti" : "gu_uno"
+    n = (r.length > 1) ? "gu_molti" : "gu_uno"
     p2 = read("text", "messages", "label='#{n}'")
     return "#{p1[0][0]} #{p2[0][0]} " + r.join(", ")
   end

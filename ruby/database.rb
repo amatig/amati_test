@@ -8,7 +8,7 @@ class Database
   
   def exec(query)
     result = []
-    res = @conn.exec query
+    res = @conn.exec(query)
     res.each do |row|
       temp = []
       row.each do |col|
@@ -21,7 +21,7 @@ class Database
   end
   
   def read(cols, tables, conds = "true")
-    return exec "select #{cols} from #{tables} where #{conds};"
+    return exec("select #{cols} from #{tables} where #{conds};")
   end
   
   def close()
