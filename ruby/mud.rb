@@ -64,19 +64,20 @@ class Mud < IrcBot
   
 end
 
-
 # Main
 
-begin
-  app = Mud.new("game_master", "Game Master")
-  app.connectDB("127.0.0.1", 5432, "mud_db", "postgres", "caliostro")
-  app.connectIRC("127.0.0.1", 6667)
-  app.main_loop
-rescue Interrupt
-rescue Exception => e
-  puts "MainLoop: " + e.message
-  print e.backtrace.join("\n")
-  #retry # ritenta dal begin
-ensure
-  app.closeDB
+if __FILE__ == $0
+  begin
+    app = Mud.new("game_master", "Game Master")
+    app.connectDB("127.0.0.1", 5432, "mud_db", "postgres", "caliostro")
+    app.connectIRC("127.0.0.1", 6667)
+    app.main_loop
+  rescue Interrupt
+  rescue Exception => e
+    puts "MainLoop: " + e.message
+    print e.backtrace.join("\n")
+    #retry # ritenta dal begin
+  ensure
+    app.closeDB
+  end
 end
