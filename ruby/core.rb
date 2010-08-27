@@ -11,8 +11,7 @@ class Core < Database
   def cmd_not_found()
     cnf = [1, 2] # id dei messaggi di command not found
     pk = cnf[rand(cnf.length)]
-    r = read("text", "messages", "id=#{pk}")
-    return r[0][0]
+    return get("text", "messages", "id=#{pk}")[0]
   end
   
   def is_welcome?(user)
@@ -20,51 +19,45 @@ class Core < Database
   end
   
   def need_welcome()
-    r = read("text", "messages", "label='rich_benv'")
-    return r[0][0]
+    return get("text", "messages", "label='rich_benv'")[0]
   end
   
   def welcome(user)
-    flag = false
-    r = read("*", "users", "nick='#{user}'")
+    temp = "benv"
+    r = get("*", "users", "nick='#{user}'")
     unless r.empty?
       @user_list[user] = User.new(user)
-      flag = true
-      r = read("text", "messages", "label='benv'")
     else
-      r = read("text", "messages", "label='non_reg'")
+      temp = "non_reg"
     end
-    temp = r[0][0]
-    temp += " #{place user}" if flag
-    return temp
+    r = get("text", "messages", "label='#{temp}'")[0]
+    return (temp == "benv") ? "#{r} #{place user}" : r
   end
   
   def place(user)
-    p1 = read("text", "messages", "label='pl'")
+    p1 = get("text", "messages", "label='pl'")[0]
     temp = @user_list[user].place
-    p2 = read("name, descr", "places", "id=#{temp}")
-    return "#{p1[0][0]} " + p2[0].join(", ")
+    p2 = get("name, descr", "places", "id=#{temp}")
+    return "#{p1} " + p2.join(", ")
   end
   
   def up(user)
     temp = @user_list[user].up
-    r = read("text", "messages", "label='up_#{temp}'")
-    return r[0][0]
+    return get("text", "messages", "label='up_#{temp}'")[0]
   end
   
   def down(user)
     temp = @user_list[user].down
-    r = read("text", "messages", "label='down_#{temp}'")
-    return r[0][0]
+    return get("text", "messages", "label='down_#{temp}'")[0]
   end
   
   # test
   def get_users()
-    p1 = read("text", "messages", "label='gu'")
+    p1 = get("text", "messages", "label='gu'")[0]
     r = read("nick", "users")
     n = (r.length > 1) ? "gu_molti" : "gu_uno"
-    p2 = read("text", "messages", "label='#{n}'")
-    return "#{p1[0][0]} #{p2[0][0]} " + r.join(", ")
+    p2 = get("text", "messages", "label='#{n}'")[0]
+    return "#{p1} #{p2} " + r.join(", ")
   end
   
 end

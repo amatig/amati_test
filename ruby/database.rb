@@ -10,18 +10,19 @@ class Database
     result = []
     res = @conn.exec(query)
     res.each do |row|
-      temp = []
-      row.each do |col|
-        temp << col[1].strip
-      end
-      result << temp
+      result << row.map { |col| col[1].strip }
     end
     res.clear
     return result
   end
   
   def read(cols, tables, conds = "true")
-    return exec("select #{cols} from #{tables} where #{conds};")
+    return exec("select #{cols} from #{tables} where #{conds}")
+  end
+  
+  def get(*args)
+    temp = read(*args)
+    return (temp.length > 0) ? temp[0] : []
   end
   
   def close()
