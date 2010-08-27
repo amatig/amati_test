@@ -42,10 +42,12 @@ class Mud < IrcBot
   def evaluate(user, extra, target, msg)
     msg = msg.strip
     # riconoscimento utente
-    if msg =~ /^(ciao|salve)$/i
-      return @core.welcome user if not @core.is_welcome? user
-    else
-      return @core.need_welcome if not @core.is_welcome? user
+    if not @core.is_welcome? user
+      if msg =~ /^(ciao|salve)$/i
+        return @core.welcome user
+      else
+        return @core.need_welcome
+      end
     end
     # tutti i comandi
     case msg
@@ -57,8 +59,7 @@ class Mud < IrcBot
       return @core.down user
     when /^dove.+(sono|sono\sfinito|mi\strovo)\?$/i
       return @core.place user
-    end
-    
+    end    
     return ""
   end
   
