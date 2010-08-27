@@ -54,9 +54,9 @@ class Mud < IrcBot
       return @core.up(user)
     when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
       return @core.down(user)
-    when /^dove.+(sono|sono\sfinito|mi\strovo)\?$/i
+    when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
       return @core.place(user)
-    when /^chi.+(qui|in zona)\?$/i
+    when /^chi.+(qu.|zona)\?$/i
       return @core.get_users
     end    
     return ""

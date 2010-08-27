@@ -9,7 +9,7 @@ class Core < Database
   end
   
   def cmd_not_found()
-    cnf = [1, 2] # id dei messaggi di command not found
+    cnf = [1, 2, 20] # id dei messaggi di command not found
     pk = cnf[rand(cnf.length)]
     return get("text", "messages", "id=#{pk}")[0]
   end
