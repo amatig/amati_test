@@ -43,7 +43,7 @@ class Mud < IrcBot
     # riconoscimento utente
     unless (@core.is_welcome? user)
       if msg =~ /^(ciao|salve)$/i
-        return @core.welcome(user)
+        return @core.welcome(user, $1)
       else
         return @core.need_welcome
       end
