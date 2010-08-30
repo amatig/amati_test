@@ -1,16 +1,17 @@
-require "pg"
+require "postgres"
 
 class Database
   
-  def initialize(host, port, db_name, user, pass)
+  def initialize(host, port, db_name, user, pass = "")
     @conn = PGconn.connect(host, port, "", "", db_name, user, pass)
   end
   
   def exec(query)
+    # puts query
     result = []
     res = @conn.exec(query)
     res.each do |row|
-      result << row.map { |col| col[1].strip }
+      result << row.collect { |col| col.strip }
     end
     res.clear
     return result

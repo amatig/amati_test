@@ -25,7 +25,7 @@ class Core < Database
     r = get("*", "users", "nick='#{user}'")
     unless r.empty?
       @user_list[user] = User.new(r)
-      return "#{say :benv} #{place user}" % [greeting, user]
+      return "#{color :red}#{say :benv} #{place user}" % [greeting, user]
     else
       return say(:no_reg)
     end

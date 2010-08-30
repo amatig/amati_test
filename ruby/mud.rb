@@ -69,7 +69,7 @@ end
 if __FILE__ == $0
   begin
     app = Mud.new("game_master", "Game Master")
-    app.connectDB("127.0.0.1", 5432, "mud_db", "postgres", "caliostro")
+    app.connectDB("127.0.0.1", 5432, "mud_db", "postgres")
     app.connectIRC("127.0.0.1", 6667)
     app.main_loop
   rescue Interrupt
