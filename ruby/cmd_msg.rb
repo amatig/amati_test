@@ -21,7 +21,7 @@ def say(str)
   return msg[str.to_sym]
 end
 
-def color(c)
+def color(c, text)
   color_set = {
     :b => '',
     :u => '',
@@ -43,5 +43,10 @@ def color(c)
     :light_gray => '15',
     :white => '16',
   }
-  return color_set[c.to_sym]
+  c = c.to_sym
+  etag = ''
+  if (c == :b or c == :u or c == :i)
+    etag = color_set[c]
+  end
+  return color_set[c] + text + etag
 end
