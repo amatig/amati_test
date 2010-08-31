@@ -15,38 +15,46 @@ def say(str)
     :nel_1 => "nel",
     :nel_2 => "nella",
     :nel_3 => "nelle",
+    :art_1 => "il",
+    :art_2 => "la",
+    :art_3 => "le",
     :gu => "nella zona",
     :pl => "ti trovi",
+    :near => "nelle vicinanze",
   }
   return msg[str.to_sym]
 end
 
+def bold(text)
+  return "" + text + ""
+end
+
+def uline(text)
+  return "" + text + ""
+end
+
+def italic(text)
+  return "" + text + ""
+end
+
 def color(c, text)
   color_set = {
-    :b => '',
-    :u => '',
-    :i => '',
-    :black => '1',
-    :navy_blue => '2',
-    :green => '3',
-    :red => '4',
-    :brown => '5',
-    :purple => '6',
-    :olive => '7',
-    :yellow => '8',
-    :lime_green => '9',
-    :teal => '10',
-    :aqua_light => '11',
-    :royal_blue => '12',
-    :hot_pink => '13',
-    :dark_gray => '14',
-    :light_gray => '15',
-    :white => '16',
+    :black => "1",
+    :navy_blue => "2",
+    :green => "3",
+    :red => "4",
+    :brown => "5",
+    :purple => "6",
+    :olive => "7",
+    :yellow => "8",
+    :lime_green => "9",
+    :teal => "10",
+    :aqua_light => "11",
+    :royal_blue => "12",
+    :hot_pink => "13",
+    :dark_gray => "14",
+    :light_gray => "15",
+    :white => "16",
   }
-  c = c.to_sym
-  etag = ''
-  if (c == :b or c == :u or c == :i)
-    etag = color_set[c]
-  end
-  return color_set[c] + text + etag
+  return color_set[c.to_sym] + text + ""
 end

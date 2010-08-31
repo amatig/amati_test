@@ -25,7 +25,7 @@ class Core < Database
     r = get("*", "users", "nick='#{user}'")
     unless r.empty?
       @user_list[user] = User.new(r)
-      return "#{say :benv} #{place user}" % [greeting, color(:b, user)]
+      return "#{say :benv} #{place user}" % [greeting, bold(user)]
     else
       return say(:no_reg)
     end
@@ -34,8 +34,14 @@ class Core < Database
   def place(user)
     temp = @user_list[user].place
     r = get("name, descr, attrs", "places", "id=#{temp}")
-    temp = "nel_" + r[2]
-    return "#{say :pl} #{say temp} " + r[0..-2].join(", ")
+    l = read("name, attrs", "links, places", "place=#{temp} and places.id=near_place")
+    nel = "nel_" + r[2]
+    np = []
+    l.each do |p|
+      temp = "art_" + p[1]
+      np << "#{say temp} #{p[0]}"
+    end
+    return "#{say :pl} #{say nel} #{bold r[0]}, #{r[1]}. #{say :near} " + np.join(", ")
   end
   
   def up(user)
