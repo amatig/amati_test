@@ -1,3 +1,48 @@
+def art_det(type, text)
+  con = %W{ b c d f g h j k l m n p q r s t v w x y z }
+  voc = %W{ a e i o u }
+  case type
+  when 1
+    if text =~ /^(z|pn|gn|ps|x|y)/i
+      return "lo " + text
+    elsif text =~ /^s(.)/i and (con.include? $1)
+      return "lo " + text
+    elsif (voc.include? text[0,1])
+      return "l'" + text
+    elsif text =~ /^h(.)/i and (voc.include? $1)
+      return "l'" + text
+    else
+      return "il " + text
+    end
+  when 2
+    if text =~ /^(z|pn|gn|ps|x|y)/i
+      return "gli " + text
+    elsif text =~ /^s(.)/i and (con.include? $1)
+      return "gli " + text
+    elsif (voc.include? text[0,1])
+      return "gli " + text
+    elsif text =~ /^h(.)/i and (voc.include? $1)
+      return "gli " + text
+    else
+      return "i " + text
+    end
+  when 3
+    if (voc.include? text[0,1])
+      return "l'" + text
+    elsif text =~ /^h(.)/i and (voc.include? $1)
+      return "l'" + text
+    else
+      return "la " + text
+    end
+  when 4
+    if text[0,1] == "e"
+      return "l'" + text
+    else
+      return "le " + text
+    end
+  end
+end
+
 def say(str)
   msg = {
     :benv => "%s a te %s",
