@@ -15,11 +15,8 @@ def say(str)
     :c_e => "c'e'",
     :ci_sono => "ci sono",
     :nel_1 => "nel",
-    :nel_2 => "nella",
-    :nel_3 => "nelle",
-    :art_1 => "il",
-    :art_2 => "la",
-    :art_3 => "le",
+    :nel_3 => "nella",
+    :nel_2 => "nelle",
     :gu => "nella zona",
     :pl => "ti trovi",
     :near => "nelle vicinanze",
@@ -68,6 +65,7 @@ end
 def art_det(type, text)
   con = %W{ b c d f g h j k l m n p q r s t v w x y z }
   voc = %W{ a e i o u }
+  type = Integer(type)
   case type
   when 1
     if text =~ /^(z|pn|gn|ps|x|y)/i

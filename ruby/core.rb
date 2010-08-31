@@ -38,8 +38,7 @@ class Core < Database
     nel = "nel_" + r[2]
     np = []
     l.each do |p|
-      temp = "art_" + p[1]
-      np << "#{say temp} #{p[0]}"
+      np << art_det(p[1], p[0])
     end
     return "#{say :pl} #{say nel} #{bold r[0]}, #{r[1]}. #{say :near} " + np.join(", ")
   end
