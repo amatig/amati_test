@@ -36,7 +36,7 @@ class Core < Database
     l = read("name", "links, places", "place=#{temp} and places.id=near_place")
     place_name = place_name.strip
     if (l.include? [place_name])
-      p = get("id", "places", "name=#{place_name}")
+      p = get("id", "places", "name='#{place_name}'")
       @user_list[user].set_place(p[0])
       return place(user)
     else
