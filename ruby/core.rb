@@ -34,13 +34,16 @@ class Core < Database
   def place(user)
     temp = @user_list[user].place
     r = get("name, descr, attrs", "places", "id=#{temp}")
-    l = read("name, attrs", "links, places", "place=#{temp} and places.id=near_place")
     nel = "nel_" + r[2]
-    np = []
-    l.each do |p|
-      np << a_det(p[1], p[0])
-    end
-    return "#{say :pl} #{say nel} #{bold r[0]}, #{r[1]}. #{say :near} " + np.join(", ")
+    return "#{say :pl} #{say nel} #{bold r[0]}, #{r[1]}"
+  end
+  
+  def near_place(user)
+    temp = @user_list[user].place
+    l = read("name, attrs", "links, places", "place=#{temp} and places.id=near_place")
+    np = l.map { |p| a_det(p[1], p[0]) + bold(p[0]) }
+    c = (np.length > 1) ? :ci_sono : :c_e
+    return "#{say :np} #{say c} " + np.join(", ")
   end
   
   def up(user)
@@ -54,8 +57,8 @@ class Core < Database
   # test
   def get_users()
     r = read("nick", "users")
-    temp = (r.length > 1) ? :ci_sono : :c_e
-    return "#{say :gu} #{say temp} " + r.join(", ")
+    c = (r.length > 1) ? :ci_sono : :c_e
+    return "#{say :gu} #{say c} " + r.join(", ")
   end
   
 end

@@ -56,6 +56,8 @@ class Mud < IrcBot
       return @core.down(user)
     when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
       return @core.place(user)
+    when /^dove.+(collegato|andare)\?$/i
+      return @core.near_place(user)
     when /^chi.+(qu.|zona)\?$/i
       return @core.get_users
     end    

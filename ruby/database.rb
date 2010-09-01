@@ -11,7 +11,7 @@ class Database
     result = []
     res = @conn.exec(query)
     res.each do |row|
-      result << row.collect { |col| col[1].strip }
+      result << row.map { |col| col[1].strip }
     end
     res.clear
     return result

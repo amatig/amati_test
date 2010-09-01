@@ -19,7 +19,7 @@ def say(str)
     :nel_2 => "nelle",
     :gu => "nella zona",
     :pl => "ti trovi",
-    :near => "nelle vicinanze",
+    :np => "nelle vicinanze",
   }
   return msg[str.to_sym]
 end
@@ -70,42 +70,38 @@ def a_det(type, text)
   case Integer(type)
   when 1
     if text =~ /^(z|pn|gn|ps|x|y)/i
-      return "lo " + text
+      return "lo "
     elsif text =~ /^s(.)/i and (con.include? $1.downcase)
-      return "lo " + text
+      return "lo "
     elsif (voc.include? text[0,1].downcase)
-      return (text !~ /^(io|ie)/i) ? "l'" + text : "lo " + text
+      return (text !~ /^(io|ie)/i) ? "l'" : "lo "
     elsif text =~ /^h(.)/i and (voc.include? $1.downcase)
-      return "l'" + text
+      return "l'"
     else
-      return "il " + text
+      return "il "
     end
   when 2
-    return "gli " + text if text.downcase == "dei" # eccezione
+    return "gli " if text.downcase == "dei" # eccezione
     if text =~ /^(z|pn|gn|ps|x|y)/i
-      return "gli " + text
+      return "gli "
     elsif text =~ /^s(.)/i and (con.include? $1.downcase)
-      return "gli " + text
+      return "gli "
     elsif (voc.include? text[0,1].downcase)
-      return "gli " + text
+      return "gli "
     elsif text =~ /^h(.)/i and (voc.include? $1.downcase)
-      return "gli " + text
+      return "gli "
     else
-      return "i " + text
+      return "i "
     end
   when 3
     if (voc.include? text[0,1].downcase) and text !~ /^(io|ie)/i
-      return "l'" + text
+      return "l'"
     elsif text =~ /^h(.)/i and (voc.include? $1.downcase)
-      return "l'" + text
+      return "l'"
     else
-      return "la " + text
+      return "la "
     end
   when 4
-    if text[0,1].downcase == "e"
-      return "l'" + text
-    else
-      return "le " + text
-    end
+    return (text[0,1].downcase == "e") ? "l'" : "le "
   end
 end
