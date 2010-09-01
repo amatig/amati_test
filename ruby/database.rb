@@ -1,10 +1,4 @@
-begin
-  $_vers = true
-  require "pg"
-rescue
-  $_vers = false
-  require "postgres"
-end
+require "pg"
 
 class Database
   
@@ -17,7 +11,7 @@ class Database
     result = []
     res = @conn.exec(query)
     res.each do |row|
-      result << row.collect { |col| $_vers ? col[1].strip : col.strip }
+      result << row.collect { |col| col[1].strip }
     end
     res.clear
     return result

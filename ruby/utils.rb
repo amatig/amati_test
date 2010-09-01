@@ -62,45 +62,47 @@ end
 
 # grammatica
 
-def art_det(type, text)
+def a_det(type, text)
   con = %W{ b c d f g h j k l m n p q r s t v w x y z }
-  voc = %W{ a e i o u }
-  type = Integer(type)
-  case type
+  voc = %W{ a e i o u }  
+  # 1 maschile singolare e 2 plurale
+  # 3 femminile singolare e 4 plurale
+  case Integer(type)
   when 1
     if text =~ /^(z|pn|gn|ps|x|y)/i
       return "lo " + text
-    elsif text =~ /^s(.)/i and (con.include? $1)
+    elsif text =~ /^s(.)/i and (con.include? $1.downcase)
       return "lo " + text
-    elsif (voc.include? text[0,1])
-      return "l'" + text
-    elsif text =~ /^h(.)/i and (voc.include? $1)
+    elsif (voc.include? text[0,1].downcase)
+      return (text !~ /^(io|ie)/i) ? "l'" + text : "lo " + text
+    elsif text =~ /^h(.)/i and (voc.include? $1.downcase)
       return "l'" + text
     else
       return "il " + text
     end
   when 2
+    return "gli " + text if text.downcase == "dei" # eccezione
     if text =~ /^(z|pn|gn|ps|x|y)/i
       return "gli " + text
-    elsif text =~ /^s(.)/i and (con.include? $1)
+    elsif text =~ /^s(.)/i and (con.include? $1.downcase)
       return "gli " + text
-    elsif (voc.include? text[0,1])
+    elsif (voc.include? text[0,1].downcase)
       return "gli " + text
-    elsif text =~ /^h(.)/i and (voc.include? $1)
+    elsif text =~ /^h(.)/i and (voc.include? $1.downcase)
       return "gli " + text
     else
       return "i " + text
     end
   when 3
-    if (voc.include? text[0,1])
+    if (voc.include? text[0,1].downcase) and text !~ /^(io|ie)/i
       return "l'" + text
-    elsif text =~ /^h(.)/i and (voc.include? $1)
+    elsif text =~ /^h(.)/i and (voc.include? $1.downcase)
       return "l'" + text
     else
       return "la " + text
     end
   when 4
-    if text[0,1] == "e"
+    if text[0,1].downcase == "e"
       return "l'" + text
     else
       return "le " + text

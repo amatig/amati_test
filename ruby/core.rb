@@ -1,5 +1,5 @@
 require "database.rb"
-require "cmd_msg.rb"
+require "utils.rb"
 require "user.rb"
 
 class Core < Database
@@ -38,7 +38,7 @@ class Core < Database
     nel = "nel_" + r[2]
     np = []
     l.each do |p|
-      np << art_det(p[1], p[0])
+      np << a_det(p[1], p[0])
     end
     return "#{say :pl} #{say nel} #{bold r[0]}, #{r[1]}. #{say :near} " + np.join(", ")
   end
