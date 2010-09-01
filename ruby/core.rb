@@ -41,9 +41,8 @@ class Core < Database
   def near_place(user)
     temp = @user_list[user].place
     l = read("name, attrs", "links, places", "place=#{temp} and places.id=near_place")
-    np = l.map { |p| a_d(p[1], p[0]) + bold(p[0]) }
-    c = (np.length > 1) ? :ci_sono : :c_e
-    return "#{say :np} #{say c} " + np.join(", ")
+    np = l.map { |p| pa_di(a_d(p[1], p[0])) + bold(p[0]) }
+    return "#{say :np} #{list np}"
   end
   
   def up(user)
@@ -58,7 +57,7 @@ class Core < Database
   def get_users()
     r = read("nick", "users")
     c = (r.length > 1) ? :ci_sono : :c_e
-    return "#{say :gu} #{say c} " + r.join(", ")
+    return "#{say :gu} #{say c} #{list r}"
   end
   
 end
