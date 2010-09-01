@@ -34,14 +34,14 @@ class Core < Database
   def place(user)
     temp = @user_list[user].place
     r = get("name, descr, attrs", "places", "id=#{temp}")
-    nel = "nel_" + r[2]
-    return "#{say :pl} #{say nel} #{bold r[0]}, #{r[1]}"
+    pa = pa_in(a_d(r[2], r[0]))
+    return "#{say :pl} #{pa}#{bold r[0]}, #{r[1]}"
   end
   
   def near_place(user)
     temp = @user_list[user].place
     l = read("name, attrs", "links, places", "place=#{temp} and places.id=near_place")
-    np = l.map { |p| a_det(p[1], p[0]) + bold(p[0]) }
+    np = l.map { |p| a_d(p[1], p[0]) + bold(p[0]) }
     c = (np.length > 1) ? :ci_sono : :c_e
     return "#{say :np} #{say c} " + np.join(", ")
   end

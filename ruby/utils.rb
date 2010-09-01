@@ -1,4 +1,4 @@
-# messaggi
+# MESSAGGI
 
 def up_case(text)
   return text[0].chr.capitalize + text[1, text.size]
@@ -18,9 +18,6 @@ def say(str)
     :down_false => "ti sei gia' per terra!",
     :c_e => "c'e'",
     :ci_sono => "ci sono",
-    :nel_1 => "nel",
-    :nel_3 => "nella",
-    :nel_2 => "nelle",
     :gu => "nella zona",
     :pl => "ti trovi",
     :np => "nelle vicinanze",
@@ -28,7 +25,7 @@ def say(str)
   return msg[str.to_sym]
 end
 
-# font style
+# FONT STYLE
 
 def bold(text)
   return "" + text + ""
@@ -64,9 +61,11 @@ def color(c, text)
   return color_set[c.to_sym] + text + ""
 end
 
-# grammatica
+# GRAMMATICA
 
-def a_det(type, text)
+# articolo determinativo
+
+def a_d(type, text)
   con = %W{ b c d f g h j k l m n p q r s t v w x y z }
   voc = %W{ a e i o u }  
   # 1 maschile singolare e 2 plurale
@@ -107,5 +106,45 @@ def a_det(type, text)
     end
   when 4
     return (text[0,1].downcase == "e") ? "l'" : "le "
+  end
+end
+
+#preposizioni articolate: di, a, da, in, con, su, per, tra, fra
+
+def pa_di(art)
+  case art
+  when "il "
+    return "del "
+  when "lo "
+    return "dello "
+  when "la "
+    return "della "
+  when "gli "
+    return "degli "
+  when "i "
+    return "dei "
+  when "le "
+    return "delle "
+  when "l'"
+    return "dell'"
+  end
+end
+
+def pa_in(art)
+  case art
+  when "il "
+    return "nel "
+  when "lo "
+    return "nello "
+  when "la "
+    return "nella "
+  when "gli "
+    return "negli "
+  when "i "
+    return "nei "
+  when "le "
+    return "nelle "
+  when "l'"
+    return "nell'"
   end
 end
