@@ -22,9 +22,9 @@ class Core < Database
   end
   
   def welcome(user, greeting)
-    r = get("*", "users", "nick='#{user}'")
-    unless r.empty?
-      @user_list[user] = User.new(r)
+    u = get("*", "users", "nick='#{user}'")
+    unless u.empty?
+      @user_list[user] = User.new(u)
       return "#{say :benv} #{place user}" % [greeting, bold(user)]
     else
       return say(:no_reg)
@@ -33,9 +33,9 @@ class Core < Database
   
   def place(user)
     temp = @user_list[user].place
-    r = get("name, descr, attrs", "places", "id=#{temp}")
-    pa = pa_in(a_d(r[2], r[0]))
-    return "#{say :pl} #{pa}#{bold r[0]}, #{r[1]}"
+    p = get("name, descr, attrs", "places", "id=#{temp}")
+    pa = pa_in(a_d(p[2], p[0]))
+    return "#{say :pl} #{pa}#{bold p[0]}, #{p[1]}"
   end
   
   def near_place(user)
@@ -55,9 +55,10 @@ class Core < Database
   
   # test
   def get_users()
-    r = read("nick", "users")
-    c = (r.length > 1) ? :ci_sono : :c_e
-    return "#{say :gu} #{say c} #{list r}"
+    u = read("nick", "users")
+    u = u.map { |e| bold(e[0]) }
+    c = (u.length > 1) ? :ci_sono : :c_e
+    return "#{say :gu} #{say c} #{list u}"
   end
   
 end
