@@ -2,7 +2,8 @@
 
 def list(array)
   str = array.join(", ")
-  str[str.rindex(", "), 2] = " e "
+  i = str.rindex(", ")
+  str[i, 2] = " e " if i
   return str
 end
 
@@ -25,10 +26,11 @@ $_msg = {
   :ci_sono => "ci sono",
   :gu => "nella zona",
   :pl => "ti trovi",
+  :no_pl => "non conosco nessun luogo nelle vicinanze con questo nome!",
   :np => "sei nelle vicinanze",
 }
 
-def say(str)
+def get_text(str)
   return $_msg[str.to_sym]
 end
 

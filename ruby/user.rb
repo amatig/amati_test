@@ -6,6 +6,10 @@ class User
     @stand_up = true 
   end
   
+  def set_place(id)
+    @place = id
+  end
+  
   def place()
     return @place
   end
