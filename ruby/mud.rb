@@ -31,9 +31,9 @@ class Mud < IrcBot
     if msg =~ /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
       text = evaluate($1, $2, $3, $4)
       unless text.empty?
-        message($1, text.capitalize)
+        message($1, up_case(text))
       else
-        message($1, @core.cmd_not_found.capitalize)
+        message($1, up_case(@core.cmd_not_found))
       end
     end
   end

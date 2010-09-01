@@ -1,5 +1,9 @@
 # messaggi
 
+def up_case(text)
+  return text[0].chr.capitalize + text[1, text.size]
+end
+
 def say(str)
   msg = {
     :benv => "%s a te %s",
