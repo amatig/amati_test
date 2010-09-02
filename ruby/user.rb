@@ -15,7 +15,7 @@ class User
   
   def set_place(id)
     @mutex_place.synchronize do
-      @place = id
+      @place = Integer(id)
     end
   end
   

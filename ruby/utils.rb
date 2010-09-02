@@ -26,6 +26,7 @@ $_msg = {
   :ci_sono => "ci sono",
   :uz => "nella zona %s %s",
   :nobody => "non c'e' nessuno",
+  :nothing => "non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
   :onlyu => "solo tu",
   :pl => "ti trovi %s, %s",
   :no_pl => "non conosco nessun luogo nelle vicinanze con questo nome!",

@@ -38,14 +38,14 @@ class Core < Database
   end
   
   def move(user, place_name)
-    temp = @user_list[user].place
+    me = @user_list[user]
     l = read(["places.id", "name"], 
              "links,places", 
-             "place=#{temp} and places.id=near_place")
+             "place=#{me.place} and places.id=near_place")
     find = nil
     l.each { |p| (find = p; break) if p[1] =~ /#{place_name.strip}/i }
     if find
-      @user_list[user].set_place(find[0])
+      me.set_place(find[0])
       return place(user)
     else
       return get_text(:no_pl)
@@ -76,14 +76,25 @@ class Core < Database
     return get_text("down_#{@user_list[user].down}")
   end
   
+  def look(user, name)
+    temp = @user_list[user].place
+    o = get(["name", "descr"], 
+            "npc,locations", 
+            "place=#{temp} and npc.id=npc and name='#{name}'")
+    return o.join(", ") unless o.empty? # per ora solo npc
+    # se nn e' un npc controlla gli oggetti con quel nome ecc
+    # da fare ...
+    return get_text(:nothing)
+  end
+  
   def users_zone(user)
     me = @user_list[user]
     npc = read(["name"], 
                "npc,locations", 
                "place=#{me.place} and npc.id=npc")
-    u = npc.map { |n| uline(n[0]) } # init u con gli npc
+    u = npc.map { |n| italic(n[0]) } # init u con gli npc
     @user_list.each_pair do |k, v|
-      u << bold(v.to_s) if v != me and v.place == me.place
+      u << bold(v.to_s) if (v != me and v.place == me.place)
     end
     if u.empty?
       c = get_text(:nobody) + ","
