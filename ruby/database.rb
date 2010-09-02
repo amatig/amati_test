@@ -6,12 +6,20 @@ class Database
     @conn = PGconn.connect(host, port, "", "", db_name, user, pass)
   end
   
-  def exec(query)
+  def exec(cols, query)
     # puts query
     result = []
     res = @conn.exec(query)
-    res.each do |row|
-      result << row.map { |col| col[1].strip }
+    if cols == ["*"]
+      res.each do |row|
+        result << row.map { |r| r[1].strip }
+      end
+    else
+      cols = cols.map { |f| (f =~ /as\s(.+)$/i) ? $1 : f }
+      cols = cols.map { |f| f.rindex(".") ? f.slice(f.rindex(".") + 1, f.size) : f }
+      res.each do |row|
+        result << cols.map { |f| row[f].strip }
+      end
     end
     res.clear
     return result
@@ -19,8 +27,8 @@ class Database
   
   # ritorna un array di tuple, ognuna e' 
   # un array di campi della select
-  def read(fields, tables, conds = "true")
-    return exec("select #{fields} from #{tables} where #{conds}")
+  def read(cols, tables, conds = "true")
+    return exec(cols, "select #{cols*','} from #{tables} where #{conds}")
   end
   
   # ritorna la prima tupla della query, 
