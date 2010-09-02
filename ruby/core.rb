@@ -1,3 +1,4 @@
+require "thread"
 require "database.rb"
 require "utils.rb"
 require "user.rb"
@@ -7,6 +8,9 @@ class Core < Database
   def initialize(*args)
     super *args
     @user_list = {}
+    
+    @mutex = Mutex.new
+    Thread.abort_on_exception = true
   end
   
   def cmd_not_found()
@@ -24,7 +28,9 @@ class Core < Database
   def welcome(user, greeting)
     u = get(["*"], "users", "nick='#{user}'")
     unless u.empty?
-      @user_list[user] = User.new(u)
+      @mutex.synchronize do
+        @user_list[user] = User.new(u)
+      end
       return get_text(:benv) % [greeting, bold(user), place(user)]
     else
       return get_text(:no_reg)

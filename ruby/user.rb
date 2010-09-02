@@ -1,29 +1,42 @@
+require "thread"
+
 class User
     
   def initialize(data)
     @nick = data[0]
     @place = 1
-    @stand_up = true 
+    @stand_up = true
+    
+    @mutex = Mutex.new
+    Thread.abort_on_exception = true
   end
   
   def set_place(id)
-    @place = id
+    @mutex.synchronize do
+      @place = id
+    end
   end
   
   def place()
-    return @place
+    @mutex.synchronize do
+      return @place
+    end
   end
   
   def up()
-    return false if @stand_up
-    @stand_up = true
-    return true
+    @mutex.synchronize do    
+      return false if @stand_up
+      @stand_up = true
+      return true
+    end
   end
   
   def down()
-    return false unless @stand_up
-    @stand_up = false
-    return true
+    @mutex.synchronize do    
+      return false unless @stand_up
+      @stand_up = false
+      return true
+    end
   end
   
   def to_s()
