@@ -39,6 +39,7 @@ class Core < Database
   
   def move(user, place_name)
     me = @user_list[user]
+    return get_text("uaresit_#{rand 2}") unless me.stand_up?
     l = read(["places.id", "name"], 
              "links,places", 
              "place=#{me.place} and places.id=near_place")

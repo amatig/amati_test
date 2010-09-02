@@ -26,7 +26,7 @@ class User
   end
   
   def up()
-    @mutex_attrs.synchronize do    
+    @mutex_attrs.synchronize do
       return false if @stand_up
       @stand_up = true
       return true
@@ -34,10 +34,16 @@ class User
   end
   
   def down()
-    @mutex_attrs.synchronize do    
+    @mutex_attrs.synchronize do
       return false unless @stand_up
       @stand_up = false
       return true
+    end
+  end
+  
+  def stand_up?()
+    @mutex_attrs.synchronize do
+      return @stand_up
     end
   end
   

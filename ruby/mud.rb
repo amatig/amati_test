@@ -62,7 +62,7 @@ class Mud < IrcBot
       return @core.move(user, $2)
     when /^chi.+(qu.|zona)\?$/i
       return @core.users_zone(user)
-    when /^(esamina|guarda|osserva|scruta|analizza)\s(.+)$/i
+    when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
       return @core.look(user, $2)
     end    
     return ""
