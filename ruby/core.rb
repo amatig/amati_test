@@ -76,12 +76,22 @@ class Core < Database
     return get_text("down_#{@user_list[user].down}")
   end
   
-  # test
-  def get_users()
-    u = read(["nick"], "users")
-    u = u.map { |e| bold(e[0]) }
-    c = (u.length > 1) ? :ci_sono : :c_e
-    return get_text(:gu) % [get_text(c), list(u)]
+  def users_zone(user)
+    me = @user_list[user]
+    npc = read(["name"], 
+               "npc,locations", 
+               "place=#{me.place} and npc.id=npc")
+    u = npc.map { |n| uline(n[0]) } # init u con gli npc
+    @user_list.each_pair do |k, v|
+      u << bold(v.to_s) if v != me and v.place == me.place
+    end
+    if u.empty?
+      c = get_text(:nobody) + ","
+      u = [get_text(:onlyu)]
+    else
+      c = get_text((u.length > 1) ? :ci_sono : :c_e)
+    end
+    return get_text(:uz) % [c, list(u)]
   end
   
 end

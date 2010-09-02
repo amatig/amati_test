@@ -61,7 +61,7 @@ class Mud < IrcBot
     when /^vado\s(ne|a).{1,3}\s(.+)$/i
       return @core.move(user, $2)
     when /^chi.+(qu.|zona)\?$/i
-      return @core.get_users
+      return @core.users_zone(user)
     end    
     return ""
   end
