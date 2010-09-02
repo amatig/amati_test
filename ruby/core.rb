@@ -43,7 +43,7 @@ class Core < Database
              "links,places", 
              "place=#{temp} and places.id=near_place")
     find = nil
-    l.each { |p| (find = p; break) if p[1] == place_name.strip }
+    l.each { |p| (find = p; break) if p[1] =~ /#{place_name.strip}/i }
     if find
       @user_list[user].set_place(find[0])
       return place(user)
