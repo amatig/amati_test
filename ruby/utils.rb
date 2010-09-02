@@ -12,7 +12,7 @@ def up_case(text)
 end
 
 $_msg = {
-  :benv => "%s a te %s",
+  :benv => "%s a te %s! %s",
   :r_benv => "prima d'ogni cosa e' buona eduzione salutare!",
   :no_reg => "non ti conosco straniero, non sei nella mia storia!",
   :cnf_0 => "non ho capito...",
@@ -24,10 +24,10 @@ $_msg = {
   :down_false => "ti sei gia' per terra!",
   :c_e => "c'e'",
   :ci_sono => "ci sono",
-  :gu => "nella zona",
-  :pl => "ti trovi",
+  :gu => "nella zona %s %s",
+  :pl => "ti trovi %s, %s",
   :no_pl => "non conosco nessun luogo nelle vicinanze con questo nome!",
-  :np => "sei nelle vicinanze",
+  :np => "sei nelle vicinanze %s",
 }
 
 def get_text(str)

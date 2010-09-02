@@ -58,8 +58,8 @@ class Mud < IrcBot
       return @core.place(user)
     when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
       return @core.near_place(user)
-    when /^vado\sne.{1,3}\s(.+)$/i
-      return @core.move(user, $1)
+    when /^vado\s(ne|a).{1,3}\s(.+)$/i
+      return @core.move(user, $2)
     when /^chi.+(qu.|zona)\?$/i
       return @core.get_users
     end    

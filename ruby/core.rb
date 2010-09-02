@@ -25,7 +25,7 @@ class Core < Database
     u = get("*", "users", "nick='#{user}'")
     unless u.empty?
       @user_list[user] = User.new(u)
-      return "#{get_text :benv} #{place user}" % [greeting, bold(user)]
+      return get_text(:benv) % [greeting, bold(user), place(user)]
     else
       return get_text(:no_reg)
     end
@@ -33,7 +33,9 @@ class Core < Database
   
   def move(user, place_name)
     temp = @user_list[user].place
-    l = read("name", "links, places", "place=#{temp} and places.id=near_place")
+    l = read("name", 
+             "links, places", 
+             "place=#{temp} and places.id=near_place")
     place_name = place_name.strip
     if (l.include? [place_name])
       p = get("id", "places", "name='#{place_name}'")
@@ -47,15 +49,17 @@ class Core < Database
   def place(user)
     temp = @user_list[user].place
     p = get("name, descr, attrs", "places", "id=#{temp}")
-    pa = pa_in(a_d(p[2], p[0]))
-    return "#{get_text :pl} #{pa}#{bold p[0]}, #{p[1]}"
+    temp = pa_in(a_d(p[2], p[0])) + bold(p[0])
+    return get_text(:pl) % [temp, p[1]]
   end
   
   def near_place(user)
     temp = @user_list[user].place
-    l = read("name, attrs", "links, places", "place=#{temp} and places.id=near_place")
+    l = read("name, attrs", 
+             "links, places", 
+             "place=#{temp} and places.id=near_place")
     l = l.map { |p| pa_di(a_d(p[1], p[0])) + bold(p[0]) }
-    return "#{get_text :np} #{list l}"
+    return get_text(:np) % list(l)
   end
   
   def up(user)
@@ -71,7 +75,7 @@ class Core < Database
     u = read("nick", "users")
     u = u.map { |e| bold(e[0]) }
     c = (u.length > 1) ? :ci_sono : :c_e
-    return "#{get_text :gu} #{get_text c} #{list u}"
+    return get_text(:gu) % [get_text(c), list(u)]
   end
   
 end
