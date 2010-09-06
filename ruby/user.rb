@@ -1,11 +1,18 @@
 require "thread"
+require "database.rb"
 
 class User
   
+  def User.get(user)
+    data = Database.instance.get(["*"], "users", "nick='#{user}'")
+    return (data.empty?) ? nil : User.new(data)
+  end
+  
   def initialize(data)
+    @db = Database.instance
+    
     @nick = data[0]
     @place = 1
-    
     @stand_up = true
     
     @mutex_place = Mutex.new

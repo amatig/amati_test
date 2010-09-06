@@ -1,5 +1,5 @@
-require "database.rb"
 require "thread"
+require "database.rb"
 require "utils.rb"
 require "user.rb"
 
@@ -26,10 +26,10 @@ class Core
   end
   
   def welcome(user, greeting)
-    u = @db.get(["*"], "users", "nick='#{user}'")
-    unless u.empty?
+    u = User.get(user)
+    if u
       @mutex.synchronize do
-        @user_list[user] = User.new(u)
+        @user_list[user] = u
       end
       return get_text(:benv) % [greeting, bold(user), place(user)]
     else
