@@ -1,8 +1,10 @@
 require "pg"
+require "singleton"
 
 class Database
+  include Singleton
   
-  def initialize(host, port, db_name, user, pass = "")
+  def connect(host, port, db_name, user, pass = "")
     @conn = PGconn.connect(host, port, "", "", db_name, user, pass)
   end
   

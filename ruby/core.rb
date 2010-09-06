@@ -1,12 +1,12 @@
-require "thread"
 require "database.rb"
+require "thread"
 require "utils.rb"
 require "user.rb"
 
-class Core < Database
+class Core
   
-  def initialize(*args)
-    super *args
+  def initialize()
+    @db = Database.instance
     @user_list = {}
     
     @mutex = Mutex.new
@@ -26,7 +26,7 @@ class Core < Database
   end
   
   def welcome(user, greeting)
-    u = get(["*"], "users", "nick='#{user}'")
+    u = @db.get(["*"], "users", "nick='#{user}'")
     unless u.empty?
       @mutex.synchronize do
         @user_list[user] = User.new(u)
@@ -40,9 +40,9 @@ class Core < Database
   def move(user, place_name)
     me = @user_list[user]
     return get_text("uaresit_#{rand 2}") unless me.stand_up?
-    l = read(["places.id", "name"], 
-             "links,places", 
-             "place=#{me.place} and places.id=near_place")
+    l = @db.read(["places.id", "name"], 
+                 "links,places", 
+                 "place=#{me.place} and places.id=near_place")
     find = nil
     l.each { |p| (find = p; break) if p[1] =~ /#{place_name.strip}/i }
     if find
@@ -55,16 +55,16 @@ class Core < Database
   
   def place(user)
     temp = @user_list[user].place
-    p = get(["name", "descr", "attrs"], "places", "id=#{temp}")
+    p = @db.get(["name", "descr", "attrs"], "places", "id=#{temp}")
     temp = pa_in(a_d(p[2], p[0])) + bold(p[0])
     return get_text(:pl) % [temp, p[1]]
   end
   
   def near_place(user)
     temp = @user_list[user].place
-    l = read(["name", "attrs"], 
-             "links,places", 
-             "place=#{temp} and places.id=near_place")
+    l = @db.read(["name", "attrs"], 
+                 "links,places", 
+                 "place=#{temp} and places.id=near_place")
     l = l.map { |p| pa_di(a_d(p[1], p[0])) + bold(p[0]) }
     return get_text(:np) % list(l)
   end
@@ -79,9 +79,9 @@ class Core < Database
   
   def look(user, name)
     temp = @user_list[user].place
-    o = get(["name", "descr"], 
-            "npc,locations", 
-            "place=#{temp} and npc.id=npc and name='#{name}'")
+    o = @db.get(["name", "descr"], 
+                "npc,locations", 
+                "place=#{temp} and npc.id=npc and name='#{name}'")
     return o.join(", ") unless o.empty? # per ora solo npc
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
@@ -90,9 +90,9 @@ class Core < Database
   
   def users_zone(user)
     me = @user_list[user]
-    npc = read(["name"], 
-               "npc,locations", 
-               "place=#{me.place} and npc.id=npc")
+    npc = @db.read(["name"], 
+                   "npc,locations", 
+                   "place=#{me.place} and npc.id=npc")
     u = npc.map { |n| italic(n[0]) } # init u con gli npc
     @user_list.each_pair do |k, v|
       u << bold(v.to_s) if (v != me and v.place == me.place)

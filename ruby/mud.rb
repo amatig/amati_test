@@ -1,21 +1,28 @@
 #!/usr/bin/ruby
 require "ircbot.rb"
+require "database.rb"
 require "core.rb"
 
 $SAFE = 1
 
 class Mud < IrcBot
   
+  def initialize(*args)
+    super(*args)
+    @core = Core.new
+  end
+  
   def connectDB(*args)
-    @core = Core.new(*args)
+    @db = Database.instance
+    @db.connect(*args)
   end
   
   def closeDB()
-    @core.close
+    @db.close
   end
   
   def connectIRC(*args)
-    super *args
+    super(*args)
     
     #Thread.new do
     #  while true
