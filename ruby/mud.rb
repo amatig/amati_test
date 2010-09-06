@@ -50,6 +50,9 @@ class Mud < IrcBot
         return @core.need_welcome
       end
     end
+    
+    @core.update_timestamp(nick) # per controllare attivita' utente
+    
     # tutti i comandi
     case msg
     when /^mi\s(alzo|sveglio)$/i

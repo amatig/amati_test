@@ -18,9 +18,19 @@ class User
     Thread.abort_on_exception = true
     
     # caricamento dati utente
+    @timestamp = Time.now.to_i
+    
     @nick = data[1]
     @stand_up = true    
     move(data[2])
+  end
+  
+  def update_timestamp()
+    @timestamp = Time.now.to_i
+  end
+  
+  def timestamp()
+    return @timestamp
   end
   
   def move(place_id)

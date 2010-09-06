@@ -11,6 +11,18 @@ class Core
     
     @mutex = Mutex.new
     Thread.abort_on_exception = true
+    
+    Thread.new do
+      while true do
+        temp = @user_list.keys
+        temp.each do |k|
+          if (Time.new.to_i - @user_list[k].timestamp > 10)
+            @mutex.synchronize { @user_list.delete(k) }
+          end
+        end
+        sleep 5
+      end
+    end
   end
   
   def cmd_not_found()
@@ -37,13 +49,17 @@ class Core
     end
   end
   
+  def update_timestamp(nick)
+    @user_list[nick].update_timestamp
+  end
+  
   def move(nick, place_name)
     me = @user_list[nick]
     return get_text("uaresit_#{rand 2}") unless me.stand_up?
     find = nil
     me.near_place.each { |p| (find = p; break) if p[1] =~ /#{place_name.strip}/i }
     if find
-      me.move(find[0])
+      me.move(find[0]) # sposta al place
       return place(nick)
     else
       return get_text(:no_pl)
