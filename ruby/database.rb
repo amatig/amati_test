@@ -18,7 +18,9 @@ class Database
       end
     else
       cols = cols.map { |f| (f =~ /as\s(.+)$/i) ? $1 : f }
-      cols = cols.map { |f| f.rindex(".") ? f.slice(f.rindex(".") + 1, f.size) : f }
+      cols = cols.map do |f| 
+        f.rindex(".") ? f.slice(f.rindex(".") + 1, f.size) : f 
+      end
       res.each do |row|
         result << cols.map { |f| row[f].strip }
       end

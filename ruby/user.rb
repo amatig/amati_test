@@ -27,15 +27,11 @@ class User
   end
   
   def update_timestamp()
-    @mutex_time.synchronize do
-      @timestamp = Time.now.to_i
-    end
+    @mutex_time.synchronize { @timestamp = Time.now.to_i }
   end
   
   def timestamp()
-    @mutex_time.synchronize do
-      return @timestamp
-    end
+    @mutex_time.synchronize { return @timestamp }
   end
   
   def move(place_id)
@@ -50,15 +46,11 @@ class User
   end
   
   def place()
-    @mutex_place.synchronize do
-      return @place
-    end
+    @mutex_place.synchronize { return @place }
   end
   
   def near_place()
-    @mutex_place.synchronize do
-      return @near_place
-    end
+    @mutex_place.synchronize { return @near_place }
   end
   
   def up()
@@ -78,9 +70,7 @@ class User
   end
   
   def stand_up?()
-    @mutex_attrs.synchronize do
-      return @stand_up
-    end
+    @mutex_attrs.synchronize { return @stand_up }
   end
   
   def to_s()

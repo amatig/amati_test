@@ -25,12 +25,16 @@ class Core
     end
   end
   
-  def cmd_not_found()
-    return get_text("cnf_#{rand 3}")
-  end
-  
   def is_welcome?(nick)
     return (@user_list.key? nick)
+  end
+  
+  def update_timestamp(nick)
+    @user_list[nick].update_timestamp
+  end
+  
+  def cmd_not_found()
+    return get_text("cnf_#{rand 3}")
   end
   
   def need_welcome()
@@ -47,15 +51,16 @@ class Core
     end
   end
   
-  def update_timestamp(nick)
-    @user_list[nick].update_timestamp
-  end
-  
   def move(nick, place_name)
     me = @user_list[nick]
     return get_text("uaresit_#{rand 2}") unless me.stand_up?
     find = nil
-    me.near_place.each { |p| (find = p; break) if p[1] =~ /#{place_name.strip}/i }
+    me.near_place.each do |p|
+      if p[1] =~ /#{place_name.strip}/i 
+        find = p
+        break
+      end
+    end
     if find
       me.move(find[0]) # sposta al place
       return place(nick)
@@ -89,7 +94,7 @@ class Core
     o = @db.get(["name", "descr"], 
                 "npc,locations", 
                 "place=#{temp} and npc.id=npc and name='#{name}'")
-    return o.join(", ") unless o.empty? # per ora solo npc
+    return o.join(", ") unless o.empty?
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
     return get_text(:nothing)

@@ -7,9 +7,13 @@ $SAFE = 1
 
 class Mud < IrcBot
   
+  def initialize(*args)
+    super(*args)
+    @core = Core.new # insieme di funzioni x elaborare i messaggi
+  end
+  
   def connectDB(*args)
     Database.instance.connect(*args) # singleton
-    @core = Core.new # vero modulo per elaborare i messaggi
   end
   
   def closeDB()
@@ -40,7 +44,7 @@ class Mud < IrcBot
       end
     end
     
-    @core.update_timestamp(nick) # per controllare attivita' utente
+    @core.update_timestamp(nick) # segnala attivita' utente
     
     # tutti i comandi
     case msg
