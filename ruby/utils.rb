@@ -12,6 +12,7 @@ def up_case(text)
 end
 
 $_msg = {
+  :save => "Terro' presente il punto in cui sei arrivato nella storia",
   :benv => "%s a te %s! %s",
   :r_benv => "prima d'ogni cosa e' buona eduzione salutare!",
   :no_reg => "non ti conosco straniero, non sei nella mia storia!",

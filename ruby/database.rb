@@ -42,6 +42,19 @@ class Database
     return (temp.length > 0) ? temp[0] : temp
   end
   
+  # aggiorna i campi di una tabella
+  def update(fields, table, conds = "true")
+    temp = []
+    fields.each_pair do |k, v|
+      if v.class == String
+        temp << "#{k}='#{v}'"
+      else
+        temp << "#{k}=#{v}"
+      end
+    end
+    @conn.exec("update #{table} set #{temp*','} where #{conds}")
+  end
+  
   def close()
     @conn.close if @conn
   end

@@ -26,6 +26,14 @@ class User
     @timestamp = Time.now.to_i
   end
   
+  def save()
+    @mutex_attrs.synchronize do
+      @db.update({"place"=>Integer(@place[0])}, 
+                 "users", 
+                 "nick='#{@nick}'")
+    end
+  end
+  
   def update_timestamp()
     @mutex_time.synchronize { @timestamp = Time.now.to_i }
   end

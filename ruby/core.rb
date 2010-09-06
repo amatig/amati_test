@@ -33,6 +33,11 @@ class Core
     @user_list[nick].update_timestamp
   end
   
+  def save(nick)
+    @user_list[nick].save
+    return get_text(:save)
+  end
+  
   def cmd_not_found()
     return get_text("cnf_#{rand 3}")
   end

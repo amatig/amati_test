@@ -62,7 +62,9 @@ class Mud < IrcBot
       return @core.users_zone(nick)
     when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
       return @core.look(nick, $2)
-    end    
+    when /^salva$/i
+      return @core.save(nick)
+    end
     return ""
   end
   
