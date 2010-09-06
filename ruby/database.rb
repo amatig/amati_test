@@ -46,11 +46,7 @@ class Database
   def update(fields, table, conds = "true")
     temp = []
     fields.each_pair do |k, v|
-      if v.class == String
-        temp << "#{k}='#{v}'"
-      else
-        temp << "#{k}=#{v}"
-      end
+      (v.class == String) ? temp << "#{k}='#{v}'" : temp << "#{k}=#{v}"
     end
     @conn.exec("update #{table} set #{temp*','} where #{conds}")
   end
