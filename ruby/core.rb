@@ -15,9 +15,8 @@ class Core
     # controllo attivita' utente
     Thread.new do
       while true do
-        temp = @user_list.keys
-        temp.each do |k|
-          if (Time.new.to_i - @user_list[k].timestamp >= 60)
+        @user_list.each_pair do |k, v|
+          if (Time.new.to_i - v.timestamp >= 60)
             @mutex.synchronize { @user_list.delete(k) }
           end
         end
