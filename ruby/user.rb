@@ -11,26 +11,31 @@ class User
   end
   
   def initialize(data)
-    @db = Database.instance
+    @db = Database.instance # singleton
     
+    @mutex_time = Mutex.new    
     @mutex_place = Mutex.new
     @mutex_attrs = Mutex.new
     Thread.abort_on_exception = true
     
-    # caricamento dati utente
-    @timestamp = Time.now.to_i
-    
+    # init dati utente
     @nick = data[1]
     @stand_up = true    
     move(data[2])
-  end
-  
-  def update_timestamp()
+    
     @timestamp = Time.now.to_i
   end
   
+  def update_timestamp()
+    @mutex_time.synchronize do
+      @timestamp = Time.now.to_i
+    end
+  end
+  
   def timestamp()
-    return @timestamp
+    @mutex_time.synchronize do
+      return @timestamp
+    end
   end
   
   def move(place_id)

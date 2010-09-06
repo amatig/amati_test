@@ -6,21 +6,22 @@ require "user.rb"
 class Core
   
   def initialize()
-    @db = Database.instance
+    @db = Database.instance # singleton
     @user_list = {}
     
     @mutex = Mutex.new
     Thread.abort_on_exception = true
     
+    # controllo attivita' utente
     Thread.new do
       while true do
         temp = @user_list.keys
         temp.each do |k|
-          if (Time.new.to_i - @user_list[k].timestamp > 10)
+          if (Time.new.to_i - @user_list[k].timestamp >= 60)
             @mutex.synchronize { @user_list.delete(k) }
           end
         end
-        sleep 5
+        sleep 30
       end
     end
   end
@@ -40,9 +41,7 @@ class Core
   def welcome(nick, greeting)
     u = User.get(nick)
     if u
-      @mutex.synchronize do
-        @user_list[nick] = u
-      end
+      @mutex.synchronize { @user_list[nick] = u }
       return get_text(:benv) % [greeting, bold(nick), place(nick)]
     else
       return get_text(:no_reg)

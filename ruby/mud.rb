@@ -8,23 +8,12 @@ $SAFE = 1
 class Mud < IrcBot
   
   def connectDB(*args)
-    Database.instance.connect(*args)
-    @core = Core.new
+    Database.instance.connect(*args) # singleton
+    @core = Core.new # vero modulo per elaborare i messaggi
   end
   
   def closeDB()
     Database.instance.close
-  end
-  
-  def connectIRC(*args)
-    super(*args)
-    
-    #Thread.new do
-    #  while true
-    #    puts "< cose a tempo >"
-    #    sleep 1
-    #  end
-    #end
   end
   
   def parse(msg)
