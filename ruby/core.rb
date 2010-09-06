@@ -17,68 +17,61 @@ class Core
     return get_text("cnf_#{rand 3}")
   end
   
-  def is_welcome?(user)
-    return (@user_list.key? user)
+  def is_welcome?(nick)
+    return (@user_list.key? nick)
   end
   
   def need_welcome()
     return get_text(:r_benv)
   end
   
-  def welcome(user, greeting)
-    u = User.get(user)
+  def welcome(nick, greeting)
+    u = User.get(nick)
     if u
       @mutex.synchronize do
-        @user_list[user] = u
+        @user_list[nick] = u
       end
-      return get_text(:benv) % [greeting, bold(user), place(user)]
+      return get_text(:benv) % [greeting, bold(nick), place(nick)]
     else
       return get_text(:no_reg)
     end
   end
   
-  def move(user, place_name)
-    me = @user_list[user]
+  def move(nick, place_name)
+    me = @user_list[nick]
     return get_text("uaresit_#{rand 2}") unless me.stand_up?
-    l = @db.read(["places.id", "name"], 
-                 "links,places", 
-                 "place=#{me.place} and places.id=near_place")
     find = nil
-    l.each { |p| (find = p; break) if p[1] =~ /#{place_name.strip}/i }
+    me.near_place.each { |p| (find = p; break) if p[1] =~ /#{place_name.strip}/i }
     if find
-      me.set_place(find[0])
-      return place(user)
+      me.move(find[0])
+      return place(nick)
     else
       return get_text(:no_pl)
     end
   end
   
-  def place(user)
-    temp = @user_list[user].place
-    p = @db.get(["name", "descr", "attrs"], "places", "id=#{temp}")
-    temp = pa_in(a_d(p[2], p[0])) + bold(p[0])
-    return get_text(:pl) % [temp, p[1]]
+  def place(nick)
+    p = @user_list[nick].place
+    temp = pa_in(a_d(p[3], p[1])) + bold(p[1])
+    return get_text(:pl) % [temp, p[2]]
   end
   
-  def near_place(user)
-    temp = @user_list[user].place
-    l = @db.read(["name", "attrs"], 
-                 "links,places", 
-                 "place=#{temp} and places.id=near_place")
-    l = l.map { |p| pa_di(a_d(p[1], p[0])) + bold(p[0]) }
-    return get_text(:np) % list(l)
+  def near_place(nick)
+    l = @user_list[nick].near_place
+    temp = l.map { |p| pa_di(a_d(p[3], p[1])) + bold(p[1]) }
+    return get_text(:np) % list(temp)
   end
   
-  def up(user)
-    return get_text("up_#{@user_list[user].up}")
+  def up(nick)
+    return get_text("up_#{@user_list[nick].up}")
   end
   
-  def down(user)
-    return get_text("down_#{@user_list[user].down}")
+  def down(nick)
+    return get_text("down_#{@user_list[nick].down}")
   end
   
-  def look(user, name)
-    temp = @user_list[user].place
+  def look(nick, name)
+    temp = @user_list[nick].place[0]
     o = @db.get(["name", "descr"], 
                 "npc,locations", 
                 "place=#{temp} and npc.id=npc and name='#{name}'")
@@ -88,14 +81,14 @@ class Core
     return get_text(:nothing)
   end
   
-  def users_zone(user)
-    me = @user_list[user]
+  def users_zone(nick)
+    me = @user_list[nick]
     npc = @db.read(["name"], 
                    "npc,locations", 
-                   "place=#{me.place} and npc.id=npc")
+                   "place=#{me.place[0]} and npc.id=npc")
     u = npc.map { |n| italic(n[0]) } # init u con gli npc
     @user_list.each_pair do |k, v|
-      u << bold(v.to_s) if (v != me and v.place == me.place)
+      u << bold(v.to_s) if (v != me and v.place[0] == me.place[0])
     end
     if u.empty?
       c = get_text(:nobody) + ","

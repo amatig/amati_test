@@ -45,12 +45,12 @@ class Mud < IrcBot
     end
   end
   
-  def evaluate(user, extra, target, msg)
+  def evaluate(nick, extra, target, msg)
     msg = msg.strip
     # riconoscimento utente
-    unless (@core.is_welcome? user)
+    unless (@core.is_welcome? nick)
       if msg =~ /^(ciao|salve)$/i
-        return @core.welcome(user, $1)
+        return @core.welcome(nick, $1)
       else
         return @core.need_welcome
       end
@@ -58,19 +58,19 @@ class Mud < IrcBot
     # tutti i comandi
     case msg
     when /^mi\s(alzo|sveglio)$/i
-      return @core.up(user)
+      return @core.up(nick)
     when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
-      return @core.down(user)
+      return @core.down(nick)
     when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
-      return @core.place(user)
+      return @core.place(nick)
     when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
-      return @core.near_place(user)
+      return @core.near_place(nick)
     when /^vado\s(ne|a).{1,3}\s(.+)$/i
-      return @core.move(user, $2)
+      return @core.move(nick, $2)
     when /^chi.+(qu.|zona)\?$/i
-      return @core.users_zone(user)
+      return @core.users_zone(nick)
     when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
-      return @core.look(user, $2)
+      return @core.look(nick, $2)
     end    
     return ""
   end
