@@ -13,25 +13,20 @@ class User
   def initialize(data)
     @db = Database.instance
     
-    @nick = data[0]
-    @stand_up = true
-    @place = @db.get(["id", "name", "descr", "attrs"], 
-                     "places", 
-                     "id=1")
-    @near_place = @db.read(["places.id", "name", "descr", "attrs"], 
-                           "links,places", 
-                           "place=#{@place[0]} and places.id=near_place")
-    
     @mutex_place = Mutex.new
     @mutex_attrs = Mutex.new
     Thread.abort_on_exception = true
+    
+    @nick = data[1]
+    @stand_up = true    
+    move(1) # move to place
   end
   
-  def move(id)
+  def move(place_id)
     @mutex_place.synchronize do
       @place = @db.get(["id", "name", "descr", "attrs"], 
                        "places", 
-                       "id=#{id}")
+                       "id=#{place_id}")
       @near_place = @db.read(["places.id", "name", "descr", "attrs"], 
                              "links,places", 
                              "place=#{@place[0]} and places.id=near_place")

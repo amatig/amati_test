@@ -7,18 +7,13 @@ $SAFE = 1
 
 class Mud < IrcBot
   
-  def initialize(*args)
-    super(*args)
+  def connectDB(*args)
+    Database.instance.connect(*args)
     @core = Core.new
   end
   
-  def connectDB(*args)
-    @db = Database.instance
-    @db.connect(*args)
-  end
-  
   def closeDB()
-    @db.close
+    Database.instance.close
   end
   
   def connectIRC(*args)
