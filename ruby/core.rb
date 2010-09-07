@@ -16,6 +16,7 @@ class Core
     Thread.new do
       while true do
         @user_list.each_pair do |k, v|
+          v.save # salva ogni 30 sec
           if (Time.new.to_i - v.timestamp >= 60)
             @mutex.synchronize { @user_list.delete(k) }
           end
