@@ -97,7 +97,7 @@ class Core
   
   def look(nick, name)
     temp = @user_list[nick].place[0]
-    o = @db.get(["name", "descr"], 
+    o = @db.get("name,descr", 
                 "npc,locations", 
                 "place=#{temp} and npc.id=npc and name='#{name}'")
     return o.join(", ") unless o.empty?
@@ -108,7 +108,7 @@ class Core
   
   def users_zone(nick)
     me = @user_list[nick]
-    npc = @db.read(["name"], 
+    npc = @db.read("name", 
                    "npc,locations", 
                    "place=#{me.place[0]} and npc.id=npc")
     u = npc.map { |n| italic(n[0]) } # init u con gli npc

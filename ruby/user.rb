@@ -4,7 +4,7 @@ require "database.rb"
 class User
   
   def User.get(nick)
-    data = Database.instance.get(["id", "nick", "place"], 
+    data = Database.instance.get("id,nick,place", 
                                  "users", 
                                  "nick='#{nick}'")
     return (data.empty?) ? nil : User.new(data)
@@ -44,10 +44,10 @@ class User
   
   def move(place_id)
     @mutex_place.synchronize do
-      @place = @db.get(["id", "name", "descr", "attrs"], 
+      @place = @db.get("id,name,descr,attrs", 
                        "places", 
                        "id=#{place_id}")
-      @near_place = @db.read(["places.id", "name", "descr", "attrs"], 
+      @near_place = @db.read("places.id,name,descr,attrs", 
                              "links,places", 
                              "place=#{@place[0]} and places.id=near_place")
     end
