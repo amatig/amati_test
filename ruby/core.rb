@@ -2,16 +2,19 @@ require "thread"
 require "database.rb"
 require "utils.rb"
 require "user.rb"
+require "npc.rb"
 
 class Core
   
   def initialize()
-    @db = Database.instance # singleton
+    @db = Database.instance # singleton    
     @user_list = {}
+    @npc_list = {}
     
     @mutex = Mutex.new
     Thread.abort_on_exception = true
     
+    load_data
     # controllo attivita' utente
     Thread.new do
       while true do
@@ -24,6 +27,12 @@ class Core
         sleep 30
       end
     end
+  end
+  
+  def load_data()
+    @npc_list = {}
+    npcs = @db.read("name", "npc")
+    npcs.each { |n| @npc_list[n[0]] = Npc.new(n[0]) }    
   end
   
   def is_welcome?(nick)
@@ -97,10 +106,8 @@ class Core
   
   def look(nick, name)
     temp = @user_list[nick].place[0]
-    obj = @db.get("name,descr", 
-                  "npc,locations", 
-                  "place=#{temp} and npc.id=npc and name='#{name}'")
-    return obj.join(", ") unless obj.empty?
+    o = @db.get("name", "npc", "place=#{temp} and name='#{name}'")
+    return "#{o[0]}, #{@npc_list[o[0]].descr}" unless o.empty?
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
     return get_text(:nothing)
@@ -108,9 +115,7 @@ class Core
   
   def users_zone(nick)
     me = @user_list[nick]
-    npc = @db.read("name", 
-                   "npc,locations", 
-                   "place=#{me.place[0]} and npc.id=npc")
+    npc = @db.read("name", "npc", "place=#{me.place[0]}")
     u = npc.map { |n| italic(n[0]) } # init u con gli npc
     @user_list.each_pair do |k, v|
       u << bold(v.to_s) if (v != me and v.place[0] == me.place[0])

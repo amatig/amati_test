@@ -3,17 +3,13 @@ require "ircbot.rb"
 require "database.rb"
 require "core.rb"
 
-$SAFE = 1
+# $SAFE = 1
 
 class Mud < IrcBot
   
-  def initialize(*args)
-    super(*args)
-    @core = Core.new # insieme di funzioni x elaborare i messaggi
-  end
-  
   def connectDB(*args)
     Database.instance.connect(*args) # singleton
+    @core = Core.new # insieme di funzioni x elaborare i messaggi
   end
   
   def closeDB()
