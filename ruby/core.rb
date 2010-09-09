@@ -35,7 +35,8 @@ class Core
   end
   
   def save(nick)
-    @user_list[nick].save
+    @db.insert({'nick'=>'mario', 'place'=>1}, "users")
+    # @user_list[nick].save
     return get_text(:save)
   end
   

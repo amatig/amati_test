@@ -42,9 +42,11 @@ class Database
     @conn.exec("update #{table} set #{temp*','} where #{conds}")
   end
   
-  # inserisce una nuova entry, fields e values sono stringhe
-  def insert(fields, values, table)
-    @conn.exec("insert into #{table} (#{fields}) values (#{values})")
+  # inserisce una nuova entry, fdata e' un hash fields => value
+  def insert(fdata, table)
+    fields = fdata.keys
+    values = fdata.values.map { |v| (v.class == String) ? "'#{v}'" : v }
+    @conn.exec("insert into #{table} (#{fields*','}) values (#{values*','})")
   end
   
   def close()
