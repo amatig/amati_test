@@ -39,14 +39,14 @@ class Database
       vv = (v.class == String) ? "'#{v}'" : v
       temp << "#{k}=#{vv}"
     end
-    @conn.exec("update #{table} set #{temp*','} where #{conds}")
+    @conn.exec "update #{table} set #{temp*','} where #{conds}"
   end
   
   # inserisce una nuova entry, fdata e' un hash fields => value
   def insert(fdata, table)
     fields = fdata.keys
     values = fdata.values.map { |v| (v.class == String) ? "'#{v}'" : v }
-    @conn.exec("insert into #{table} (#{fields*','}) values (#{values*','})")
+    @conn.exec "insert into #{table} (#{fields*','}) values (#{values*','})"
   end
   
   def close()

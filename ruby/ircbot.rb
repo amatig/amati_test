@@ -28,7 +28,7 @@ class IrcBot
     @mutex.synchronize { @buffer += "#{msg}#{@delim}" }
   end
   
-  def connectIRC(server, port)
+  def connectIRC(server = "127.0.0.1", port = 6667)
     @irc = TCPSocket.open(server, port)
     temp = "USER #{@nick} #{@nick} bla :#{@realname}#{@delim}"
     temp += "NICK #{@nick}#{@delim}"

@@ -4,9 +4,7 @@ require "database.rb"
 class User
   
   def User.get(nick)
-    data = Database.instance.get("id,nick,place", 
-                                 "users", 
-                                 "nick='#{nick}'")
+    data = Database.instance.get("*", "users", "nick='#{nick}'")
     return (data.empty?) ? nil : User.new(data)
   end
   
@@ -20,7 +18,7 @@ class User
     
     # init dati utente
     @nick = data[1]
-    @stand_up = true    
+    @stand_up = true
     move(data[2])
     
     @timestamp = Time.now.to_i
@@ -28,7 +26,9 @@ class User
   
   def save()
     @mutex_attrs.synchronize do
-      @db.update({"place"=>Integer(@place[0])}, 
+      @db.update({
+                   "place" => Integer(@place[0]),
+                 }, 
                  "users", 
                  "nick='#{@nick}'")
     end

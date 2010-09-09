@@ -35,8 +35,7 @@ class Core
   end
   
   def save(nick)
-    @db.insert({'nick'=>'mario', 'place'=>1}, "users")
-    # @user_list[nick].save
+    @user_list[nick].save
     return get_text(:save)
   end
   
@@ -98,10 +97,10 @@ class Core
   
   def look(nick, name)
     temp = @user_list[nick].place[0]
-    o = @db.get("name,descr", 
-                "npc,locations", 
-                "place=#{temp} and npc.id=npc and name='#{name}'")
-    return o.join(", ") unless o.empty?
+    obj = @db.get("name,descr", 
+                  "npc,locations", 
+                  "place=#{temp} and npc.id=npc and name='#{name}'")
+    return obj.join(", ") unless obj.empty?
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
     return get_text(:nothing)
