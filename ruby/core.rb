@@ -115,8 +115,10 @@ class Core
   
   def users_zone(nick)
     me = @user_list[nick]
-    npc = @db.read("name", "npc", "place=#{me.place[0]}")
-    u = npc.map { |n| italic(n[0]) } # init u con gli npc
+    u = []
+    @npc_list.each_pair do |k, v|
+      u << italic(v.name) if (v.place == me.place[0])
+    end
     @user_list.each_pair do |k, v|
       u << bold(v.to_s) if (v != me and v.place[0] == me.place[0])
     end

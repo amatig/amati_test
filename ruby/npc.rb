@@ -1,7 +1,7 @@
 require "rexml/document"
 
 class Npc
-  attr_accessor :name, :descr
+  attr_accessor :name, :descr, :place
   
   def initialize(name)
     file = File.new("npc/#{name}.xml")
@@ -9,6 +9,7 @@ class Npc
     root = doc.elements["npc"]
     @name = name
     @descr = root.elements["descr"].text
+    @place = root.elements["place"].text
     file.close
   end
   
