@@ -10,6 +10,7 @@ class Core
     @db = Database.instance # singleton    
     @user_list = {}
     @npc_list = {}
+    @npc_place_list = {}
     
     @mutex = Mutex.new
     Thread.abort_on_exception = true
@@ -31,8 +32,16 @@ class Core
   
   def load_data()
     @npc_list = {}
+    @npc_place_list = {}
     npcs = @db.read("name", "npc")
-    npcs.each { |n| @npc_list[n[0]] = Npc.new(n[0]) }    
+    npcs.each do |n|
+      temp = Npc.new(n[0])
+      @npc_list[n[0]] = temp
+      unless (@npc_place_list.has_key? temp.place)
+        @npc_place_list[temp.place] = []
+      end
+      @npc_place_list[temp.place] << temp
+    end
   end
   
   def is_welcome?(nick)
