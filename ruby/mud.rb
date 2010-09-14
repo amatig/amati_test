@@ -52,7 +52,7 @@ class Mud < IrcBot
       return @core.place(nick)
     when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
       return @core.near_place(nick)
-    when /^vado\s(ne|a).{1,3}\s(.+)$/i
+    when /^va.*\s(ne|a).{1,3}\s(.+)$/i
       return @core.move(nick, $2)
     when /^chi.+(qu.|zona)\?$/i
       return @core.users_zone(nick)

@@ -2,6 +2,7 @@ require "thread"
 require "database.rb"
 
 class User
+  attr_accessor :id, :name
   
   def User.get(nick)
     data = Database.instance.get("*", "users", "nick='#{nick}'")
@@ -11,26 +12,25 @@ class User
   def initialize(data)
     @db = Database.instance # singleton
     
-    @mutex_time = Mutex.new    
-    @mutex_place = Mutex.new
-    @mutex_attrs = Mutex.new
-    Thread.abort_on_exception = true
-    
     # init dati utente
-    @nick = data[1]
+    @id, @name, @place = data
     @stand_up = true
-    move(data[2])
     
     @timestamp = Time.now.to_i
+    
+    @mutex_attrs = Mutex.new
+    @mutex_place = Mutex.new
+    @mutex_time = Mutex.new
+    Thread.abort_on_exception = true
   end
   
   def save()
     @mutex_attrs.synchronize do
       @db.update({
-                   "place" => Integer(@place[0]),
+                   "place" => Integer(@place),
                  }, 
                  "users", 
-                 "nick='#{@nick}'")
+                 "id=#{@id}")
     end
   end
   
@@ -42,23 +42,12 @@ class User
     @mutex_time.synchronize { return @timestamp }
   end
   
-  def move(place_id)
-    @mutex_place.synchronize do
-      @place = @db.get("id,name,descr,attrs", 
-                       "places", 
-                       "id=#{place_id}")
-      @near_place = @db.read("places.id,name,descr,attrs", 
-                             "links,places", 
-                             "place=#{@place[0]} and places.id=near_place")
-    end
+  def set_place(place_id)
+    @mutex_place.synchronize { @place = place_id }
   end
   
   def place()
     @mutex_place.synchronize { return @place }
-  end
-  
-  def near_place()
-    @mutex_place.synchronize { return @near_place }
   end
   
   def up()
@@ -82,7 +71,7 @@ class User
   end
   
   def to_s()
-    return @nick
+    return @name
   end
   
 end

@@ -2,6 +2,7 @@ require "thread"
 require "database.rb"
 require "utils.rb"
 require "user.rb"
+require "place.rb"
 require "npc.rb"
 
 class Core
@@ -9,8 +10,8 @@ class Core
   def initialize()
     @db = Database.instance # singleton    
     @user_list = {}
+    @place_list = {}
     @npc_list = {}
-    @npc_place_list = {}
     
     @mutex = Mutex.new
     Thread.abort_on_exception = true
@@ -31,13 +32,24 @@ class Core
   end
   
   def load_data()
+    @place_list = {}
+    places = @db.read("*", "places")
+    places.each { |p| @place_list[p[0]] = Place.new(p) }
+    places.each do |p|
+      temp = @db.read("places.id", 
+                      "links,places", 
+                      "place=#{p[0]} and places.id=near_place")
+      temp.each do |near|
+        @place_list[p[0]].add_near_place(@place_list[near[0]])
+      end
+    end
+    
     @npc_list = {}
-    @npc_place_list = {}
     npcs = @db.read("name", "npc")
     npcs.each do |n|
       temp = Npc.new(n[0])
       @npc_list[n[0]] = temp
-      (@npc_place_list[temp.place] ||= []) << temp
+      @place_list[temp.place].add_people(temp)
     end
   end
   
@@ -66,6 +78,7 @@ class Core
     u = User.get(nick)
     if u
       @mutex.synchronize { @user_list[nick] = u }
+      @place_list[u.place].add_people(u)
       return get_text(:benv) % [greeting, bold(nick), place(nick)]
     else
       return get_text(:no_reg)
@@ -76,14 +89,16 @@ class Core
     me = @user_list[nick]
     return get_text("uaresit_#{rand 2}") unless me.stand_up?
     find = nil
-    me.near_place.each do |p|
-      if p[1] =~ /#{place_name.strip}/i 
+    @place_list[me.place].near_place.each do |p|
+      if p.name =~ /#{place_name.strip}/i 
         find = p
         break
       end
     end
     if find
-      me.move(find[0]) # sposta al place
+      @place_list[me.place].remove_people(me)
+      me.set_place(find.id) # cambio di place_id
+      @place_list[me.place].add_people(me)
       return place(nick)
     else
       return get_text(:no_pl)
@@ -91,14 +106,14 @@ class Core
   end
   
   def place(nick)
-    p = @user_list[nick].place
-    temp = pa_in(a_d(p[3], p[1])) + bold(p[1])
-    return get_text(:pl) % [temp, p[2]]
+    p = @place_list[@user_list[nick].place]
+    temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
+    return get_text(:pl) % [temp, p.descr]
   end
   
   def near_place(nick)
-    l = @user_list[nick].near_place
-    temp = l.map { |p| pa_di(a_d(p[3], p[1])) + bold(p[1]) }
+    l = @place_list[@user_list[nick].place].near_place
+    temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
     return get_text(:np) % list(temp)
   end
   
@@ -111,9 +126,15 @@ class Core
   end
   
   def look(nick, name)
-    temp = @user_list[nick].place[0]
-    o = @db.get("name", "npc", "place=#{temp} and name='#{name}'")
-    return "#{o[0]}, #{@npc_list[o[0]].descr}" unless o.empty?
+    temp = @user_list[nick].place
+    res = nil
+    @place_list[temp].people.each do |p|
+      if (p.class == Npc and p.name == name)
+        res = p
+        break
+      end
+    end
+    return "#{res.name}, #{res.descr}" if res
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
     return get_text(:nothing)
@@ -122,11 +143,12 @@ class Core
   def users_zone(nick)
     me = @user_list[nick]
     u = []
-    if (@npc_place_list.key? me.place[0])
-      @npc_place_list[me.place[0]].each { |v| u << italic(v.name) }
-    end
-    @user_list.each_pair do |k, v| # fare anche qua magari per posto
-      u << bold(v.to_s) if (v != me and v.place[0] == me.place[0])
+    @place_list[me.place].people.each do |p|
+      if p.class == User
+        u << bold(p.name) if (p != me)
+      else
+        u << italic(p.name)
+      end
     end
     if u.empty?
       c = get_text(:nobody) + ","
