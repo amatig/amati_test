@@ -37,10 +37,7 @@ class Core
     npcs.each do |n|
       temp = Npc.new(n[0])
       @npc_list[n[0]] = temp
-      unless (@npc_place_list.has_key? temp.place)
-        @npc_place_list[temp.place] = []
-      end
-      @npc_place_list[temp.place] << temp
+      (@npc_place_list[temp.place] ||= []) << temp
     end
   end
   
@@ -125,10 +122,10 @@ class Core
   def users_zone(nick)
     me = @user_list[nick]
     u = []
-    @npc_list.each_pair do |k, v|
-      u << italic(v.name) if (v.place == me.place[0])
+    if (@npc_place_list.key? me.place[0])
+      @npc_place_list[me.place[0]].each { |v| u << italic(v.name) }
     end
-    @user_list.each_pair do |k, v|
+    @user_list.each_pair do |k, v| # fare anche qua magari per posto
       u << bold(v.to_s) if (v != me and v.place[0] == me.place[0])
     end
     if u.empty?
