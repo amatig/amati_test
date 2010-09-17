@@ -5,6 +5,14 @@ require "user.rb"
 require "place.rb"
 require "npc.rb"
 
+# :title:Core
+# = Description
+# prova
+# = License
+# This code is provided under the terms of the {MIT License.}[http://www.opensource.org/licenses/mit-license.php]
+# = Authors
+# Giovanni Amati
+
 class Core
   
   def initialize()

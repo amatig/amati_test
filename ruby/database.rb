@@ -1,9 +1,18 @@
 require "pg"
 require "singleton"
 
+# :title:Database
+# = Description
+# bla bla
+# = License
+# This code is provided under the terms of the {MIT License.}[http://www.opensource.org/licenses/mit-license.php]
+# = Authors
+# Giovanni Amati
+
 class Database
   include Singleton
   
+  # Connessione al db
   def connect(host, port, db_name, user, pass = "")
     @conn = PGconn.connect(host, port, "", "", db_name, user, pass)
   end
@@ -21,6 +30,7 @@ class Database
   
   # ritorna un array di tuple, ognuna e' 
   # un array di campi della select
+  # = prova
   def read(fields, tables, conds = "true")
     return exec2("select #{fields} from #{tables} where #{conds}")
   end

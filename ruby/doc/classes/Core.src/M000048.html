@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new (Core)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File core.rb, line 18</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>() <span class="ruby-comment cmt"># :yields: prova, das</span>
+    <span class="ruby-ivar">@db</span> = <span class="ruby-constant">Database</span>.<span class="ruby-identifier">instance</span> <span class="ruby-comment cmt"># singleton    </span>
+    <span class="ruby-ivar">@user_list</span> = {}
+    <span class="ruby-ivar">@place_list</span> = {}
+    <span class="ruby-ivar">@npc_list</span> = {}
+    
+    <span class="ruby-ivar">@mutex</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
+    <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">abort_on_exception</span> = <span class="ruby-keyword kw">true</span>
+    
+    <span class="ruby-identifier">load_data</span>
+    <span class="ruby-comment cmt"># controllo attivita' utente</span>
+    <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">new</span> <span class="ruby-keyword kw">do</span>
+      <span class="ruby-keyword kw">while</span> <span class="ruby-keyword kw">true</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-ivar">@user_list</span>.<span class="ruby-identifier">each_pair</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">k</span>, <span class="ruby-identifier">v</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">v</span>.<span class="ruby-identifier">save</span> <span class="ruby-comment cmt"># salva ogni 30 sec</span>
+          <span class="ruby-keyword kw">if</span> (<span class="ruby-constant">Time</span>.<span class="ruby-identifier">new</span>.<span class="ruby-identifier">to_i</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">v</span>.<span class="ruby-identifier">timestamp</span> <span class="ruby-operator">&gt;=</span> <span class="ruby-value">60</span>)
+            <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-ivar">@user_list</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">k</span>) }
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">sleep</span> <span class="ruby-value">30</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
