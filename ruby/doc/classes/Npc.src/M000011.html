@@ -12,7 +12,7 @@
 <body class="standalone-code">
   <pre><span class="ruby-comment cmt"># File npc.rb, line 6</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">name</span>)
-    <span class="ruby-identifier">file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;npc/#{name}.xml&quot;</span>)
+    <span class="ruby-identifier">file</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">new</span>(<span class="ruby-node">&quot;config/#{name}.xml&quot;</span>)
     <span class="ruby-identifier">doc</span> = <span class="ruby-constant">REXML</span><span class="ruby-operator">::</span><span class="ruby-constant">Document</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">file</span>)
     <span class="ruby-identifier">root</span> = <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">elements</span>[<span class="ruby-value str">&quot;npc&quot;</span>]
     <span class="ruby-ivar">@name</span> = <span class="ruby-identifier">name</span>
