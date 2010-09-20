@@ -1,9 +1,12 @@
 require "pg"
 require "singleton"
 
-# :title:Database
+# = Name
+# Database
+# = Synopsis
+# ...
 # = Description
-# bla bla
+# ...
 # = License
 # This code is provided under the terms of the {MIT License.}[http://www.opensource.org/licenses/mit-license.php]
 # = Authors

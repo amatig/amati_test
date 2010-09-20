@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File database.rb, line 56</span>
+  <pre><span class="ruby-comment cmt"># File database.rb, line 59</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">insert</span>(<span class="ruby-identifier">fdata</span>, <span class="ruby-identifier">table</span>)
     <span class="ruby-identifier">fields</span> = <span class="ruby-identifier">fdata</span>.<span class="ruby-identifier">keys</span>
     <span class="ruby-identifier">values</span> = <span class="ruby-identifier">fdata</span>.<span class="ruby-identifier">values</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">v</span><span class="ruby-operator">|</span> (<span class="ruby-identifier">v</span>.<span class="ruby-identifier">class</span> <span class="ruby-operator">==</span> <span class="ruby-constant">String</span>) <span class="ruby-operator">?</span> <span class="ruby-node">&quot;'#{v}'&quot;</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">v</span> }

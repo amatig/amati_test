@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File core.rb, line 122</span>
+  <pre><span class="ruby-comment cmt"># File core.rb, line 133</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">near_place</span>(<span class="ruby-identifier">nick</span>)
     <span class="ruby-identifier">l</span> = <span class="ruby-ivar">@place_list</span>[<span class="ruby-ivar">@user_list</span>[<span class="ruby-identifier">nick</span>].<span class="ruby-identifier">place</span>].<span class="ruby-identifier">near_place</span>
     <span class="ruby-identifier">temp</span> = <span class="ruby-identifier">l</span>.<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">p</span><span class="ruby-operator">|</span> <span class="ruby-identifier">pa_di</span>(<span class="ruby-identifier">a_d</span>(<span class="ruby-identifier">p</span>.<span class="ruby-identifier">attrs</span>, <span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span>)) <span class="ruby-operator">+</span> <span class="ruby-identifier">bold</span>(<span class="ruby-identifier">p</span>.<span class="ruby-identifier">name</span>) }
