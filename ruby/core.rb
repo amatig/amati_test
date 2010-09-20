@@ -12,7 +12,7 @@ require "npc.rb"
 # = Description
 # ...
 # = License
-# <one line to give the program's name and a brief idea of what it does.>
+# Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
 # Copyright (C) 2010 Giovanni Amati
 #

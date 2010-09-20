@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
 </head>
 <body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File user.rb, line 7</span>
+  <pre><span class="ruby-comment cmt"># File user.rb, line 26</span>
   <span class="ruby-keyword kw">def</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">nick</span>)
     <span class="ruby-identifier">data</span> = <span class="ruby-constant">Database</span>.<span class="ruby-identifier">instance</span>.<span class="ruby-identifier">get</span>(<span class="ruby-value str">&quot;*&quot;</span>, <span class="ruby-value str">&quot;users&quot;</span>, <span class="ruby-node">&quot;nick='#{nick}'&quot;</span>)
     <span class="ruby-keyword kw">return</span> (<span class="ruby-identifier">data</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>)
