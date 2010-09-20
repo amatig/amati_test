@@ -1,6 +1,6 @@
 #!/usr/bin/ruby
-require "ircbot.rb"
-require "database.rb"
+require "lib/ircbot.rb"
+require "lib/database.rb"
 require "core.rb"
 
 # $SAFE = 1

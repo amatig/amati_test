@@ -1,5 +1,5 @@
 require "thread"
-require "database.rb"
+require "lib/database.rb"
 
 class User
   attr_accessor :id, :name

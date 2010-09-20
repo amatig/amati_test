@@ -1,6 +1,6 @@
 require "thread"
-require "database.rb"
-require "utils.rb"
+require "lib/database.rb"
+require "lib/utils.rb"
 require "user.rb"
 require "place.rb"
 require "npc.rb"
