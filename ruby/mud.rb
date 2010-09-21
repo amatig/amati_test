@@ -58,7 +58,7 @@ class Mud < IrcBot
   #
   # Ogni operazione ha un messaggio di ritorno che torna al dispatch.
   def evaluate(nick, extra, target, msg)
-    msg = msg.strip
+    msg = msg.strip # stampa del messaggio grezzo
     # riconoscimento utente
     unless (@core.is_welcome? nick)
       if msg =~ /^(ciao|salve)$/i

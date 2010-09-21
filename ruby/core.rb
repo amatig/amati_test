@@ -2,11 +2,11 @@ require "thread"
 require "lib/database.rb"
 require "lib/utils.rb"
 require "user.rb"
-require "place.rb"
 require "npc.rb"
+require "place.rb"
 
 # = Description
-# ...
+# Classe che implementa tutti i comandi utente, di sistema e la messaggistica del Mud.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -46,6 +46,7 @@ class Core
     :np => "sei nelle vicinanze %s",
   }
   
+  # Metodo di inizializzazione della classe.
   def initialize()
     @db = Database.instance # singleton    
     @user_list = {}
@@ -70,6 +71,7 @@ class Core
     end
   end
   
+  # Inizializza la mappa del mondo, npc, ecc...
   def load_data()
     @place_list = {}
     places = @db.read("*", "places")
@@ -94,7 +96,7 @@ class Core
     end
   end
   
-  def is_welcome?(nick)  # :yields: nick
+  def is_welcome?(nick)
     return (@user_list.key? nick)
   end
   
@@ -206,4 +208,5 @@ class Core
     return @@bot_msg[str.to_sym]
   end
   
+  private :load_data, :get_text
 end
