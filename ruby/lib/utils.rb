@@ -172,7 +172,7 @@ def a_d(type, text)
 end
 
 # Ritorna una stringa rappresentante la preposizioni articolata 'di' 
-# partendo dall'articolo passato nell'argomento art.
+# partendo dall'articolo determinativo passato nell'argomento art.
 def pa_di(art)
   case art
   when "il "
@@ -193,7 +193,7 @@ def pa_di(art)
 end
 
 # Ritorna una stringa rappresentante la preposizioni articolata 'in' 
-# partendo dall'articolo passato nell'argomento art.
+# partendo dall'articolo determinativo passato nell'argomento art.
 def pa_in(art)
   case art
   when "il "
