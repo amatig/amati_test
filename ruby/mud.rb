@@ -4,7 +4,7 @@ require "lib/database.rb"
 require "core.rb"
 
 # = Description
-# ...
+# Classe principale dell'applicazione che estende IrcBot e utilizza Database per la connessione ai dati.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -28,8 +28,8 @@ class Mud < IrcBot
   def closeDB()
     Database.instance.close
   end
-  
-  def parse(msg)
+    
+  def dispatch(msg)
     # puts Thread.current
     puts msg
     if msg =~ /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
@@ -77,6 +77,8 @@ class Mud < IrcBot
     return ""
   end
   
+  private :evaluate
+  protected :dispatch
 end
 
 # Main

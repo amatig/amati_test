@@ -18,6 +18,7 @@ require "thread"
 
 class IrcBot
   
+  # Metodo di inizializzazione della classe.
   def initialize(nick, realname = "bla")
     @irc = nil
     @delim = "\r\n"
@@ -30,6 +31,8 @@ class IrcBot
     Thread.abort_on_exception = true
   end
   
+  # E' il metodo che effettua il vero e proprio invio sul
+  # socket svuotando il buffer alla fine dell'operazione.
   def socket_send()
     @mutex.synchronize do
       unless @buffer.empty?
@@ -39,17 +42,22 @@ class IrcBot
     end
   end
   
+  # Consente di bufferizzare i messaggi da inviare, in
+  # maniera che il loop di invio svuoti il buffer ogni tot
+  # per ottimizzare il blocco di messaggi da inviare al server irc.
   def send(msg)
     @mutex.synchronize { @buffer += "#{msg}#{@delim}" }
   end
   
+  # Apre una connessione socket verso un server irc e
+  # invia i dati identificativi per l'utente bot.
   def connectIRC(server = "127.0.0.1", port = 6667)
     @irc = TCPSocket.open(server, port)
     temp = "USER #{@nick} #{@nick} bla :#{@realname}#{@delim}"
     temp += "NICK #{@nick}#{@delim}"
     @irc.send(temp, 0)
     
-    # buffer send loop
+    # thread loop che svuota il buffer dei messaggi da inviare
     Thread.new do
       while true do
         socket_send
@@ -58,10 +66,20 @@ class IrcBot
     end
   end
   
-  def parse(msg)
-    # non implementata
+  # Questo metodo riceve in un nuovo thread i messaggi che
+  # arrivano dal socket. E' un metodo non implementato,
+  # estendendo la classe ognuno lo implementa in base alla
+  # logica da asegnare ad ogni messaggio
+  def dispatch(msg)
+    
   end
   
+  # Fa partire il ciclo principale del bot che legge i messaggi
+  # provenienti dal socket e li manda ad un nuovo thread 
+  # chiamando il metodo dispatch.
+  #
+  # Nel caso si tratta di un PING del server risponde subito col
+  # PONG per non far cadere la connessione.
   def main_loop()
     while true
       return if @irc.eof
@@ -72,15 +90,18 @@ class IrcBot
           puts "[ Server ping ]"
           send "PONG :#{$1}"
         else
-          parse msg
+          dispatch msg
         end
       end
     end
   end
   
-  # messaggi complessi
+  # Invia un messaggio di tipo PRIVMSG ad un nick/channel.
+  # Questo metodo utilizza il metodo send.
   def message(target, msg)
     send "PRIVMSG #{target} :#{msg}"
   end
   
+  private :socket_send
+  protected :dispatch, :send
 end
