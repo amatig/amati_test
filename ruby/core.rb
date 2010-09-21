@@ -96,27 +96,36 @@ class Core
     end
   end
   
+  # Ritorna un booleano che indica se l'utente e' stato identificato
+  # o no dal sistema.
   def is_welcome?(nick)
     return (@user_list.key? nick)
   end
   
+  # Aggiorna il timestamp dell'utene, che indica il momento dell'ultimo
+  # messaggio inviato.
   def update_timestamp(nick)
     @user_list[nick].update_timestamp
   end
   
+  # Salva lo stato dell'utente e lo cominica con un messaggio di ritorno.
   def save(nick)
     @user_list[nick].save
     return get_text(:save)
   end
   
+  # Ritorna un messaggio random di comando non conosciuto.
   def cmd_not_found()
     return get_text("cnf_#{rand 3}")
   end
   
+  # Ritorna un messaggio che indica la necessita di riconoscersi,
+  # di effettuare una sorta di autenticazione/login.
   def need_welcome()
     return get_text(:r_benv)
   end
   
+  # Ritorna un messaggio di benvenuto e il posto in cui e' l'utente.
   def welcome(nick, greeting)
     u = User.get(nick)
     if u
@@ -128,6 +137,9 @@ class Core
     end
   end
   
+  # Muove l'utente in un posto vicino, collegato a quello attuale e
+  # ritorna un messaggio con nuovo nome del posto e descrizione o
+  # un messaggio di fallito spostamento.
   def move(nick, place_name)
     me = @user_list[nick]
     return get_text("uaresit_#{rand 2}") unless me.stand_up?
@@ -148,26 +160,31 @@ class Core
     end
   end
   
+  # Ritorna il posto e descrizione in cui e' l'utente.
   def place(nick)
     p = @place_list[@user_list[nick].place]
     temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
     return get_text(:pl) % [temp, p.descr]
   end
   
+  # Ritorna la lista dei posti vicini in cui si puo andare.
   def near_place(nick)
     l = @place_list[@user_list[nick].place].near_place
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
     return get_text(:np) % list(temp)
   end
   
+  # Fa alzare l'utente e ritorna un messaggio di esito.
   def up(nick)
     return get_text("up_#{@user_list[nick].up}")
   end
   
+  # Fa abbassare l'utente e ritorna un messaggio di esito.
   def down(nick)
     return get_text("down_#{@user_list[nick].down}")
   end
   
+  # Ritorna la descrizione di un npc, oggetto o altro.
   def look(nick, name)
     temp = @user_list[nick].place
     res = nil
@@ -183,6 +200,7 @@ class Core
     return get_text(:nothing)
   end
   
+  # Ritorna la lista degli npc ed utenti nella zona.
   def users_zone(nick)
     me = @user_list[nick]
     u = []
