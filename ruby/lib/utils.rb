@@ -15,6 +15,8 @@
 
 # Ritorna una stringa, concatenando tramite virgole gli elemeneti di un array.
 # L'ultimo elemento viene concatenato per 'e'.
+#
+# [es.] list ( [ "mario", "carlo", "fabio" ] ) #=> "mario, carlo e fabio"
 def list(array)
   str = array.join(", ")
   i = str.rindex(", ")
@@ -22,6 +24,7 @@ def list(array)
   return str
 end
 
+# Ritorna una stringa con la prima lettera maiuscola.
 def up_case(text)
   return text[0].chr.capitalize + text[1, text.size]
 end
@@ -51,20 +54,23 @@ $_msg = {
   :np => "sei nelle vicinanze %s",
 }
 
+# Ritorna una stringa rappresentate una risposta o affermazione del bot, 
+# ogni messaggio e' indicizzato tramite un symbol/stringa.
 def get_text(str)
   return $_msg[str.to_sym]
 end
 
-# FONT STYLE
-
+# Ritorna una stringa con lo stile bold per il client irc.
 def bold(text)
   return "" + text + ""
 end
 
+# Ritorna una stringa con lo stile underline per il client irc.
 def uline(text)
   return "" + text + ""
 end
 
+# Ritorna una stringa con lo stile italic per il client irc.
 def italic(text)
   return "" + text + ""
 end
@@ -88,14 +94,39 @@ $_color_set = {
   :white => "16",
 }
 
+# Ritorna una stringa colorata per il client irc.
+# L'argomento c e' un symbol/stringa per ottenere il colore
+# dall'insieme indicizzato dei colori disponibili.
+#
+# Valori possibili di c:
+# * black
+# * navy_blue
+# * green
+# * red
+# * brown
+# * purple
+# * olive
+# * yellow
+# * lime_green
+# * teal
+# * aqua_light
+# * royal_blue
+# * hot_pink
+# * dark_gray
+# * light_gray
+# * white
 def color(c, text)
   return $_color_set[c.to_sym] + text + ""
 end
 
-# GRAMMATICA
-
-# articolo determinativo
-
+# Ritorna una stringa rappresentante l'articolo determinativo
+# della parola nell'argomento text, l'argomento type e' un intero che 
+# rapprensenta il tipo di parola:
+#
+# 1. Maschile singolare
+# 2. Maschile plurale
+# 3. Femminile singolare
+# 4. Femminile plurale
 def a_d(type, text)
   con = %W{ b c d f g h j k l m n p q r s t v w x y z }
   voc = %W{ a e i o u }  
@@ -140,8 +171,8 @@ def a_d(type, text)
   end
 end
 
-#preposizioni articolate: di, a, da, in, con, su, per, tra, fra
-
+# Ritorna una stringa rappresentante la preposizioni articolata 'di' 
+# partendo dall'articolo passato nell'argomento art.
 def pa_di(art)
   case art
   when "il "
@@ -161,6 +192,8 @@ def pa_di(art)
   end
 end
 
+# Ritorna una stringa rappresentante la preposizioni articolata 'in' 
+# partendo dall'articolo passato nell'argomento art.
 def pa_in(art)
   case art
   when "il "
