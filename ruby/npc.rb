@@ -18,6 +18,7 @@ require "rexml/document"
 class Npc
   attr_reader :name, :descr, :place
   
+  # Metodo di inizializzazione della classe.
   def initialize(name)
     file = File.new("config/#{name}.xml")
     doc = REXML::Document.new(file)
@@ -28,6 +29,7 @@ class Npc
     file.close
   end
   
+  # Ritorna una stringa che rappresenta il nome dell'npc.
   def to_s()
     return @name
   end

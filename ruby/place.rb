@@ -16,10 +16,12 @@ require "thread"
 # Giovanni Amati
 
 class Place
-  attr_reader :id, :name, :descr, :attrs, :near_place
+  attr_reader :id, :name, :descr, :attrs
+  attr_accessor :near_place
   
+  # Metodo di inizializzazione della classe.
+  # [data] array contenete tutti i dati del posto.
   def initialize(data)
-    # init dati place
     @id, @name, @descr, @attrs = data
     @near_place = []
     @people_here = []
@@ -28,22 +30,24 @@ class Place
     Thread.abort_on_exception = true
   end
   
-  def add_near_place(place)
-    @near_place << place # non sono mai modificati
-  end
-  
+  # Rimuove un oggeto di tipo User dalla lista delle persone in
+  # questo posto.
   def remove_people(user)
     @mutex.synchronize { @people_here.slice!(@people_here.index(user)) }
   end
   
+  # Aggiunge un oggeto di tipo User dalla lista delle persone in
+  # questo posto.
   def add_people(user)
     @mutex.synchronize { @people_here << user }
   end
   
+  # Ritorna l'array di tutti gli oggetti User (le persone) presenti nel posto.
   def people()
     @mutex.synchronize { return @people_here }
   end
   
+  # Ritorna una stringa che rappresenta il nome del posto.
   def to_s()
     return @name
   end

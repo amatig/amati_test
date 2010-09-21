@@ -79,7 +79,9 @@ class Core
                       "links,places", 
                       "place=#{p[0]} and places.id=near_place")
       temp.each do |near|
-        @place_list[p[0]].add_near_place(@place_list[near[0]])
+        # i near_place devono essere aggiunti solo i volta
+        # mai piu modificati
+        @place_list[p[0]].near_place << @place_list[near[0]]
       end
     end
     
