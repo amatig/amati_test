@@ -2,7 +2,7 @@ require "pg"
 require "singleton"
 
 # = Description
-# ...
+# Classe singleton che gestisce l'interazione con il database Postgres.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #

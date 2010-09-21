@@ -1,7 +1,7 @@
 require "rexml/document"
 
 # = Description
-# ...
+# Classe che rappresenta l'entita' npc.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #

@@ -2,7 +2,7 @@ require "thread"
 require "lib/database.rb"
 
 # = Description
-# ...
+# Classe che rappresenta l'entita' utente.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -19,7 +19,7 @@ require "lib/database.rb"
 class User
   attr_reader :id, :name
   
-  # Metodo di classe che ritorna una instanza di tipo User creata
+  # Metodo di classe che ritorna una istanza di tipo User creata
   # dai dati utente nel database presi tramite l'argomento <em>nick</em>.
   def User.get(nick)
     data = Database.instance.get("*", "users", "nick='#{nick}'")

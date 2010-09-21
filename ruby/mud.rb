@@ -4,7 +4,10 @@ require "lib/database.rb"
 require "core.rb"
 
 # = Description
-# Classe principale dell'applicazione che estende IrcBot e utilizza Database per la connessione ai dati.
+# Classe principale del mud che estende IrcBot e utilizza il singleton Database per la connessione ai dati.
+#
+# Questa classe si occupa di intercettare e distinguere i comandi degli utenti, e' stata schissa 
+# in due con la classe Core che invece ne implementa i comandi (elaborazione dati) e la messaggistica (testo dialoghi).
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -20,15 +23,23 @@ require "core.rb"
 
 class Mud < IrcBot
   
+  # Ottine il singleton dell'istanza Database, ne setta i parametri di
+  # connessione, e stabilisce la connessione al database.
+  #
+  # Istanzia inoltre la classe Core che ha al suo interno
+  # tutte le implementazioni dei comandi e la messaggistica del mud.
   def connectDB(*args)
     Database.instance.connect(*args) # singleton
-    @core = Core.new # insieme di funzioni x elaborare i messaggi
+    @core = Core.new # insieme di funzioni x elaborare i comandi
   end
   
+  # Invia al singleton il comando di chiusura della connessione al database.
   def closeDB()
     Database.instance.close
   end
-    
+  
+  # Parsa un messaggio utente per valutarlo tramite il metodo evaluate, 
+  # l'esito della valutazione e' un messaggio che viene comunicato all'utente.
   def dispatch(msg)
     # puts Thread.current
     puts msg
@@ -42,6 +53,10 @@ class Mud < IrcBot
     end
   end
   
+  # Valuta il parsing del messaggio utente ed esegue di conseguenza 
+  # l'operazione di riferimento implementata all'interno di Core.
+  #
+  # Ogni operazione ha un messaggio di ritorno che torna al dispatch.
   def evaluate(nick, extra, target, msg)
     msg = msg.strip
     # riconoscimento utente

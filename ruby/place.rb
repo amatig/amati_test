@@ -1,7 +1,7 @@
 require "thread"
 
 # = Description
-# ...
+# Classe che rappresenta l'entita' posto.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #

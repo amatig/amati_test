@@ -2,7 +2,7 @@ require "socket"
 require "thread"
 
 # = Description
-# ...
+# Classe che implementa un generico bot per l'interazione con un server irc.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
