@@ -19,11 +19,18 @@ require "singleton"
 class Database
   include Singleton
   
-  # Connessione al db
+  # Apre una connessione verso un server postgres.
   def connect(host, port, db_name, user, pass = "")
     @conn = PGconn.connect(host, port, "", "", db_name, user, pass)
   end
   
+  # Chiude la connessione verso il server postgres.
+  def close()
+    @conn.close if @conn
+  end
+  
+  # Esegue una query ritornando la tabella dei risultati come un
+  # array di array.
   def exec2(query)
     # puts query
     result = []
@@ -35,21 +42,27 @@ class Database
     return result
   end
   
-  # ritorna un array di tuple, ognuna e' 
-  # un array di campi della select
-  # = prova
+  # Ritorna un array di entries, ogni entry e' a sua volta un array di campi.
+  # [fields] campi da selezionare.
+  # [tables] nomi delle tabelle di interesse concatenate da virgola.
+  # [conds] condizione di selezione delle entries.
   def read(fields, tables, conds = "true")
     return exec2("select #{fields} from #{tables} where #{conds}")
   end
   
-  # ritorna la prima tupla della query, 
-  # un array dei campi della select
+  # Ritorna la prima entry come un array di campi.
+  # [fields] campi da selezionare.
+  # [tables] nomi delle tabelle di interesse concatenate da virgola.
+  # [conds] condizione di selezione delle entries.
   def get(fields, tables, conds = "true")
     temp = read(fields, tables, conds + " LIMIT 1")
     return (temp.length > 0) ? temp[0] : temp
   end
   
-  # aggiorna i campi di una tabella, fdata e' un hash fields => value
+  # Aggiorna una entry nella tabella <em>table</em>.
+  # [fdata] e' un hash {fields => value, ...}.
+  # [table] nome della tabella di interesse.
+  # [conds] condizione di selezione della entry.
   def update(fdata, table, conds = "true")
     temp = []
     fdata.each_pair do |k, v|
@@ -59,15 +72,14 @@ class Database
     @conn.exec "update #{table} set #{temp*','} where #{conds}"
   end
   
-  # inserisce una nuova entry, fdata e' un hash fields => value
+  # Inserisce una nuova entry nella tabella <em>table</em>.
+  # [fdata] e' un hash {fields => value, ...}.
+  # [table] nome della tabella di interesse.
   def insert(fdata, table)
     fields = fdata.keys
     values = fdata.values.map { |v| (v.class == String) ? "'#{v}'" : v }
     @conn.exec "insert into #{table} (#{fields*','}) values (#{values*','})"
   end
   
-  def close()
-    @conn.close if @conn
-  end
-  
+  private :exec2
 end

@@ -31,8 +31,8 @@ class IrcBot
     Thread.abort_on_exception = true
   end
   
-  # E' il metodo che effettua il vero e proprio invio sul
-  # socket svuotando il buffer alla fine dell'operazione.
+  # E' il metodo che effettua il vero e proprio invio dei dati
+  # nel buffer sul socket svuotando il buffer alla fine dell'operazione.
   def socket_send()
     @mutex.synchronize do
       unless @buffer.empty?

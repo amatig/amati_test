@@ -1,5 +1,5 @@
 # = Description
-# Insieme di utilities
+# Insieme di utilities.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -29,17 +29,17 @@ def up_case(text)
   return text[0].chr.capitalize + text[1, text.size]
 end
 
-# Ritorna una stringa con lo stile bold per il client irc.
+# Ritorna una stringa con lo stile bold (per il client irc).
 def bold(text)
   return "" + text + ""
 end
 
-# Ritorna una stringa con lo stile underline per il client irc.
+# Ritorna una stringa con lo stile underline (per il client irc).
 def uline(text)
   return "" + text + ""
 end
 
-# Ritorna una stringa con lo stile italic per il client irc.
+# Ritorna una stringa con lo stile italic (per il client irc).
 def italic(text)
   return "" + text + ""
 end
@@ -63,11 +63,11 @@ $_color_set = {
   :white => "16",
 }
 
-# Ritorna una stringa colorata per il client irc.
-# L'argomento c e' un symbol/stringa per ottenere il colore
+# Ritorna una stringa con i codici colore (per il client irc).
+# L'argomento <em>c</em> e' un symbol/stringa per ottenere il colore
 # dall'insieme indicizzato dei colori disponibili.
 #
-# Valori possibili di c:
+# Valori possibili di <em>c</em>:
 # * black
 # * navy_blue
 # * green
@@ -89,8 +89,8 @@ def color(c, text)
 end
 
 # Ritorna una stringa rappresentante l'articolo determinativo
-# della parola nell'argomento text, l'argomento type e' un intero che 
-# rapprensenta il tipo di parola:
+# della parola nell'argomento <em>text</em>, l'argomento 
+# <em>type</em> invece e' un intero che rapprensenta il tipo di parola:
 #
 # 1. Maschile singolare
 # 2. Maschile plurale
@@ -141,7 +141,7 @@ def a_d(type, text)
 end
 
 # Ritorna una stringa rappresentante la preposizioni articolata 'di' 
-# partendo dall'articolo determinativo passato nell'argomento art.
+# partendo dall'articolo determinativo passato nell'argomento <em>art</em>.
 def pa_di(art)
   case art
   when "il "
@@ -162,7 +162,7 @@ def pa_di(art)
 end
 
 # Ritorna una stringa rappresentante la preposizioni articolata 'in' 
-# partendo dall'articolo determinativo passato nell'argomento art.
+# partendo dall'articolo determinativo passato nell'argomento <em>art</em>.
 def pa_in(art)
   case art
   when "il "
