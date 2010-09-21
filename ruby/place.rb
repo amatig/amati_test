@@ -1,9 +1,5 @@
 require "thread"
 
-# = Name
-# Place
-# = Synopsis
-# ...
 # = Description
 # ...
 # = License
@@ -20,7 +16,7 @@ require "thread"
 # Giovanni Amati
 
 class Place
-  attr_accessor :id, :name, :descr, :attrs, :near_place
+  attr_reader :id, :name, :descr, :attrs, :near_place
   
   def initialize(data)
     # init dati place

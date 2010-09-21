@@ -79,15 +79,7 @@
   <div id="contextContent">
 
     <div id="description">
-      <h1>Name</h1>
-<p>
-<a href="Place.html">Place</a>
-</p>
-<h1>Synopsis</h1>
-<p>
-&#8230;
-</p>
-<h1>Description</h1>
+      <h1>Description</h1>
 <p>
 &#8230;
 </p>
@@ -157,27 +149,27 @@ Giovanni Amati
         <table>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">attrs</td>
-          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">descr</td>
-          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">id</td>
-          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">name</td>
-          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
         </tr>
         <tr class="top-aligned-row context-row">
           <td class="context-item-name">near_place</td>
-          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
           <td class="context-item-desc"></td>
         </tr>
         </table>
@@ -194,13 +186,28 @@ Giovanni Amati
         <a name="M000042"></a>
 
         <div class="method-heading">
-          <a href="Place.src/M000042.html" target="Code" class="method-signature"
-            onclick="popupCode('Place.src/M000042.html');return false;">
+          <a href="#M000042" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(data)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000042-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000042-source">
+<pre>
+    <span class="ruby-comment cmt"># File place.rb, line 21</span>
+21:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">data</span>)
+22:     <span class="ruby-comment cmt"># init dati place</span>
+23:     <span class="ruby-ivar">@id</span>, <span class="ruby-ivar">@name</span>, <span class="ruby-ivar">@descr</span>, <span class="ruby-ivar">@attrs</span> = <span class="ruby-identifier">data</span>
+24:     <span class="ruby-ivar">@near_place</span> = []
+25:     <span class="ruby-ivar">@people_here</span> = []
+26:     
+27:     <span class="ruby-ivar">@mutex</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
+28:     <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">abort_on_exception</span> = <span class="ruby-keyword kw">true</span>
+29:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
         </div>
       </div>
 
@@ -210,13 +217,22 @@ Giovanni Amati
         <a name="M000043"></a>
 
         <div class="method-heading">
-          <a href="Place.src/M000043.html" target="Code" class="method-signature"
-            onclick="popupCode('Place.src/M000043.html');return false;">
+          <a href="#M000043" class="method-signature">
           <span class="method-name">add_near_place</span><span class="method-args">(place)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000043-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000043-source">
+<pre>
+    <span class="ruby-comment cmt"># File place.rb, line 31</span>
+31:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_near_place</span>(<span class="ruby-identifier">place</span>)
+32:     <span class="ruby-ivar">@near_place</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">place</span> <span class="ruby-comment cmt"># non sono mai modificati</span>
+33:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
         </div>
       </div>
 
@@ -224,13 +240,22 @@ Giovanni Amati
         <a name="M000045"></a>
 
         <div class="method-heading">
-          <a href="Place.src/M000045.html" target="Code" class="method-signature"
-            onclick="popupCode('Place.src/M000045.html');return false;">
+          <a href="#M000045" class="method-signature">
           <span class="method-name">add_people</span><span class="method-args">(user)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000045-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000045-source">
+<pre>
+    <span class="ruby-comment cmt"># File place.rb, line 39</span>
+39:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_people</span>(<span class="ruby-identifier">user</span>)
+40:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-ivar">@people_here</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">user</span> }
+41:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
         </div>
       </div>
 
@@ -238,13 +263,22 @@ Giovanni Amati
         <a name="M000046"></a>
 
         <div class="method-heading">
-          <a href="Place.src/M000046.html" target="Code" class="method-signature"
-            onclick="popupCode('Place.src/M000046.html');return false;">
+          <a href="#M000046" class="method-signature">
           <span class="method-name">people</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000046-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000046-source">
+<pre>
+    <span class="ruby-comment cmt"># File place.rb, line 43</span>
+43:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">people</span>()
+44:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@people_here</span> }
+45:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
         </div>
       </div>
 
@@ -252,13 +286,22 @@ Giovanni Amati
         <a name="M000044"></a>
 
         <div class="method-heading">
-          <a href="Place.src/M000044.html" target="Code" class="method-signature"
-            onclick="popupCode('Place.src/M000044.html');return false;">
+          <a href="#M000044" class="method-signature">
           <span class="method-name">remove_people</span><span class="method-args">(user)</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000044-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000044-source">
+<pre>
+    <span class="ruby-comment cmt"># File place.rb, line 35</span>
+35:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_people</span>(<span class="ruby-identifier">user</span>)
+36:     <span class="ruby-ivar">@mutex</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-ivar">@people_here</span>.<span class="ruby-identifier">slice!</span>(<span class="ruby-ivar">@people_here</span>.<span class="ruby-identifier">index</span>(<span class="ruby-identifier">user</span>)) }
+37:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
         </div>
       </div>
 
@@ -266,13 +309,22 @@ Giovanni Amati
         <a name="M000047"></a>
 
         <div class="method-heading">
-          <a href="Place.src/M000047.html" target="Code" class="method-signature"
-            onclick="popupCode('Place.src/M000047.html');return false;">
+          <a href="#M000047" class="method-signature">
           <span class="method-name">to_s</span><span class="method-args">()</span>
           </a>
         </div>
       
         <div class="method-description">
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000047-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000047-source">
+<pre>
+    <span class="ruby-comment cmt"># File place.rb, line 47</span>
+47:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>()
+48:     <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@name</span>
+49:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
         </div>
       </div>
 

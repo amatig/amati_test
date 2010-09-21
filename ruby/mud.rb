@@ -3,10 +3,6 @@ require "lib/ircbot.rb"
 require "lib/database.rb"
 require "core.rb"
 
-# = Name
-# Mud
-# = Synopsis
-# ...
 # = Description
 # ...
 # = License

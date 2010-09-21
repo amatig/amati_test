@@ -1,9 +1,5 @@
 require "rexml/document"
 
-# = Name
-# Npc
-# = Synopsis
-# ...
 # = Description
 # ...
 # = License
@@ -20,7 +16,7 @@ require "rexml/document"
 # Giovanni Amati
 
 class Npc
-  attr_accessor :name, :descr, :place
+  attr_reader :name, :descr, :place
   
   def initialize(name)
     file = File.new("config/#{name}.xml")

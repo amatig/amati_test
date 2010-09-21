@@ -1,10 +1,6 @@
 require "pg"
 require "singleton"
 
-# = Name
-# Database
-# = Synopsis
-# ...
 # = Description
 # ...
 # = License

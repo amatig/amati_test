@@ -1,10 +1,6 @@
 require "thread"
 require "lib/database.rb"
 
-# = Name
-# User
-# = Synopsis
-# ...
 # = Description
 # ...
 # = License
@@ -21,7 +17,7 @@ require "lib/database.rb"
 # Giovanni Amati
 
 class User
-  attr_accessor :id, :name
+  attr_reader :id, :name
   
   def User.get(nick)
     data = Database.instance.get("*", "users", "nick='#{nick}'")

@@ -5,10 +5,6 @@ require "user.rb"
 require "place.rb"
 require "npc.rb"
 
-# = Name
-# Core
-# = Synopsis
-# ...
 # = Description
 # ...
 # = License

@@ -1,10 +1,6 @@
 require "socket"
 require "thread"
 
-# = Name
-# IrcBot
-# = Synopsis
-# ...
 # = Description
 # ...
 # = License
