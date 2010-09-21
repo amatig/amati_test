@@ -29,37 +29,6 @@ def up_case(text)
   return text[0].chr.capitalize + text[1, text.size]
 end
 
-$_msg = {
-  :save => "Terro' presente il punto in la storia e' arrivata",
-  :benv => "%s a te %s! %s",
-  :r_benv => "prima d'ogni cosa e' buona eduzione salutare!",
-  :no_reg => "non ti conosco straniero, non sei nella mia storia!",
-  :cnf_0 => "non ho capito...",
-  :cnf_1 => "puoi ripetere?",
-  :cnf_2 => "forse sbagli nella pronuncia?",
-  :up_true => "ti sei alzato",
-  :up_false => "sei gia' in piedi!",
-  :down_true => "ti sei adagiato per terra",
-  :down_false => "ti sei gia' per terra!",
-  :uaresit_0 => "sei per terra non puoi andare da nessuna parte!",
-  :uaresit_1 => "si nei tuoi sogni!",
-  :c_e => "c'e'",
-  :ci_sono => "ci sono",
-  :uz => "nella zona %s %s",
-  :nobody => "non c'e' nessuno",
-  :nothing => "non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
-  :onlyu => "solo tu",
-  :pl => "ti trovi %s, %s",
-  :no_pl => "non conosco nessun luogo nelle vicinanze con questo nome!",
-  :np => "sei nelle vicinanze %s",
-}
-
-# Ritorna una stringa rappresentate una risposta o affermazione del bot, 
-# ogni messaggio e' indicizzato tramite un symbol/stringa.
-def get_text(str)
-  return $_msg[str.to_sym]
-end
-
 # Ritorna una stringa con lo stile bold per il client irc.
 def bold(text)
   return "" + text + ""

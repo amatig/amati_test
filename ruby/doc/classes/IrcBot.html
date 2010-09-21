@@ -122,13 +122,13 @@ Giovanni Amati
       <h3 class="section-bar">Methods</h3>
 
       <div class="name-list">
-      <a href="#M000034">connectIRC</a>&nbsp;&nbsp;
-      <a href="#M000035">dispatch</a>&nbsp;&nbsp;
-      <a href="#M000036">main_loop</a>&nbsp;&nbsp;
-      <a href="#M000037">message</a>&nbsp;&nbsp;
-      <a href="#M000031">new</a>&nbsp;&nbsp;
-      <a href="#M000033">send</a>&nbsp;&nbsp;
-      <a href="#M000032">socket_send</a>&nbsp;&nbsp;
+      <a href="#M000033">connectIRC</a>&nbsp;&nbsp;
+      <a href="#M000034">dispatch</a>&nbsp;&nbsp;
+      <a href="#M000035">main_loop</a>&nbsp;&nbsp;
+      <a href="#M000036">message</a>&nbsp;&nbsp;
+      <a href="#M000030">new</a>&nbsp;&nbsp;
+      <a href="#M000032">send</a>&nbsp;&nbsp;
+      <a href="#M000031">socket_send</a>&nbsp;&nbsp;
       </div>
     </div>
 
@@ -150,11 +150,11 @@ Giovanni Amati
     <div id="methods">
       <h3 class="section-bar">Public Class methods</h3>
 
-      <div id="method-M000031" class="method-detail">
-        <a name="M000031"></a>
+      <div id="method-M000030" class="method-detail">
+        <a name="M000030"></a>
 
         <div class="method-heading">
-          <a href="#M000031" class="method-signature">
+          <a href="#M000030" class="method-signature">
           <span class="method-name">new</span><span class="method-args">(nick, realname = &quot;bla&quot;)</span>
           </a>
         </div>
@@ -164,8 +164,8 @@ Giovanni Amati
 Metodo di inizializzazione della classe.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000031-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000031-source">
+            onclick="toggleCode('M000030-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000030-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ircbot.rb, line 22</span>
 22:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">nick</span>, <span class="ruby-identifier">realname</span> = <span class="ruby-value str">&quot;bla&quot;</span>)
@@ -186,11 +186,11 @@ Metodo di inizializzazione della classe.
 
       <h3 class="section-bar">Public Instance methods</h3>
 
-      <div id="method-M000034" class="method-detail">
-        <a name="M000034"></a>
+      <div id="method-M000033" class="method-detail">
+        <a name="M000033"></a>
 
         <div class="method-heading">
-          <a href="#M000034" class="method-signature">
+          <a href="#M000033" class="method-signature">
           <span class="method-name">connectIRC</span><span class="method-args">(server = &quot;127.0.0.1&quot;, port = 6667)</span>
           </a>
         </div>
@@ -201,8 +201,8 @@ Apre una connessione socket verso un server irc e invia i dati
 identificativi per l&#8216;utente bot.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000034-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000034-source">
+            onclick="toggleCode('M000033-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000033-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ircbot.rb, line 54</span>
 54:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">connectIRC</span>(<span class="ruby-identifier">server</span> = <span class="ruby-value str">&quot;127.0.0.1&quot;</span>, <span class="ruby-identifier">port</span> = <span class="ruby-value">6667</span>)
@@ -224,11 +224,11 @@ identificativi per l&#8216;utente bot.
         </div>
       </div>
 
-      <div id="method-M000036" class="method-detail">
-        <a name="M000036"></a>
+      <div id="method-M000035" class="method-detail">
+        <a name="M000035"></a>
 
         <div class="method-heading">
-          <a href="#M000036" class="method-signature">
+          <a href="#M000035" class="method-signature">
           <span class="method-name">main_loop</span><span class="method-args">()</span>
           </a>
         </div>
@@ -237,15 +237,15 @@ identificativi per l&#8216;utente bot.
           <p>
 Fa partire il ciclo principale del bot che legge i messaggi provenienti dal
 socket e li manda ad un nuovo thread chiamando il metodo <a
-href="IrcBot.html#M000035">dispatch</a>.
+href="IrcBot.html#M000034">dispatch</a>.
 </p>
 <p>
 Nel caso si tratta di un PING del server risponde subito col PONG per non
 far cadere la connessione.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000036-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000036-source">
+            onclick="toggleCode('M000035-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000035-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ircbot.rb, line 83</span>
 83:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">main_loop</span>()
@@ -268,11 +268,11 @@ far cadere la connessione.
         </div>
       </div>
 
-      <div id="method-M000037" class="method-detail">
-        <a name="M000037"></a>
+      <div id="method-M000036" class="method-detail">
+        <a name="M000036"></a>
 
         <div class="method-heading">
-          <a href="#M000037" class="method-signature">
+          <a href="#M000036" class="method-signature">
           <span class="method-name">message</span><span class="method-args">(target, msg)</span>
           </a>
         </div>
@@ -280,11 +280,11 @@ far cadere la connessione.
         <div class="method-description">
           <p>
 Invia un messaggio di tipo PRIVMSG ad un nick/channel. Questo metodo
-utilizza il metodo <a href="IrcBot.html#M000033">send</a>.
+utilizza il metodo <a href="IrcBot.html#M000032">send</a>.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000037-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000037-source">
+            onclick="toggleCode('M000036-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000036-source">
 <pre>
      <span class="ruby-comment cmt"># File lib/ircbot.rb, line 101</span>
 101:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">message</span>(<span class="ruby-identifier">target</span>, <span class="ruby-identifier">msg</span>)
@@ -297,11 +297,11 @@ utilizza il metodo <a href="IrcBot.html#M000033">send</a>.
 
       <h3 class="section-bar">Protected Instance methods</h3>
 
-      <div id="method-M000035" class="method-detail">
-        <a name="M000035"></a>
+      <div id="method-M000034" class="method-detail">
+        <a name="M000034"></a>
 
         <div class="method-heading">
-          <a href="#M000035" class="method-signature">
+          <a href="#M000034" class="method-signature">
           <span class="method-name">dispatch</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -313,8 +313,8 @@ E&#8217; un metodo non implementato, estendendo la classe ognuno lo
 implementa in base alla logica da asegnare ad ogni messaggio
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000035-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000035-source">
+            onclick="toggleCode('M000034-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000034-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ircbot.rb, line 73</span>
 73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">dispatch</span>(<span class="ruby-identifier">msg</span>)
@@ -325,11 +325,11 @@ implementa in base alla logica da asegnare ad ogni messaggio
         </div>
       </div>
 
-      <div id="method-M000033" class="method-detail">
-        <a name="M000033"></a>
+      <div id="method-M000032" class="method-detail">
+        <a name="M000032"></a>
 
         <div class="method-heading">
-          <a href="#M000033" class="method-signature">
+          <a href="#M000032" class="method-signature">
           <span class="method-name">send</span><span class="method-args">(msg)</span>
           </a>
         </div>
@@ -341,8 +341,8 @@ invio svuoti il buffer ogni tot per ottimizzare il blocco di messaggi da
 inviare al server irc.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000033-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000033-source">
+            onclick="toggleCode('M000032-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000032-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ircbot.rb, line 48</span>
 48:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">send</span>(<span class="ruby-identifier">msg</span>)
@@ -355,11 +355,11 @@ inviare al server irc.
 
       <h3 class="section-bar">Private Instance methods</h3>
 
-      <div id="method-M000032" class="method-detail">
-        <a name="M000032"></a>
+      <div id="method-M000031" class="method-detail">
+        <a name="M000031"></a>
 
         <div class="method-heading">
-          <a href="#M000032" class="method-signature">
+          <a href="#M000031" class="method-signature">
           <span class="method-name">socket_send</span><span class="method-args">()</span>
           </a>
         </div>
@@ -370,8 +370,8 @@ E&#8217; il metodo che effettua il vero e proprio invio sul socket
 svuotando il buffer alla fine dell&#8216;operazione.
 </p>
           <p><a class="source-toggle" href="#"
-            onclick="toggleCode('M000032-source');return false;">[Source]</a></p>
-          <div class="method-source-code" id="M000032-source">
+            onclick="toggleCode('M000031-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000031-source">
 <pre>
     <span class="ruby-comment cmt"># File lib/ircbot.rb, line 36</span>
 36:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">socket_send</span>()
