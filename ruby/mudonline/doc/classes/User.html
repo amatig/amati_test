@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: User</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">User</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/user_rb.html">
+                user.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1>Description</h1>
+<p>
+Classe che rappresenta l&#8216;entita&#8217; utente.
+</p>
+<h1>License</h1>
+<p>
+Nemesis - IRC <a href="Mud.html">Mud</a> Multiplayer Online totalmente
+italiano
+</p>
+<p>
+Copyright (C) 2010 Giovanni Amati
+</p>
+<p>
+This program is free software: you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option)
+any later version.
+</p>
+<p>
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for
+more details.
+</p>
+<p>
+You should have received a copy of the GNU General Public License along
+with this program. If not, see <a
+href="http://www.gnu.org/licenses">www.gnu.org/licenses</a>/.
+</p>
+<h1>Authors</h1>
+<p>
+Giovanni Amati
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000020">down</a>&nbsp;&nbsp;
+      <a href="#M000012">get</a>&nbsp;&nbsp;
+      <a href="#M000013">new</a>&nbsp;&nbsp;
+      <a href="#M000018">place</a>&nbsp;&nbsp;
+      <a href="#M000014">save</a>&nbsp;&nbsp;
+      <a href="#M000017">set_place</a>&nbsp;&nbsp;
+      <a href="#M000021">stand_up?</a>&nbsp;&nbsp;
+      <a href="#M000016">timestamp</a>&nbsp;&nbsp;
+      <a href="#M000022">to_s</a>&nbsp;&nbsp;
+      <a href="#M000019">up</a>&nbsp;&nbsp;
+      <a href="#M000015">update_timestamp</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">id</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">name</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000012" class="method-detail">
+        <a name="M000012"></a>
+
+        <div class="method-heading">
+          <a href="#M000012" class="method-signature">
+          <span class="method-name">get</span><span class="method-args">(nick)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Metodo di classe che ritorna una istanza di tipo <a
+href="User.html">User</a> creata dai dati utente nel database presi tramite
+l&#8216;argomento <em>nick</em>.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000012-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000012-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 24</span>
+24:   <span class="ruby-keyword kw">def</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">get</span>(<span class="ruby-identifier">nick</span>)
+25:     <span class="ruby-identifier">data</span> = <span class="ruby-constant">Database</span>.<span class="ruby-identifier">instance</span>.<span class="ruby-identifier">get</span>(<span class="ruby-value str">&quot;*&quot;</span>, <span class="ruby-value str">&quot;users&quot;</span>, <span class="ruby-node">&quot;nick='#{nick}'&quot;</span>)
+26:     <span class="ruby-keyword kw">return</span> (<span class="ruby-identifier">data</span>.<span class="ruby-identifier">empty?</span>) <span class="ruby-operator">?</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-operator">:</span> <span class="ruby-constant">User</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">data</span>)
+27:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000013" class="method-detail">
+        <a name="M000013"></a>
+
+        <div class="method-heading">
+          <a href="#M000013" class="method-signature">
+          <span class="method-name">new</span><span class="method-args">(data)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Metodo di inizializzazione della classe.
+</p>
+<dl>
+<dt>data</dt><dd>array contenete tutti i dati dell&#8216;utente.
+
+</dd>
+</dl>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000013-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000013-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 31</span>
+31:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">data</span>)
+32:     <span class="ruby-ivar">@db</span> = <span class="ruby-constant">Database</span>.<span class="ruby-identifier">instance</span> <span class="ruby-comment cmt"># singleton</span>
+33:     
+34:     <span class="ruby-ivar">@id</span>, <span class="ruby-ivar">@name</span>, <span class="ruby-ivar">@place</span> = <span class="ruby-identifier">data</span>
+35:     <span class="ruby-ivar">@stand_up</span> = <span class="ruby-keyword kw">true</span>
+36:     <span class="ruby-ivar">@timestamp</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span>
+37:     
+38:     <span class="ruby-ivar">@mutex_attrs</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
+39:     <span class="ruby-ivar">@mutex_place</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
+40:     <span class="ruby-ivar">@mutex_time</span> = <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>
+41:     <span class="ruby-constant">Thread</span>.<span class="ruby-identifier">abort_on_exception</span> = <span class="ruby-keyword kw">true</span>
+42:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000020" class="method-detail">
+        <a name="M000020"></a>
+
+        <div class="method-heading">
+          <a href="#M000020" class="method-signature">
+          <span class="method-name">down</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Setta l&#8216;utente come &#8216;per terra&#8217;. Se l&#8216;utente non
+era tale ritorna true, se era gia&#8217; &#8216;per terra&#8217; ritorna
+false.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000020-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000020-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 89</span>
+89:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">down</span>()
+90:     <span class="ruby-ivar">@mutex_attrs</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+91:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-ivar">@stand_up</span>
+92:       <span class="ruby-ivar">@stand_up</span> = <span class="ruby-keyword kw">false</span>
+93:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
+94:     <span class="ruby-keyword kw">end</span>
+95:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000018" class="method-detail">
+        <a name="M000018"></a>
+
+        <div class="method-heading">
+          <a href="#M000018" class="method-signature">
+          <span class="method-name">place</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Ritorna l&#8216;id del posto in cui si trova l&#8216;utente.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000018-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000018-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 73</span>
+73:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">place</span>()
+74:     <span class="ruby-ivar">@mutex_place</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@place</span> }
+75:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000014" class="method-detail">
+        <a name="M000014"></a>
+
+        <div class="method-heading">
+          <a href="#M000014" class="method-signature">
+          <span class="method-name">save</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Salva lo stato dell&#8216;utente nel database.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000014-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000014-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 45</span>
+45:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">save</span>()
+46:     <span class="ruby-ivar">@mutex_attrs</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+47:       <span class="ruby-ivar">@db</span>.<span class="ruby-identifier">update</span>({
+48:                    <span class="ruby-value str">&quot;place&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Integer</span>(<span class="ruby-ivar">@place</span>),
+49:                  }, 
+50:                  <span class="ruby-value str">&quot;users&quot;</span>, 
+51:                  <span class="ruby-node">&quot;id=#{@id}&quot;</span>)
+52:     <span class="ruby-keyword kw">end</span>
+53:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000017" class="method-detail">
+        <a name="M000017"></a>
+
+        <div class="method-heading">
+          <a href="#M000017" class="method-signature">
+          <span class="method-name">set_place</span><span class="method-args">(place_id)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Modifica l&#8216;id del posto in cui si trova l&#8216;utente.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000017-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000017-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 68</span>
+68:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_place</span>(<span class="ruby-identifier">place_id</span>)
+69:     <span class="ruby-ivar">@mutex_place</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-ivar">@place</span> = <span class="ruby-identifier">place_id</span> }
+70:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000021" class="method-detail">
+        <a name="M000021"></a>
+
+        <div class="method-heading">
+          <a href="#M000021" class="method-signature">
+          <span class="method-name">stand_up?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Ritorna un booleano che indica se l&#8216;utente e&#8217; &#8216;in
+piedi&#8217; o no.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000021-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000021-source">
+<pre>
+     <span class="ruby-comment cmt"># File user.rb, line 98</span>
+ 98:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">stand_up?</span>()
+ 99:     <span class="ruby-ivar">@mutex_attrs</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@stand_up</span> }
+100:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000016" class="method-detail">
+        <a name="M000016"></a>
+
+        <div class="method-heading">
+          <a href="#M000016" class="method-signature">
+          <span class="method-name">timestamp</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Ritorna il <a href="User.html#M000016">timestamp</a> dell&#8216;utente, il
+tempo dell&#8216;ultimo messaggio inviato.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000016-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000016-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 63</span>
+63:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">timestamp</span>()
+64:     <span class="ruby-ivar">@mutex_time</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@timestamp</span> }
+65:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000022" class="method-detail">
+        <a name="M000022"></a>
+
+        <div class="method-heading">
+          <a href="#M000022" class="method-signature">
+          <span class="method-name">to_s</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Ritorna una stringa che rappresenta il nome dell&#8216;utente.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000022-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000022-source">
+<pre>
+     <span class="ruby-comment cmt"># File user.rb, line 103</span>
+103:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">to_s</span>()
+104:     <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@name</span>
+105:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000019" class="method-detail">
+        <a name="M000019"></a>
+
+        <div class="method-heading">
+          <a href="#M000019" class="method-signature">
+          <span class="method-name">up</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Setta l&#8216;utente come &#8216;in piedi&#8217;. Se l&#8216;utente non era
+tale ritorna true, se era gia&#8217; &#8216;in piedi&#8217; ritorna false.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000019-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000019-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 79</span>
+79:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">up</span>()
+80:     <span class="ruby-ivar">@mutex_attrs</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+81:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@stand_up</span>
+82:       <span class="ruby-ivar">@stand_up</span> = <span class="ruby-keyword kw">true</span>
+83:       <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">true</span>
+84:     <span class="ruby-keyword kw">end</span>
+85:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+      <div id="method-M000015" class="method-detail">
+        <a name="M000015"></a>
+
+        <div class="method-heading">
+          <a href="#M000015" class="method-signature">
+          <span class="method-name">update_timestamp</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Aggiorna il <a href="User.html#M000016">timestamp</a> dell&#8216;utente,
+questa variabile tiene traccia del tempo dell&#8216;ultimo messaggio
+inviato dall&#8216;utente al fine sloggarlo per inattivita&#8217;
+salvandone lo stato.
+</p>
+          <p><a class="source-toggle" href="#"
+            onclick="toggleCode('M000015-source');return false;">[Source]</a></p>
+          <div class="method-source-code" id="M000015-source">
+<pre>
+    <span class="ruby-comment cmt"># File user.rb, line 58</span>
+58:   <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">update_timestamp</span>()
+59:     <span class="ruby-ivar">@mutex_time</span>.<span class="ruby-identifier">synchronize</span> { <span class="ruby-ivar">@timestamp</span> = <span class="ruby-constant">Time</span>.<span class="ruby-identifier">now</span>.<span class="ruby-identifier">to_i</span> }
+60:   <span class="ruby-keyword kw">end</span>
+</pre>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>
