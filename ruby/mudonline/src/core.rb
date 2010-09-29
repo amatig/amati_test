@@ -5,6 +5,8 @@ require "user.rb"
 require "npc.rb"
 require "place.rb"
 
+include Utils
+
 # = Description
 # Classe che implementa tutti i comandi utente, di sistema e la messaggistica del Mud.
 # = License
