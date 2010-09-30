@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby -w
-
 require 'drb'
 
-class Datas
+class User
   include DRbUndumped
   
   def initialize(name)
@@ -16,25 +15,21 @@ class Datas
 end
 
 class Server
-  attr :data
+  attr :user_list
   
-  def initialize(array)
-    @data = array
+  def initialize()
+    @user_list = []
+    @user_list << User.new("Amish Paradise")
+    @user_list << User.new("Eat it")
   end
   
   def get(index)
-    puts @data[index]
-    return @data[index]
+    puts @user_list[index]
+    return @user_list[index]
   end
   
 end
 
-d = [
-  Datas.new("Amish Paradise"),
-  Datas.new("Eat it")
-]
-
-DRb.start_service nil, Server.new(d)
+DRb.start_service nil, Server.new
 puts DRb.uri
-
 DRb.thread.join

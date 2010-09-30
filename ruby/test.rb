@@ -1,5 +1,4 @@
 #!/usr/bin/env ruby -w
-
 require 'drb'
 
 DRb.start_service
