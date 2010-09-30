@@ -32,4 +32,6 @@ end
 
 DRb.start_service nil, Server.new
 puts DRb.uri
+
+trap("INT") { DRb.stop_service }
 DRb.thread.join
