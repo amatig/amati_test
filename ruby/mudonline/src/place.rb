@@ -27,7 +27,6 @@ class Place
     @people_here = []
     
     @mutex = Mutex.new
-    Thread.abort_on_exception = true
   end
   
   # Rimuove un oggeto di tipo User dalla lista delle persone in

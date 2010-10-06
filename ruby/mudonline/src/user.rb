@@ -38,7 +38,6 @@ class User
     @mutex_attrs = Mutex.new
     @mutex_place = Mutex.new
     @mutex_time = Mutex.new
-    Thread.abort_on_exception = true
   end
   
   # Salva lo stato dell'utente nel database.

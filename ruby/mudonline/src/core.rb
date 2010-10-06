@@ -56,7 +56,6 @@ class Core
     @npc_list = {}
     
     @mutex = Mutex.new
-    Thread.abort_on_exception = true
     
     load_data
     # controllo attivita' utente
