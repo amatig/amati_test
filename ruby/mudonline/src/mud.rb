@@ -1,13 +1,18 @@
 #!/usr/bin/ruby
-require "lib/ircbot.rb"
+require "rubygems"
+require "IRC"
 require "lib/database.rb"
 require "core.rb"
 
 # = Description
-# Classe principale del mud che estende IrcBot e utilizza il singleton Database per la connessione ai dati.
+# Classe principale del mud che usa Ruby-IRC, un framework di connessione e comunicazione con server Irc.
 #
-# Questa classe si occupa di intercettare e distinguere i comandi degli utenti, e' stata schissa 
-# in due con la classe Core che invece ne implementa i comandi (elaborazione dati) e la messaggistica (testo dialoghi).
+# Questa classe si occupa di distinguere, eseguire e rispondere ai comandi degli utenti, e' stata scissa 
+# in due con la classe Core che elabora realmente i dati di un comando e ritorna il messaggio generato per 
+# l'invio all'utente attraverso il server Irc.
+#
+# Nello script di main viene anche inizializzato il singleton Database per la connessione ai dati su server Postgres.
+#
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -21,95 +26,95 @@ require "core.rb"
 # = Authors
 # Giovanni Amati
 
-class Mud < IrcBot
+class Mud < IRC
   
-  # Ottine il singleton dell'istanza Database, ne setta i parametri di
-  # connessione, e stabilisce la connessione al database.
-  #
+  # Metodo di inizializzazione della classe.
   # Istanzia inoltre la classe Core che ha al suo interno
-  # tutte le implementazioni dei comandi e la messaggistica del mud.
-  def connectDB(*args)
-    Database.instance.connect(*args) # singleton
+  # tutte le implementazioni dei comandi e la messaggistica del mud.  
+  def initialize(nick, server, port, channels = [], options = {})
+    super(nick, server, port, nil, options)
+    
+    # Callbakcs for the connection.
+    IRCEvent.add_callback("endofmotd") do |event| 
+      channels.each { |chan| add_channel(chan) }
+    end
+    IRCEvent.add_callback("nicknameinuse") do |event| 
+      ch_nick("RubyBot")
+    end
+    IRCEvent.add_callback("privmsg") do |event|
+      parse(event)
+    end
+    IRCEvent.add_callback("join") do |event|
+      if @autoops.include?(event.from)
+        op(event.channel, event.from)
+      end
+    end
+    
     @core = Core.new # insieme di funzioni x elaborare i comandi
   end
   
-  # Invia al singleton il comando di chiusura della connessione al database.
-  def closeDB()
-    Database.instance.close
-  end
-  
-  # Parsa un messaggio utente per valutarlo tramite il metodo evaluate, 
-  # l'esito della valutazione e' un messaggio che viene comunicato all'utente.
-  def dispatch(msg)
-    # puts Thread.current
-    puts msg
-    if msg =~ /^:(.+)!(.+@.+)\sPRIVMSG\s(.+)\s:(.+)$/i
-      text = evaluate($1, $2, $3, $4)
-      unless text.empty?
-        message($1, up_case(text))
-      else
-        message($1, up_case(@core.cmd_not_found))
-      end
+  def parse(event)
+    if event.channel == @nick
+      delivery_priv(event.from, event.message)
+    else
+      delivery_chan(event.channel, event.message)
     end
   end
   
-  # Valuta il parsing del messaggio utente ed esegue di conseguenza 
-  # l'operazione di riferimento implementata all'interno di Core.
-  #
-  # Ogni operazione ha un messaggio di ritorno che torna al dispatch.
-  def evaluate(nick, extra, target, msg)
-    msg = msg.strip # stampa del messaggio grezzo
+  def delivery_chan(target, msg)
+  end
+  
+  def delivery_priv(target, msg)
+    puts Thread.current
     # riconoscimento utente
-    unless (@core.is_welcome? nick)
+    unless (@core.is_welcome? target)
       if msg =~ /^(ciao|salve)$/i
-        return @core.welcome(nick, $1)
+        send_message(target, @core.welcome(target, $1))
       else
-        return @core.need_welcome
+        send_message(target, @core.need_welcome)
+      end
+    else
+      @core.update_timestamp(target) # segnala attivita' utente      
+      # tutti i comandi
+      case msg
+      when /^mi\s(alzo|sveglio)$/i
+        send_message(target, @core.up(target))
+      when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
+        send_message(target, @core.down(target))
+      when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
+        send_message(target, @core.place(target))
+      when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
+        send_message(target, @core.near_place(target))
+      when /^va.*\s(ne|a).{1,3}\s(.+)$/i
+        send_message(target, @core.move(target, $2))
+      when /^chi.+(qu.|zona)\?$/i
+        send_message(target, @core.users_zone(target))
+      when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
+        send_message(target, @core.look(target, $2))
+      when /^salva$/i
+        send_message(target, @core.save(target))
+      else
+        send_message(target, @core.cmd_not_found)
       end
     end
-    
-    @core.update_timestamp(nick) # segnala attivita' utente
-    
-    # tutti i comandi
-    case msg
-    when /^mi\s(alzo|sveglio)$/i
-      return @core.up(nick)
-    when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
-      return @core.down(nick)
-    when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
-      return @core.place(nick)
-    when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
-      return @core.near_place(nick)
-    when /^va.*\s(ne|a).{1,3}\s(.+)$/i
-      return @core.move(nick, $2)
-    when /^chi.+(qu.|zona)\?$/i
-      return @core.users_zone(nick)
-    when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
-      return @core.look(nick, $2)
-    when /^salva$/i
-      return @core.save(nick)
-    end
-    return ""
   end
   
-  private :evaluate
-  protected :dispatch
+  private :delivery_priv, :delivery_chan
 end
+
 
 # Main
 
 if __FILE__ == $0
   begin
-    app = Mud.new("game_master", "Game Master")
-    app.connectDB("127.0.0.1", 5432, "mud_db", "postgres", "caliostro")
-    app.connectIRC("127.0.0.1", 6667)
-    app.main_loop
+    Database.instance.connect("127.0.0.1", 5432, "mud_db", "postgres")
+    Mud.new("GameMaster", "127.0.0.1", 6667, ["\#Hall"]).connect
   rescue Interrupt
   rescue Exception => e
     puts "MainLoop: " + e.message
     print e.backtrace.join("\n")
     #retry # ritenta dal begin
   ensure
-    app.closeDB
+    Database.instance.close
   end
 end
