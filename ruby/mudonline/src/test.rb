@@ -1,27 +1,25 @@
+#!/usr/bin/ruby
 require "rubygems"
 require "IRC"
-require "StParseEvent"
 require "socket"
 
 class Master < IRC
   
   def initialize(nick, server, port, channels, options) 
     super(nick, server, port, nil, options)
-    @bot = self
-    # This makes us listen to STDIN. It's handy sometimes.
-    IRCConnection.add_IO_socket(STDIN) do |sock| 
-      StParseEvent.new(sock.readline.chomp)
-    end
     # Callbakcs for the connection.
     IRCEvent.add_callback("endofmotd") do |event| 
-      channels.each { |chan| @bot.add_channel(chan) }
+      channels.each { |chan| add_channel(chan) }
     end
-    IRCEvent.add_callback("nicknameinuse") { |event| @bot.ch_nick("RubyBot") }
-    IRCEvent.add_callback("privmsg") { |event| parse(event) }
-    StParseEvent.add_handler("command") { |event| parse(event) }
+    IRCEvent.add_callback("nicknameinuse") do |event| 
+      ch_nick("RubyBot")
+    end
+    IRCEvent.add_callback("privmsg") do |event|
+      parse(event)
+    end
     IRCEvent.add_callback("join") do |event|
       if @autoops.include?(event.from)
-        @bot.op(event.channel, event.from)
+        op(event.channel, event.from)
       end
     end
     IRCEvent.add_callback("mode") do |event|
@@ -54,6 +52,7 @@ class Master < IRC
   end
   
   def parse(event)
+    puts Thread.current
     target = (event.channel == @nick) ? event.from : event.channel
     msg = event.message
     
@@ -73,7 +72,7 @@ if __FILE__ == $0
     botnick  = "GameMaster"
     server   = "127.0.0.1"
     port     = "6667"
-    channels = ["\#hall"]
+    channels = ["\#Hall"]
     options  = {} # {:use_ssl => 1}
     Master.new(botnick, server, port, channels, options).connect
   rescue Interrupt
