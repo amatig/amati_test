@@ -8,7 +8,7 @@ require "place.rb"
 include Utils
 
 # = Description
-# Classe che implementa tutti i comandi utente, di sistema e la messaggistica del Mud.
+# Classe che implementa l'elaborazione dei dati dei comandi utente e genera i messaggi di ritorno del Mud.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
