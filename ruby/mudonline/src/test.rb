@@ -22,33 +22,6 @@ class Master < IRC
         op(event.channel, event.from)
       end
     end
-    IRCEvent.add_callback("mode") do |event|
-      # Gotta Break up the mode events.
-      switch = "add"
-      i = 5
-      event.mode.scan(/[\+-ovh]/) do |mode|
-        case mode
-        when "-"
-          switch = "sub"
-        when "+"
-          switch = "add"
-        when "o"
-          target = event.stats[i]
-          if (@autoops.include?(event.from) && 
-              ! @autoops.include?(target) && switch == "add")
-            @autoops.add(target)
-            @autoops.write
-          else (@autoops.include?(event.from) && 
-                @autoops.include?(target) && switch == "sub")
-            @autoops.remove(target)
-            @autoops.write
-          end
-          i += 1
-        else
-          i += 1
-        end
-      end
-    end
   end
   
   def parse(event)
