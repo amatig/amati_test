@@ -51,6 +51,7 @@ class Mud < IRC
     @core = Core.new
   end
   
+  # Metodo che smista i messaggi utente per messaggi di canale o privati.
   def parse(event)
     if event.channel == @nick
       delivery_priv(event.from, event.message)
@@ -59,9 +60,11 @@ class Mud < IRC
     end
   end
   
+  # Metodo di gestione dei messaggi di canale.
   def delivery_chan(target, msg)
   end
   
+  # Metodo di gestione dei messaggi privati.
   def delivery_priv(target, msg)
     puts Thread.current
     # riconoscimento utente
@@ -97,6 +100,8 @@ class Mud < IRC
     end
   end
   
+  # Ridefinizione del metodo di invio al server Irc dei messaggi.
+  # Consente di poter rendere maiuscola la prima lettera della frase.
   def send_message(target, msg)
     super(target, up_case(msg))
   end
