@@ -33,7 +33,6 @@ class Mud < IRC
   # l'elaborazione dati dei comandi e la messaggistica di ritorno del mud.
   def initialize(nick, server, port, channels = [], options = {})
     super(nick, server, port, nil, options)
-    
     # Callbakcs for the connection.
     IRCEvent.add_callback("endofmotd") do |event| 
       channels.each { |chan| add_channel(chan) }
@@ -41,15 +40,14 @@ class Mud < IRC
     IRCEvent.add_callback("nicknameinuse") do |event| 
       ch_nick("RubyBot")
     end
-    IRCEvent.add_callback("privmsg") do |event|
+    IRCEvent.add_callback("privmsg") do |event| 
       parse(event)
     end
-    IRCEvent.add_callback("join") do |event|
+    IRCEvent.add_callback("join") do |event| 
       if @autoops.include?(event.from)
         op(event.channel, event.from)
       end
     end
-    
     @core = Core.new
   end
   
