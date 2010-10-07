@@ -1,9 +1,9 @@
 require "thread"
 require "lib/database.rb"
 require "lib/utils.rb"
-require "common/user.rb"
-require "common/npc.rb"
-require "common/place.rb"
+require "mod/user.rb"
+require "mod/npc.rb"
+require "mod/place.rb"
 
 include Utils
 

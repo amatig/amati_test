@@ -20,7 +20,7 @@ class Npc
   
   # Metodo di inizializzazione della classe.
   def initialize(name)
-    file = File.new("xml/#{name}.xml")
+    file = File.new("data/#{name}.xml")
     doc = REXML::Document.new(file)
     root = doc.elements["npc"]
     @name = name
