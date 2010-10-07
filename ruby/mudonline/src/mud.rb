@@ -2,7 +2,10 @@
 require "rubygems"
 require "IRC"
 require "lib/database.rb"
+require "lib/utils.rb"
 require "core.rb"
+
+include Utils
 
 # = Description
 # Classe principale del mud che usa Ruby-IRC, un framework di connessione e comunicazione con server Irc.
