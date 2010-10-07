@@ -24,7 +24,7 @@ include Utils
 
 class Core
   @@bot_msg = {
-    :save => "Terro' presente il punto in la storia e' arrivata",
+    :save => "terro' presente il punto in cui la storia e' arrivata",
     :benv => "%s a te %s! %s",
     :r_benv => "prima d'ogni cosa e' buona eduzione salutare!",
     :no_reg => "non ti conosco straniero, non sei nella mia storia!",
@@ -41,10 +41,10 @@ class Core
     :ci_sono => "ci sono",
     :uz => "nella zona %s %s",
     :nobody => "non c'e' nessuno",
-    :nothing => "non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
     :onlyu => "solo tu",
+    :nothing => "%s? Non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
     :pl => "ti trovi %s, %s",
-    :no_pl => "non conosco nessun luogo nelle vicinanze con questo nome!",
+    :no_pl => "%s? Non conosco nessun luogo nelle vicinanze con questo nome!",
     :np => "sei nelle vicinanze %s",
   }
   
@@ -132,7 +132,7 @@ class Core
     if u
       @mutex.synchronize { @user_list[nick] = u }
       @place_list[u.place].add_people(u)
-      return get_text(:benv) % [greeting, bold(nick), place(nick)]
+      return get_text(:benv) % [greeting, bold(nick), up_case(place(nick))]
     else
       return get_text(:no_reg)
     end
@@ -157,7 +157,7 @@ class Core
       @place_list[me.place].add_people(me)
       return place(nick)
     else
-      return get_text(:no_pl)
+      return get_text(:no_pl) % place_name
     end
   end
   
@@ -198,7 +198,7 @@ class Core
     return "#{res.name}, #{res.descr}" if res
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
-    return get_text(:nothing)
+    return get_text(:nothing) % name
   end
   
   # Ritorna la lista degli npc ed utenti nella zona.

@@ -83,7 +83,7 @@ class Mud < IRC
         send_message(target, @core.place(target))
       when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
         send_message(target, @core.near_place(target))
-      when /^va.*\s(ne|a).{1,3}\s(.+)$/i
+      when /^va.*\s(ne|a).{0,3}\s(.+)$/i
         send_message(target, @core.move(target, $2))
       when /^chi.+(qu.|zona)\?$/i
         send_message(target, @core.users_zone(target))
@@ -95,6 +95,10 @@ class Mud < IRC
         send_message(target, @core.cmd_not_found)
       end
     end
+  end
+  
+  def send_message(target, msg)
+    super(target, up_case(msg))
   end
   
   private :delivery_priv, :delivery_chan
