@@ -30,7 +30,7 @@ class Mud < IRC
   
   # Metodo di inizializzazione della classe.
   # Istanzia inoltre la classe Core che ha al suo interno
-  # tutte le implementazioni dei comandi e la messaggistica del mud.  
+  # l'elaborazione dati dei comandi e la messaggistica di ritorno del mud.
   def initialize(nick, server, port, channels = [], options = {})
     super(nick, server, port, nil, options)
     
@@ -50,7 +50,7 @@ class Mud < IRC
       end
     end
     
-    @core = Core.new # insieme di funzioni x elaborare i comandi
+    @core = Core.new
   end
   
   def parse(event)
