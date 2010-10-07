@@ -21,7 +21,7 @@ module Utils
   # [es.] list ( [ "mario", "carlo", "fabio" ] ) #=> "mario, carlo e fabio"
   def list(array)
     str = array.join(", ")
-  i = str.rindex(", ")
+    i = str.rindex(", ")
     str[i, 2] = " e " if i
     return str
   end
