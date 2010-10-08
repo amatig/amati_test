@@ -1,11 +1,10 @@
 require "thread"
 require "lib/database.rb"
 require "lib/utils.rb"
+require "locate/messages_it.rb"
 require "mod/user.rb"
 require "mod/npc.rb"
 require "mod/place.rb"
-
-include Utils
 
 # = Description
 # Classe che implementa l'elaborazione dei dati dei comandi utente e genera i messaggi di ritorno del Mud.
@@ -23,32 +22,8 @@ include Utils
 # Giovanni Amati
 
 class Core
-  @@bot_msg = {
-    :test => "Salve %s, contattami in privato",
-    :benv => "Oooh %s a te %s! Da quanto tempo! %s",
-    :r_benv => "Prima d'ogni cosa e' buona eduzione salutare!",
-    :no_reg => "Non ti conosco straniero, non sei nella mia storia!",
-    :nothing => "Mmm %s? Non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
-    :no_pl => "Mmm %s? Non conosco nessun luogo nelle vicinanze con questo nome!",
-    :pl => "Ti trovi %s, %s",
-    :np => "Sei nelle vicinanze %s",
-    :uz => "Nella zona %s %s",
-    :desc_npc => "Che dire di %s... %s",
-    :save => "Terro' presente il punto in cui la storia e' arrivata",
-    :up_true => "Ti sei alzato",
-    :up_false => "Sei gia' in piedi!",
-    :down_true => "Ti sei adagiato per terra",
-    :down_false => "Ti sei gia' per terra!",
-    :uaresit_0 => "Sei per terra non puoi andare da nessuna parte!",
-    :uaresit_1 => "Si nei tuoi sogni!",
-    :nobody => "non c'e' nessuno",
-    :onlyu => "solo tu",
-    :c_e => "c'e'",
-    :ci_sono => "ci sono",
-    :cnf_0 => "Non ho capito...",
-    :cnf_1 => "Puoi ripetere?",
-    :cnf_2 => "Forse sbagli nella pronuncia?",
-  }
+  include Utils
+  include GetText
   
   # Metodo di inizializzazione della classe.
   def initialize()
@@ -113,24 +88,24 @@ class Core
   
   # Test comunicazione in canale.
   def test(nick)
-    return get_text(:test) % nick
+    return _(:test) % nick
   end
   
   # Salva lo stato dell'utente e lo cominica con un messaggio di ritorno.
   def save(nick)
     @user_list[nick].save
-    return get_text(:save)
+    return _(:save)
   end
   
   # Ritorna un messaggio random di comando non conosciuto.
   def cmd_not_found()
-    return get_text("cnf_#{rand 3}")
+    return _("cnf_#{rand 3}")
   end
   
   # Ritorna un messaggio che indica la necessita di riconoscersi,
   # di effettuare una sorta di autenticazione/login.
   def need_welcome()
-    return get_text(:r_benv)
+    return _(:r_benv)
   end
   
   # Ritorna un messaggio di benvenuto e il posto in cui e' l'utente.
@@ -139,9 +114,9 @@ class Core
     if u
       @mutex.synchronize { @user_list[nick] = u }
       @place_list[u.place].add_people(u)
-      return get_text(:benv) % [greeting, bold(nick), up_case(place(nick))]
+      return _(:benv) % [greeting, bold(nick), up_case(place(nick))]
     else
-      return get_text(:no_reg)
+      return _(:no_reg)
     end
   end
   
@@ -150,7 +125,7 @@ class Core
   # un messaggio di fallito spostamento.
   def move(nick, place_name)
     me = @user_list[nick]
-    return get_text("uaresit_#{rand 2}") unless me.stand_up?
+    return _("uaresit_#{rand 2}") unless me.stand_up?
     find = nil
     @place_list[me.place].near_place.each do |p|
       if p.name =~ /#{place_name.strip}/i 
@@ -164,7 +139,7 @@ class Core
       @place_list[me.place].add_people(me)
       return place(nick)
     else
-      return get_text(:no_pl) % place_name
+      return _(:no_pl) % place_name
     end
   end
   
@@ -172,24 +147,24 @@ class Core
   def place(nick)
     p = @place_list[@user_list[nick].place]
     temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
-    return get_text(:pl) % [temp, p.descr]
+    return _(:pl) % [temp, p.descr]
   end
   
   # Ritorna la lista dei posti vicini in cui si puo andare.
   def near_place(nick)
     l = @place_list[@user_list[nick].place].near_place
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
-    return get_text(:np) % conc(temp)
+    return _(:np) % conc(temp)
   end
   
   # Fa alzare l'utente e ritorna un messaggio di esito.
   def up(nick)
-    return get_text("up_#{@user_list[nick].up}")
+    return _("up_#{@user_list[nick].up}")
   end
   
   # Fa abbassare l'utente e ritorna un messaggio di esito.
   def down(nick)
-    return get_text("down_#{@user_list[nick].down}")
+    return _("down_#{@user_list[nick].down}")
   end
   
   # Ritorna la descrizione di un npc, oggetto o altro.
@@ -202,10 +177,10 @@ class Core
         break
       end
     end
-    return get_text(:desc_npc) % [res.name, res.descr] if res
+    return _(:desc_npc) % [res.name, res.descr] if res
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
-    return get_text(:nothing) % name
+    return _(:nothing) % name
   end
   
   # Ritorna la lista degli npc ed utenti nella zona.
@@ -220,19 +195,13 @@ class Core
       end
     end
     if u.empty?
-      c = get_text(:nobody) + ","
-      u = [get_text(:onlyu)]
+      c = _(:nobody) + ","
+      u = [_(:onlyu)]
     else
-      c = get_text((u.length > 1) ? :ci_sono : :c_e)
+      c = _((u.length > 1) ? :ci_sono : :c_e)
     end
-    return get_text(:uz) % [c, conc(u)]
+    return _(:uz) % [c, conc(u)]
   end
   
-  # Ritorna una stringa rappresentate una risposta o affermazione del bot, 
-  # ogni messaggio e' indicizzato tramite un symbol/stringa.
-  def get_text(label)
-    return @@bot_msg[label.to_sym]
-  end
-  
-  private :load_data, :get_text
+  private :load_data
 end
