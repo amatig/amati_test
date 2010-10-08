@@ -173,7 +173,7 @@ class Core
   def near_place(nick)
     l = @place_list[@user_list[nick].place].near_place
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
-    return get_text(:np) % list(temp)
+    return get_text(:np) % conc(temp)
   end
   
   # Fa alzare l'utente e ritorna un messaggio di esito.
@@ -219,7 +219,7 @@ class Core
     else
       c = get_text((u.length > 1) ? :ci_sono : :c_e)
     end
-    return get_text(:uz) % [c, list(u)]
+    return get_text(:uz) % [c, conc(u)]
   end
   
   # Ritorna una stringa rappresentate una risposta o affermazione del bot, 

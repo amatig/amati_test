@@ -18,12 +18,14 @@ module Utils
   # Ritorna una stringa, concatenando tramite virgole gli elemeneti di un array.
   # L'ultimo elemento viene concatenato per 'e'.
   #
-  # [es.] list ( [ "mario", "carlo", "fabio" ] ) #=> "mario, carlo e fabio"
-  def list(array)
-    str = array.join(", ")
-    i = str.rindex(", ")
-    str[i, 2] = " e " if i
-    return str
+  # [es.] conc ( [ "mario", "carlo", "fabio" ] ) #=> "mario, carlo e fabio"
+  def conc(array)
+    l = array[0..-2]
+    if l.length >= 1
+      return "%s e %s" % [l.join(", "), array[-1]]
+    else
+      return array[0]
+    end
   end
   
   # Ritorna una stringa con la prima lettera maiuscola.
