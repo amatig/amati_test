@@ -23,7 +23,7 @@ class Npc
     file = File.new("data/#{name}.xml")
     doc = REXML::Document.new(file)
     root = doc.elements["npc"]
-    @name = name
+    @name = name.capitalize
     @descr = root.elements["descr"].text
     @place = root.elements["place"].text
     file.close

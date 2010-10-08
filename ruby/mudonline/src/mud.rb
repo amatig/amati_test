@@ -2,10 +2,7 @@
 require "rubygems"
 require "IRC"
 require "lib/database.rb"
-require "lib/utils.rb"
 require "core.rb"
-
-include Utils
 
 # = Description
 # Classe principale del mud che usa Ruby-IRC, un framework di connessione e comunicazione con server Irc.
@@ -59,46 +56,47 @@ class Mud < IRC
     if event.channel == @nick
       delivery_priv(event.from, event.message)
     else
-      delivery_chan(event.channel, event.message)
+      delivery_chan(event.channel, event.from, event.message)
     end
   end
   
   # Metodo di gestione dei messaggi di canale.
-  def delivery_chan(target, msg)
+  def delivery_chan(channel, nick, msg)
+    send_message(channel, @core.test(nick))
   end
   
   # Metodo di gestione dei messaggi privati.
-  def delivery_priv(target, msg)
-    puts Thread.current
+  def delivery_priv(nick, msg)
+    # puts Thread.current
     # riconoscimento utente
-    unless (@core.is_welcome? target)
+    unless (@core.is_welcome? nick)
       if msg =~ /^(ciao|salve)$/i
-        send_message(target, @core.welcome(target, $1))
+        send_message(nick, @core.welcome(nick, $1))
       else
-        send_message(target, @core.need_welcome)
+        send_message(nick, @core.need_welcome)
       end
     else
-      @core.update_timestamp(target) # segnala attivita' utente      
+      @core.update_timestamp(nick) # segnala attivita' utente      
       # tutti i comandi
       case msg
       when /^mi\s(alzo|sveglio)$/i
-        send_message(target, @core.up(target))
+        send_message(nick, @core.up(nick))
       when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
-        send_message(target, @core.down(target))
+        send_message(nick, @core.down(nick))
       when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
-        send_message(target, @core.place(target))
+        send_message(nick, @core.place(nick))
       when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
-        send_message(target, @core.near_place(target))
+        send_message(nick, @core.near_place(nick))
       when /^va.*\s(ne|a).{0,3}\s(.+)$/i
-        send_message(target, @core.move(target, $2))
+        send_message(nick, @core.move(nick, $2))
       when /^chi.+(qu.|zona)\?$/i
-        send_message(target, @core.users_zone(target))
+        send_message(nick, @core.users_zone(nick))
       when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
-        send_message(target, @core.look(target, $2))
+        send_message(nick, @core.look(nick, $2))
       when /^salva$/i
-        send_message(target, @core.save(target))
+        send_message(nick, @core.save(nick))
       else
-        send_message(target, @core.cmd_not_found)
+        send_message(nick, @core.cmd_not_found)
       end
     end
   end

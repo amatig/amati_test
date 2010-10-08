@@ -24,29 +24,30 @@ include Utils
 
 class Core
   @@bot_msg = {
-    :save => "Terro' presente il punto in cui la storia e' arrivata",
+    :test => "Salve %s, contattami in privato",
     :benv => "Oooh %s a te %s! Da quanto tempo! %s",
     :r_benv => "Prima d'ogni cosa e' buona eduzione salutare!",
     :no_reg => "Non ti conosco straniero, non sei nella mia storia!",
-    :cnf_0 => "Non ho capito...",
-    :cnf_1 => "Puoi ripetere?",
-    :cnf_2 => "Forse sbagli nella pronuncia?",
+    :nothing => "Mmm %s? Non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
+    :no_pl => "Mmm %s? Non conosco nessun luogo nelle vicinanze con questo nome!",
+    :pl => "Ti trovi %s, %s",
+    :np => "Sei nelle vicinanze %s",
+    :uz => "Nella zona %s %s",
+    :desc_npc => "Che dire di %s... %s",
+    :save => "Terro' presente il punto in cui la storia e' arrivata",
     :up_true => "Ti sei alzato",
     :up_false => "Sei gia' in piedi!",
     :down_true => "Ti sei adagiato per terra",
     :down_false => "Ti sei gia' per terra!",
     :uaresit_0 => "Sei per terra non puoi andare da nessuna parte!",
     :uaresit_1 => "Si nei tuoi sogni!",
-    :c_e => "c'e'",
-    :ci_sono => "ci sono",
-    :uz => "Nella zona %s %s",
     :nobody => "non c'e' nessuno",
     :onlyu => "solo tu",
-    :nothing => "Mmm %s? Non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
-    :pl => "Ti trovi %s, %s",
-    :no_pl => "Mmm %s? Non conosco nessun luogo nelle vicinanze con questo nome!",
-    :np => "Sei nelle vicinanze %s",
-    :desc_npc => "Che dire di %s... %s",
+    :c_e => "c'e'",
+    :ci_sono => "ci sono",
+    :cnf_0 => "Non ho capito...",
+    :cnf_1 => "Puoi ripetere?",
+    :cnf_2 => "Forse sbagli nella pronuncia?",
   }
   
   # Metodo di inizializzazione della classe.
@@ -108,6 +109,11 @@ class Core
   # messaggio inviato.
   def update_timestamp(nick)
     @user_list[nick].update_timestamp
+  end
+  
+  # Test comunicazione in canale.
+  def test(nick)
+    return get_text(:test) % nick
   end
   
   # Salva lo stato dell'utente e lo cominica con un messaggio di ritorno.
@@ -191,7 +197,7 @@ class Core
     temp = @user_list[nick].place
     res = nil
     @place_list[temp].people.each do |p|
-      if (p.class == Npc and p.name == name)
+      if (p.class == Npc and p.name == name.capitalize)
         res = p
         break
       end
@@ -224,8 +230,8 @@ class Core
   
   # Ritorna una stringa rappresentate una risposta o affermazione del bot, 
   # ogni messaggio e' indicizzato tramite un symbol/stringa.
-  def get_text(str)
-    return @@bot_msg[str.to_sym]
+  def get_text(label)
+    return @@bot_msg[label.to_sym]
   end
   
   private :load_data, :get_text
