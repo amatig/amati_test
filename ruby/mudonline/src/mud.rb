@@ -102,13 +102,7 @@ class Mud < IRC
       end
     end
   end
-  
-  # Ridefinizione del metodo di invio al server Irc dei messaggi.
-  # Consente di poter rendere maiuscola la prima lettera della frase.
-  def send_message(target, msg)
-    super(target, up_case(msg))
-  end
-  
+    
   private :delivery_priv, :delivery_chan
 end
 

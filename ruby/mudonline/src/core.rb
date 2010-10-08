@@ -24,28 +24,29 @@ include Utils
 
 class Core
   @@bot_msg = {
-    :save => "terro' presente il punto in cui la storia e' arrivata",
-    :benv => "%s a te %s! %s",
-    :r_benv => "prima d'ogni cosa e' buona eduzione salutare!",
-    :no_reg => "non ti conosco straniero, non sei nella mia storia!",
-    :cnf_0 => "non ho capito...",
-    :cnf_1 => "puoi ripetere?",
-    :cnf_2 => "forse sbagli nella pronuncia?",
-    :up_true => "ti sei alzato",
-    :up_false => "sei gia' in piedi!",
-    :down_true => "ti sei adagiato per terra",
-    :down_false => "ti sei gia' per terra!",
-    :uaresit_0 => "sei per terra non puoi andare da nessuna parte!",
-    :uaresit_1 => "si nei tuoi sogni!",
+    :save => "Terro' presente il punto in cui la storia e' arrivata",
+    :benv => "Oooh %s a te %s! Da quanto tempo! %s",
+    :r_benv => "Prima d'ogni cosa e' buona eduzione salutare!",
+    :no_reg => "Non ti conosco straniero, non sei nella mia storia!",
+    :cnf_0 => "Non ho capito...",
+    :cnf_1 => "Puoi ripetere?",
+    :cnf_2 => "Forse sbagli nella pronuncia?",
+    :up_true => "Ti sei alzato",
+    :up_false => "Sei gia' in piedi!",
+    :down_true => "Ti sei adagiato per terra",
+    :down_false => "Ti sei gia' per terra!",
+    :uaresit_0 => "Sei per terra non puoi andare da nessuna parte!",
+    :uaresit_1 => "Si nei tuoi sogni!",
     :c_e => "c'e'",
     :ci_sono => "ci sono",
-    :uz => "nella zona %s %s",
+    :uz => "Nella zona %s %s",
     :nobody => "non c'e' nessuno",
     :onlyu => "solo tu",
-    :nothing => "%s? Non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
-    :pl => "ti trovi %s, %s",
-    :no_pl => "%s? Non conosco nessun luogo nelle vicinanze con questo nome!",
-    :np => "sei nelle vicinanze %s",
+    :nothing => "Mmm %s? Non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
+    :pl => "Ti trovi %s, %s",
+    :no_pl => "Mmm %s? Non conosco nessun luogo nelle vicinanze con questo nome!",
+    :np => "Sei nelle vicinanze %s",
+    :desc_npc => "Che dire di %s... %s",
   }
   
   # Metodo di inizializzazione della classe.
@@ -195,7 +196,7 @@ class Core
         break
       end
     end
-    return "#{res.name}, #{res.descr}" if res
+    return get_text(:desc_npc) % [res.name, res.descr] if res
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
     return get_text(:nothing) % name
