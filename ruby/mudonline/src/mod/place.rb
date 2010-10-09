@@ -16,8 +16,7 @@ require "thread"
 # Giovanni Amati
 
 class Place
-  attr_reader :id, :name, :descr, :attrs
-  attr_accessor :near_place
+  attr_reader :id, :name, :descr, :attrs, :near_place
   
   # Metodo di inizializzazione della classe.
   # [data] array contenete tutti i dati del posto.
@@ -26,13 +25,26 @@ class Place
     @near_place = []
     @people_here = []
     
+    @init_np = false # fa fare l'init_near_place una sola volta    
     @mutex = Mutex.new
+  end
+  
+  # Aggiunge a questo luogo le istanze dei posti vicini.
+  # Il flag init_np serve ad assicurarsi che l'aggiunta possa essere 
+  # fatta una sola volta.
+  def init_near_place(place_instances, near_places)
+    unless @init_np
+      near_places.each do |near|
+        near_place << place_instances[near[0]]
+      end
+      @init_np = true
+    end
   end
   
   # Rimuove un oggeto di tipo User dalla lista delle persone in
   # questo posto.
   def remove_people(user)
-    @mutex.synchronize { @people_here.slice!(@people_here.index(user)) }
+    @mutex.synchronize { @people_here.delete(user) }
   end
   
   # Aggiunge un oggeto di tipo User dalla lista delle persone in

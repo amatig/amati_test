@@ -31,7 +31,7 @@ class User
   def initialize(data)
     @db = Database.instance # singleton
     
-    @id, @name, @place = data
+    @id, @name, @place_id = data
     @stand_up = true
     @timestamp = Time.now.to_i
     
@@ -43,9 +43,7 @@ class User
   # Salva lo stato dell'utente nel database.
   def save()
     @mutex_attrs.synchronize do
-      @db.update({
-                   "place" => Integer(@place),
-                 }, 
+      @db.update({"place" => Integer(@place_id)}, 
                  "users", 
                  "id=#{@id}")
     end
@@ -65,12 +63,12 @@ class User
   
   # Modifica l'id del posto in cui si trova l'utente.
   def set_place(place_id)
-    @mutex_place.synchronize { @place = place_id }
+    @mutex_place.synchronize { @place_id = place_id }
   end
   
   # Ritorna l'id del posto in cui si trova l'utente.
   def place()
-    @mutex_place.synchronize { return @place }
+    @mutex_place.synchronize { return @place_id }
   end
   
   # Setta l'utente come 'in piedi'. Se l'utente non era tale

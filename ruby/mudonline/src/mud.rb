@@ -53,6 +53,7 @@ class Mud < IRC
   
   # Metodo che smista i messaggi utente per messaggi di canale o privati.
   def parse(event)
+    # puts Thread.current
     if event.channel == @nick
       delivery_priv(event.from, event.message)
     else
@@ -67,7 +68,6 @@ class Mud < IRC
   
   # Metodo di gestione dei messaggi privati.
   def delivery_priv(nick, msg)
-    # puts Thread.current
     # riconoscimento utente
     unless (@core.is_welcome? nick)
       if msg =~ /^(ciao|salve)$/i
@@ -76,7 +76,7 @@ class Mud < IRC
         send_message(nick, @core.need_welcome)
       end
     else
-      @core.update_timestamp(nick) # segnala attivita' utente      
+      @core.update_timestamp(nick) # segnala attivita' utente
       # tutti i comandi
       case msg
       when /^mi\s(alzo|sveglio)$/i

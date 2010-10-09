@@ -34,6 +34,7 @@ class Core
     
     @mutex = Mutex.new
     
+    # caricamento dati mondo
     load_data
     # controllo attivita' utente
     Thread.new do
@@ -58,11 +59,7 @@ class Core
       temp = @db.read("places.id", 
                       "links,places", 
                       "place=#{p[0]} and places.id=near_place")
-      temp.each do |near|
-        # i near_place devono essere aggiunti solo i volta
-        # mai piu modificati
-        @place_list[p[0]].near_place << @place_list[near[0]]
-      end
+      @place_list[p[0]].init_near_place(@place_list, temp)
     end
     
     @npc_list = {}
@@ -77,7 +74,7 @@ class Core
   # Ritorna un booleano che indica se l'utente e' stato identificato
   # o no dal sistema.
   def is_welcome?(nick)
-    return (@user_list.key? nick)
+    return @user_list.key?(nick)
   end
   
   # Aggiorna il timestamp dell'utene, che indica il momento dell'ultimo
@@ -114,7 +111,7 @@ class Core
     if u
       @mutex.synchronize { @user_list[nick] = u }
       @place_list[u.place].add_people(u)
-      return _(:benv) % [greeting, bold(nick), up_case(place(nick))]
+      return _(:benv) % [greeting, bold(nick), place(nick)]
     else
       return _(:no_reg)
     end
@@ -169,15 +166,15 @@ class Core
   
   # Ritorna la descrizione di un npc, oggetto o altro.
   def look(nick, name)
-    temp = @user_list[nick].place
-    res = nil
-    @place_list[temp].people.each do |p|
+    me = @user_list[nick]
+    find = nil
+    @place_list[me.place].people.each do |p|
       if (p.class == Npc and p.name == name.capitalize)
-        res = p
+        find = p
         break
       end
     end
-    return _(:desc_npc) % [res.name, res.descr] if res
+    return _(:desc_npc) % [find.name, find.descr] if find
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
     return _(:nothing) % name
