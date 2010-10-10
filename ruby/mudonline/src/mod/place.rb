@@ -25,7 +25,8 @@ class Place
     @near_place = []
     @people_here = []
     
-    @init_np = false # fa fare l'init_near_place una sola volta    
+    @init_np = false # fa fare l'init_near_place una sola volta
+    
     @mutex = Mutex.new
   end
   
