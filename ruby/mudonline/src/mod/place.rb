@@ -21,7 +21,10 @@ class Place
   # Metodo di inizializzazione della classe.
   # [data] array contenete tutti i dati del posto.
   def initialize(data)
-    @id, @name, @descr, @attrs = data
+    @id = Integer(data[0])
+    @name = data[1]
+    @descr = data[2]
+    @attrs = Integer(data[3])
     @near_place = []
     @people_here = []
     
@@ -36,26 +39,24 @@ class Place
   def init_near_place(place_instances, near_places)
     unless @init_np
       near_places.each do |near|
-        near_place << place_instances[near[0]]
+        near_place << place_instances[Integer(near[0])]
       end
       @init_np = true
     end
   end
   
-  # Rimuove un oggeto di tipo User dalla lista delle persone in
-  # questo posto.
-  def remove_people(user)
-    @mutex.synchronize { @people_here.delete(user) }
+  # Rimuove un utente o npc dalla lista delle persone in questo posto.
+  def remove_people(p)
+    @mutex.synchronize { @people_here.delete(p) }
   end
   
-  # Aggiunge un oggeto di tipo User dalla lista delle persone in
-  # questo posto.
-  def add_people(user)
-    @mutex.synchronize { @people_here << user }
+  # Aggiunge un utente o npc dalla lista delle persone in questo posto.
+  def add_people(p)
+    @mutex.synchronize { @people_here << p }
   end
   
-  # Ritorna l'array di tutti gli oggetti User (le persone) presenti nel posto.
-  def people()
+  # Ritorna l'array di tutti le persone presenti nel posto.
+  def get_people()
     @mutex.synchronize { return @people_here }
   end
   

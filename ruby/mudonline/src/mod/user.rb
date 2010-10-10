@@ -1,4 +1,3 @@
-require "thread"
 require "lib/database.rb"
 
 # = Description
@@ -17,88 +16,88 @@ require "lib/database.rb"
 # Giovanni Amati
 
 class User
-  attr_reader :id, :name
   
-  # Metodo di classe che ritorna una istanza di tipo User creata
-  # dai dati utente nel database presi tramite l'argomento <em>nick</em>.
-  def User.get(nick)
-    data = Database.instance.get("*", "users", "nick='#{nick}'")
-    return (data.empty?) ? nil : User.new(data)
+  # Resetta i login utente.
+  def User.reset_login()
+    Database.instance.update({"logged" => 0}, "users")
   end
   
-  # Metodo di inizializzazione della classe.
-  # [data] array contenete tutti i dati dell'utente.
-  def initialize(data)
-    @db = Database.instance # singleton
-    
-    @id, @name, @place_id = data
-    @stand_up = true
-    @timestamp = Time.now.to_i
-    
-    @mutex_attrs = Mutex.new
-    @mutex_place = Mutex.new
-    @mutex_time = Mutex.new
+  # Ritorna true se esiste l'utente nel database ed e' loggato,
+  # altrimenti false.
+  def User.logged?(nick)
+    data = Database.instance.get("logged", "users", "nick='#{nick}'")
+    return (not data.empty? and data[0] == "1")
   end
   
-  # Salva lo stato dell'utente nel database.
-  def save()
-    @mutex_attrs.synchronize do
-      @db.update({"place" => Integer(@place_id)}, 
-                 "users", 
-                 "id=#{@id}")
+  # Imposta l'utente come loggato e ritorna true/false in base all'esito.
+  def User.login(nick)
+    data = Database.instance.get("logged", "users", "nick='#{nick}'")
+    if not data.empty?
+      Database.instance.update({"logged" => 1}, 
+                               "users", 
+                               "nick='#{nick}'")
+      return true
+    else
+      return false
     end
+  end
+  
+  # Modifica l'id del posto in cui si trova l'utente.
+  def User.set_place(nick, place_id)
+    Database.instance.update({"place" => Integer(place_id)}, 
+                             "users", 
+                             "nick='#{nick}'")
+  end
+  
+  # Ritorna l'id del posto in cui si trova l'utente.
+  def User.get_place(nick)
+    data = Database.instance.get("place", "users", "nick='#{nick}'")
+    return Integer(data[0])
   end
   
   # Aggiorna il timestamp dell'utente, questa variabile tiene traccia
   # del tempo dell'ultimo messaggio inviato dall'utente al fine
-  # sloggarlo per inattivita' salvandone lo stato.
-  def update_timestamp()
-    @mutex_time.synchronize { @timestamp = Time.now.to_i }
+  # sloggarlo per inattivita'.
+  def User.update_timestamp(nick)
+    Database.instance.update({"timestamp" => Time.now.to_i}, 
+                             "users", 
+                             "nick='#{nick}'")
   end
   
   # Ritorna il timestamp dell'utente, il tempo dell'ultimo messaggio inviato.
-  def timestamp()
-    @mutex_time.synchronize { return @timestamp }
-  end
-  
-  # Modifica l'id del posto in cui si trova l'utente.
-  def set_place(place_id)
-    @mutex_place.synchronize { @place_id = place_id }
-  end
-  
-  # Ritorna l'id del posto in cui si trova l'utente.
-  def place()
-    @mutex_place.synchronize { return @place_id }
+  def User.get_timestamp(nick)
+    data = Database.instance.get("timestamp", "users", "nick='#{nick}'")
+    return Integer(data[0])
   end
   
   # Setta l'utente come 'in piedi'. Se l'utente non era tale
   # ritorna true, se era gia' 'in piedi' ritorna false.
-  def up()
-    @mutex_attrs.synchronize do
-      return false if @stand_up
-      @stand_up = true
+  def User.up(nick)
+    data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
+    if (data[0] == "1")
+      return false
+    else
+      Database.instance.update({"stand_up" => 1}, "users", "nick='#{nick}'")
       return true
     end
   end
   
   # Setta l'utente come 'per terra'. Se l'utente non era tale
   # ritorna true, se era gia' 'per terra' ritorna false.
-  def down()
-    @mutex_attrs.synchronize do
-      return false unless @stand_up
-      @stand_up = false
+  def User.down(nick)
+    data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
+    if (data[0] == "0")
+      return false
+    else
+      Database.instance.update({"stand_up" => 0}, "users", "nick='#{nick}'")
       return true
     end
   end
   
   # Ritorna un booleano che indica se l'utente e' 'in piedi' o no.
-  def stand_up?()
-    @mutex_attrs.synchronize { return @stand_up }
-  end
-  
-  # Ritorna una stringa che rappresenta il nome dell'utente.
-  def to_s()
-    return @name
+  def User.stand_up?(nick)
+    data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
+    return (data[0] == "1")
   end
   
 end

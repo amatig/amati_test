@@ -27,39 +27,39 @@ class Core
   
   # Metodo di inizializzazione della classe.
   def initialize()
-    @db = Database.instance # singleton    
-    @user_list = {}
+    @db = Database.instance # singleton
+    
     @place_list = {}
     @npc_list = {}
-    
-    @mutex = Mutex.new
     
     # caricamento dati mondo
     load_data
     # controllo attivita' utente
-    Thread.new do
-      while true do
-        @user_list.each_pair do |k, v|
-          v.save # salva ogni 30 sec
-          if (Time.new.to_i - v.timestamp >= 60)
-            @mutex.synchronize { @user_list.delete(k) }
-          end
-        end
-        sleep 30
-      end
-    end
+    #Thread.new do
+    #  while true do
+    #    @user_list.each_pair do |k, v|
+    #      v.save # salva ogni 30 sec
+    #      if (Time.new.to_i - User.get_timestamp(nick) >= 60)
+    #        @mutex.synchronize { @user_list.delete(k) }
+    #      end
+    #    end
+    #    sleep 30
+    #  end
+    #end
   end
   
   # Inizializza la mappa del mondo, npc, ecc...
   def load_data()
+    User.reset_login
+    
     @place_list = {}
     places = @db.read("*", "places")
-    places.each { |p| @place_list[p[0]] = Place.new(p) }
+    places.each { |p| @place_list[Integer(p[0])] = Place.new(p) }
     places.each do |p|
       temp = @db.read("places.id", 
                       "links,places", 
                       "place=#{p[0]} and places.id=near_place")
-      @place_list[p[0]].init_near_place(@place_list, temp)
+      @place_list[Integer(p[0])].init_near_place(@place_list, temp)
     end
     
     @npc_list = {}
@@ -71,27 +71,21 @@ class Core
     end
   end
   
-  # Ritorna un booleano che indica se l'utente e' stato identificato
-  # o no dal sistema.
+  # Ritorna un booleano che indica se l'utente e' loggato o no nel sistema, 
+  # ritorna false anche nel caso non esiste.
   def is_welcome?(nick)
-    return @user_list.key?(nick)
+    return User.logged?(nick)
   end
   
-  # Aggiorna il timestamp dell'utene, che indica il momento dell'ultimo
+  # Aggiorna il timestamp dell'utente, che indica il momento dell'ultimo
   # messaggio inviato.
   def update_timestamp(nick)
-    @user_list[nick].update_timestamp
+    User.update_timestamp(nick)
   end
   
   # Test comunicazione in canale.
   def test(nick)
     return _(:test) % nick
-  end
-  
-  # Salva lo stato dell'utente e lo cominica con un messaggio di ritorno.
-  def save(nick)
-    @user_list[nick].save
-    return _(:save)
   end
   
   # Ritorna un messaggio random di comando non conosciuto.
@@ -105,12 +99,11 @@ class Core
     return _(:r_benv)
   end
   
-  # Ritorna un messaggio di benvenuto e il posto in cui e' l'utente.
+  # Ritorna un messaggio di benvenuto e il posto in cui e' l'utente,
+  # il comando login tenta il login utente e ritorna true/false.
   def welcome(nick, greeting)
-    u = User.get(nick)
-    if u
-      @mutex.synchronize { @user_list[nick] = u }
-      @place_list[u.place].add_people(u)
+    if User.login(nick)
+      @place_list[User.get_place(nick)].add_people(nick)
       return _(:benv) % [greeting, bold(nick), place(nick)]
     else
       return _(:no_reg)
@@ -121,19 +114,18 @@ class Core
   # ritorna un messaggio con nuovo nome del posto e descrizione o
   # un messaggio di fallito spostamento.
   def move(nick, place_name)
-    me = @user_list[nick]
-    return _("uaresit_#{rand 2}") unless me.stand_up?
+    return _("uaresit_#{rand 2}") unless User.stand_up?(nick)
     find = nil
-    @place_list[me.place].near_place.each do |p|
+    @place_list[User.get_place(nick)].near_place.each do |p|
       if p.name =~ /#{place_name.strip}/i 
         find = p
         break
       end
     end
     if find
-      @place_list[me.place].remove_people(me)
-      me.set_place(find.id) # cambio di place_id
-      @place_list[me.place].add_people(me)
+      @place_list[User.get_place(nick)].remove_people(nick)
+      User.set_place(nick, find.id) # cambio di place_id
+      @place_list[User.get_place(nick)].add_people(nick)
       return place(nick)
     else
       return _(:no_pl) % place_name
@@ -142,33 +134,32 @@ class Core
   
   # Ritorna il posto e descrizione in cui e' l'utente.
   def place(nick)
-    p = @place_list[@user_list[nick].place]
+    p = @place_list[User.get_place(nick)]
     temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
     return _(:pl) % [temp, p.descr]
   end
   
   # Ritorna la lista dei posti vicini in cui si puo andare.
   def near_place(nick)
-    l = @place_list[@user_list[nick].place].near_place
+    l = @place_list[User.get_place(nick)].near_place
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
     return _(:np) % conc(temp)
   end
   
   # Fa alzare l'utente e ritorna un messaggio di esito.
   def up(nick)
-    return _("up_#{@user_list[nick].up}")
+    return _("up_#{User.up(nick)}")
   end
   
   # Fa abbassare l'utente e ritorna un messaggio di esito.
   def down(nick)
-    return _("down_#{@user_list[nick].down}")
+    return _("down_#{User.down(nick)}")
   end
   
   # Ritorna la descrizione di un npc, oggetto o altro.
   def look(nick, name)
-    me = @user_list[nick]
     find = nil
-    @place_list[me.place].people.each do |p|
+    @place_list[User.get_place(nick)].get_people.each do |p|
       if (p.class == Npc and p.name == name.capitalize)
         find = p
         break
@@ -182,11 +173,10 @@ class Core
   
   # Ritorna la lista degli npc ed utenti nella zona.
   def users_zone(nick)
-    me = @user_list[nick]
     u = []
-    @place_list[me.place].people.each do |p|
-      if p.class == User
-        u << bold(p.name) if (p != me)
+    @place_list[User.get_place(nick)].get_people.each do |p|
+      unless p.class == Npc
+        u << bold(p) if (p != nick)
       else
         u << italic(p.name)
       end

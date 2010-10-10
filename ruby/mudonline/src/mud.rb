@@ -93,14 +93,12 @@ class Mud < IRC
         send_message(nick, @core.users_zone(nick))
       when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
         send_message(nick, @core.look(nick, $2))
-      when /^salva$/i
-        send_message(nick, @core.save(nick))
       else
         send_message(nick, @core.cmd_not_found)
       end
     end
   end
-    
+  
   private :delivery_priv, :delivery_chan
 end
 
