@@ -33,7 +33,7 @@ class Core
     @npc_list = {}
     
     # caricamento dati mondo
-    load_data
+    init_data
     # controllo attivita' utente
     #Thread.new do
     #  while true do
@@ -49,7 +49,7 @@ class Core
   end
   
   # Inizializza la mappa del mondo, npc, ecc...
-  def load_data()
+  def init_data()
     User.reset_login
     
     @place_list = {}
@@ -125,7 +125,7 @@ class Core
     if find
       @place_list[User.get_place(nick)].remove_people(nick)
       User.set_place(nick, find.id) # cambio di place_id
-      @place_list[User.get_place(nick)].add_people(nick)
+      find.add_people(nick)
       return place(nick)
     else
       return _(:no_pl) % place_name
@@ -190,5 +190,5 @@ class Core
     return _(:uz) % [c, conc(u)]
   end
   
-  private :load_data
+  private :init_data
 end
