@@ -34,17 +34,17 @@ class Core
     
     # caricamento dati mondo
     init_data
-    # controllo attivita' utente
-    Thread.new do
-      while true do
-        users = @db.read("nick,timestamp", "users")
-        users.each_pair do |u|
-          puts Time.new.to_i - Integer(u[1])
-          if ((Time.new.to_i - Integer(u[1])) >= 60)
-            puts u
-          end
-        end
-        sleep 30
+  end
+  
+  # Controlla se gli utenti sono inattivi, nel caso li setta
+  # come non loggati.
+  def check_login()
+    users = @db.read("nick,timestamp", "users", "logged=1")
+    users.each do |u|
+      if ((Time.new.to_i - Integer(u[1])) >= 30)
+        puts "Logout #{u[0]}"
+        User.logout(u[0])
+        @place_list[User.get_place(u[0])].remove_people(u[0])
       end
     end
   end

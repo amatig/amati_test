@@ -19,7 +19,7 @@ class User
   
   # Resetta i login utente.
   def User.reset_login()
-    Database.instance.update({"logged" => 0}, "users")
+    Database.instance.update({"logged" => 0}, "users", "logged=1")
   end
   
   # Ritorna true se esiste l'utente nel database ed e' loggato,
@@ -33,13 +33,18 @@ class User
   def User.login(nick)
     data = Database.instance.get("logged", "users", "nick='#{nick}'")
     if not data.empty?
-      Database.instance.update({"logged" => 1}, 
+      Database.instance.update({"logged" => 1, "timestamp" => Time.now.to_i},
                                "users", 
                                "nick='#{nick}'")
       return true
     else
       return false
     end
+  end
+  
+  # Imposta l'utente come sloggato.
+  def User.logout(nick)
+    Database.instance.update({"logged" => 0}, "users", "nick='#{nick}'")
   end
   
   # Modifica l'id del posto in cui si trova l'utente.
