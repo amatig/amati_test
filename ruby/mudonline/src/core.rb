@@ -35,17 +35,18 @@ class Core
     # caricamento dati mondo
     init_data
     # controllo attivita' utente
-    #Thread.new do
-    #  while true do
-    #    @user_list.each_pair do |k, v|
-    #      v.save # salva ogni 30 sec
-    #      if (Time.new.to_i - User.get_timestamp(nick) >= 60)
-    #        @mutex.synchronize { @user_list.delete(k) }
-    #      end
-    #    end
-    #    sleep 30
-    #  end
-    #end
+    Thread.new do
+      while true do
+        users = @db.read("nick,timestamp", "users")
+        users.each_pair do |u|
+          puts Time.new.to_i - Integer(u[1])
+          if ((Time.new.to_i - Integer(u[1])) >= 60)
+            puts u
+          end
+        end
+        sleep 30
+      end
+    end
   end
   
   # Inizializza la mappa del mondo, npc, ecc...
