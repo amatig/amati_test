@@ -69,11 +69,11 @@ class Mud < IRC
   # Metodo di gestione dei messaggi privati.
   def delivery_priv(nick, msg)
     # riconoscimento utente
-    unless @core.is_welcome?(nick)
+    unless @core.logged?(nick)
       if msg =~ /^(ciao|salve)$/i
-        send_message(nick, @core.welcome(nick, $1))
+        send_message(nick, @core.login(nick, $1))
       else
-        send_message(nick, @core.need_welcome)
+        send_message(nick, @core.need_login)
       end
     else
       @core.update_timestamp(nick) # segnala attivita' utente
@@ -93,6 +93,8 @@ class Mud < IRC
         send_message(nick, @core.users_zone(nick))
       when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
         send_message(nick, @core.look(nick, $2))
+      when /^(fine|stop|esci|exit|quit|basta.*)$/i
+        send_message(nick, @core.logout(nick))
       else
         send_message(nick, @core.cmd_not_found)
       end

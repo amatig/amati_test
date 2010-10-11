@@ -59,16 +59,9 @@ class Core
     end
   end
   
-  # Ritorna un booleano che indica se l'utente e' loggato o no nel sistema, 
-  # ritorna false anche nel caso non esiste.
-  def is_welcome?(nick)
-    return User.logged?(nick)
-  end
-  
-  # Aggiorna il timestamp dell'utente, che indica il momento dell'ultimo
-  # messaggio inviato.
-  def update_timestamp(nick)
-    User.update_timestamp(nick)
+  # Ritorna un messaggio random di comando non conosciuto.
+  def cmd_not_found()
+    return _("cnf_#{rand 3}")
   end
   
   # Test comunicazione in canale.
@@ -76,20 +69,21 @@ class Core
     return _(:test) % nick
   end
   
-  # Ritorna un messaggio random di comando non conosciuto.
-  def cmd_not_found()
-    return _("cnf_#{rand 3}")
+  # Ritorna un booleano che indica se l'utente e' loggato o no nel sistema, 
+  # ritorna false anche nel caso non esiste.
+  def logged?(nick)
+    return User.logged?(nick)
   end
   
   # Ritorna un messaggio che indica la necessita di riconoscersi,
   # di effettuare una sorta di autenticazione/login.
-  def need_welcome()
+  def need_login()
     return _(:r_benv)
   end
   
   # Ritorna un messaggio di benvenuto e il posto in cui e' l'utente,
   # il comando login tenta il login utente e ritorna true/false.
-  def welcome(nick, greeting)
+  def login(nick, greeting)
     if User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
       return _(:benv) % [greeting, bold(nick), place(nick)]
@@ -98,26 +92,33 @@ class Core
     end
   end
   
+  # Slogga un utente dal sistema.
+  def logout(nick)
+    User.logout(nick)
+    @place_list[User.get_place(nick)].remove_people(nick)
+    return _(:logout) % nick
+  end
+  
+  # Aggiorna il timestamp dell'utente, che indica il momento dell'ultimo
+  # messaggio inviato.
+  def update_timestamp(nick)
+    User.update_timestamp(nick)
+  end
+  
   # Muove l'utente in un posto vicino, collegato a quello attuale e
   # ritorna un messaggio con nuovo nome del posto e descrizione o
   # un messaggio di fallito spostamento.
   def move(nick, place_name)
     return _("uaresit_#{rand 2}") unless User.stand_up?(nick)
-    find = nil
     @place_list[User.get_place(nick)].near_place.each do |p|
-      if p.name =~ /#{place_name.strip}/i 
-        find = p
-        break
+      if p.name =~ /#{place_name.strip}/i
+        @place_list[User.get_place(nick)].remove_people(nick)
+        User.set_place(nick, p.id) # cambio di place_id
+        p.add_people(nick)
+        return place(nick)
       end
     end
-    if find
-      @place_list[User.get_place(nick)].remove_people(nick)
-      User.set_place(nick, find.id) # cambio di place_id
-      find.add_people(nick)
-      return place(nick)
-    else
-      return _(:no_pl) % place_name
-    end
+    return _(:no_pl) % place_name
   end
   
   # Ritorna il posto e descrizione in cui e' l'utente.
@@ -146,14 +147,13 @@ class Core
   
   # Ritorna la descrizione di un npc, oggetto o altro.
   def look(nick, name)
-    find = nil
     @place_list[User.get_place(nick)].get_people.each do |p|
-      if (p.class == Npc and p.name == name.capitalize)
-        find = p
-        break
+      if p.class == Npc
+        return _(:desc_npc) % [p.name, p.descr] if p.name =~ /^#{name.strip}$/i
+      else
+        return _(:desc_people) if p =~ /^#{name.strip}$/i
       end
     end
-    return _(:desc_npc) % [find.name, find.descr] if find
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
     return _(:nothing) % name

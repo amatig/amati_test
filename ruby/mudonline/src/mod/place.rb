@@ -47,12 +47,12 @@ class Place
   
   # Rimuove un utente o npc dalla lista delle persone in questo posto.
   def remove_people(p)
-    @mutex.synchronize { @people_here.delete(p) }
+    @mutex.synchronize { @people_here.delete(p) if @people_here.include?(p) }
   end
   
   # Aggiunge un utente o npc dalla lista delle persone in questo posto.
   def add_people(p)
-    @mutex.synchronize { @people_here << p }
+    @mutex.synchronize { @people_here << p unless @people_here.include?(p) }
   end
   
   # Ritorna l'array di tutti le persone presenti nel posto.
