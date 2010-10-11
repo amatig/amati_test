@@ -23,6 +23,7 @@ module GetText
     :nothing => "Mmm %s? Non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
     :no_pl => "Mmm %s? Non conosco nessun luogo nelle vicinanze con questo nome!",
     :pl => "Ti trovi %s, %s",
+    :new_pl => "Sei giunto %s, %s",
     :np => "Sei nelle vicinanze %s",
     :uz => "Nella zona %s %s",
     :desc_npc => "Che dire di %s... %s",

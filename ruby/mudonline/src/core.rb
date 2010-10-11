@@ -115,7 +115,8 @@ class Core
         @place_list[User.get_place(nick)].remove_people(nick)
         User.set_place(nick, p.id) # cambio di place_id
         p.add_people(nick)
-        return place(nick)
+        temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
+        return _(:new_pl) % [temp, p.descr]
       end
     end
     return _(:no_pl) % place_name
