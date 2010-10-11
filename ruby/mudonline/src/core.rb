@@ -35,20 +35,7 @@ class Core
     # caricamento dati mondo
     init_data
   end
-  
-  # Controlla se gli utenti sono inattivi, nel caso li setta
-  # come non loggati.
-  def check_login()
-    users = @db.read("nick,timestamp", "users", "logged=1")
-    users.each do |u|
-      if ((Time.new.to_i - Integer(u[1])) >= 30)
-        puts "Logout #{u[0]}"
-        User.logout(u[0])
-        @place_list[User.get_place(u[0])].remove_people(u[0])
-      end
-    end
-  end
-  
+    
   # Inizializza la mappa del mondo, npc, ecc...
   def init_data()
     User.reset_login

@@ -68,7 +68,6 @@ class Mud < IRC
   
   # Metodo di gestione dei messaggi privati.
   def delivery_priv(nick, msg)
-    @core.check_login
     # riconoscimento utente
     unless @core.is_welcome?(nick)
       if msg =~ /^(ciao|salve)$/i

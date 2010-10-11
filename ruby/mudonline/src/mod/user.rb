@@ -17,7 +17,7 @@ require "lib/database.rb"
 
 class User
   
-  # Resetta i login utente.
+  # Resetta i login degli utenti.
   def User.reset_login()
     Database.instance.update({"logged" => 0}, "users", "logged=1")
   end
