@@ -60,6 +60,7 @@ class Core
   end
   
   # Ritorna un messaggio random di comando non conosciuto.
+  # @return [String] messaggio del mud.
   def cmd_not_found()
     return _("cnf_#{rand 3}")
   end
@@ -73,18 +74,21 @@ class Core
   
   # Ritorna un booleano che indica se l'utente e' loggato o no nel sistema, 
   # ritorna false anche nel caso non esiste.
+  # @return [Boolean] stato della login utente.
   def logged?(nick)
     return User.logged?(nick)
   end
   
   # Ritorna un messaggio che indica la necessita di riconoscersi,
   # di effettuare una sorta di autenticazione/login.
+  # @return [String] messaggio del mud.
   def need_login()
     return _(:r_benv)
   end
   
   # Ritorna un messaggio di benvenuto e il posto in cui e' l'utente,
   # il comando login tenta il login utente e ritorna true/false.
+  # @return [String] messaggio del mud.
   def login(nick, greeting)
     if User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
@@ -95,6 +99,7 @@ class Core
   end
   
   # Slogga un utente dal sistema.
+  # @return [String] messaggio del mud.
   def logout(nick)
     User.logout(nick)
     @place_list[User.get_place(nick)].remove_people(nick)
@@ -110,6 +115,7 @@ class Core
   # Muove l'utente in un posto vicino, collegato a quello attuale e
   # ritorna un messaggio con nuovo nome del posto e descrizione o
   # un messaggio di fallito spostamento.
+  # @return [String] messaggio del mud.
   def move(nick, place_name)
     return _("uaresit_#{rand 2}") unless User.stand_up?(nick)
     @place_list[User.get_place(nick)].near_place.each do |p|
@@ -125,6 +131,7 @@ class Core
   end
   
   # Ritorna il posto e descrizione in cui e' l'utente.
+  # @return [String] messaggio del mud.
   def place(nick)
     p = @place_list[User.get_place(nick)]
     temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
@@ -132,6 +139,7 @@ class Core
   end
   
   # Ritorna la lista dei posti vicini in cui si puo andare.
+  # @return [String] messaggio del mud.
   def near_place(nick)
     l = @place_list[User.get_place(nick)].near_place
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
@@ -139,16 +147,19 @@ class Core
   end
   
   # Fa alzare l'utente e ritorna un messaggio di esito.
+  # @return [String] messaggio del mud.
   def up(nick)
     return _("up_#{User.up(nick)}")
   end
   
   # Fa abbassare l'utente e ritorna un messaggio di esito.
+  # @return [String] messaggio del mud.
   def down(nick)
     return _("down_#{User.down(nick)}")
   end
   
   # Ritorna la descrizione di un npc, oggetto o altro.
+  # @return [String] messaggio del mud.
   def look(nick, name)
     @place_list[User.get_place(nick)].get_people.each do |p|
       if p.class == Npc
@@ -163,6 +174,7 @@ class Core
   end
   
   # Ritorna la lista degli npc ed utenti nella zona.
+  # @return [String] messaggio del mud.
   def users_zone(nick)
     u = []
     @place_list[User.get_place(nick)].get_people.each do |p|
