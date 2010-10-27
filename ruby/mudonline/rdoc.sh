@@ -1,3 +1,3 @@
 #!/bin/bash
 
-rdoc -SUN -t "IRC Mud Online - Documentazione" -m Mud -a
+rdoc -SUN -t "Nemesis - Documentazione" -m Mud -a

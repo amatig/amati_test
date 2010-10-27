@@ -35,7 +35,7 @@ class Core
     # caricamento dati mondo
     init_data
   end
-    
+  
   # Inizializza la mappa del mondo, npc, ecc...
   def init_data()
     User.reset_login
@@ -65,6 +65,8 @@ class Core
   end
   
   # Test comunicazione in canale.
+  # @param [String] nick e' l'identificativo dell'utente.
+  # @return [String] messaggio del mud.
   def test(nick)
     return _(:test) % nick
   end
