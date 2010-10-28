@@ -17,8 +17,8 @@ module Utils
   
   # Ritorna una stringa, concatenando tramite virgole gli elemeneti di un array.
   # L'ultimo elemento viene concatenato per 'e'.
-  #
-  # [es.] conc ( [ "mario", "carlo", "fabio" ] ) #=> "mario, carlo e fabio"
+  # @example
+  #   conc ( [ "mario", "carlo", "fabio" ] ) #=> "mario, carlo e fabio"
   def conc(array)
     l = array[0..-2]
     if l.length >= 1

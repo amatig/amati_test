@@ -24,7 +24,7 @@ require "mod/place.rb"
 class Core
   include Utils
   include GetText
-  
+    
   # Una nuova istanza di Core.
   def initialize()
     @db = Database.instance # singleton
