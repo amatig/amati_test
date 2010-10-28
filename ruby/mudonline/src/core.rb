@@ -25,7 +25,7 @@ class Core
   include Utils
   include GetText
   
-  # Metodo di inizializzazione della classe.
+  # Una nuova istanza di Core.
   def initialize()
     @db = Database.instance # singleton
     
@@ -36,7 +36,7 @@ class Core
     init_data
   end
   
-  # Inizializza la mappa del mondo, npc, ecc...
+  # Inizializza tutti gli elementi del gioco.
   def init_data()
     User.reset_login
     
@@ -59,37 +59,33 @@ class Core
     end
   end
   
-  # Ritorna un messaggio random di comando non conosciuto.
+  # Messaggio random per un comando sconosciuto.
   # @return [String] messaggio del mud.
   def cmd_not_found()
     return _("cnf_#{rand 3}")
   end
   
   # Test comunicazione in canale.
-  # @param [String] nick e' l'identificativo dell'utente.
+  # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
   def test(nick)
     return _(:test) % nick
   end
   
-  # Ritorna un booleano che indica se l'utente e' loggato o no nel sistema, 
+  # Indica se l'utente e' loggato o no nel sistema, 
   # ritorna false anche nel caso non esiste.
+  # @param [String] nick identificativo dell'utente.
   # @return [Boolean] stato della login utente.
   def logged?(nick)
     return User.logged?(nick)
   end
   
-  # Ritorna un messaggio che indica la necessita di riconoscersi,
-  # di effettuare una sorta di autenticazione/login.
+  # Effettua il login di un utente dal sistema.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] greeting parola usata dall'utente per salutare.
   # @return [String] messaggio del mud.
-  def need_login()
-    return _(:r_benv)
-  end
-  
-  # Ritorna un messaggio di benvenuto e il posto in cui e' l'utente,
-  # il comando login tenta il login utente e ritorna true/false.
-  # @return [String] messaggio del mud.
-  def login(nick, greeting)
+  def login(nick, greeting = nil)
+    return _(:r_benv) if greeting == nil
     if User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
       return _(:benv) % [greeting, bold(nick), place(nick)]
@@ -98,7 +94,8 @@ class Core
     end
   end
   
-  # Slogga un utente dal sistema.
+  # Effettua il logout di un utente dal sistema.
+  # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
   def logout(nick)
     User.logout(nick)
@@ -108,13 +105,14 @@ class Core
   
   # Aggiorna il timestamp dell'utente, che indica il momento dell'ultimo
   # messaggio inviato.
+  # @param [String] nick identificativo dell'utente.
   def update_timestamp(nick)
     User.update_timestamp(nick)
   end
   
-  # Muove l'utente in un posto vicino, collegato a quello attuale e
-  # ritorna un messaggio con nuovo nome del posto e descrizione o
-  # un messaggio di fallito spostamento.
+  # Muove l'utente in un posto vicino (collegato) a quello attuale.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] place_name nome del luogo in cui ci si vuole spostare.
   # @return [String] messaggio del mud.
   def move(nick, place_name)
     return _("uaresit_#{rand 2}") unless User.stand_up?(nick)
@@ -130,7 +128,8 @@ class Core
     return _(:no_pl) % place_name
   end
   
-  # Ritorna il posto e descrizione in cui e' l'utente.
+  # Descrizione del posto in cui e' l'utente.
+  # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
   def place(nick)
     p = @place_list[User.get_place(nick)]
@@ -138,7 +137,8 @@ class Core
     return _(:pl) % [temp, p.descr]
   end
   
-  # Ritorna la lista dei posti vicini in cui si puo andare.
+  # Elenca i posti vicini in cui si puo andare.
+  # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
   def near_place(nick)
     l = @place_list[User.get_place(nick)].near_place
@@ -146,19 +146,23 @@ class Core
     return _(:np) % conc(temp)
   end
   
-  # Fa alzare l'utente e ritorna un messaggio di esito.
+  # Fa alzare l'utente.
+  # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
   def up(nick)
     return _("up_#{User.up(nick)}")
   end
   
-  # Fa abbassare l'utente e ritorna un messaggio di esito.
+  # Fa abbassare l'utente.
+  # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
   def down(nick)
     return _("down_#{User.down(nick)}")
   end
   
-  # Ritorna la descrizione di un npc, oggetto o altro.
+  # Descrizione di un npc, oggetto o altro.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] name nome dell'utente/npc/oggetto da esaminare.
   # @return [String] messaggio del mud.
   def look(nick, name)
     @place_list[User.get_place(nick)].get_people.each do |p|
@@ -173,7 +177,8 @@ class Core
     return _(:nothing) % name
   end
   
-  # Ritorna la lista degli npc ed utenti nella zona.
+  # Elenca gli npc ed utenti nella zona.
+  # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
   def users_zone(nick)
     u = []

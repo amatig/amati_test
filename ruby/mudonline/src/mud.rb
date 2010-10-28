@@ -70,11 +70,9 @@ class Mud < IRC
   def delivery_priv(nick, msg)
     # riconoscimento utente
     unless @core.logged?(nick)
-      if msg =~ /^(ciao|salve)$/i
-        send_message(nick, @core.login(nick, $1))
-      else
-        send_message(nick, @core.need_login)
-      end
+      greeting = nil
+      greeting = $1 if msg =~ /^(ciao|salve)$/i
+      send_message(nick, @core.login(nick, greeting))
     else
       @core.update_timestamp(nick) # segnala attivita' utente
       # tutti i comandi
