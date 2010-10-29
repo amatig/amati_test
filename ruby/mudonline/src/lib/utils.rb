@@ -15,35 +15,45 @@
 
 module Utils
   
-  # Ritorna una stringa, concatenando tramite virgole gli elemeneti di un array.
+  # Concatena tramite virgole gli elemeneti di un array.
   # L'ultimo elemento viene concatenato per 'e'.
   # @example
-  #   conc ( [ "mario", "carlo", "fabio" ] ) #=> "mario, carlo e fabio"
-  def conc(array)
-    l = array[0..-2]
+  #   conc ( [ "mario", "carlo", "fabio" ] ) # => "mario, carlo e fabio"
+  # @param [Array] elems array di elementi (scalari).
+  # @return [String] concatenazione degli elementi.
+  def conc(elems)
+    l = elems[0..-2]
     if l.length >= 1
-      return "%s e %s" % [l.join(", "), array[-1]]
+      return "%s e %s" % [l.join(", "), elems[-1]]
     else
-      return array[0]
+      return elems[0]
     end
   end
   
-  # Ritorna una stringa con la prima lettera maiuscola.
+  # Rende maiuscola la prima lettera di una parola senza modificarne le altre.
+  # @param [String] text parola originale.
+  # @return [String] parola con la prima lettera in maiuscolo.
   def up_case(text)
     return text[0].chr.capitalize + text[1, text.size]
   end
   
-  # Ritorna una stringa con lo stile bold (per il client irc).
+  # Aggiunge ad una parola i tag stile bold (per il client irc).
+  # @param [String] text parola originale.
+  # @return [String] parola taggata.
   def bold(text)
     return "" + text + ""
   end
   
-  # Ritorna una stringa con lo stile underline (per il client irc).
+  # Aggiunge ad una parola i tag stile underline (per il client irc).
+  # @param [String] text parola originale.
+  # @return [String] parola taggata.
   def uline(text)
     return "" + text + ""
   end
   
-  # Ritorna una stringa con lo stile italic (per il client irc).
+  # Aggiunge ad una parola i tag stile italic (per il client irc).
+  # @param [String] text parola originale.
+  # @return [String] parola taggata.
   def italic(text)
     return "" + text + ""
   end
@@ -67,11 +77,9 @@ module Utils
     :white => "16",
   }
   
-  # Ritorna una stringa con i codici colore (per il client irc).
-  # L'argomento <em>c</em> e' un symbol/stringa per ottenere il colore
-  # dall'insieme indicizzato dei colori disponibili.
+  # Aggiunge ad una parola i tag di un colore (per il client irc).
   #
-  # Valori possibili di <em>c</em>:
+  # Codici colore:
   # * black
   # * navy_blue
   # * green
@@ -88,18 +96,24 @@ module Utils
   # * dark_gray
   # * light_gray
   # * white
+  # @param [String, Symbol] c codice colore.
+  # @param [String] text parola originale.
+  # @return [String] parola taggata.
   def color(c, text)
     return $_color_set[c.to_sym] + text + ""
   end
   
-  # Ritorna una stringa rappresentante l'articolo determinativo
-  # della parola nell'argomento <em>text</em>, l'argomento 
-  # <em>type</em> invece e' un intero che rapprensenta il tipo di parola:
+  # Stabilisce l'articolo determinativo di un parola.
+  #
+  # Codice tipo:
   #
   # 1. Maschile singolare
   # 2. Maschile plurale
   # 3. Femminile singolare
   # 4. Femminile plurale
+  # @param [Integer] type Codice tipo.
+  # @param [String] text parola.
+  # @return [String] articolo determinativo.
   def a_d(type, text)
     con = %W{ b c d f g h j k l m n p q r s t v w x y z }
     voc = %W{ a e i o u }  
@@ -144,8 +158,9 @@ module Utils
     end
   end
   
-  # Ritorna una stringa rappresentante la preposizioni articolata 'di' 
-  # partendo dall'articolo determinativo passato nell'argomento <em>art</em>.
+  # Stabilisce la preposizioni articolata 'di' di un articolo determinativo.
+  # @param [String] art articolo determinativo.
+  # @return [String] preposizione articolata 'di'.
   def pa_di(art)
     case art
     when "il "
@@ -165,8 +180,9 @@ module Utils
     end
   end
   
-  # Ritorna una stringa rappresentante la preposizioni articolata 'in' 
-  # partendo dall'articolo determinativo passato nell'argomento <em>art</em>.
+  # Stabilisce la preposizioni articolata 'in' di un articolo determinativo.
+  # @param [String] art articolo determinativo.
+  # @return [String] preposizione articolata 'in'.
   def pa_in(art)
     case art
     when "il "
