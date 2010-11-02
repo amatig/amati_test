@@ -4,6 +4,7 @@ require "IRC"
 require "lib/database.rb"
 require "core.rb"
 
+# Classe principale del mud.
 # = Description
 # Classe principale del mud che usa Ruby-IRC, un framework di connessione e comunicazione con server Irc.
 #
@@ -28,9 +29,16 @@ require "core.rb"
 
 class Mud < IRC
   
-  # Metodo di inizializzazione della classe.
+  # Una nuova istanza di Mud.
+  #
   # Istanzia inoltre la classe Core che ha al suo interno
   # l'elaborazione dati dei comandi e la messaggistica di ritorno del mud.
+  # @param [String] nick identificativo del bot mud.
+  # @param [String] server indirizzo del server irc.
+  # @param [Integer] port porta del server irc.
+  # @param [Array<String>] channels lista dei canali in cui inserire il bot.
+  # @param [Hash] options hash di opzioni per la connessione irc.
+  # @option options [Boolean] :use_ssl per usare ssl nella connessione.
   def initialize(nick, server, port, channels = [], options = {})
     super(nick, server, port, nil, options)
     # Callbakcs for the connection.
@@ -48,10 +56,11 @@ class Mud < IRC
         op(event.channel, event.from)
       end
     end
-    @core = Core.new
+    @core = Core.new # instanza di Core per i messaggi di ritorno
   end
   
-  # Metodo che smista i messaggi utente per messaggi di canale o privati.
+  # Smembra e smista i messaggi utente per messaggi di canale o privati.
+  # @param [Event] event oggetto complesso contenete il messaggio utente.
   def parse(event)
     # puts Thread.current
     if event.channel == @nick
@@ -61,12 +70,17 @@ class Mud < IRC
     end
   end
   
-  # Metodo di gestione dei messaggi di canale.
+  # Gestisce i messaggi di canale.
+  # @param [String] channel identificativo del canale.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] msg messaggio utente.
   def delivery_chan(channel, nick, msg)
     send_message(channel, @core.test(nick))
   end
   
-  # Metodo di gestione dei messaggi privati.
+  # Gestisce i messaggi privati.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] msg messaggio utente.
   def delivery_priv(nick, msg)
     # riconoscimento utente
     unless @core.logged?(nick)

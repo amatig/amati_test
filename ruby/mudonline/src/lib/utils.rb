@@ -19,7 +19,7 @@ module Utils
   # L'ultimo elemento viene concatenato per 'e'.
   # @example
   #   conc ( [ "mario", "carlo", "fabio" ] ) # => "mario, carlo e fabio"
-  # @param [Array] elems array di elementi (scalari).
+  # @param [Array<Scalar>] elems array di elementi (scalari).
   # @return [String] concatenazione degli elementi.
   def conc(elems)
     l = elems[0..-2]

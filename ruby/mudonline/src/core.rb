@@ -6,6 +6,7 @@ require "mod/user.rb"
 require "mod/npc.rb"
 require "mod/place.rb"
 
+# Classe che implementa l'elaborazione dei dati dei comandi utente e genera i messaggi di ritorno del Mud.
 # = Description
 # Classe che implementa l'elaborazione dei dati dei comandi utente e genera i messaggi di ritorno del Mud.
 # = License
