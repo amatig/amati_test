@@ -1,5 +1,6 @@
-# = Description
 # Insieme di utilities.
+# = Description
+# Modulo contente una serie di utilities di vario genere.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -111,7 +112,7 @@ module Utils
   # 2. Maschile plurale
   # 3. Femminile singolare
   # 4. Femminile plurale
-  # @param [Integer] type Codice tipo.
+  # @param [Integer] type codice tipo.
   # @param [String] text parola.
   # @return [String] articolo determinativo.
   def a_d(type, text)

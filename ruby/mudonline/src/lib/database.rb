@@ -1,9 +1,9 @@
 require "pg"
 require "singleton"
 
-# Classe singleton che gestisce l'interazione con il database Postgres Server.
+# Classe per la gestione dei dati.
 # = Description
-# Classe singleton che gestisce l'interazione con il database Postgres Server.
+# Questa classe e' di tipo singleton e gestisce l'interazione con il database Postgres per la gestione dei dati.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -37,7 +37,7 @@ class Database
   
   # Esegue una query sul database ritornando dati ben strutturati.
   # @param [String] query query SQL standard.
-  # @return [Array of Array<String>] lista di tuple risultanti.
+  # @return [Array of Array<String>] lista delle tuple risultanti.
   def exec2(query)
     # puts query
     result = []
@@ -53,7 +53,7 @@ class Database
   # @param [String] fields campi di interesse.
   # @param [String] tables nomi delle tabelle concatenate da virgola.
   # @param [String] conds condizioni della selezione.
-  # @return [Array of Array<String>] lista di tuple risultanti dalla selezione.
+  # @return [Array of Array<String>] lista delle tuple risultanti.
   def read(fields, tables, conds = "true")
     return exec2("select #{fields} from #{tables} where #{conds}")
   end
