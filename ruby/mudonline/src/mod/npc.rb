@@ -1,8 +1,8 @@
 require "rexml/document"
 
-# Classe che rappresenta l'entita' npc.
+# Non-player character.
 # = Description
-# Questa classe rappresenta l'entita' npc.
+# Questa classe rappresenta l'entita' npc, personaggio non giocante.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -19,7 +19,7 @@ require "rexml/document"
 class Npc
   attr_reader :name, :descr, :place
   
-  # Metodo di inizializzazione della classe.
+  # Una nuova istanza di Npc.
   def initialize(name)
     file = File.new("data/#{name}.xml")
     doc = REXML::Document.new(file)
@@ -30,7 +30,8 @@ class Npc
     file.close
   end
   
-  # Ritorna una stringa che rappresenta il nome dell'npc.
+  # Identificativo dell'npc.
+  # @return [String] identificativo dell'npc.
   def to_s()
     return @name
   end

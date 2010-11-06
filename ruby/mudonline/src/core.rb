@@ -8,7 +8,7 @@ require "mod/place.rb"
 
 # Classe dei comandi/messaggi del mud.
 # = Description
-# Questa classe implementa l'elaborazione dei dati dei comandi utente e genera i messaggi di ritorno.
+# Questa classe implementa l'elaborazione dei dati dei comandi utente e genera i messaggi di ritorno alla classe Mud che li invia al server Irc.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #

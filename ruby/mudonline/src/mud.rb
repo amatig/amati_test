@@ -4,7 +4,7 @@ require "IRC"
 require "lib/database.rb"
 require "core.rb"
 
-# Classe principale del mud che estende Ruby-IRC, un framework di connessione e comunicazione con server Irc.
+# Classe principale del mud che utilizza Ruby-IRC, un framework di connessione e comunicazione con server Irc.
 # = Description
 # Questa classe si occupa di distinguere ed eseguire/rispondere ai comandi degli utenti, e' stata scissa 
 # in due con la classe Core che elabora realmente i dati di un comando e ritorna il messaggio generato per 
