@@ -1,7 +1,10 @@
 require "lib/database.rb"
 
+# Entita' User.
 # = Description
-# Classe che rappresenta l'entita' utente.
+# Questa classe rappresenta l'entita' utente, una persona giocante.
+#
+# E' una classe con soli metodi statici per interfacciarsi direttamente ai dati nel database.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -22,14 +25,17 @@ class User
     Database.instance.update({"logged" => 0}, "users", "logged=1")
   end
   
-  # Ritorna true se esiste l'utente nel database ed e' loggato,
-  # altrimenti false.
+  # Stato del login utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Boolean] stato del login utente.
   def User.logged?(nick)
     data = Database.instance.get("logged", "users", "nick='#{nick}'")
     return (not data.empty? and data[0] == "1")
   end
   
-  # Imposta l'utente come loggato e ritorna true/false in base all'esito.
+  # Cerca di effettuare il login utente e ritorna l'esito dell'operazione.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Boolean] esito del login utente.  
   def User.login(nick)
     data = Database.instance.get("logged", "users", "nick='#{nick}'")
     if not data.empty?
@@ -42,19 +48,24 @@ class User
     end
   end
   
-  # Imposta l'utente come sloggato.
+  # Effettua il logout utente.
+  # @param [String] nick identificativo dell'utente.
   def User.logout(nick)
     Database.instance.update({"logged" => 0}, "users", "nick='#{nick}'")
   end
   
-  # Modifica l'id del posto in cui si trova l'utente.
+  # Modifica l'indice del posto in cui si trova l'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @param [Integer] place_id indice del nuovo posto.
   def User.set_place(nick, place_id)
     Database.instance.update({"place" => Integer(place_id)}, 
                              "users", 
                              "nick='#{nick}'")
   end
   
-  # Ritorna l'id del posto in cui si trova l'utente.
+  # Indice del posto in cui si trova l'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Integer] indice del posto in cui si trova l'utente.
   def User.get_place(nick)
     data = Database.instance.get("place", "users", "nick='#{nick}'")
     return Integer(data[0])
@@ -63,20 +74,25 @@ class User
   # Aggiorna il timestamp dell'utente, questa variabile tiene traccia
   # del tempo dell'ultimo messaggio inviato dall'utente al fine
   # sloggarlo per inattivita'.
+  # @param [String] nick identificativo dell'utente.
   def User.update_timestamp(nick)
     Database.instance.update({"timestamp" => Time.now.to_i}, 
                              "users", 
                              "nick='#{nick}'")
   end
   
-  # Ritorna il timestamp dell'utente, il tempo dell'ultimo messaggio inviato.
+  # Timestamp dell'utente, il tempo dell'ultimo messaggio inviato.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Integer] timestamp dell'ultimo messaggio inviato dall'utente.
   def User.get_timestamp(nick)
     data = Database.instance.get("timestamp", "users", "nick='#{nick}'")
     return Integer(data[0])
   end
   
-  # Setta l'utente come 'in piedi'. Se l'utente non era tale
+  # Setta lo stato dell'utente come 'in piedi'. Se l'utente non era tale 
   # ritorna true, se era gia' 'in piedi' ritorna false.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Boolean] esito dell'operazione.
   def User.up(nick)
     data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
     if (data[0] == "1")
@@ -87,8 +103,10 @@ class User
     end
   end
   
-  # Setta l'utente come 'per terra'. Se l'utente non era tale
+  # Setta lo stato dell'utente come 'per terra'. Se l'utente non era tale 
   # ritorna true, se era gia' 'per terra' ritorna false.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Boolean] esito dell'operazione.
   def User.down(nick)
     data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
     if (data[0] == "0")
@@ -99,7 +117,9 @@ class User
     end
   end
   
-  # Ritorna un booleano che indica se l'utente e' 'in piedi' o no.
+  # Stato dell'utente, se e' 'in piedi' o no.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Boolean] stato 'in piedi' dell'utente.
   def User.stand_up?(nick)
     data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
     return (data[0] == "1")
