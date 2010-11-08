@@ -19,7 +19,7 @@ module Utils
   # Concatena tramite virgole gli elemeneti di un array.
   # L'ultimo elemento viene concatenato per 'e'.
   # @example
-  #   conc ( [ "mario", "carlo", "fabio" ] ) # => "mario, carlo e fabio"
+  #   conc ( [ "mario" , "carlo" , "fabio" ] ) # => "mario, carlo e fabio"
   # @param [Array<Scalar>] elems array di elementi (scalari).
   # @return [String] concatenazione degli elementi.
   def conc(elems)
@@ -81,23 +81,28 @@ module Utils
   # Aggiunge ad una parola i tag di un colore (per il client irc).
   #
   # Codici colore:
-  # * black
-  # * navy_blue
-  # * green
-  # * red
-  # * brown
-  # * purple
-  # * olive
-  # * yellow
-  # * lime_green
-  # * teal
-  # * aqua_light
-  # * royal_blue
-  # * hot_pink
-  # * dark_gray
-  # * light_gray
-  # * white
-  # @param [String, Symbol] c codice colore.
+  #   :black
+  #   :navy_blue
+  #   :green
+  #   :red
+  #   :brown
+  #   :purple
+  #   :olive
+  #   :yellow
+  #   :lime_green
+  #   :teal
+  #   :aqua_light
+  #   :royal_blue
+  #   :hot_pink
+  #   :dark_gray
+  #   :light_gray
+  #   :white
+  #
+  # @example
+  #   color ( :black , "ciao" )
+  #   color ( "black" , "ciao" )
+  #
+  # @param [Symbol, String] c codice colore.
   # @param [String] text parola originale.
   # @return [String] parola taggata.
   def color(c, text)
@@ -108,10 +113,10 @@ module Utils
   #
   # Codice tipo:
   #
-  # 1. Maschile singolare
-  # 2. Maschile plurale
-  # 3. Femminile singolare
-  # 4. Femminile plurale
+  #   1 #=> Maschile singolare
+  #   2 #=> Maschile plurale
+  #   3 #=> Femminile singolare
+  #   4 #=> Femminile plurale
   # @param [Integer] type codice tipo.
   # @param [String] text parola.
   # @return [String] articolo determinativo.

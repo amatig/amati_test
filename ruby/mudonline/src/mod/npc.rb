@@ -1,8 +1,8 @@
-require "rexml/document"
+1;2205;0crequire "rexml/document"
 
-# Non-player character.
+# Entita' NPC (Non-Player Character).
 # = Description
-# Questa classe rappresenta l'entita' npc, personaggio non giocante.
+# Questa classe rappresenta l'entita' npc, personaggio non giocante del mud.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -17,7 +17,15 @@ require "rexml/document"
 # Giovanni Amati
 
 class Npc
-  attr_reader :name, :descr, :place
+  # Identificativo dell'npc.
+  # @return [String] identificativo dell'npc.
+  attr_reader :name
+  # Descrizione dell'npc.
+  # @return [String] descrizione dell'npc.
+  attr_reader :descr
+  # Indice del posto in cui e' l'npc.
+  # @return [Integer] indice del posto in cui e' l'npc.
+  attr_reader :place
   
   # Una nuova istanza di Npc.
   def initialize(name)

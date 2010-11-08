@@ -1,7 +1,8 @@
 require "thread"
 
+# Entita' Place.
 # = Description
-# Classe che rappresenta l'entita' posto.
+# Questa classe rappresenta l'entita' posto, un luogo del mondo del mud.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -16,10 +17,25 @@ require "thread"
 # Giovanni Amati
 
 class Place
-  attr_reader :id, :name, :descr, :attrs, :near_place
+  # Indice del posto.
+  # @return [Integer] indice del posto.
+  attr_reader :id
+  # Identificativo del posto.
+  # @return [String] identificativo del posto.
+  attr_reader :name
+  # Descrizione del posto.
+  # @return [String] descrizione del posto.
+  attr_reader :descr
+  # Rappresenta se un posto e' maschile/femminile singolare/plurale,
+  # serve per poterne identificare l'articolo.
+  # @return [Integer] attributo per identificare l'articolo.
+  attr_reader :attrs
+  # Lista dei posti adiacenti.
+  # @return [Array<Place>] lista dei posti adiacenti.
+  attr_reader :near_place
   
-  # Metodo di inizializzazione della classe.
-  # [data] array contenete tutti i dati del posto.
+  # Una nuova istanza di Place.
+  # @param [Array<String>] data contiene tutti i dati del posto.
   def initialize(data)
     @id = Integer(data[0])
     @name = data[1]
