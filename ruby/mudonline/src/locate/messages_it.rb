@@ -1,6 +1,6 @@
 # Messaggi in lingua italiana.
 # = Description
-# Implementazione di un get_text rivisitata per utilizzare varie lingue, in questo caso italiano.
+# Questo modulo implementa una get_text rivisitata per utilizzare varie lingue, in questo caso italiano.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #

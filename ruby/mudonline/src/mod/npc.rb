@@ -1,6 +1,6 @@
 require "rexml/document"
 
-# Entita' NPC (Non-Player Character).
+# Classe per la gestione degli NPC (Non-Player Character).
 # = Description
 # Questa classe rappresenta l'entita' npc, personaggio non giocante del mud.
 # = License

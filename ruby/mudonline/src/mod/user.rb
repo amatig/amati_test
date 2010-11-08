@@ -1,6 +1,6 @@
 require "lib/database.rb"
 
-# Entita' User.
+# Classe per la gestione degli utenti.
 # = Description
 # Questa classe rappresenta l'entita' utente, una persona giocante.
 #

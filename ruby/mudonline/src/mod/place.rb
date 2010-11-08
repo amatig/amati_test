@@ -1,6 +1,6 @@
 require "thread"
 
-# Entita' Place.
+# Classe per la gestione dei posti.
 # = Description
 # Questa classe rappresenta l'entita' posto, un luogo del mondo del mud.
 # = License
