@@ -60,21 +60,25 @@ class Place
   end
   
   # Rimuove un utente o npc dalla lista delle persone in questo posto.
+  # @param [Npc, String] p identificativo di un utente o instanza di Npc.
   def remove_people(p)
     @mutex.synchronize { @people_here.delete(p) if @people_here.include?(p) }
   end
   
   # Aggiunge un utente o npc dalla lista delle persone in questo posto.
+  # @param [Npc, String] p identificativo di un utente o instanza di Npc.
   def add_people(p)
     @mutex.synchronize { @people_here << p unless @people_here.include?(p) }
   end
   
-  # Ritorna l'array di tutti le persone presenti nel posto.
+  # Lista di tutti le persone presenti nel posto, sia utenti che npc.
+  # @return [Array<Npc, String>] lista degli utenti e instanze di Npc.
   def get_people()
     @mutex.synchronize { return @people_here }
   end
   
-  # Ritorna una stringa che rappresenta il nome del posto.
+  # Identificativo del posto.
+  # @return [String] identificativo del posto.
   def to_s()
     return @name
   end
