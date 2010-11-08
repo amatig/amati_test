@@ -45,10 +45,14 @@ class Core
     places = @db.read("*", "places")
     places.each { |p| @place_list[Integer(p[0])] = Place.new(p) }
     places.each do |p|
-      temp = @db.read("places.id", 
-                      "links,places", 
-                      "place=#{p[0]} and places.id=near_place")
-      @place_list[Integer(p[0])].init_near_place(@place_list, temp)
+      temp = []
+      list_np = @db.read("places.id", 
+                         "links,places", 
+                         "place=#{p[0]} and places.id=nearby_place")
+      list_np.each do |near|
+        temp << @place_list[Integer(near[0])]
+      end
+      @place_list[Integer(p[0])].init_nearby_place(temp)
     end
     
     @npc_list = {}
@@ -117,7 +121,7 @@ class Core
   # @return [String] messaggio del mud.
   def move(nick, place_name)
     return _("uaresit_#{rand 2}") unless User.stand_up?(nick)
-    @place_list[User.get_place(nick)].near_place.each do |p|
+    @place_list[User.get_place(nick)].nearby_place.each do |p|
       if p.name =~ /#{place_name.strip}/i
         @place_list[User.get_place(nick)].remove_people(nick)
         User.set_place(nick, p.id) # cambio di place_id
@@ -141,8 +145,8 @@ class Core
   # Elenca i posti vicini in cui si puo andare.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def near_place(nick)
-    l = @place_list[User.get_place(nick)].near_place
+  def nearby_place(nick)
+    l = @place_list[User.get_place(nick)].nearby_place
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
     return _(:np) % conc(temp)
   end

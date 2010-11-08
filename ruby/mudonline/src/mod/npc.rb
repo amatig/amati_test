@@ -1,4 +1,4 @@
-1;2205;0crequire "rexml/document"
+require "rexml/document"
 
 # Entita' NPC (Non-Player Character).
 # = Description

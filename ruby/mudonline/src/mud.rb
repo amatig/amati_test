@@ -96,7 +96,7 @@ class Mud < IRC
       when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
         send_message(nick, @core.place(nick))
       when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
-        send_message(nick, @core.near_place(nick))
+        send_message(nick, @core.nearby_place(nick))
       when /^va.*\s(ne|a).{0,3}\s(.+)$/i
         send_message(nick, @core.move(nick, $2))
       when /^chi.+(qu.|zona)\?$/i

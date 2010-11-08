@@ -32,7 +32,7 @@ class Place
   attr_reader :attrs
   # Lista dei posti adiacenti.
   # @return [Array<Place>] lista dei posti adiacenti.
-  attr_reader :near_place
+  attr_reader :nearby_place
   
   # Una nuova istanza di Place.
   # @param [Array<String>] data contiene tutti i dati del posto.
@@ -41,22 +41,20 @@ class Place
     @name = data[1]
     @descr = data[2]
     @attrs = Integer(data[3])
-    @near_place = []
+    @nearby_place = []
     @people_here = []
     
-    @init_np = false # fa fare l'init_near_place una sola volta
+    @init_np = false # fa fare l'init_nearby_place una sola volta
     
     @mutex = Mutex.new
   end
   
-  # Aggiunge a questo luogo le istanze dei posti vicini.
-  # Il flag init_np serve ad assicurarsi che l'aggiunta possa essere 
-  # fatta una sola volta.
-  def init_near_place(place_instances, near_places)
+  # Inizializza (aggiunge) a questo luogo le istanze dei posti vicini,
+  # un flag si assicurara che l'operazione possa essere fatta una sola volta.
+  # @param [Array<Place>] nearby_place lista delle istanze dei posti adiacenti.
+  def init_nearby_place(nearby_place)
     unless @init_np
-      near_places.each do |near|
-        near_place << place_instances[Integer(near[0])]
-      end
+      @nearby_place = nearby_place
       @init_np = true
     end
   end
