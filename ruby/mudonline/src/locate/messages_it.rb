@@ -1,5 +1,6 @@
+# Messaggi in lingua italiana.
 # = Description
-# GetText artigianale linguaggio ITA.
+# Implementazione di un get_text rivisitata per utilizzare varie lingue, in questo caso italiano.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -44,8 +45,10 @@ module GetText
     :cnf_2 => "Forse sbagli nella pronuncia?",
   }
   
-  # Ritorna una stringa rappresentate una risposta o affermazione del bot, 
-  # ogni messaggio e' indicizzato tramite un symbol/stringa.
+  # Messaggio rappresentate una risposta o affermazione del bot.
+  # Ogni messaggio e' indicizzato tramite un symbol/stringa.
+  # @param [Symbol, String] label etichetta' che identifica il messaggio.
+  # @return [String] messaggio in italiano.
   def _(label)
     return $_msg_set[label.to_sym]
   end
