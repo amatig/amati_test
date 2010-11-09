@@ -35,12 +35,18 @@ class Place
   attr_reader :nearby_place
   
   # Una nuova istanza di Place.
-  # @param [Array<String>] data contiene tutti i dati del posto.
+  # @param [Array<String>] data contiene indice ed identificativo del posto.
   def initialize(data)
     @id = Integer(data[0])
-    @name = data[1]
-    @descr = data[2]
-    @attrs = Integer(data[3])
+    
+    file = File.new("data/places/#{data[1]}.xml")
+    doc = REXML::Document.new(file)
+    root = doc.elements["place"]
+    @name = root.elements["name"].text
+    @descr = root.elements["descr"].text
+    @attrs = Integer(root.elements["attrs"].text)
+    file.close
+        
     @nearby_place = []
     @people_here = []
     

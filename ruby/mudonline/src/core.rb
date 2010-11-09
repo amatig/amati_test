@@ -56,7 +56,7 @@ class Core
     end
     
     @npc_list = {}
-    npcs = @db.read("name", "npc")
+    npcs = @db.read("name", "npcs")
     npcs.each do |n|
       temp = Npc.new(n[0])
       @npc_list[n[0]] = temp

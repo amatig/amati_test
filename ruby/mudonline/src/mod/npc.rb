@@ -29,7 +29,7 @@ class Npc
   
   # Una nuova istanza di Npc.
   def initialize(name)
-    file = File.new("data/#{name}.xml")
+    file = File.new("data/npcs/#{name}.xml")
     doc = REXML::Document.new(file)
     root = doc.elements["npc"]
     @name = name.capitalize
