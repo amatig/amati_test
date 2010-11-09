@@ -16,7 +16,7 @@
 
 module GetText
   
-  $_msg_set = {
+  MSG_SET = {
     :test => "Salve %s, contattami in privato",
     :benv => "Oooh %s a te %s! Da quanto tempo! %s",
     :r_benv => "Prima d'ogni cosa e' buona eduzione salutare!",
@@ -50,7 +50,7 @@ module GetText
   # @param [Symbol, String] label etichetta' che identifica il messaggio.
   # @return [String] messaggio in italiano.
   def _(label)
-    return $_msg_set[label.to_sym]
+    return MSG_SET[label.to_sym]
   end
   
 end

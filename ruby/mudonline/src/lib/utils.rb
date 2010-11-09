@@ -59,7 +59,7 @@ module Utils
     return "" + text + ""
   end
   
-  $_color_set = {
+  COLOR_SET = {
     :black => "1",
     :navy_blue => "2",
     :green => "3",
@@ -102,11 +102,11 @@ module Utils
   #   color ( :black , "ciao" )
   #   color ( "black" , "ciao" )
   #
-  # @param [Symbol, String] c codice colore.
+  # @param [Symbol, String] ccolor codice colore.
   # @param [String] text parola originale.
   # @return [String] parola taggata.
-  def color(c, text)
-    return $_color_set[c.to_sym] + text + ""
+  def color(ccolor, text)
+    return COLOR_SET[ccolor.to_sym] + text + ""
   end
   
   # Stabilisce l'articolo determinativo di un parola.
@@ -117,15 +117,15 @@ module Utils
   #   2 #=> Maschile plurale
   #   3 #=> Femminile singolare
   #   4 #=> Femminile plurale
-  # @param [Integer] type codice tipo.
+  # @param [Integer] ctype codice tipo.
   # @param [String] text parola.
   # @return [String] articolo determinativo.
-  def a_d(type, text)
+  def a_d(ctype, text)
     con = %W{ b c d f g h j k l m n p q r s t v w x y z }
     voc = %W{ a e i o u }  
     # 1 maschile singolare e 2 plurale
     # 3 femminile singolare e 4 plurale
-    case Integer(type)
+    case Integer(ctype)
     when 1
       if text =~ /^(z|pn|gn|ps|x|y)/i
         return "lo "
