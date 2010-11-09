@@ -52,7 +52,7 @@ class Npc
     when /^(arrivederci|addio|a presto|alla prossima|vado)$/i
       return "%s: Alla prossima straniero!" % bold(@name)
     else
-      return "%s: merda" % bold(@name)
+      return "%s: non ti capisco!!" % bold(@name)
     end
   end
   

@@ -188,7 +188,7 @@ class Core
   
   # Entra in modalita' interazione 'dialogo' con un npc.
   # @param [String] nick identificativo dell'utente.
-  # @param [String] name nome dell'npc.
+  # @param [String] name identificativo dell'npc.
   # @return [String] messaggio dell'npc o del mud.
   def speak(nick, name)
     @place_list[User.get_place(nick)].get_people.each do |p|

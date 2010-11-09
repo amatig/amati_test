@@ -88,7 +88,13 @@ class User
   # Effettua il logout utente.
   # @param [String] nick identificativo dell'utente.
   def User.logout(nick)
-    Database.instance.update({"logged" => 0}, "users", "nick='#{nick}'")
+    Database.instance.update({
+                               "logged" => 0,
+                               "mode" => "move", 
+                               "target" => ""
+                             }, 
+                             "users", 
+                             "nick='#{nick}'")
   end
   
   # Modifica l'indice del posto in cui si trova l'utente.
