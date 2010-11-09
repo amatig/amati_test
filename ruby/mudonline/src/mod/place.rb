@@ -35,7 +35,7 @@ class Place
   attr_reader :nearby_place
   
   # Una nuova istanza di Place.
-  # @param [Array<String>] data contiene indice ed identificativo del posto.
+  # @param [Array<String>] data contiene alcune informazioni sul posto.
   def initialize(data)
     @id = Integer(data[0])
     
