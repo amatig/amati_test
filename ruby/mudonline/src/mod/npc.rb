@@ -1,4 +1,5 @@
 require "rexml/document"
+require "lib/utils.rb"
 
 # Classe per la gestione degli NPC (Non-Player Character).
 # = Description
@@ -17,6 +18,8 @@ require "rexml/document"
 # Giovanni Amati
 
 class Npc
+  include Utils
+  
   # Identificativo dell'npc.
   # @return [String] identificativo dell'npc.
   attr_reader :name
@@ -45,11 +48,11 @@ class Npc
   def parse(nick, msg)
     case msg
     when /^(ciao|salve)$/i
-      return "%s: Saaaalve straniero..." % @name
+      return "%s: Saaaalve straniero..." % bold(@name)
     when /^(arrivederci|addio|a presto|alla prossima|vado)$/i
-      return "%s: Alla prossima straniero!" % @name
+      return "%s: Alla prossima straniero!" % bold(@name)
     else
-      return "%s: merda" % @name
+      return "%s: merda" % bold(@name)
     end
   end
   

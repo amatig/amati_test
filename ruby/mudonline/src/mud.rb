@@ -116,8 +116,8 @@ class Mud < IRC
       send_message(nick, @core.users_zone(nick))
     when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
       send_message(nick, @core.look(nick, $2))
-    when /^(parl.|dialog.)\scon\s(.+)$/i
-      send_message(nick, @core.speak(nick, $2))
+    when /^(parl.|dialog.)\s(a|con)\s(.+)$/i
+      send_message(nick, @core.speak(nick, $3))
     when /^(fine|stop|esci|exit|quit|basta.*)$/i
       send_message(nick, @core.logout(nick))
     else
