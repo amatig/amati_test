@@ -197,7 +197,7 @@ class Core
         return npc_interaction(nick, "ciao")
       end
     end
-    return _(:nothing) % name
+    return _(:nothing_npc) % name
   end
   
   # Demanda all'npc l'interazione vera e propria con l'utente.

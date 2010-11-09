@@ -22,6 +22,7 @@ module GetText
     :r_benv => "Prima d'ogni cosa e' buona eduzione salutare!",
     :no_reg => "Non ti conosco straniero, non sei nella mia storia!",
     :nothing => "Mmm %s? Non c'e' nessun oggetto o persona corrispondente a quel nome qui!",
+    :nothing_npc => "Mmm %s? Non c'e' nessun personaggio della storia corrispondente a quel nome qui!",
     :no_pl => "Mmm %s? Non conosco nessun luogo nelle vicinanze con questo nome!",
     :pl => "Ti trovi %s, %s",
     :new_pl => "Sei giunto %s, %s",
