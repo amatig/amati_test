@@ -87,31 +87,52 @@ class Mud < IRC
       send_message(nick, @core.login(nick, greeting))
     else
       @core.update_timestamp(nick) # segnala attivita' utente
-      # tutti i comandi
-      case msg
-      when /^mi\s(alzo|sveglio)$/i
-        send_message(nick, @core.up(nick))
-      when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
-        send_message(nick, @core.down(nick))
-      when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
-        send_message(nick, @core.place(nick))
-      when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
-        send_message(nick, @core.nearby_place(nick))
-      when /^va.*\s(ne|a).{0,3}\s(.+)$/i
-        send_message(nick, @core.move(nick, $2))
-      when /^chi.+(qu.|zona)\?$/i
-        send_message(nick, @core.users_zone(nick))
-      when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
-        send_message(nick, @core.look(nick, $2))
-      when /^(fine|stop|esci|exit|quit|basta.*)$/i
-        send_message(nick, @core.logout(nick))
-      else
-        send_message(nick, @core.cmd_not_found)
+      # modalita' di interazione
+      case @core.get_user_mode(nick)
+      when "move"
+        mode_navigation(nick, msg)
+      when "dialog"
+        mode_dialog(nick, msg)
       end
     end
   end
   
-  private :delivery_priv, :delivery_chan
+  # Gestisce la modalita' di interazione 'navigazione'.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] msg messaggio utente.
+  def mode_navigation(nick, msg)
+    case msg
+    when /^mi\s(alzo|sveglio)$/i
+      send_message(nick, @core.up(nick))
+    when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
+      send_message(nick, @core.down(nick))
+    when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
+      send_message(nick, @core.place(nick))
+    when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
+      send_message(nick, @core.nearby_place(nick))
+    when /^va.*\s(ne|a).{0,3}\s(.+)$/i
+      send_message(nick, @core.move(nick, $2))
+    when /^chi.+(qu.|zona)\?$/i
+      send_message(nick, @core.users_zone(nick))
+    when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
+      send_message(nick, @core.look(nick, $2))
+    when /^(parl.|dialog.)\scon\s(.+)$/i
+      send_message(nick, @core.speak(nick, $2))
+    when /^(fine|stop|esci|exit|quit|basta.*)$/i
+      send_message(nick, @core.logout(nick))
+    else
+      send_message(nick, @core.cmd_not_found)
+    end
+  end
+  
+  # Gestisce la modalita' di interazione 'dialogo'.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] msg messaggio utente.
+  def mode_dialog(nick, msg)
+    send_message(nick, @core.npc_interaction(nick, msg))
+  end
+  
+  private :delivery_priv, :delivery_chan, :mode_navigation, :mode_dialog
 end
 
 

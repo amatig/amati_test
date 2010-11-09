@@ -22,7 +22,13 @@ class User
   
   # Resetta i login degli utenti.
   def User.reset_login()
-    Database.instance.update({"logged" => 0}, "users", "logged=1")
+    Database.instance.update({
+                               "logged" => 0, 
+                               "mode" => "move", 
+                               "target" => ""
+                             }, 
+                             "users", 
+                             "logged=1")
   end
   
   # Stato del login utente.
@@ -33,13 +39,44 @@ class User
     return (not data.empty? and data[0] == "1")
   end
   
+  # Cambia la modalita' di interazione dell'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] mode modalita' di interazione dell'utente.
+  # @param [String] target riferimento dell'interazione.
+  def User.set_mode(nick, mode, target)
+    Database.instance.update({"mode" => mode, "target" => target}, 
+                             "users", 
+                             "nick='#{nick}'")
+  end
+  
+  # Modalita' di interazione dell'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [String] stato della modalita' di interazione dell'utente.
+  def User.get_mode(nick)
+    data = Database.instance.get("mode", "users", "nick='#{nick}'")
+    return data[0]
+  end
+  
+  # Target della modalita' di interazione.
+  # @param [String] nick identificativo dell'utente.
+  # @return [String] riferimento della modalita' di interazione.
+  def User.get_target(nick)
+    data = Database.instance.get("target", "users", "nick='#{nick}'")
+    return data[0]
+  end
+  
   # Cerca di effettuare il login utente e ritorna l'esito dell'operazione.
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] esito del login utente.  
   def User.login(nick)
     data = Database.instance.get("logged", "users", "nick='#{nick}'")
     if not data.empty?
-      Database.instance.update({"logged" => 1, "timestamp" => Time.now.to_i},
+      Database.instance.update({
+                                 "logged" => 1, 
+                                 "mode" => "move", 
+                                 "target" => "",
+                                 "timestamp" => Time.now.to_i
+                               },
                                "users", 
                                "nick='#{nick}'")
       return true
@@ -94,11 +131,15 @@ class User
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] esito dell'operazione.
   def User.up(nick)
-    data = Database.instance.get("stand_up", "attributes", "user_nick='#{nick}'")
+    data = Database.instance.get("stand_up", 
+                                 "attributes", 
+                                 "user_nick='#{nick}'")
     if (data[0] == "1")
       return false
     else
-      Database.instance.update({"stand_up" => 1}, "attributes", "user_nick='#{nick}'")
+      Database.instance.update({"stand_up" => 1}, 
+                               "attributes", 
+                               "user_nick='#{nick}'")
       return true
     end
   end
@@ -108,11 +149,15 @@ class User
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] esito dell'operazione.
   def User.down(nick)
-    data = Database.instance.get("stand_up", "attributes", "user_nick='#{nick}'")
+    data = Database.instance.get("stand_up", 
+                                 "attributes", 
+                                 "user_nick='#{nick}'")
     if (data[0] == "0")
       return false
     else
-      Database.instance.update({"stand_up" => 0}, "attributes", "user_nick='#{nick}'")
+      Database.instance.update({"stand_up" => 0}, 
+                               "attributes", 
+                               "user_nick='#{nick}'")
       return true
     end
   end
@@ -121,7 +166,9 @@ class User
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] stato 'in piedi' dell'utente.
   def User.stand_up?(nick)
-    data = Database.instance.get("stand_up", "attributes", "user_nick='#{nick}'")
+    data = Database.instance.get("stand_up", 
+                                 "attributes", 
+                                 "user_nick='#{nick}'")
     return (data[0] == "1")
   end
   

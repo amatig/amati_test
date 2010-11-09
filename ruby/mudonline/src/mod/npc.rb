@@ -38,6 +38,21 @@ class Npc
     file.close
   end
   
+  # Logica dell'npc, dell'interazione con l'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] msg messaggio utente.
+  # @return [String] messaggio npc.
+  def parse(nick, msg)
+    case msg
+    when /^(ciao|salve)$/i
+      return "%s: Saaaalve straniero..." % @name
+    when /^(arrivederci|addio|a presto|alla prossima|vado)$/i
+      return "%s: Alla prossima straniero!" % @name
+    else
+      return "%s: merda" % @name
+    end
+  end
+  
   # Identificativo dell'npc.
   # @return [String] identificativo dell'npc.
   def to_s()

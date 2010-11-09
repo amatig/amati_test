@@ -56,7 +56,7 @@ class Core
     npcs = @db.read("name", "npcs")
     npcs.each do |n|
       temp = Npc.new(n[0])
-      @npc_list[n[0]] = temp
+      @npc_list[temp.name] = temp
       @place_list[temp.place].add_people(temp)
     end
   end
@@ -80,6 +80,13 @@ class Core
   # @return [Boolean] stato della login utente.
   def logged?(nick)
     return User.logged?(nick)
+  end
+  
+  # Modalita' di interazione dell'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [String] stato della modalita' di interazione dell'utente.
+  def get_user_mode(nick)
+    return User.get_mode(nick)
   end
   
   # Effettua il login di un utente dal sistema.
@@ -177,6 +184,32 @@ class Core
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
     return _(:nothing) % name
+  end
+  
+  # Entra in modalita' interazione 'dialogo' con un npc.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] name nome dell'npc.
+  # @return [String] messaggio dell'npc o del mud.
+  def speak(nick, name)
+    @place_list[User.get_place(nick)].get_people.each do |p|
+      if (p.class == Npc and p.name =~ /^#{name.strip}$/i)
+        User.set_mode(nick, "dialog", p.name)
+        return npc_interaction(nick, "ciao")
+      end
+    end
+    return _(:nothing) % name
+  end
+  
+  # Demanda all'npc l'interazione vera e propria con l'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] msg messaggio utente.
+  # @return [String] messaggio npc.
+  def npc_interaction(nick, msg)
+    temp = @npc_list[User.get_target(nick)].parse(nick, msg)
+    if temp =~ /(arrivederci|addio|a presto|alla prossima)/i
+      User.set_mode(nick, "move", "")
+    end
+    return temp
   end
   
   # Elenca gli npc ed utenti nella zona.
