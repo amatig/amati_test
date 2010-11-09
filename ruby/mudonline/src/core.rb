@@ -45,13 +45,10 @@ class Core
     places = @db.read("*", "places")
     places.each { |p| @place_list[Integer(p[0])] = Place.new(p) }
     places.each do |p|
-      temp = []
       list_np = @db.read("places.id", 
                          "links,places", 
                          "place=#{p[0]} and places.id=nearby_place")
-      list_np.each do |near|
-        temp << @place_list[Integer(near[0])]
-      end
+      temp = list_np.map { |near| @place_list[Integer(near[0])] }
       @place_list[Integer(p[0])].init_nearby_place(temp)
     end
     

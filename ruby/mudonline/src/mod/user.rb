@@ -59,15 +59,15 @@ class User
   # @param [Integer] place_id indice del nuovo posto.
   def User.set_place(nick, place_id)
     Database.instance.update({"place" => Integer(place_id)}, 
-                             "users", 
-                             "nick='#{nick}'")
+                             "attributes", 
+                             "user_nick='#{nick}'")
   end
   
   # Indice del posto in cui si trova l'utente.
   # @param [String] nick identificativo dell'utente.
   # @return [Integer] indice del posto in cui si trova l'utente.
   def User.get_place(nick)
-    data = Database.instance.get("place", "users", "nick='#{nick}'")
+    data = Database.instance.get("place", "attributes", "user_nick='#{nick}'")
     return Integer(data[0])
   end
   
@@ -94,11 +94,11 @@ class User
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] esito dell'operazione.
   def User.up(nick)
-    data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
+    data = Database.instance.get("stand_up", "attributes", "user_nick='#{nick}'")
     if (data[0] == "1")
       return false
     else
-      Database.instance.update({"stand_up" => 1}, "users", "nick='#{nick}'")
+      Database.instance.update({"stand_up" => 1}, "attributes", "user_nick='#{nick}'")
       return true
     end
   end
@@ -108,11 +108,11 @@ class User
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] esito dell'operazione.
   def User.down(nick)
-    data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
+    data = Database.instance.get("stand_up", "attributes", "user_nick='#{nick}'")
     if (data[0] == "0")
       return false
     else
-      Database.instance.update({"stand_up" => 0}, "users", "nick='#{nick}'")
+      Database.instance.update({"stand_up" => 0}, "attributes", "user_nick='#{nick}'")
       return true
     end
   end
@@ -121,7 +121,7 @@ class User
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] stato 'in piedi' dell'utente.
   def User.stand_up?(nick)
-    data = Database.instance.get("stand_up", "users", "nick='#{nick}'")
+    data = Database.instance.get("stand_up", "attributes", "user_nick='#{nick}'")
     return (data[0] == "1")
   end
   
