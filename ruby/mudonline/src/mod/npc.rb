@@ -51,6 +51,8 @@ class Npc
       return "%s: Saaaalve straniero..." % bold(@name)
     when /^(arrivederci|addio|a presto|alla prossima|vado)$/i
       return "%s: Alla prossima straniero!" % bold(@name)
+    when /(da.?|ha.?|sa.?|conosc.|sapete|conoscete|d.re|dici|dite)\s(particolari|qualcosa|cose|informazion.|notizi.|dettagl.)\s(su|di|riguardo)\s([A-z\ ]+)/i
+      return "%s: info su %s?" % [bold(@name), $4]
     else
       return "%s: non ti capisco!!" % bold(@name)
     end
