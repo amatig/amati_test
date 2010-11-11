@@ -106,18 +106,20 @@ class Mud < IRC
       send_message(nick, @core.up(nick))
     when /mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)/i
       send_message(nick, @core.down(nick))
-    when /dove.+(sono|siamo|finit\w|trov\w+)\?/i
+    when /dove.+(sono|siamo|finit\w|trov\w{1,4})\?/i
       send_message(nick, @core.place(nick))
-    when /dove.+(recar\w+|andar\w+|procedere|diriger\w+)\?/i
+    when /dove.+(recar\w{1,2}|andar\w{1,4}|procedere|diriger\w{1,2})\?/i
       send_message(nick, @core.nearby_place(nick))
     when /(andiamo|va\w{0,2})\s(ne|a)\w{0,3}\s([A-z0-9\ ]+)/i
       send_message(nick, @core.move(nick, $3))
-    when /chi.+(qu\w|zona)\?/i
+    when /chi.+(qu\w|zona|luogo|paraggi)\?/i
       send_message(nick, @core.users_zone(nick))
     when /(esamin\w|guard\w|osserv\w|scrut\w|analizz\w)\s([A-z0-9\ ]+)/i
       send_message(nick, @core.look(nick, $2))
     when /(parl\w|dialog\w)\s(a|con)\s([A-z0-9\ ]+)/i
       send_message(nick, @core.speak(nick, $3))
+    when /(ciao|salve)\s([A-z0-9\ ]+)/i
+      send_message(nick, @core.speak(nick, $2))
     when /^(fine|stop|esci|exit|quit|basta)$/i
       send_message(nick, @core.logout(nick))
     else

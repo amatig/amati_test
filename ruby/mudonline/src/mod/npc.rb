@@ -52,20 +52,27 @@ class Npc
   def parse(nick, msg)
     case msg
     when /^(ciao|salve)$/i
-      return context("Saaaalve straniero...")
+      return context("saluto", @dialog["welcome_#{rand 2}"])
     when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)$/i
-      return context("Alla prossima straniero!")
-    when /(da\w?|ha\w?|sa\w?|conosc\w|sapete|conoscete|d\wre|dici|dite)\s(particolari|niente|qualcosa|cose|informazion\w|notizi\w|dettagl\w)\s(su\w{0,3}|d\w{0,4}|riguardo)\s([A-z\ ]+)/i
-      return context("Informazioni su #{$4}?")
+      return context("saluto", @dialog["goodbye_#{rand 2}"])
+    when /(da\w?|ha\w?|sa\w?|conosc\w{1,3}|sapete|d\wre|dici|dite)\s(particolari|niente|qualcosa|cose|informazion\w|notizi\w|dettagl\w)\s(su\w{0,3}|d\w{0,4}|riguardo)\s([A-z\ ]+)/i
+      return context("richiesta", "Informazioni su #{$4}?")
     else
-      return context(@dialog["dnf_#{rand 2}"])
+      if msg =~ /\?/
+        return context("err_domanda", @dialog["dnf_#{rand 2}"])
+      else
+        return context("err_affermazione", @dialog["anf_#{rand 2}"])
+      end
     end
   end
   
-  # Aggiunge al messaggio dell'npc il nome davanti al testo, tipo dialogo.
+  # Arricchisce il messaggio dell'npc, simulando un dialogo.
+  # I messaggi vengono messi in cache nel database, in caso di insistenza di
+  # un particolare tipo di domanda l'npc risponde a tono.
+  # @param [String] type tipo di messaggio.
   # @param [String] msg messaggio grezzo.
-  # @return [String] messaggio con il nome dell'npc.
-  def context(msg)
+  # @return [String] messaggio finale dell'npc.
+  def context(type, msg)
     return "%s: %s" % [bold(@name), msg]
   end
   
