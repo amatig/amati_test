@@ -38,6 +38,10 @@ class Npc
     @name = name.capitalize
     @descr = root.elements["descr"].text
     @place = Integer(root.elements["place"].text)
+    @dialog = {}
+    root.elements["dialog"].each_element do |val|
+      @dialog[val.name] = val.text
+    end
     file.close
   end
   
@@ -48,14 +52,21 @@ class Npc
   def parse(nick, msg)
     case msg
     when /^(ciao|salve)$/i
-      return "%s: Saaaalve straniero..." % bold(@name)
-    when /^(arrivederci|addio|a presto|alla prossima|vado)$/i
-      return "%s: Alla prossima straniero!" % bold(@name)
-    when /(da.?|ha.?|sa.?|conosc.|sapete|conoscete|d.re|dici|dite)\s(particolari|qualcosa|cose|informazion.|notizi.|dettagl.)\s(su|di|riguardo)\s([A-z\ ]+)/i
-      return "%s: info su %s?" % [bold(@name), $4]
+      return context("Saaaalve straniero...")
+    when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)$/i
+      return context("Alla prossima straniero!")
+    when /(da\w?|ha\w?|sa\w?|conosc\w|sapete|conoscete|d\wre|dici|dite)\s(particolari|niente|qualcosa|cose|informazion\w|notizi\w|dettagl\w)\s(su\w{0,3}|d\w{0,4}|riguardo)\s([A-z\ ]+)/i
+      return context("Informazioni su #{$4}?")
     else
-      return "%s: non ti capisco!!" % bold(@name)
+      return context(@dialog["dnf_#{rand 2}"])
     end
+  end
+  
+  # Aggiunge al messaggio dell'npc il nome davanti al testo, tipo dialogo.
+  # @param [String] msg messaggio grezzo.
+  # @return [String] messaggio con il nome dell'npc.
+  def context(msg)
+    return "%s: %s" % [bold(@name), msg]
   end
   
   # Identificativo dell'npc.
@@ -64,4 +75,5 @@ class Npc
     return @name
   end
   
+  private :context
 end

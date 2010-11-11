@@ -2,4 +2,8 @@
 <npc>
   <descr>e' un vecchio uomo barbuto e rugoso</descr>
   <place>1</place>
+  <dialog>
+    <dnf_0>Di questo non so nulla, mi spiace</dnf_0>
+    <dnf_1>Mai sentito parlare di questa cosa</dnf_1>
+  </dialog>
 </npc>

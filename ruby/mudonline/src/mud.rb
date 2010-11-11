@@ -102,23 +102,23 @@ class Mud < IRC
   # @param [String] msg messaggio utente.
   def mode_navigation(nick, msg)
     case msg
-    when /^mi\s(alzo|sveglio)$/i
+    when /mi\s(alzo|sveglio)/i
       send_message(nick, @core.up(nick))
-    when /^mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)$/i
+    when /mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)/i
       send_message(nick, @core.down(nick))
-    when /^dove.+(sono|siamo|finit.|trov.+)\?$/i
+    when /dove.+(sono|siamo|finit\w|trov\w+)\?/i
       send_message(nick, @core.place(nick))
-    when /^dove.+(recar.+|andar.+|procedere|diriger.+)\?$/i
+    when /dove.+(recar\w+|andar\w+|procedere|diriger\w+)\?/i
       send_message(nick, @core.nearby_place(nick))
-    when /^va.*\s(ne|a).{0,3}\s(.+)$/i
-      send_message(nick, @core.move(nick, $2))
-    when /^chi.+(qu.|zona)\?$/i
+    when /(andiamo|va\w{0,2})\s(ne|a)\w{0,3}\s([A-z0-9\ ]+)/i
+      send_message(nick, @core.move(nick, $3))
+    when /chi.+(qu\w|zona)\?/i
       send_message(nick, @core.users_zone(nick))
-    when /^(esamin.|guard.|osserv.|scrut.|analizz.)\s(.+)$/i
+    when /(esamin\w|guard\w|osserv\w|scrut\w|analizz\w)\s([A-z0-9\ ]+)/i
       send_message(nick, @core.look(nick, $2))
-    when /^(parl.|dialog.)\s(a|con)\s(.+)$/i
+    when /(parl\w|dialog\w)\s(a|con)\s([A-z0-9\ ]+)/i
       send_message(nick, @core.speak(nick, $3))
-    when /^(fine|stop|esci|exit|quit|basta.*)$/i
+    when /^(fine|stop|esci|exit|quit|basta)$/i
       send_message(nick, @core.logout(nick))
     else
       send_message(nick, @core.cmd_not_found)
