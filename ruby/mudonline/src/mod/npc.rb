@@ -77,24 +77,42 @@ class Npc
     end
   end
   
-  # Rende variabile il messaggio dell'npc, simulando un dialogo.
-  # I messaggi vengono messi in cache nel database, in caso di insistenza di
-  # un particolare tipo di domanda l'npc risponde a tono o non risponde per
-  # alcuni minuti. Tutto sempre in base alle sue regole.
+  # Rende variabile il messaggio dell'npc simulando un dialogo.
+  # Usa il metodo "crave" per le decisioni.
+  # @see Npc#crave
+  # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @param [Integer] count numero di messaggi dell'npc per quel tipo.
   # @return [String] messaggio finale dell'npc.
-  def reply(type, count)
+  def reply(nick, type, count)
+    # crave
     return "%s: %s" % [bold(@name), @dialog["#{type}_#{rand count}"]]
   end
   
   # Ritorna nel informazioni che ha un npc rispetto ad un argomento
-  # richiesto dall'utente.
+  # richiesto dall'utente. Usa il metodo "crave" per le decisioni.
+  # @see Npc#crave
+  # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @param [String] target oggetto di cui l'utente vuole informazioni.
   # @return [String] messaggio finale dell'npc.
-  def reply_info(type, target)
+  def reply_info(nick, type, target)
+    # crave
     return "%s: %s" % [bold(@name), "Info su #{target}?"]
+  end
+  
+  # Mette in cache nel database il tipo di richiesta dell'utente con
+  # relativo timestamp e target, in maniera che si possa sapere se
+  # un particolare tipo di richesta e' insistente su un tipo di argomento
+  # da parte di un utente. Ne ottiene il valore attuale di insistenza e
+  # confrontato con le logiche dell'npc decide se rispondere all'utente
+  # o evitare la conversazione o altro.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] type tipo di messaggio.
+  # @param [String] target oggetto di cui l'utente vuole informazioni.
+  # @return [Integer] decisione dell'npc.
+  def crave(nick, type, target)
+    return 0
   end
   
   # Identificativo dell'npc.
@@ -103,5 +121,5 @@ class Npc
     return @name
   end
   
-  private :reply, :reply_info
+  private :reply, :reply_info, :crave
 end
