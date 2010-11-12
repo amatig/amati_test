@@ -69,7 +69,7 @@ class Npc
     when /(da\w?|ha\w?|sa\w?|conosc\w{1,3}|sapete|d\wre|dici|dite)\s(particolari|niente|qualcosa|cose|informazion\w|notizi\w|dettagl\w)\s(su\w{0,3}|d\w{0,4}|riguardo)\s([A-z\ ]+)\?/i
       return reply_info(nick, "quest", $4)
     else
-      if msg =~ /\?/
+      if msg.index("?") != nil
         return reply(nick, "err_qst", @count_eq)
       else
         return reply(nick, "err_aff", @count_ea)
@@ -98,6 +98,7 @@ class Npc
   # @return [String] messaggio finale dell'npc.
   def reply_info(nick, type, target)
     # crave
+    # in caso ottenre info da db
     return "%s: %s" % [bold(@name), "Info su #{target}?"]
   end
   
