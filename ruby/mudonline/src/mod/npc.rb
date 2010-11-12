@@ -63,16 +63,16 @@ class Npc
   def parse(nick, msg)
     case msg
     when /^(ciao|salve)$/i
-      return reply("welcome", @count_wc)
+      return reply(nick, "welcome", @count_wc)
     when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)$/i
-      return reply("goodbye", @count_gb)
+      return reply(nick, "goodbye", @count_gb)
     when /(da\w?|ha\w?|sa\w?|conosc\w{1,3}|sapete|d\wre|dici|dite)\s(particolari|niente|qualcosa|cose|informazion\w|notizi\w|dettagl\w)\s(su\w{0,3}|d\w{0,4}|riguardo)\s([A-z\ ]+)\?/i
-      return reply_info("quest", $4)
+      return reply_info(nick, "quest", $4)
     else
       if msg =~ /\?/
-        return reply("err_qst", @count_eq)
+        return reply(nick, "err_qst", @count_eq)
       else
-        return reply("err_aff", @count_ea)
+        return reply(nick, "err_aff", @count_ea)
       end
     end
   end
