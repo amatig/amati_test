@@ -43,6 +43,17 @@ class Npc
       @dialog[val.name] = val.text
     end
     file.close
+    
+    @count_wc = 0
+    @count_gb = 0
+    @count_eq = 0
+    @count_ea = 0
+    @dialog.keys.each do |k|
+      @count_wc+=1 if k =~ /^welcome/
+      @count_gb+=1 if k =~ /^goodbye/
+      @count_eq+=1 if k =~ /^err_qst/
+      @count_ea+=1 if k =~ /^err_aff/
+    end
   end
   
   # Logica dell'npc, dell'interazione con l'utente.
@@ -52,28 +63,38 @@ class Npc
   def parse(nick, msg)
     case msg
     when /^(ciao|salve)$/i
-      return context("saluto", @dialog["welcome_#{rand 2}"])
+      return reply("welcome", @count_wc)
     when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)$/i
-      return context("saluto", @dialog["goodbye_#{rand 2}"])
-    when /(da\w?|ha\w?|sa\w?|conosc\w{1,3}|sapete|d\wre|dici|dite)\s(particolari|niente|qualcosa|cose|informazion\w|notizi\w|dettagl\w)\s(su\w{0,3}|d\w{0,4}|riguardo)\s([A-z\ ]+)/i
-      return context("richiesta", "Informazioni su #{$4}?")
+      return reply("goodbye", @count_gb)
+    when /(da\w?|ha\w?|sa\w?|conosc\w{1,3}|sapete|d\wre|dici|dite)\s(particolari|niente|qualcosa|cose|informazion\w|notizi\w|dettagl\w)\s(su\w{0,3}|d\w{0,4}|riguardo)\s([A-z\ ]+)\?/i
+      return reply_info("quest", $4)
     else
       if msg =~ /\?/
-        return context("err_domanda", @dialog["dnf_#{rand 2}"])
+        return reply("err_qst", @count_eq)
       else
-        return context("err_affermazione", @dialog["anf_#{rand 2}"])
+        return reply("err_aff", @count_ea)
       end
     end
   end
   
-  # Arricchisce il messaggio dell'npc, simulando un dialogo.
+  # Rende variabile il messaggio dell'npc, simulando un dialogo.
   # I messaggi vengono messi in cache nel database, in caso di insistenza di
-  # un particolare tipo di domanda l'npc risponde a tono.
+  # un particolare tipo di domanda l'npc risponde a tono o non risponde per
+  # alcuni minuti. Tutto sempre in base alle sue regole.
   # @param [String] type tipo di messaggio.
-  # @param [String] msg messaggio grezzo.
+  # @param [Integer] count numero di messaggi dell'npc per quel tipo.
   # @return [String] messaggio finale dell'npc.
-  def context(type, msg)
-    return "%s: %s" % [bold(@name), msg]
+  def reply(type, count)
+    return "%s: %s" % [bold(@name), @dialog["#{type}_#{rand count}"]]
+  end
+  
+  # Ritorna nel informazioni che ha un npc rispetto ad un argomento
+  # richiesto dall'utente.
+  # @param [String] type tipo di messaggio.
+  # @param [String] target oggetto di cui l'utente vuole informazioni.
+  # @return [String] messaggio finale dell'npc.
+  def reply_info(type, target)
+    return "%s: %s" % [bold(@name), "Info su #{target}?"]
   end
   
   # Identificativo dell'npc.
@@ -82,5 +103,5 @@ class Npc
     return @name
   end
   
-  private :context
+  private :reply, :reply_info
 end
