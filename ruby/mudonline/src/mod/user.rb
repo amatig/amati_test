@@ -101,7 +101,7 @@ class User
   # @param [String] nick identificativo dell'utente.
   # @param [Integer] place_id indice del nuovo posto.
   def User.set_place(nick, place_id)
-    Database.instance.update({"place" => Integer(place_id)}, 
+    Database.instance.update({"place_id" => Integer(place_id)}, 
                              "attributes", 
                              "user_nick='#{nick}'")
   end
@@ -110,7 +110,7 @@ class User
   # @param [String] nick identificativo dell'utente.
   # @return [Integer] indice del posto in cui si trova l'utente.
   def User.get_place(nick)
-    data = Database.instance.get("place", "attributes", "user_nick='#{nick}'")
+    data = Database.instance.get("place_id", "attributes", "user_nick='#{nick}'")
     return Integer(data[0])
   end
   

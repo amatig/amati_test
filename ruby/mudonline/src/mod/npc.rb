@@ -1,4 +1,5 @@
 require "rexml/document"
+require "lib/database.rb"
 require "lib/utils.rb"
 
 # Classe per la gestione degli NPC (Non-Player Character).
@@ -32,6 +33,8 @@ class Npc
   
   # Una nuova istanza di Npc.
   def initialize(name)
+    @db = Database.instance # singleton
+    
     file = File.new("data/npcs/#{name}.xml")
     doc = REXML::Document.new(file)
     root = doc.elements["npc"]
@@ -85,7 +88,7 @@ class Npc
   # @param [Integer] count numero di messaggi dell'npc per quel tipo.
   # @return [String] messaggio finale dell'npc.
   def reply(nick, type, count)
-    # crave
+    crave(nick, type)
     return "%s: %s" % [bold(@name), @dialog["#{type}_#{rand count}"]]
   end
   
@@ -97,7 +100,7 @@ class Npc
   # @param [String] target oggetto di cui l'utente vuole informazioni.
   # @return [String] messaggio finale dell'npc.
   def reply_info(nick, type, target)
-    # crave
+    crave(nick, type, target)
     # in caso ottenre info da db
     return "%s: %s" % [bold(@name), "Info su #{target}?"]
   end
@@ -112,7 +115,16 @@ class Npc
   # @param [String] type tipo di messaggio.
   # @param [String] target oggetto di cui l'utente vuole informazioni.
   # @return [Integer] decisione dell'npc.
-  def crave(nick, type, target)
+  def crave(nick, type, target = nil)
+    fdata = {
+      "user_nick" => nick,
+      "npc_name" => @name,
+      "type" => type,
+      "timestamp" => Time.now.to_i
+    }
+    fdata["target"] = target if target
+    @db.insert(fdata, "npc_cache")
+    
     return 0
   end
   

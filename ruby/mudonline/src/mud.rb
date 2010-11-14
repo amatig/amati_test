@@ -42,6 +42,7 @@ class Mud < IRC
     # Callbakcs for the connection.
     IRCEvent.add_callback("endofmotd") do |event| 
       channels.each { |chan| add_channel(chan) }
+      puts "Mud is running..."
     end
     IRCEvent.add_callback("nicknameinuse") do |event| 
       ch_nick("RubyBot")
