@@ -116,7 +116,7 @@ class Npc
   # @param [String] target oggetto di cui l'utente vuole informazioni.
   # @return [Integer] decisione dell'npc.
   def crave(nick, type, target = "")
-    @db.delete("npc_caches")
+    @db.delete("npc_caches", "#{Time.now.to_i}-timestamp>120")
     @db.insert({
                  "user_nick" => nick,
                  "npc_name" => @name,
