@@ -115,17 +115,16 @@ class Npc
   # @param [String] type tipo di messaggio.
   # @param [String] target oggetto di cui l'utente vuole informazioni.
   # @return [Integer] decisione dell'npc.
-  def crave(nick, type, target = nil)
-    #puts @db.get("*", "npc_caches")
-    fdata = {
-      "user_nick" => nick,
-      "npc_name" => @name,
-      "type" => type,
-      "timestamp" => Time.now.to_i
-    }
-    fdata["target"] = target if target
-    @db.insert(fdata, "npc_caches")
-    
+  def crave(nick, type, target = "")
+    @db.delete("npc_caches")
+    @db.insert({
+                 "user_nick" => nick,
+                 "npc_name" => @name,
+                 "type" => type,
+                 "target" => target,
+                 "timestamp" => Time.now.to_i
+               }, 
+               "npc_caches")
     return 0
   end
   

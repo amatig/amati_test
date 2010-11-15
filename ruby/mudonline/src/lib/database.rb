@@ -39,13 +39,17 @@ class Database
   # @param [String] query query SQL standard.
   # @return [Array of Array<String>] lista delle tuple risultanti.
   def exec2(query)
-    puts query
+    # puts query
     result = []
-    res = @conn.exec(query)
-    res.each do |row|
-      result << res.fields.map { |f| row[f].strip }
+    begin
+      res = @conn.exec(query)
+      res.each do |row|
+        result << res.fields.map { |f| row[f].strip }
+      end
+      res.clear
+    rescue Exception => e
+      puts "Database Err: " + e.message
     end
-    res.clear
     return result
   end
   
@@ -88,6 +92,13 @@ class Database
     fields = fdata.keys
     values = fdata.values.map { |v| (v.class == String) ? "'#{v}'" : v }
     @conn.exec "insert into #{table} (#{fields*','}) values (#{values*','})"
+  end
+  
+  # Cancella una selezione di tuple.
+  # @param [String] table identificativo della tabella.
+  # @param [String] conds condizioni di selezione.
+  def delete(table, conds = true)
+    @conn.exec "delete from #{table} where #{conds}"
   end
   
   private :exec2
