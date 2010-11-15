@@ -67,6 +67,12 @@ class Core
     return _("cnf_#{rand 3}")
   end
   
+  # Messaggio di utente non registrato dal mud.
+  # @return [String] messaggio del mud.
+  def user_no_exist()
+    return _(:no_reg)
+  end
+  
   # Test comunicazione in canale.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
@@ -77,7 +83,7 @@ class Core
   # Indica se l'utente e' loggato o no nel sistema, 
   # ritorna false anche nel caso non esiste.
   # @param [String] nick identificativo dell'utente.
-  # @return [Boolean] stato della login utente.
+  # @return [Integer] stato della login utente.
   def logged?(nick)
     return User.logged?(nick)
   end
@@ -94,12 +100,12 @@ class Core
   # @param [String] greeting parola usata dall'utente per salutare.
   # @return [String] messaggio del mud.
   def login(nick, greeting = nil)
-    return _(:r_benv) if greeting == nil
-    if User.login(nick)
+    if greeting == nil
+      return _(:r_benv) 
+    else
+      User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
       return _(:benv) % [greeting, bold(nick), place(nick)]
-    else
-      return _(:no_reg)
     end
   end
   

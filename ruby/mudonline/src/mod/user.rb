@@ -33,10 +33,14 @@ class User
   
   # Stato del login utente.
   # @param [String] nick identificativo dell'utente.
-  # @return [Boolean] stato del login utente.
+  # @return [Integer] stato del login utente.
   def User.logged?(nick)
     data = Database.instance.get("logged", "users", "nick='#{nick}'")
-    return (not data.empty? and data[0] == "1")
+    if data.empty?
+      return -1
+    else
+      return Integer(data[0])
+    end
   end
   
   # Cambia la modalita' di interazione dell'utente.
@@ -65,24 +69,17 @@ class User
     return data[0]
   end
   
-  # Cerca di effettuare il login utente e ritorna l'esito dell'operazione.
+  # Effettua il login utente.
   # @param [String] nick identificativo dell'utente.
-  # @return [Boolean] esito del login utente.  
   def User.login(nick)
-    data = Database.instance.get("logged", "users", "nick='#{nick}'")
-    if not data.empty?
-      Database.instance.update({
-                                 "logged" => 1, 
-                                 "mode" => "move", 
-                                 "target" => "",
-                                 "timestamp" => Time.now.to_i
-                               },
-                               "users", 
-                               "nick='#{nick}'")
-      return true
-    else
-      return false
-    end
+    Database.instance.update({
+                               "logged" => 1, 
+                               "mode" => "move", 
+                               "target" => "",
+                               "timestamp" => Time.now.to_i
+                             },
+                             "users", 
+                             "nick='#{nick}'")
   end
   
   # Effettua il logout utente.

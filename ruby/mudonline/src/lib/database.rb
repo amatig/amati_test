@@ -39,7 +39,7 @@ class Database
   # @param [String] query query SQL standard.
   # @return [Array of Array<String>] lista delle tuple risultanti.
   def exec2(query)
-    # puts query
+    puts query
     result = []
     res = @conn.exec(query)
     res.each do |row|
@@ -64,7 +64,7 @@ class Database
   # @param [String] conds condizioni della selezione.
   # @return [Array<String>] tupla del risultato della selezione.
   def get(fields, tables, conds = "true")
-    temp = read(fields, tables, conds + " LIMIT 1")
+    temp = read(fields, tables, conds + " limit 1")
     return (temp.length > 0) ? temp[0] : temp
   end
   
