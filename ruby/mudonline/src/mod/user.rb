@@ -34,7 +34,7 @@ class User
   # Stato del login utente.
   # @param [String] nick identificativo dell'utente.
   # @return [Integer] stato del login utente.
-  def User.logged?(nick)
+  def User.is_logged?(nick)
     data = Database.instance.get("logged", "users", "nick='#{nick}'")
     if data.empty?
       return -1
@@ -59,6 +59,14 @@ class User
   def User.get_mode(nick)
     data = Database.instance.get("mode", "users", "nick='#{nick}'")
     return data[0]
+  end
+  
+  # Dettagli dell'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Array<Integer, String>] insieme di informazioni sull'utente.
+  def User.get_details(nick)
+    data = Database.instance.get("*", "users", "nick='#{nick}'")
+    return [Integer(data[3]), data[4], Integer(data[2])]
   end
   
   # Target della modalita' di interazione.

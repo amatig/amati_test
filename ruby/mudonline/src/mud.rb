@@ -81,17 +81,17 @@ class Mud < IRC
   # @param [String] nick identificativo dell'utente.
   # @param [String] msg messaggio utente.
   def delivery_priv(nick, msg)
-    # riconoscimento utente
-    case @core.logged?(nick)
+    login, mode, timestamp = @core.get_user_details(nick)
+    case login
     when -1
-      send_message(nick, @core.user_no_exist)
+      send_message(nick, @core.user_not_exist)
     when 0
       greeting = (msg =~ /^(ciao|salve)$/i) ? $1 : nil
       send_message(nick, @core.login(nick, greeting))
     when 1
-      @core.update_timestamp(nick) # segnala attivita' utente
+      @core.update_user_timestamp(nick) # segnala attivita' utente
       # modalita' di interazione
-      case @core.get_user_mode(nick)
+      case mode
       when "move"
         mode_navigation(nick, msg)
       when "dialog"

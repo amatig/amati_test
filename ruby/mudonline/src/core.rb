@@ -61,6 +61,13 @@ class Core
     end
   end
   
+  # Test comunicazione in canale.
+  # @param [String] nick identificativo dell'utente.
+  # @return [String] messaggio del mud.
+  def test(nick)
+    return _(:test) % nick
+  end
+  
   # Messaggio random per un comando sconosciuto.
   # @return [String] messaggio del mud.
   def cmd_not_found()
@@ -69,23 +76,16 @@ class Core
   
   # Messaggio di utente non registrato dal mud.
   # @return [String] messaggio del mud.
-  def user_no_exist()
+  def user_not_exist()
     return _(:no_reg)
   end
-  
-  # Test comunicazione in canale.
-  # @param [String] nick identificativo dell'utente.
-  # @return [String] messaggio del mud.
-  def test(nick)
-    return _(:test) % nick
-  end
-  
+    
   # Indica se l'utente e' loggato o no nel sistema, 
   # ritorna false anche nel caso non esiste.
   # @param [String] nick identificativo dell'utente.
   # @return [Integer] stato della login utente.
-  def logged?(nick)
-    return User.logged?(nick)
+  def user_is_logged?(nick)
+    return User.is_logged?(nick)
   end
   
   # Modalita' di interazione dell'utente.
@@ -93,6 +93,13 @@ class Core
   # @return [String] stato della modalita' di interazione dell'utente.
   def get_user_mode(nick)
     return User.get_mode(nick)
+  end
+  
+  # Dettagli dell'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Array<Integer, String>] insieme di informazioni sull'utente.
+  def get_user_details(nick)
+    return User.get_details(nick)
   end
   
   # Effettua il login di un utente dal sistema.
@@ -115,13 +122,13 @@ class Core
   def logout(nick)
     User.logout(nick)
     @place_list[User.get_place(nick)].remove_people(nick)
-    return _(:logout) % nick
+    return _(:logout) % bold(nick)
   end
   
   # Aggiorna il timestamp dell'utente, che indica il momento dell'ultimo
   # messaggio inviato.
   # @param [String] nick identificativo dell'utente.
-  def update_timestamp(nick)
+  def update_user_timestamp(nick)
     User.update_timestamp(nick)
   end
   
@@ -131,9 +138,10 @@ class Core
   # @return [String] messaggio del mud.
   def move(nick, place_name)
     return _("uaresit_#{rand 2}") unless User.stand_up?(nick)
-    @place_list[User.get_place(nick)].nearby_place.each do |p|
+    old_p = @place_list[User.get_place(nick)]
+    old_p.nearby_place.each do |p|
       if p.name =~ /#{place_name.strip}/i
-        @place_list[User.get_place(nick)].remove_people(nick)
+        old_p.remove_people(nick)
         User.set_place(nick, p.id) # cambio di place_id
         p.add_people(nick)
         temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
