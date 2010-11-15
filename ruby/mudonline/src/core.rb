@@ -215,7 +215,7 @@ class Core
   # Elenca gli npc ed utenti nella zona.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def users_zone(nick)
+  def users_in_zone(nick)
     u = []
     @place_list[User.get_place(nick)].get_people.each do |p|
       unless p.class == Npc

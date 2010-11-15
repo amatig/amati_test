@@ -114,7 +114,7 @@ class Mud < IRC
     when /(andiamo|va\w{0,2})\s(ne|a)\w{0,3}\s([A-z0-9\ ]+)/i
       send_message(nick, @core.move(nick, $3))
     when /chi.+(qu\w|zona|luogo|paraggi)\?/i
-      send_message(nick, @core.users_zone(nick))
+      send_message(nick, @core.users_in_zone(nick))
     when /(esamin\w|guard\w|osserv\w|scrut\w|analizz\w)\s([A-z0-9\ ]+)/i
       send_message(nick, @core.look(nick, $2))
     when /(parl\w|dialog\w)\s(a|con)\s([A-z0-9\ ]+)/i
