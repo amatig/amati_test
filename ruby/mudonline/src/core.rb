@@ -25,7 +25,7 @@ require "mod/place.rb"
 class Core
   include Utils
   include GetText
-    
+  
   # Una nuova istanza di Core.
   def initialize()
     @db = Database.instance # singleton
@@ -79,21 +79,6 @@ class Core
   def user_not_exist()
     return _(:no_reg)
   end
-    
-  # Indica se l'utente e' loggato o no nel sistema, 
-  # ritorna false anche nel caso non esiste.
-  # @param [String] nick identificativo dell'utente.
-  # @return [Integer] stato della login utente.
-  def user_is_logged?(nick)
-    return User.is_logged?(nick)
-  end
-  
-  # Modalita' di interazione dell'utente.
-  # @param [String] nick identificativo dell'utente.
-  # @return [String] stato della modalita' di interazione dell'utente.
-  def get_user_mode(nick)
-    return User.get_mode(nick)
-  end
   
   # Dettagli dell'utente.
   # @param [String] nick identificativo dell'utente.
@@ -137,18 +122,21 @@ class Core
   # @param [String] place_name nome del luogo in cui ci si vuole spostare.
   # @return [String] messaggio del mud.
   def move(nick, place_name)
-    return _("uaresit_#{rand 2}") unless User.stand_up?(nick)
-    old_p = @place_list[User.get_place(nick)]
-    old_p.nearby_place.each do |p|
-      if p.name =~ /#{place_name.strip}/i
-        old_p.remove_people(nick)
-        User.set_place(nick, p.id) # cambio di place_id
-        p.add_people(nick)
-        temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
-        return _(:new_pl) % [temp, p.descr]
+    unless User.stand_up?(nick)
+      return _("uaresit_#{rand 2}")
+    else
+      old_p = @place_list[User.get_place(nick)]
+      old_p.nearby_place.each do |p|
+        if p.name =~ /#{place_name.strip}/i
+          old_p.remove_people(nick)
+          User.set_place(nick, p.id) # cambio di place_id
+          p.add_people(nick)
+          temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
+          return _(:new_pl) % [temp, p.descr]
+        end
       end
+      return _(:no_pl) % place_name
     end
-    return _(:no_pl) % place_name
   end
   
   # Descrizione del posto in cui e' l'utente.
@@ -200,32 +188,6 @@ class Core
     return _(:nothing) % name
   end
   
-  # Entra in modalita' interazione 'dialogo' con un npc.
-  # @param [String] nick identificativo dell'utente.
-  # @param [String] name identificativo dell'npc.
-  # @return [String] messaggio dell'npc o del mud.
-  def speak(nick, name)
-    @place_list[User.get_place(nick)].get_people.each do |p|
-      if (p.class == Npc and p.name =~ /^#{name.strip}$/i)
-        User.set_mode(nick, "dialog", p.name)
-        return npc_interaction(nick, "ciao")
-      end
-    end
-    return _(:nothing_npc) % name
-  end
-  
-  # Demanda all'npc l'interazione vera e propria con l'utente.
-  # @param [String] nick identificativo dell'utente.
-  # @param [String] msg messaggio utente.
-  # @return [String] messaggio npc.
-  def npc_interaction(nick, msg)
-    temp = @npc_list[User.get_target(nick)].parse(nick, msg)
-    if temp =~ /(arrivederci|addio|a presto|alla prossima)/i
-      User.set_mode(nick, "move", "")
-    end
-    return temp
-  end
-  
   # Elenca gli npc ed utenti nella zona.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
@@ -245,6 +207,30 @@ class Core
       c = _((u.length > 1) ? :ci_sono : :c_e)
     end
     return _(:uz) % [c, conc(u)]
+  end
+  
+  # Entra in modalita' interazione 'dialogo' con un npc.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] name identificativo dell'npc.
+  # @return [String] messaggio dell'npc o del mud.
+  def speak(nick, name)
+    npc = @npc_list[name.strip.capitalize]
+    if npc and npc.place == User.get_place(nick)
+      User.set_mode(nick, "dialog", npc.name)
+      return npc_interaction(nick, "ciao")
+    else
+      return _(:nothing_npc) % name
+    end
+  end
+  
+  # Demanda all'npc l'interazione vera e propria con l'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] msg messaggio utente.
+  # @return [String] messaggio npc.
+  def npc_interaction(nick, msg)
+    r = @npc_list[User.get_target(nick)].parse(nick, msg)
+    User.set_mode(nick, "move", "") if r[0] == 0 # goodbye
+    return r[1]
   end
   
   private :init_data

@@ -42,41 +42,7 @@ class User
       return Integer(data[0])
     end
   end
-  
-  # Cambia la modalita' di interazione dell'utente.
-  # @param [String] nick identificativo dell'utente.
-  # @param [String] mode modalita' di interazione dell'utente.
-  # @param [String] target riferimento dell'interazione.
-  def User.set_mode(nick, mode, target)
-    Database.instance.update({"mode" => mode, "target" => target}, 
-                             "users", 
-                             "nick='#{nick}'")
-  end
-  
-  # Modalita' di interazione dell'utente.
-  # @param [String] nick identificativo dell'utente.
-  # @return [String] stato della modalita' di interazione dell'utente.
-  def User.get_mode(nick)
-    data = Database.instance.get("mode", "users", "nick='#{nick}'")
-    return data[0]
-  end
-  
-  # Dettagli dell'utente.
-  # @param [String] nick identificativo dell'utente.
-  # @return [Array<Integer, String>] insieme di informazioni sull'utente.
-  def User.get_details(nick)
-    data = Database.instance.get("*", "users", "nick='#{nick}'")
-    return [Integer(data[3]), data[4], Integer(data[2])]
-  end
-  
-  # Target della modalita' di interazione.
-  # @param [String] nick identificativo dell'utente.
-  # @return [String] riferimento della modalita' di interazione.
-  def User.get_target(nick)
-    data = Database.instance.get("target", "users", "nick='#{nick}'")
-    return data[0]
-  end
-  
+    
   # Effettua il login utente.
   # @param [String] nick identificativo dell'utente.
   def User.login(nick)
@@ -102,21 +68,30 @@ class User
                              "nick='#{nick}'")
   end
   
-  # Modifica l'indice del posto in cui si trova l'utente.
+  # Cambia la modalita' di interazione dell'utente.
   # @param [String] nick identificativo dell'utente.
-  # @param [Integer] place_id indice del nuovo posto.
-  def User.set_place(nick, place_id)
-    Database.instance.update({"place_id" => Integer(place_id)}, 
-                             "attributes", 
-                             "user_nick='#{nick}'")
+  # @param [String] mode modalita' di interazione dell'utente.
+  # @param [String] target riferimento dell'interazione.
+  def User.set_mode(nick, mode, target)
+    Database.instance.update({"mode" => mode, "target" => target}, 
+                             "users", 
+                             "nick='#{nick}'")
   end
   
-  # Indice del posto in cui si trova l'utente.
+  # Modalita' di interazione dell'utente.
   # @param [String] nick identificativo dell'utente.
-  # @return [Integer] indice del posto in cui si trova l'utente.
-  def User.get_place(nick)
-    data = Database.instance.get("place_id", "attributes", "user_nick='#{nick}'")
-    return Integer(data[0])
+  # @return [String] stato della modalita' di interazione dell'utente.
+  def User.get_mode(nick)
+    data = Database.instance.get("mode", "users", "nick='#{nick}'")
+    return data[0]
+  end
+    
+  # Target della modalita' di interazione.
+  # @param [String] nick identificativo dell'utente.
+  # @return [String] riferimento della modalita' di interazione.
+  def User.get_target(nick)
+    data = Database.instance.get("target", "users", "nick='#{nick}'")
+    return data[0]
   end
   
   # Aggiorna il timestamp dell'utente, questa variabile tiene traccia
@@ -134,6 +109,31 @@ class User
   # @return [Integer] timestamp dell'ultimo messaggio inviato dall'utente.
   def User.get_timestamp(nick)
     data = Database.instance.get("timestamp", "users", "nick='#{nick}'")
+    return Integer(data[0])
+  end
+  
+  # Dettagli dell'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Array<Integer, String>] insieme di informazioni sull'utente.
+  def User.get_details(nick)
+    data = Database.instance.get("*", "users", "nick='#{nick}'")
+    return [Integer(data[3]), data[4], Integer(data[2])]
+  end
+  
+  # Modifica l'indice del posto in cui si trova l'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @param [Integer] place_id indice del nuovo posto.
+  def User.set_place(nick, place_id)
+    Database.instance.update({"place_id" => Integer(place_id)}, 
+                             "attributes", 
+                             "user_nick='#{nick}'")
+  end
+  
+  # Indice del posto in cui si trova l'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Integer] indice del posto in cui si trova l'utente.
+  def User.get_place(nick)
+    data = Database.instance.get("place_id", "attributes", "user_nick='#{nick}'")
     return Integer(data[0])
   end
   
@@ -182,5 +182,5 @@ class User
                                  "user_nick='#{nick}'")
     return (data[0] == "1")
   end
-  
+    
 end

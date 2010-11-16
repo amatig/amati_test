@@ -62,7 +62,7 @@ class Npc
   # Logica dell'npc, dell'interazione con l'utente.
   # @param [String] nick identificativo dell'utente.
   # @param [String] msg messaggio utente.
-  # @return [String] messaggio npc.
+  # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def parse(nick, msg)
     case msg
     when /^(ciao|salve)$/i
@@ -86,10 +86,11 @@ class Npc
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @param [Integer] count numero di messaggi dell'npc per quel tipo.
-  # @return [String] messaggio finale dell'npc.
+  # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply(nick, type, count)
+    r = (type == "goodbye") ? 0 : 1
     crave(nick, type)
-    return "%s: %s" % [bold(@name), @dialog["#{type}_#{rand count}"]]
+    return [r, bold(@name) + ": "+ @dialog["#{type}_#{rand count}"]]
   end
   
   # Ritorna nel informazioni che ha un npc rispetto ad un argomento
@@ -98,11 +99,11 @@ class Npc
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @param [String] target oggetto di cui l'utente vuole informazioni.
-  # @return [String] messaggio finale dell'npc.
+  # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply_info(nick, type, target)
     crave(nick, type, target)
     # in caso ottenre info da db
-    return "%s: %s" % [bold(@name), "Info su #{target}?"]
+    return [2, bold(@name) + ": "+ "Info su #{target}?"]
   end
   
   # Mette in cache nel database il tipo di richiesta dell'utente con
