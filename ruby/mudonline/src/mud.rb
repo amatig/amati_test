@@ -134,7 +134,7 @@ class Mud < IRC
   # @param [String] nick identificativo dell'utente.
   # @param [String] msg messaggio utente.
   def mode_dialog(nick, msg)
-    send_message(nick, @core.npc_interaction(nick, msg))
+    send_message(nick, @core.dispatch_to_npc(nick, msg))
   end
   
   private :delivery_priv, :delivery_chan, :mode_navigation, :mode_dialog

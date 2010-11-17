@@ -93,7 +93,7 @@ class Core
   # @return [String] messaggio del mud.
   def login(nick, greeting = nil)
     if greeting == nil
-      return _(:r_benv) 
+      return _(:r_benv)
     else
       User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
@@ -217,7 +217,7 @@ class Core
     npc = @npc_list[name.strip.capitalize]
     if npc and npc.place == User.get_place(nick)
       User.set_mode(nick, "dialog", npc.name)
-      return npc_interaction(nick, "ciao")
+      return dispatch_to_npc(nick, "ciao")
     else
       return _(:nothing_npc) % name
     end
@@ -227,9 +227,9 @@ class Core
   # @param [String] nick identificativo dell'utente.
   # @param [String] msg messaggio utente.
   # @return [String] messaggio npc.
-  def npc_interaction(nick, msg)
+  def dispatch_to_npc(nick, msg)
     r = @npc_list[User.get_target(nick)].parse(nick, msg)
-    User.set_mode(nick, "move", "") if r[0] == 0 # goodbye
+    User.set_mode(nick, "move", "") if r[0] == 0 # goodbye?
     return r[1]
   end
   
