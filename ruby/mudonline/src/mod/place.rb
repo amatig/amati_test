@@ -79,7 +79,7 @@ class Place
   
   # Lista di tutti le persone presenti nel posto, sia utenti che npc.
   # @return [Array<Npc, String>] lista degli utenti e instanze di Npc.
-  def get_people()
+  def get_peoples()
     @mutex.synchronize { return @people_here }
   end
   

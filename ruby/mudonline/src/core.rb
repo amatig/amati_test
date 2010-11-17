@@ -176,7 +176,7 @@ class Core
   # @param [String] name nome dell'utente/npc/oggetto da esaminare.
   # @return [String] messaggio del mud.
   def look(nick, name)
-    @place_list[User.get_place(nick)].get_people.each do |p|
+    @place_list[User.get_place(nick)].get_peoples.each do |p|
       if p.class == Npc
         return _(:desc_npc) % [p.name, p.descr] if p.name =~ /^#{name.strip}$/i
       else
@@ -193,7 +193,7 @@ class Core
   # @return [String] messaggio del mud.
   def users_in_zone(nick)
     u = []
-    @place_list[User.get_place(nick)].get_people.each do |p|
+    @place_list[User.get_place(nick)].get_peoples.each do |p|
       unless p.class == Npc
         u << bold(p) if (p != nick)
       else
