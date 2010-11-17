@@ -112,7 +112,7 @@ class Mud < IRC
     when /dove.+(sono|siamo|finit\w|trov\w{1,4})\?/i
       send_message(nick, @core.cmd_place(nick))
     when /dove.+(recar\w{1,2}|andar\w{1,4}|procedere|diriger\w{1,2})\?/i
-      send_message(nick, @core.cmd_nearby_place(nick))
+      send_message(nick, @core.cmd_nearby_places(nick))
     when /(andiamo|va\w{0,2})\s(ne|a)\w{0,3}\s([A-z0-9\ ]+)/i
       send_message(nick, @core.cmd_move(nick, $3))
     when /chi.+(qu\w|zona|luogo|paraggi)\?/i

@@ -49,7 +49,7 @@ class Core
                          "links,places", 
                          "place_id=#{p[0]} and places.id=nearby_place_id")
       temp = list_np.map { |near| @place_list[Integer(near[0])] }
-      @place_list[Integer(p[0])].init_nearby_place(temp)
+      @place_list[Integer(p[0])].init_nearby_places(temp)
     end
     
     @npc_list = {}
@@ -126,7 +126,7 @@ class Core
       return _("uaresit_#{rand 2}")
     else
       old_p = @place_list[User.get_place(nick)]
-      old_p.nearby_place.each do |p|
+      old_p.nearby_places.each do |p|
         if p.name =~ /#{place_name.strip}/i
           old_p.remove_people(nick)
           User.set_place(nick, p.id) # cambio di place_id
@@ -151,8 +151,8 @@ class Core
   # Elenca i posti vicini in cui si puo andare.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def cmd_nearby_place(nick)
-    l = @place_list[User.get_place(nick)].nearby_place
+  def cmd_nearby_places(nick)
+    l = @place_list[User.get_place(nick)].nearby_places
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
     return _(:np) % conc(temp)
   end
