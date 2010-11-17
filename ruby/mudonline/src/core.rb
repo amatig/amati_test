@@ -64,7 +64,7 @@ class Core
   # Test comunicazione in canale.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def test(nick)
+  def info(nick)
     return _(:test) % nick
   end
   
@@ -80,13 +80,6 @@ class Core
     return _(:no_reg)
   end
   
-  # Dettagli dell'utente.
-  # @param [String] nick identificativo dell'utente.
-  # @return [Array<Integer, String>] insieme di informazioni sull'utente.
-  def get_user_details(nick)
-    return User.get_details(nick)
-  end
-  
   # Effettua il login di un utente dal sistema.
   # @param [String] nick identificativo dell'utente.
   # @param [String] greeting parola usata dall'utente per salutare.
@@ -97,7 +90,7 @@ class Core
     else
       User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
-      return _(:benv) % [greeting, bold(nick), place(nick)]
+      return _(:benv) % [greeting, bold(nick), cmd_place(nick)]
     end
   end
   
@@ -117,11 +110,18 @@ class Core
     User.update_timestamp(nick)
   end
   
+  # Dettagli dell'utente.
+  # @param [String] nick identificativo dell'utente.
+  # @return [Array<Integer, String>] insieme di informazioni sull'utente.
+  def get_user_details(nick)
+    return User.get_details(nick)
+  end
+  
   # Muove l'utente in un posto vicino (collegato) a quello attuale.
   # @param [String] nick identificativo dell'utente.
   # @param [String] place_name nome del luogo in cui ci si vuole spostare.
   # @return [String] messaggio del mud.
-  def move(nick, place_name)
+  def cmd_move(nick, place_name)
     unless User.stand_up?(nick)
       return _("uaresit_#{rand 2}")
     else
@@ -142,7 +142,7 @@ class Core
   # Descrizione del posto in cui e' l'utente.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def place(nick)
+  def cmd_place(nick)
     p = @place_list[User.get_place(nick)]
     temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
     return _(:pl) % [temp, p.descr]
@@ -151,7 +151,7 @@ class Core
   # Elenca i posti vicini in cui si puo andare.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def nearby_place(nick)
+  def cmd_nearby_place(nick)
     l = @place_list[User.get_place(nick)].nearby_place
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
     return _(:np) % conc(temp)
@@ -160,22 +160,22 @@ class Core
   # Fa alzare l'utente.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def up(nick)
-    return _("up_#{User.up(nick)}")
+  def cmd_up(nick)
+    return _("up_#{User.set_up(nick)}")
   end
   
   # Fa abbassare l'utente.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def down(nick)
-    return _("down_#{User.down(nick)}")
+  def cmd_down(nick)
+    return _("down_#{User.set_down(nick)}")
   end
   
   # Descrizione di un npc, oggetto o altro.
   # @param [String] nick identificativo dell'utente.
   # @param [String] name nome dell'utente/npc/oggetto da esaminare.
   # @return [String] messaggio del mud.
-  def look(nick, name)
+  def cmd_look(nick, name)
     @place_list[User.get_place(nick)].get_peoples.each do |p|
       if p.class == Npc
         return _(:desc_npc) % [p.name, p.descr] if p.name =~ /^#{name.strip}$/i
@@ -191,7 +191,7 @@ class Core
   # Elenca gli npc ed utenti nella zona.
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
-  def users_in_zone(nick)
+  def cmd_users_in_zone(nick)
     u = []
     @place_list[User.get_place(nick)].get_peoples.each do |p|
       unless p.class == Npc
@@ -213,7 +213,7 @@ class Core
   # @param [String] nick identificativo dell'utente.
   # @param [String] name identificativo dell'npc.
   # @return [String] messaggio dell'npc o del mud.
-  def speak(nick, name)
+  def cmd_speak(nick, name)
     npc = @npc_list[name.strip.capitalize]
     if npc and npc.place == User.get_place(nick)
       User.set_mode(nick, "dialog", npc.name)

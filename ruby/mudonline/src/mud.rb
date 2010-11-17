@@ -74,7 +74,7 @@ class Mud < IRC
   # @param [String] nick identificativo dell'utente.
   # @param [String] msg messaggio utente.
   def delivery_chan(channel, nick, msg)
-    send_message(channel, @core.test(nick))
+    send_message(channel, @core.info(nick))
   end
   
   # Gestisce i messaggi privati.
@@ -106,23 +106,23 @@ class Mud < IRC
   def mode_navigation(nick, msg)
     case msg
     when /mi\s(alzo|sveglio)/i
-      send_message(nick, @core.up(nick))
+      send_message(nick, @core.cmd_up(nick))
     when /mi\s(siedo|addormento|sdraio|riposo|stendo|distendo)/i
-      send_message(nick, @core.down(nick))
+      send_message(nick, @core.cmd_down(nick))
     when /dove.+(sono|siamo|finit\w|trov\w{1,4})\?/i
-      send_message(nick, @core.place(nick))
+      send_message(nick, @core.cmd_place(nick))
     when /dove.+(recar\w{1,2}|andar\w{1,4}|procedere|diriger\w{1,2})\?/i
-      send_message(nick, @core.nearby_place(nick))
+      send_message(nick, @core.cmd_nearby_place(nick))
     when /(andiamo|va\w{0,2})\s(ne|a)\w{0,3}\s([A-z0-9\ ]+)/i
-      send_message(nick, @core.move(nick, $3))
+      send_message(nick, @core.cmd_move(nick, $3))
     when /chi.+(qu\w|zona|luogo|paraggi)\?/i
-      send_message(nick, @core.users_in_zone(nick))
+      send_message(nick, @core.cmd_users_in_zone(nick))
     when /(esamin\w|guard\w|osserv\w|scrut\w|analizz\w)\s([A-z0-9\ ]+)/i
-      send_message(nick, @core.look(nick, $2))
+      send_message(nick, @core.cmd_look(nick, $2))
     when /(parl\w|dialog\w)\s(a|con)\s([A-z0-9\ ]+)/i
-      send_message(nick, @core.speak(nick, $3))
+      send_message(nick, @core.cmd_speak(nick, $3))
     when /(ciao|salve)\s([A-z0-9\ ]+)/i
-      send_message(nick, @core.speak(nick, $2))
+      send_message(nick, @core.cmd_speak(nick, $2))
     when /^(fine|stop|esci|exit|quit|basta)$/i
       send_message(nick, @core.logout(nick))
     else

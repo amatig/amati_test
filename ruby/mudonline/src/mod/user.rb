@@ -141,7 +141,7 @@ class User
   # ritorna true, se era gia' 'in piedi' ritorna false.
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] esito dell'operazione.
-  def User.up(nick)
+  def User.set_up(nick)
     data = Database.instance.get("stand_up", 
                                  "attributes", 
                                  "user_nick='#{nick}'")
@@ -159,7 +159,7 @@ class User
   # ritorna true, se era gia' 'per terra' ritorna false.
   # @param [String] nick identificativo dell'utente.
   # @return [Boolean] esito dell'operazione.
-  def User.down(nick)
+  def User.set_down(nick)
     data = Database.instance.get("stand_up", 
                                  "attributes", 
                                  "user_nick='#{nick}'")
