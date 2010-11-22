@@ -52,8 +52,8 @@ class Npc
   # @param [String] msg messaggio utente.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def parse(nick, msg)
-    regex =  "(da\\w?|ha\\w?|sa\\w?|conosc\\w{1,3}|sapete|d\\wre|dici|dite)\\s"
-    regex += "(particolari|niente|qualcosa|cose|info\\w*|notizi\\w|dettagl\\w)\\s"
+    regex =  "(da\\w?|ha\\w?|sa\\w?|conosc\\w{1,3}|sapete|d\\w[rct]\\w{1,2}|qualche|alcun\\w)\\s"
+    regex += "(particolar\\w|niente|qualcosa|info\\w*|notizi\\w|dettagl\\w{1,2})\\s"
     regex += "(su\\w{0,3}|d\\w{0,4}|riguardo)\\s([A-z\\ ]+)\\?"
     
     case msg
