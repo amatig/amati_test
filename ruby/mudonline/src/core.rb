@@ -37,7 +37,7 @@ class Core
   
   # Inizializza tutti gli elementi del gioco.
   def init_data()
-    # caricamento dei messaggi nella variabili di classe
+    # caricamento dei messaggi nella variabili di instanza
     localization("data/mud.xml", "mud")
     
     User.reset_login
@@ -87,11 +87,11 @@ class Core
   # @return [String] messaggio del mud.
   def login(nick, greeting = nil)
     if greeting == nil
-      return _("r_benv")
+      return _("r_welcome")
     else
       User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
-      return _("benv") % [greeting, bold(nick), cmd_place(nick)]
+      return _("welcome") % [greeting, bold(nick), cmd_place(nick)]
     end
   end
   
@@ -133,10 +133,10 @@ class Core
           User.set_place(nick, p.id) # cambio di place_id
           p.add_people(nick)
           temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
-          return _("new_pl") % [temp, p.descr]
+          return _("new_place") % [temp, p.descr]
         end
       end
-      return _("no_pl") % place_name
+      return _("no_place") % place_name
     end
   end
   
@@ -146,7 +146,7 @@ class Core
   def cmd_place(nick)
     p = @place_list[User.get_place(nick)]
     temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
-    return _("pl") % [temp, p.descr]
+    return _("place") % [temp, p.descr]
   end
   
   # Elenca i posti vicini in cui si puo andare.
@@ -155,7 +155,7 @@ class Core
   def cmd_nearby_places(nick)
     l = @place_list[User.get_place(nick)].nearby_places
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
-    return _("np") % conc(temp)
+    return _("near_places") % conc(temp)
   end
   
   # Fa alzare l'utente.
@@ -207,7 +207,7 @@ class Core
     else
       c = _((u.length > 1) ? "ci_sono" : "c_e")
     end
-    return _("uz") % [c, conc(u)]
+    return _("users_zone") % [c, conc(u)]
   end
   
   # Entra in modalita' interazione 'dialogo' con un npc.
