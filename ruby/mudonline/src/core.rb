@@ -1,7 +1,6 @@
 require "thread"
 require "lib/database.rb"
 require "lib/utils.rb"
-require "locate/messages_it.rb"
 require "mod/user.rb"
 require "mod/npc.rb"
 require "mod/place.rb"
@@ -24,7 +23,6 @@ require "mod/place.rb"
 
 class Core
   include Utils
-  include GetText
   
   # Una nuova istanza di Core.
   def initialize()
@@ -39,6 +37,9 @@ class Core
   
   # Inizializza tutti gli elementi del gioco.
   def init_data()
+    # caricamento dei messaggi nella variabili di classe
+    localization("data/mud.xml", "mud")
+    
     User.reset_login
     
     @place_list = {}
@@ -65,19 +66,19 @@ class Core
   # @param [String] nick identificativo dell'utente.
   # @return [String] messaggio del mud.
   def info(nick)
-    return _(:test) % nick
+    return _("test") % nick
   end
   
   # Messaggio random per un comando sconosciuto.
   # @return [String] messaggio del mud.
   def cmd_not_found()
-    return _("cnf_#{rand 3}")
+    return _("cnf")
   end
   
   # Messaggio di utente non registrato dal mud.
   # @return [String] messaggio del mud.
   def user_not_exist()
-    return _(:no_reg)
+    return _("no_reg")
   end
   
   # Effettua il login di un utente dal sistema.
@@ -86,11 +87,11 @@ class Core
   # @return [String] messaggio del mud.
   def login(nick, greeting = nil)
     if greeting == nil
-      return _(:r_benv)
+      return _("r_benv")
     else
       User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
-      return _(:benv) % [greeting, bold(nick), cmd_place(nick)]
+      return _("benv") % [greeting, bold(nick), cmd_place(nick)]
     end
   end
   
@@ -100,7 +101,7 @@ class Core
   def logout(nick)
     User.logout(nick)
     @place_list[User.get_place(nick)].remove_people(nick)
-    return _(:logout) % bold(nick)
+    return _("logout") % bold(nick)
   end
   
   # Aggiorna il timestamp dell'utente, che indica il momento dell'ultimo
@@ -123,7 +124,7 @@ class Core
   # @return [String] messaggio del mud.
   def cmd_move(nick, place_name)
     unless User.stand_up?(nick)
-      return _("uaresit_#{rand 2}")
+      return _("uaresit")
     else
       old_p = @place_list[User.get_place(nick)]
       old_p.nearby_places.each do |p|
@@ -132,10 +133,10 @@ class Core
           User.set_place(nick, p.id) # cambio di place_id
           p.add_people(nick)
           temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
-          return _(:new_pl) % [temp, p.descr]
+          return _("new_pl") % [temp, p.descr]
         end
       end
-      return _(:no_pl) % place_name
+      return _("no_pl") % place_name
     end
   end
   
@@ -145,7 +146,7 @@ class Core
   def cmd_place(nick)
     p = @place_list[User.get_place(nick)]
     temp = pa_in(a_d(p.attrs, p.name)) + bold(p.name)
-    return _(:pl) % [temp, p.descr]
+    return _("pl") % [temp, p.descr]
   end
   
   # Elenca i posti vicini in cui si puo andare.
@@ -154,7 +155,7 @@ class Core
   def cmd_nearby_places(nick)
     l = @place_list[User.get_place(nick)].nearby_places
     temp = l.map { |p| pa_di(a_d(p.attrs, p.name)) + bold(p.name) }
-    return _(:np) % conc(temp)
+    return _("np") % conc(temp)
   end
   
   # Fa alzare l'utente.
@@ -178,14 +179,14 @@ class Core
   def cmd_look(nick, name)
     @place_list[User.get_place(nick)].get_peoples.each do |p|
       if p.class == Npc
-        return _(:desc_npc) % [p.name, p.descr] if p.name =~ /^#{name.strip}$/i
+        return _("desc_npc") % [p.name, p.descr] if p.name =~ /^#{name.strip}$/i
       else
-        return _(:desc_people) if p =~ /^#{name.strip}$/i
+        return _("desc_people") if p =~ /^#{name.strip}$/i
       end
     end
     # se nn e' un npc controlla gli oggetti con quel nome ecc
     # da fare ...
-    return _(:nothing) % name
+    return _("nothing") % name
   end
   
   # Elenca gli npc ed utenti nella zona.
@@ -201,12 +202,12 @@ class Core
       end
     end
     if u.empty?
-      c = _(:nobody) + ","
-      u = [_(:onlyu)]
+      c = _("nobody") + ","
+      u = [_("onlyu")]
     else
-      c = _((u.length > 1) ? :ci_sono : :c_e)
+      c = _((u.length > 1) ? "ci_sono" : "c_e")
     end
-    return _(:uz) % [c, conc(u)]
+    return _("uz") % [c, conc(u)]
   end
   
   # Entra in modalita' interazione 'dialogo' con un npc.
@@ -219,7 +220,7 @@ class Core
       User.set_mode(nick, "dialog", npc.name)
       return dispatch_to_npc(nick, "ciao")
     else
-      return _(:nothing_npc) % name
+      return _("nothing_npc") % name
     end
   end
   

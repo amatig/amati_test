@@ -16,6 +16,44 @@
 
 module Utils
   
+  # Carica i messaggi di una entita' in base alla lingua desiderata.
+  # La funzione inizializza delle variabili di istanza all'interno dell'entita'
+  # che include questo modulo.
+  # @param [String] filename percorso completo del file xml dell'entita'.
+  # @param [String] context nodo principale dell'entita'.
+  # @param [String] lang lingua desiderata.
+  def localization(filename, context, lang = "italian")
+    file = File.new(filename)
+    doc = REXML::Document.new(file)
+    root = doc.elements[context]
+    
+    @_msgs = {}
+    @_counts = {}
+    root.elements["lang"].elements[lang].each_element do |val|
+      if val.name =~ /^(\w+)\_\d+$/
+        @_msgs[val.name] = val.text
+        @_counts[$1] = 0
+      end
+    end
+    file.close
+    
+    @_msgs.keys.each do |k|
+      @_counts[$1] += 1 if k =~ /^(\w+)\_\d+$/
+    end
+  end
+  
+  # Messaggio rappresentate una risposta o affermazione del bot.
+  # Usa attributi di instanza che devono essere al momento dell'utilizzo, 
+  # queste variabili vengono inizializzate con la funzione localization.
+  # @see Utils#localization
+  # @param [String, Symbol] label etichetta' che identifica il messaggio.
+  # @return [String] messaggio per l'utente.
+  def _(label)
+    label = label.to_s
+    c = (@_counts[label] > 1) ? rand(@_counts[label]) : 0
+    return @_msgs["#{label}_#{c}"]
+  end
+  
   # Concatena tramite virgole gli elemeneti di un array.
   # L'ultimo elemento viene concatenato per 'e'.
   # @example

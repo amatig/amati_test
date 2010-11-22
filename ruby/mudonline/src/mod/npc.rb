@@ -41,22 +41,10 @@ class Npc
     @name = name.capitalize
     @descr = root.elements["descr"].text
     @place = Integer(root.elements["place"].text)
-    @dialog = {}
-    root.elements["dialog"].each_element do |val|
-      @dialog[val.name] = val.text
-    end
     file.close
     
-    @count_wc = 0
-    @count_gb = 0
-    @count_eq = 0
-    @count_ea = 0
-    @dialog.keys.each do |k|
-      @count_wc+=1 if k =~ /^welcome/
-      @count_gb+=1 if k =~ /^goodbye/
-      @count_eq+=1 if k =~ /^err_qst/
-      @count_ea+=1 if k =~ /^err_aff/
-    end
+    # caricamento dei messaggi nella variabili di classe
+    localization("data/npcs/#{name}.xml", "npc")
   end
   
   # Logica dell'npc, dell'interazione con l'utente.
@@ -90,7 +78,7 @@ class Npc
   def reply(nick, type, count)
     r = (type == "goodbye") ? 0 : 1
     crave(nick, type)
-    return [r, bold(@name) + ": "+ @dialog["#{type}_#{rand count}"]]
+    return [r, bold(@name) + ": " + _(type)]
   end
   
   # Ritorna nel informazioni che ha un npc rispetto ad un argomento

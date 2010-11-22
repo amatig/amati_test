@@ -2,14 +2,16 @@
 <npc>
   <descr>e' un vecchio uomo barbuto e rugoso</descr>
   <place>1</place>
-  <dialog>
-    <welcome_0>Saaaalve stranieto...</welcome_0>
-    <welcome_1>Ooohh una faccia nuova da queste parti, salve!</welcome_1>
-    <goodbye_0>Alla prossima amico</goodbye_0>
-    <goodbye_1>Spero di rivederti, a presto!</goodbye_1>
-    <err_qst_0>Di questo non so nulla, mi spiace</err_qst_0>
-    <err_qst_1>Non ti so dare una risposta</err_qst_1>
-    <err_aff_0>Come???</err_aff_0>
-    <err_aff_1>Domadami qualcosa, forse posso aiutarti...</err_aff_1>
-  </dialog>
+  <lang>
+    <italian>
+      <welcome_0>Saaaalve stranieto...</welcome_0>
+      <welcome_1>Ooohh una faccia nuova da queste parti, salve!</welcome_1>
+      <goodbye_0>Alla prossima amico</goodbye_0>
+      <goodbye_1>Spero di rivederti, a presto!</goodbye_1>
+      <err_qst_0>Di questo non so nulla, mi spiace</err_qst_0>
+      <err_qst_1>Non ti so dare una risposta</err_qst_1>
+      <err_aff_0>Come???</err_aff_0>
+      <err_aff_1>Domadami qualcosa, forse posso aiutarti...</err_aff_1>
+    </italian>
+  </lang>
 </npc>
