@@ -42,12 +42,12 @@ module Utils
     end
   end
   
-  # Messaggio rappresentate una risposta o affermazione del bot.
+  # Ritorna un messaggio rappresentate una risposta o affermazione del bot.
   # Usa attributi di instanza che devono essere al momento dell'utilizzo, 
   # queste variabili vengono inizializzate con la funzione localization.
   # @see Utils#localization
   # @param [String, Symbol] label etichetta' che identifica il messaggio.
-  # @return [String] messaggio per l'utente.
+  # @return [String] messaggio del mud per l'utente.
   def _(label)
     label = label.to_s
     c = (@_counts[label] > 1) ? rand(@_counts[label]) : 0
