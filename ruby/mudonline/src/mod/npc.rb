@@ -52,18 +52,22 @@ class Npc
   # @param [String] msg messaggio utente.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def parse(nick, msg)
+    regex =  "(da\\w?|ha\\w?|sa\\w?|conosc\\w{1,3}|sapete|d\\wre|dici|dite)\\s"
+    regex += "(particolari|niente|qualcosa|cose|info\\w*|notizi\\w|dettagl\\w)\\s"
+    regex += "(su\\w{0,3}|d\\w{0,4}|riguardo)\\s([A-z\\ ]+)\\?"
+    
     case msg
     when /^(ciao|salve)$/i
-      return reply(nick, "welcome", @count_wc)
+      return reply(nick, "welcome")
     when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)$/i
-      return reply(nick, "goodbye", @count_gb)
-    when /(da\w?|ha\w?|sa\w?|conosc\w{1,3}|sapete|d\wre|dici|dite)\s(particolari|niente|qualcosa|cose|informazion\w|notizi\w|dettagl\w)\s(su\w{0,3}|d\w{0,4}|riguardo)\s([A-z\ ]+)\?/i
+      return reply(nick, "goodbye")
+    when /#{regex}/i
       return reply_info(nick, "quest", $4)
     else
       if msg.index("?") != nil
-        return reply(nick, "err_qst", @count_eq)
+        return reply(nick, "err_qst")
       else
-        return reply(nick, "err_aff", @count_ea)
+        return reply(nick, "err_aff")
       end
     end
   end
@@ -73,9 +77,8 @@ class Npc
   # @see Npc#crave
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
-  # @param [Integer] count numero di messaggi dell'npc per quel tipo.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
-  def reply(nick, type, count)
+  def reply(nick, type)
     r = (type == "goodbye") ? 0 : 1
     crave(nick, type)
     return [r, bold(@name) + ": " + _(type)]
