@@ -43,7 +43,7 @@ class Npc
     @place = Integer(root.elements["place"].text)
     file.close
     
-    # caricamento dei messaggi nella variabili di instanza
+    # caricamento dei messaggi dell'npc
     localization("data/npcs/#{name}.xml", "npc")
   end
   

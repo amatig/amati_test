@@ -31,15 +31,14 @@ class Core
     @place_list = {}
     @npc_list = {}
     
+    # caricamento dei messaggi del mud
+    localization("data/mud.xml", "mud")
     # caricamento dati mondo
     init_data
   end
   
   # Inizializza tutti gli elementi del gioco.
   def init_data()
-    # caricamento dei messaggi nella variabili di instanza
-    localization("data/mud.xml", "mud")
-    
     User.reset_login
     
     @place_list = {}
