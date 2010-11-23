@@ -27,7 +27,7 @@ class Core
   
   # Una nuova istanza di Core.
   def initialize()
-    @log = Logger.new("./logs/core.log")
+    @log = Logger.new("log/core.log")
     @db = Database.instance # singleton
     
     @place_list = {}
