@@ -2,6 +2,18 @@
 <npc>
   <descr>e' un vecchio uomo barbuto e rugoso</descr>
   <place>1</place>
+  <memory>30</memory>
+  <likes>
+    <timerange>10-18</timerange>
+    <weather>2</weather>
+  </likes>
+  <hates>
+    <timerange>1-3</timerange>
+    <weather>1</weather>
+  </hates>
+  <crave>
+    <welcome>5</welcome>
+  </crave>
   <lang>
     <italian>
       <welcome_0>Saaaalve stranieto...</welcome_0>

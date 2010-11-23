@@ -41,6 +41,15 @@ class Npc
     @name = name.capitalize
     @descr = root.elements["descr"].text
     @place = Integer(root.elements["place"].text)
+    @memory = Integer(root.elements["memory"].text)
+    
+    l = root.elements["likes"]
+    @l_tm = l.elements["timerange"].text.split("-").map { |x| Integer x }
+    @l_wh = Integer(l.elements["weather"].text)
+    h = root.elements["hates"]
+    @h_tm = h.elements["timerange"].text.split("-").map { |x| Integer x }
+    @h_wh = Integer(h.elements["weather"].text)
+    
     file.close
     
     # caricamento dei messaggi dell'npc
@@ -108,7 +117,7 @@ class Npc
   # @param [String] target oggetto di cui l'utente vuole informazioni.
   # @return [Integer] decisione dell'npc.
   def crave(nick, type, target = "")
-    @db.delete("npc_caches", "#{Time.now.to_i}-timestamp>120")
+    @db.delete("npc_caches", "#{Time.now.to_i}-timestamp>#{@memory}")
     @db.insert({
                  "user_nick" => nick,
                  "npc_name" => @name,
@@ -117,6 +126,19 @@ class Npc
                  "timestamp" => Time.now.to_i
                }, 
                "npc_caches")
+    cache = @db.read("type,target",
+                     "npc_caches",
+                     "user_nick='#{nick}' and npc_name='#{@name}' and type='#{type}'")
+    
+    now = Time.now.hour
+    index = 0
+    index += 5 if  @l_tm[0] <= now and now <= @l_tm[1]
+    index -= 5 if  @h_tm[0] <= now and now <= @h_tm[1]
+    index += 5 if  @l_wh == 2
+    index -= 5 if  @h_wh == 2
+    
+    puts index
+    puts cache.length
     return 0
   end
   
