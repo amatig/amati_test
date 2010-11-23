@@ -1,4 +1,5 @@
 require "thread"
+require "logger"
 require "lib/database.rb"
 require "lib/utils.rb"
 require "mod/user.rb"
@@ -26,6 +27,7 @@ class Core
   
   # Una nuova istanza di Core.
   def initialize()
+    @log = Logger.new("./logs/core.log")
     @db = Database.instance # singleton
     
     @place_list = {}

@@ -51,7 +51,11 @@ module Utils
   def _(label)
     label = label.to_s
     c = (@_counts[label] > 1) ? rand(@_counts[label]) : 0
-    return @_msgs["#{label}_#{c}"]
+    temp = @_msgs["#{label}_#{c}"]
+    if (not temp and @log)
+      @log.error("Messaggio '#{label}_#{c}' inesistente")
+    end
+    return temp
   end
   
   # Concatena tramite virgole gli elemeneti di un array.
