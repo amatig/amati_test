@@ -4,10 +4,12 @@
   <place>1</place>
   <memory>30</memory>
   <likes>
+    <increase></increase>
     <timerange>10-18</timerange>
     <weather>2</weather>
   </likes>
   <hates>
+    <decrease></decrease>
     <timerange>1-3</timerange>
     <weather>1</weather>
   </hates>
