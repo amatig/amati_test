@@ -18,9 +18,15 @@ module Utils
   
   # Data e ora del mondo del mud. 1 secondo reale sono 4 secondi nel mud, 
   # quindi 1 ora reale sono 4 ore nel mud, 1 giorno reale 4 giorni nel mud.
-  def mud_time()
+  # Se non viene fornito un timestamp calcola data e ora attuali, altrimenti
+  # calcola data e ora del mondo del mud a partire da un timestamp del mondo
+  # reale.
+  # @param [Integer] timestamp data e ora reali nel formato timestamp.
+  # @return [Time] tempo del mondo del mud.  
+  def mud_time(timestamp = nil)
     start_time = 1290521959 # inizio del gioco timestamp
-    delta = Time.now.to_i - start_time
+    tm = (timestamp == nil) ? Time.now.to_i : timestamp
+    delta = tm - start_time
     return Time.at(start_time + (delta * 4))
   end
   
