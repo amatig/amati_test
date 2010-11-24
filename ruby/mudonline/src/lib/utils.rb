@@ -16,9 +16,17 @@
 
 module Utils
   
+  # Data e ora del mondo del mud. 1 secondo reale sono 4 secondi nel mud, 
+  # quindi 1 ora reale sono 4 ore nel mud, 1 giorno reale 4 giorni nel mud.
+  def mud_time()
+    start_time = 1290521959 # inizio del gioco timestamp
+    delta = Time.now.to_i - start_time
+    return Time.at(start_time + (delta * 4))
+  end
+  
   # Carica i messaggi di una entita' in base alla lingua desiderata.
-  # La funzione inizializza delle variabili di istanza all'interno dell'entita'
-  # che include questo modulo.
+  # La funzione inizializza delle variabili di istanza all'interno 
+  # dell'entita' che include questo modulo.
   # @param [String] filename percorso completo del file xml dell'entita'.
   # @param [String] context nodo principale dell'entita'.
   # @param [String] lang lingua desiderata.

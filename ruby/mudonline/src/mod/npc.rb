@@ -130,14 +130,14 @@ class Npc
                      "npc_caches",
                      "user_nick='#{nick}' and npc_name='#{@name}' and type='#{type}'")
     
-    now = Time.now.hour
+    now = Time.now.to_i
     index = 0
     index += 5 if  @l_tm[0] <= now and now <= @l_tm[1]
     index -= 5 if  @h_tm[0] <= now and now <= @h_tm[1]
     index += 5 if  @l_wh == 2
     index -= 5 if  @h_wh == 2
     
-    puts index
+    puts mud_time
     puts cache.length
     return 0
   end
