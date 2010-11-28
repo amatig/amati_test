@@ -137,8 +137,8 @@ class Npc
     index += 5 if  @l_wh == 2
     index -= 5 if  @h_wh == 2
     
-    puts mud_time
-    puts index
+    #puts mud_time
+    #puts index
     #puts cache.length
     return 0
   end
