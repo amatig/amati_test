@@ -42,14 +42,15 @@ class Npc
     @descr = root.elements["descr"].text
     @place = Integer(root.elements["place"].text)
     @memory = Integer(root.elements["memory"].text)
-    
-    l = root.elements["likes"]
-    @l_tm = l.elements["timerange"].text.split("-").map { |x| Integer x }
-    @l_wh = Integer(l.elements["weather"].text)
-    h = root.elements["hates"]
-    @h_tm = h.elements["timerange"].text.split("-").map { |x| Integer x }
-    @h_wh = Integer(h.elements["weather"].text)
-    
+    @max_quest = Integer(root.elements["max_quest"].text)
+    @likes = {}
+    root.elements["likes"].each_element do |val|
+      @likes[val.name] = val.text
+    end
+    @hates = {}
+    root.elements["hates"].each_element do |val|
+      @hates[val.name] = val.text
+    end
     file.close
     
     # caricamento dei messaggi dell'npc
@@ -89,8 +90,8 @@ class Npc
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply(nick, type)
     r = (type == "goodbye") ? 0 : 1
-    crave(nick, type)
-    return [r, bold(@name) + ": " + _(type)]
+    esito = (r != 0 and crave(nick, type)) ? "crave_" : ""
+    return [r, bold(@name) + ": " + _("#{esito}#{type}")]
   end
   
   # Ritorna nel informazioni che ha un npc rispetto ad un argomento
@@ -101,9 +102,13 @@ class Npc
   # @param [String] target oggetto di cui l'utente vuole informazioni.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply_info(nick, type, target)
-    crave(nick, type, target)
-    # in caso ottenre info da db
-    return [2, bold(@name) + ": "+ "Info su #{target}?"]
+    msg = ""
+    if not crave(nick, type, target)
+      msg = "Info su #{target}?" # ottenre info da db
+    else
+      msg = _("crave_#{type}")
+    end
+    return [2, bold(@name) + ": " + msg]
   end
   
   # Mette in cache nel database il tipo di richiesta dell'utente con
@@ -115,32 +120,48 @@ class Npc
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @param [String] target oggetto di cui l'utente vuole informazioni.
-  # @return [Integer] decisione dell'npc.
+  # @return [Boolean] decisione dell'npc.
   def crave(nick, type, target = "")
     @db.delete("npc_caches", "#{Time.now.to_i}-timestamp>#{@memory}")
-    @db.insert({
-                 "user_nick" => nick,
-                 "npc_name" => @name,
-                 "type" => type,
-                 "target" => target,
-                 "timestamp" => Time.now.to_i
-               }, 
-               "npc_caches")
     cache = @db.read("type,target",
                      "npc_caches",
-                     "user_nick='#{nick}' and npc_name='#{@name}' and type='#{type}'")
+                     "user_nick='#{nick}' and npc_name='#{@name}'")
     
+    i = @max_quest
     now = mud_time.hour
-    index = 0
-    index += 5 if  @l_tm[0] <= now and now <= @l_tm[1]
-    index -= 5 if  @h_tm[0] <= now and now <= @h_tm[1]
-    index += 5 if  @l_wh == 2
-    index -= 5 if  @h_wh == 2
+    ls = le = hs = he = 0
     
-    #puts mud_time
-    #puts index
-    #puts cache.length
-    return 0
+    begin
+      ls, le = @likes["timerange"].split("-")
+      i += Integer(@likes["value"]) if (Integer(ls) <= now and now < Integer(le))
+    rescue
+    end
+    begin
+      hs, he = @hates["timerange"].split("-")
+      i -= Integer(@hates["value"]) if (Integer(hs) <= now and now < Integer(he))
+    rescue
+    end
+    if @likes.has_key?("weather")
+      i += Integer(@likes["value"]) if Integer(@likes["weather"]) == 2
+    end
+    if @hates.has_key?("weather")
+      i -= Integer(@hates["value"]) if Integer(@hates["weather"]) == 2
+    end
+    
+    # puts "#{mud_time} #{cache.length} #{i}"
+    if cache.length < i
+      @db.insert({
+                   "user_nick" => nick,
+                   "npc_name" => @name,
+                   "type" => type,
+                   "target" => target,
+                   "timestamp" => Time.now.to_i
+                 }, 
+                 "npc_caches")
+      return false
+    else
+      return true
+    end
   end
   
   # Identificativo dell'npc.
