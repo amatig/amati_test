@@ -3,7 +3,8 @@
   <descr>e' un vecchio uomo barbuto e rugoso</descr>
   <place>1</place>
   <memory>120</memory>
-  <max_quest>5</max_quest>
+  <max_inter>10</max_inter>
+  <max_quest>4</max_quest>
   <likes>
     <value>1</value>
     <timerange>10-18</timerange>
@@ -23,12 +24,12 @@
       <goodbye_1>Spero di rivederti, a presto!</goodbye_1>
       <err_qst_0>Di questo non so nulla, mi spiace</err_qst_0>
       <err_qst_1>Non ti so dare una risposta</err_qst_1>
-      <crave_err_qst_0>Alle tue domande non so rispondeeeee!!!</crave_err_qst_0>
+      <crave_err_qst_0>Alle tue domande non so risponde!!! Non insistere!</crave_err_qst_0>
       <err_aff_0>Come???</err_aff_0>
       <err_aff_1>Domadami qualcosa, forse posso aiutarti...</err_aff_1>
-      <crave_err_aff_0>Ma sai fare una domanda sensata?</crave_err_aff_0>
-      <crave_quest_0>Mi chiedi troppo, passa piu' tardi</crave_quest_0>
-      <crave_quest_1>Ho da fare ora, a dopo...</crave_quest_1>
+      <crave_err_aff_0>Ma sai fare una domanda sensata? Non farmi perdere tempo</crave_err_aff_0>
+      <crave_quest_0>Mi chiedi troppo, avrei da fare</crave_quest_0>
+      <crave_quest_1>Ho da fare ora, non insistere</crave_quest_1>
     </italian>
   </lang>
 </npc>

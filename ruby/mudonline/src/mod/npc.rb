@@ -43,6 +43,7 @@ class Npc
     @place = Integer(root.elements["place"].text)
     @memory = Integer(root.elements["memory"].text)
     @max_quest = Integer(root.elements["max_quest"].text)
+    @max_inter = Integer(root.elements["max_inter"].text)
     @likes = {}
     root.elements["likes"].each_element do |val|
       @likes[val.name] = val.text
@@ -72,7 +73,9 @@ class Npc
     when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)$/i
       return reply(nick, "goodbye")
     when /#{regex}/i
-      return reply_info(nick, "quest", $4)
+      return reply_info(nick, "quest_info", $4)
+    when /dove.+(e'|essere|trova\w{0,2})\s([A-z\\ ]+)\?/i
+      return reply_info(nick, "quest_find", $2)
     else
       if msg.index("?") != nil
         return reply(nick, "err_qst")
@@ -102,11 +105,13 @@ class Npc
   # @param [String] target oggetto di cui l'utente vuole informazioni.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply_info(nick, type, target)
+    t = type.split("_")
     msg = ""
-    if not crave(nick, type, target)
+    if not crave(nick, t[0], target)
+      puts t[1]
       msg = "Info su #{target}?" # ottenre info da db
     else
-      msg = _("crave_#{type}")
+      msg = _("crave_#{t[0]}")
     end
     return [2, bold(@name) + ": " + msg]
   end
@@ -123,9 +128,12 @@ class Npc
   # @return [Boolean] decisione dell'npc.
   def crave(nick, type, target = "")
     @db.delete("npc_caches", "#{Time.now.to_i}-timestamp>#{@memory}")
-    cache = @db.read("type,target",
-                     "npc_caches",
-                     "user_nick='#{nick}' and npc_name='#{@name}'")
+    c1 = @db.read("type,target",
+                  "npc_caches",
+                  "user_nick='#{nick}' and npc_name='#{@name}'")
+    c2 = @db.read("type,target",
+                  "npc_caches",
+                  "user_nick='#{nick}' and npc_name='#{@name}' and type='#{type}' and target='#{target}'")
     
     i = @max_quest
     now = mud_time.hour
@@ -148,8 +156,8 @@ class Npc
       i -= Integer(@hates["value"]) if Integer(@hates["weather"]) == 2
     end
     
-    # puts "#{mud_time} #{cache.length} #{i}"
-    if cache.length < i
+    puts "#{mud_time} #{c1.length} #{c2.length} #{i}"
+    if c1.length < @max_inter
       @db.insert({
                    "user_nick" => nick,
                    "npc_name" => @name,
