@@ -74,7 +74,7 @@ class Npc
       return reply(nick, "goodbye")
     when /#{regex}/i
       return reply_info(nick, "quest_info", $4)
-    when /dove.+(e'|essere|trova\w{0,2})\s([A-z\\ ]+)\?/i
+    when /dove.+(e'|sta\w{0,2}|essere|trova\w{0,2})\s([A-z\\ ]+)\?/i
       return reply_info(nick, "quest_find", $2)
     else
       if msg.index("?") != nil
