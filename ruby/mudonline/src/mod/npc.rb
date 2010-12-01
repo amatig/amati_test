@@ -92,6 +92,9 @@ class Npc
   # @param [String] type tipo di messaggio.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply(nick, type)
+    if type == "welcome" and crave(nick, type)
+      return [0, bold(@name) + ": " + "Non ho tempo passa dopo!"]
+    end
     r = (type == "goodbye") ? 0 : 1
     esito = (r != 0 and crave(nick, type)) ? "crave_" : ""
     return [r, bold(@name) + ": " + _("#{esito}#{type}")]
@@ -138,7 +141,6 @@ class Npc
     i = @max_quest
     now = mud_time.hour
     ls = le = hs = he = 0
-    
     begin
       ls, le = @likes["timerange"].split("-")
       i += Integer(@likes["value"]) if (Integer(ls) <= now and now < Integer(le))
@@ -156,8 +158,13 @@ class Npc
       i -= Integer(@hates["value"]) if Integer(@hates["weather"]) == 2
     end
     
-    puts "#{mud_time} #{c1.length} #{c2.length} #{i}"
-    if c1.length < @max_inter
+    bonta = rand(i) <= Integer(i * 2 / 3)
+    disponibilita = rand(@max_inter - c1.length + 1) > 0
+    
+    puts "---> bonta #{bonta} #{i} #{Integer(i * 2 / 3)}"
+    puts "---> dispo #{disponibilita} #{c1.length}"
+    
+    if (disponibilita and bonta)
       @db.insert({
                    "user_nick" => nick,
                    "npc_name" => @name,
