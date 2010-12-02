@@ -167,7 +167,7 @@ class Npc
     rescue
     end
     if @likes.has_key?("weather")
-      i += Integer(@likes["value"]) if Integer(@likes["weather"]) == 2
+      i += Integer(@likes["value"]) if Integer(@likes["weather"]) == 2 # mettere nel db la condizione meteo
     end
     if @hates.has_key?("weather")
       i -= Integer(@hates["value"]) if Integer(@hates["weather"]) == 2
@@ -175,8 +175,9 @@ class Npc
     
     bonta = false
     if i > 1
-      bonta = rand(i) <= Integer(i * 2 / 3)
+      bonta = rand(i) <= Integer((i - 1) / 2)
     end
+    puts "#{i} #{Integer((i - 1) / 2)}"
     
     n = @max_inter - c1.length + 1
     n = 1 if n <= 0 # se per errori imprevisti la cache supera il max
