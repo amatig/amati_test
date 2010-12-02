@@ -68,6 +68,8 @@ class Npc
     regex += "(su\\w{0,3}|d\\w{0,4}|riguardo)\\s([A-z\\ ]+)\\?"
     
     case msg
+    when /^_start_18278374937_$/
+      return reply_start(nick)
     when /^(ciao|salve)$/i
       return reply(nick, "welcome")
     when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)$/i
@@ -85,23 +87,37 @@ class Npc
     end
   end
   
+  # Comincia il dialogo con l'utente se e' disponibile.
+  # @see Npc#is_free?
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] type tipo di messaggio.
+  # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
+  def reply_start(nick)
+    if not is_free?(nick, "quest") # npc non disponibile
+      return [0, bold(@name) + ": " + "Non ho tempo passa dopo!"] # mettere messaggio
+    else
+      return [1, bold(@name) + ": " + _("welcome")]
+    end
+  end
+  
   # Rende variabile il messaggio dell'npc simulando un dialogo.
-  # Usa il metodo "crave" per le decisioni.
   # @see Npc#crave
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply(nick, type)
-    if type == "welcome" and crave(nick, type)
-      return [0, bold(@name) + ": " + "Non ho tempo passa dopo!"]
+    r = 1
+    esito = ""
+    if type == "goodbye"
+      r = 0
+    else
+      esito = "crave_" if crave(nick, type)
     end
-    r = (type == "goodbye") ? 0 : 1
-    esito = (r != 0 and crave(nick, type)) ? "crave_" : ""
     return [r, bold(@name) + ": " + _("#{esito}#{type}")]
   end
   
-  # Ritorna nel informazioni che ha un npc rispetto ad un argomento
-  # richiesto dall'utente. Usa il metodo "crave" per le decisioni.
+  # Ritorna le informazioni che ha un npc rispetto ad un argomento
+  # richiesto dall'utente.
   # @see Npc#crave
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
@@ -119,17 +135,15 @@ class Npc
     return [2, bold(@name) + ": " + msg]
   end
   
-  # Mette in cache nel database il tipo di richiesta dell'utente con
-  # relativo timestamp e target, in maniera che si possa sapere se
-  # un particolare tipo di richesta e' insistente su un tipo di argomento
-  # da parte di un utente. Ne ottiene il valore attuale di insistenza e
-  # confrontato con le logiche dell'npc decide se rispondere all'utente
-  # o evitare la conversazione o altro.
+  # Controlla la cache delle richieste in maniera che si possa sapere se
+  # un particolare tipo di argomento e' insistente da parte di un utente.
+  # Ne ottiene dei valori che accoppiati con le le logiche dell'npc servono 
+  # a decidere come rispondere all'utente.
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @param [String] target oggetto di cui l'utente vuole informazioni.
-  # @return [Boolean] decisione dell'npc.
-  def crave(nick, type, target = "")
+  # @return [Array<Boolean>] valori di decisione dell'npc.
+  def check_crave(nick, type, target = "")
     @db.delete("npc_caches", "#{Time.now.to_i}-timestamp>#{@memory}")
     c1 = @db.read("type,target",
                   "npc_caches",
@@ -137,8 +151,9 @@ class Npc
     c2 = @db.read("type,target",
                   "npc_caches",
                   "user_nick='#{nick}' and npc_name='#{@name}' and type='#{type}' and target='#{target}'")
+    # puts "#{type} #{c2.length}"
     
-    i = @max_quest
+    i = @max_quest # - c2.length??
     now = mud_time.hour
     ls = le = hs = he = 0
     begin
@@ -158,13 +173,30 @@ class Npc
       i -= Integer(@hates["value"]) if Integer(@hates["weather"]) == 2
     end
     
-    bonta = rand(i) <= Integer(i * 2 / 3)
-    disponibilita = rand(@max_inter - c1.length + 1) > 0
+    bonta = false
+    if i > 1
+      bonta = rand(i) <= Integer(i * 2 / 3)
+    end
     
-    puts "---> bonta #{bonta} #{i} #{Integer(i * 2 / 3)}"
-    puts "---> dispo #{disponibilita} #{c1.length}"
+    n = @max_inter - c1.length + 1
+    n = 1 if n <= 0 # se per errori imprevisti la cache supera il max
+    disponibilita = rand(n) > 0 # rende + casuale la risposta
     
-    if (disponibilita and bonta)
+    return [disponibilita, bonta]
+  end
+  
+  # Tramite i valori di decisione ottenuti dai dati in possesso dell'npc,
+  # stabilisce se rispondere o no ad una richiesta dell'utente.
+  # Nel caso di risposta manda in cache la richiesta.
+  # @see Npc#check_crave
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] type tipo di messaggio.
+  # @param [String] target oggetto di cui l'utente vuole informazioni.
+  # @return [Boolean] decisione dell'npc.  
+  def crave(nick, type, target = "")
+    d, b = check_crave(nick, type, target)
+    if (d)
+      puts "ok"
       @db.insert({
                    "user_nick" => nick,
                    "npc_name" => @name,
@@ -179,11 +211,22 @@ class Npc
     end
   end
   
+  # Tramite i valori di decisione ottenuti dai dati in possesso dell'npc,
+  # stabilisce se un npc e' disponibile per il dialogo.
+  # @see Npc#check_crave
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] type tipo di messaggio.
+  # @return [Boolean] decisione dell'npc.  
+  def is_free?(nick, type)
+    d, b = check_crave(nick, type)
+    return d
+  end
+  
   # Identificativo dell'npc.
   # @return [String] identificativo dell'npc.
   def to_s()
     return @name
   end
   
-  private :reply, :reply_info, :crave
+  private :reply_start, :reply, :reply_info, :check_crave, :crave, :is_free?
 end

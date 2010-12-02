@@ -219,7 +219,7 @@ class Core
     npc = @npc_list[name.strip.capitalize]
     if npc and npc.place == User.get_place(nick)
       User.set_mode(nick, "dialog", npc.name)
-      return dispatch_to_npc(nick, "ciao")
+      return dispatch_to_npc(nick, "_start_18278374937_")
     else
       return _("nothing_npc") % name
     end

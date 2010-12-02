@@ -3,7 +3,7 @@
   <descr>e' un vecchio uomo barbuto e rugoso</descr>
   <place>1</place>
   <memory>120</memory>
-  <max_inter>15</max_inter>
+  <max_inter>5</max_inter>
   <max_quest>4</max_quest>
   <likes>
     <value>1</value>
