@@ -3,8 +3,9 @@
   <descr>e' un vecchio uomo barbuto e rugoso</descr>
   <place>1</place>
   <memory>120</memory>
-  <max_inter>5</max_inter>
-  <max_quest>4</max_quest>
+  <availability>10</availability>
+  <goodness>8</goodness>
+  <max_type>3</max_type>
   <likes>
     <value>1</value>
     <timerange>10-18</timerange>
@@ -18,8 +19,9 @@
   <lang>
     <italian>
       <welcome_0>Salve straniero, dimmi pure</welcome_0>
-      <welcome_1>OhOhOh una faccia nuova da queste parti, salve!</welcome_1>
+      <welcome_1>Ben arrivato, cosa ti spinge qui?</welcome_1>
       <crave_welcome_0>Ci siamo appena salutati!</crave_welcome_0>
+      <crave_welcome_1>Basta con i convenevoli!</crave_welcome_1>
       <goodbye_0>Alla prossima amico</goodbye_0>
       <goodbye_1>Spero di rivederti, a presto!</goodbye_1>
       <err_qst_0>Di questo non so nulla, mi spiace</err_qst_0>

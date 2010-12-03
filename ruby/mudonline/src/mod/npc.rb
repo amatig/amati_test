@@ -42,8 +42,9 @@ class Npc
     @descr = root.elements["descr"].text
     @place = Integer(root.elements["place"].text)
     @memory = Integer(root.elements["memory"].text)
-    @max_quest = Integer(root.elements["max_quest"].text)
-    @max_inter = Integer(root.elements["max_inter"].text)
+    @availability = Integer(root.elements["availability"].text)
+    @goodness = Integer(root.elements["goodness"].text)
+    @max_type = Integer(root.elements["max_type"].text)
     @likes = {}
     root.elements["likes"].each_element do |val|
       @likes[val.name] = val.text
@@ -145,15 +146,27 @@ class Npc
   # @return [Array<Boolean>] valori di decisione dell'npc.
   def check_crave(nick, type, target = "")
     @db.delete("npc_caches", "#{Time.now.to_i}-timestamp>#{@memory}")
+    
+    if type != "quest"
+      # cache per tipo
+      c2 = @db.read("type,target",
+                    "npc_caches",
+                    "user_nick='#{nick}' and npc_name='#{@name}' and type='#{type}'")
+      n = @max_type - c2.length + 1
+      n = 1 if n <= 0 # se per errori imprevisti la cache supera il max
+      # non permette + del max per tipo, dando casualita'
+      return [false, false] if rand(n) <= 0
+    end
+    
+    # cache totale
     c1 = @db.read("type,target",
                   "npc_caches",
-                  "user_nick='#{nick}' and npc_name='#{@name}'")
-    c2 = @db.read("type,target",
-                  "npc_caches",
-                  "user_nick='#{nick}' and npc_name='#{@name}' and type='#{type}' and target='#{target}'")
-    # puts "#{type} #{c2.length}"
+                  "user_nick='#{nick}' and npc_name='#{@name}' and type='quest'")
+    n = @availability - c1.length + 1
+    n = 1 if n <= 0 # se per errori imprevisti la cache supera il max
+    disponibilita = rand(n) > 0 # rende + casuale la risposta
     
-    i = @max_quest # - c2.length??
+    i = @goodness
     now = mud_time.hour
     ls = le = hs = he = 0
     begin
@@ -177,11 +190,7 @@ class Npc
     if i > 1
       bonta = rand(i) <= Integer((i - 1) / 2)
     end
-    puts "#{i} #{Integer((i - 1) / 2)}"
-    
-    n = @max_inter - c1.length + 1
-    n = 1 if n <= 0 # se per errori imprevisti la cache supera il max
-    disponibilita = rand(n) > 0 # rende + casuale la risposta
+    # puts "#{i} #{Integer((i - 1) / 2)}"
     
     return [disponibilita, bonta]
   end
@@ -196,16 +205,17 @@ class Npc
   # @return [Boolean] decisione dell'npc.  
   def crave(nick, type, target = "")
     d, b = check_crave(nick, type, target)
-    if (d)
-      puts "ok"
-      @db.insert({
-                   "user_nick" => nick,
-                   "npc_name" => @name,
-                   "type" => type,
-                   "target" => target,
-                   "timestamp" => Time.now.to_i
-                 }, 
-                 "npc_caches")
+    if (d or b)
+      if d
+        @db.insert({
+                     "user_nick" => nick,
+                     "npc_name" => @name,
+                     "type" => type,
+                     "target" => target,
+                     "timestamp" => Time.now.to_i
+                   }, 
+                   "npc_caches")
+      end
       return false
     else
       return true
