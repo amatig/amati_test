@@ -65,8 +65,8 @@ class Npc
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def parse(nick, msg)
     regex =  "(da\\w?|ha\\w?|sa\\w?|conosc\\w{1,3}|sapete|d\\w[rct]\\w{1,2}|qualche|alcun\\w)\\s"
-    regex += "(particolar\\w|niente|qualcosa|info\\w*|notizi\\w|dettagl\\w{1,2})\\s"
-    regex += "(su\\w{0,3}|d\\w{0,4}|riguardo)\\s([A-z\\ ]+)\\?"
+    regex += "(particolar\\w|niente|cosa|qualcosa|info\\w*|notizi\\w|dettagl\\w{1,2})\\s"
+    regex += "(su\\w{0,3}|d\\w{0,4}|riguardo)\\s([A-z\\ ]+)"
     
     case msg
     when /^_start_18278374937_$/
@@ -77,7 +77,7 @@ class Npc
       return reply(nick, "goodbye")
     when /#{regex}/i
       return reply_info(nick, "quest_info", $4)
-    when /dove.+(e'|sta\w{0,2}|essere|trova\w{0,2})\s([A-z\\ ]+)\?/i
+    when /dove.+(e'|sono|sta\w{0,3}|essere|trova\w{0,2})\s([A-z\\ ]+)\?/i
       return reply_info(nick, "quest_find", $2)
     else
       if msg.index("?") != nil
@@ -95,7 +95,7 @@ class Npc
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply_start(nick)
     if not is_free?(nick, "quest") # npc non disponibile
-      return [0, bold(@name) + ": " + "Non ho tempo passa dopo!"] # mettere messaggio
+      return [0, bold(@name) + ": " + _("busy")]
     else
       return [1, bold(@name) + ": " + _("welcome")]
     end
