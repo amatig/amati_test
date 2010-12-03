@@ -92,7 +92,7 @@ class Core
     else
       User.login(nick)
       @place_list[User.get_place(nick)].add_people(nick)
-      return _("welcome") % [greeting, bold(nick), cmd_place(nick)]
+      return _("welcome") % [bold(nick), cmd_place(nick)]
     end
   end
   
