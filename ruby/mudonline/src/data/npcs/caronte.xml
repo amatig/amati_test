@@ -18,6 +18,8 @@
   </hates>
   <lang>
     <italian>
+      <info_0>Non so niente di cio'!</info_0>
+      <find_0>Non so dove possa trovarsi!</find_0>
       <welcome_0>Salve straniero, dimmi pure</welcome_0>
       <welcome_1>Ben arrivato, cosa ti spinge qui?</welcome_1>
       <welcome_2>Che piacere averti qui, dimmi tutto</welcome_2>

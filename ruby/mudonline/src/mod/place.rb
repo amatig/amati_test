@@ -1,4 +1,5 @@
 require "thread"
+require "lib/database.rb"
 
 # Classe per la gestione dei posti.
 # = Description
@@ -37,6 +38,7 @@ class Place
   # Una nuova istanza di Place.
   # @param [Array<String>] data contiene alcune informazioni sul posto.
   def initialize(data)
+    @db = Database.instance # singleton
     @id = Integer(data[0])
     
     file = File.new("data/places/#{data[1]}.xml")
@@ -63,6 +65,13 @@ class Place
       @nearby_places = nearby_places
       @init_np = true
     end
+  end
+  
+  # Condizione metereologica del posto.
+  # @return [Integer] rappresenta la condizione meteo della zona.
+  def get_weather()
+    data = @db.get("weather", "places", "id='#{@id}'")
+    return Integer(data[0])
   end
   
   # Rimuove un utente o npc dalla lista delle persone in questo posto.

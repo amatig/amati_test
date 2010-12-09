@@ -129,7 +129,11 @@ class Npc
     msg = ""
     if not crave(nick, t[0], target)
       puts t[1]
-      msg = "Info su #{target}?" # ottenre info da db
+      pattern = target.gsub(" ", "%")
+      info = @db.get("data",
+                     "npc_info",
+                     "type='#{t[1]}' and pattern like '%#{pattern}%'")
+      msg = (info.empty?) ? _(t[1]) : info[0]
     else
       msg = _("crave_#{t[0]}")
     end
@@ -166,6 +170,7 @@ class Npc
     n = 1 if n <= 0 # se per errori imprevisti la cache supera il max
     disponibilita = rand(n) > 0 # rende + casuale la risposta
     
+    pl_wh = @db.read("weather", "places", "id=#{@place}")[0]
     i = @goodness
     now = mud_time.hour
     ls = le = hs = he = 0
@@ -180,10 +185,10 @@ class Npc
     rescue
     end
     if @likes.has_key?("weather")
-      i += Integer(@likes["value"]) if Integer(@likes["weather"]) == 2 # mettere nel db la condizione meteo
+      i += Integer(@likes["value"]) if Integer(@likes["weather"]) == pl_wh
     end
     if @hates.has_key?("weather")
-      i -= Integer(@hates["value"]) if Integer(@hates["weather"]) == 2
+      i -= Integer(@hates["value"]) if Integer(@hates["weather"]) == pl_wh
     end
     
     bonta = false
