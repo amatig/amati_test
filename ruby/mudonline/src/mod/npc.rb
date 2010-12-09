@@ -133,7 +133,7 @@ class Npc
       info = @db.get("data",
                      "npc_info",
                      "type='#{t[1]}' and pattern like '%#{pattern}%'")
-      msg = (info.empty?) ? _(t[1]) : info[0]
+      msg = (info.empty?) ? _("no_#{t[1]}") : info[0]
     else
       msg = _("crave_#{t[0]}")
     end
