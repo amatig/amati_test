@@ -72,6 +72,23 @@ module Utils
     return temp
   end
   
+  # Ritorna un messaggio rappresentate una risposta o affermazione del bot.
+  # Usa attributi di instanza che devono essere al momento dell'utilizzo, 
+  # queste variabili vengono inizializzate con la funzione localization.
+  # @see Utils#localization
+  # @param [String, Symbol] label etichetta' che identifica il messaggio.
+  # @param [Integer] i indice del messaggio.
+  # @return [String] messaggio del mud per l'utente.
+  def __(label, i = 0)
+    label = label.to_s
+    c = (i >= @_counts[label]) ? (@_counts[label] - 1) : i
+    temp = @_msgs["#{label}_#{c}"]
+    if (not temp and @log)
+      @log.error("Messaggio '#{label}_#{c}' inesistente")
+    end
+    return temp
+  end
+  
   # Concatena tramite virgole gli elemeneti di un array.
   # L'ultimo elemento viene concatenato per 'e'.
   # @example

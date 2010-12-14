@@ -67,7 +67,7 @@ class Npc
     regex =  "(da\\w?|ha\\w?|sa\\w?|conosc\\w{1,3}|sapete|d\\w[rct]\\w{1,2}|qualche|alcun\\w)\\s"
     regex += "(particolar\\w|niente|cosa|qualcosa|info\\w*|notizi\\w|dettagl\\w{1,2})\\s"
     regex += "(su\\w{0,3}|d\\w{0,4}|riguardo)\\s([A-z\\ ]+)"
-    
+        
     case msg
     when /^_start_18278374937_$/
       return reply_start(nick)
@@ -94,7 +94,7 @@ class Npc
   # @param [String] type tipo di messaggio.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply_start(nick)
-    if not is_free?(nick, "quest") # npc non disponibile
+    if not is_free?(nick) # npc non disponibile
       return [0, bold(@name) + ": " + _("busy")]
     else
       return [1, bold(@name) + ": " + _("welcome")]
@@ -102,24 +102,32 @@ class Npc
   end
   
   # Rende variabile il messaggio dell'npc simulando un dialogo.
-  # @see Npc#crave
+  # @see Npc#level_crave
+  # @see Npc#cache_crave
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply(nick, type)
     r = 1
-    esito = ""
+    msg = _(type)
     if type == "goodbye"
       r = 0
     else
-      esito = "crave_" if crave(nick, type)
+      esito = type
+      diff = level_crave(nick, type) - @max_type
+      if diff >= 0
+        esito = "crave_#{esito}"
+        msg = __(esito, diff)
+      end
+      cache_crave(nick, type) if (diff < @_counts[esito])
     end
-    return [r, bold(@name) + ": " + _("#{esito}#{type}")]
+    return [r, bold(@name) + ": " + msg]
   end
   
   # Ritorna le informazioni che ha un npc rispetto ad un argomento
   # richiesto dall'utente.
-  # @see Npc#crave
+  # @see Npc#level_crave
+  # @see Npc#cache_crave
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @param [String] target oggetto di cui l'utente vuole informazioni.
@@ -127,17 +135,38 @@ class Npc
   def reply_info(nick, type, target)
     t = type.split("_")
     msg = ""
-    if not crave(nick, t[0], target)
-      puts t[1]
-      pattern = target.gsub(" ", "%")
-      info = @db.get("data",
-                     "npc_info",
-                     "type='#{t[1]}' and pattern like '%#{pattern}%'")
-      msg = (info.empty?) ? _("no_#{t[1]}") : info[0]
+    diff = level_crave(nick, type, target) - @max_type
+    puts diff
+    if diff < 0
+      msg = "ok"
+      cache_crave(nick, type, target)
     else
-      msg = _("crave_#{t[0]}")
+      msg = __("crave_#{t[0]}", diff)
     end
+    #if not crave(nick, t[0], target)
+    #  puts t[1]
+    #  pattern = target.gsub(" ", "%")
+    #  info = @db.get("data",
+    #                 "npc_info",
+    #                 "type='#{t[1]}' and pattern like '%#{pattern}%'")
+    #  msg = (info.empty?) ? _("no_#{t[1]}") : info[0]
+    #else
+    #  msg = _("crave_#{t[0]}")
+    #end
     return [2, bold(@name) + ": " + msg]
+  end
+  
+  # Numero di richieste in cache dell'npc di un particolare tipo.
+  # @param [String] nick identificativo dell'utente.
+  # @param [String] type tipo di messaggio.
+  # @param [String] target oggetto di cui l'utente vuole informazioni.
+  # @return [Integer] numero di richeste cachate.
+  def level_crave(nick, type, target = "")
+    @db.delete("npc_caches", "#{Time.now.to_i}-timestamp>#{@memory}")
+    c = @db.read("type,target",
+                 "npc_caches",
+                 "user_nick='#{nick}' and npc_name='#{@name}' and type='#{type}' and target='#{target}'")
+    return c.length
   end
   
   # Controlla la cache delle richieste in maniera che si possa sapere se
@@ -200,42 +229,28 @@ class Npc
     return [disponibilita, bonta]
   end
   
-  # Tramite i valori di decisione ottenuti dai dati in possesso dell'npc,
-  # stabilisce se rispondere o no ad una richiesta dell'utente.
-  # Nel caso di risposta manda in cache la richiesta.
-  # @see Npc#check_crave
+  # Crea una cache di una richiesta.
   # @param [String] nick identificativo dell'utente.
   # @param [String] type tipo di messaggio.
   # @param [String] target oggetto di cui l'utente vuole informazioni.
-  # @return [Boolean] decisione dell'npc.  
-  def crave(nick, type, target = "")
-    d, b = check_crave(nick, type, target)
-    if (d or b)
-      if d
-        @db.insert({
-                     "user_nick" => nick,
-                     "npc_name" => @name,
-                     "type" => type,
-                     "target" => target,
-                     "timestamp" => Time.now.to_i
-                   }, 
-                   "npc_caches")
-      end
-      return false
-    else
-      return true
-    end
+  def cache_crave(nick, type, target = "")
+    @db.insert({
+                 "user_nick" => nick,
+                 "npc_name" => @name,
+                 "type" => type,
+                 "target" => target,
+                 "timestamp" => Time.now.to_i
+               }, 
+               "npc_caches")
   end
   
-  # Tramite i valori di decisione ottenuti dai dati in possesso dell'npc,
+  # Tramite i valori dei dati in possesso dell'npc (valori cache),
   # stabilisce se un npc e' disponibile per il dialogo.
-  # @see Npc#check_crave
   # @param [String] nick identificativo dell'utente.
-  # @param [String] type tipo di messaggio.
-  # @return [Boolean] decisione dell'npc.  
-  def is_free?(nick, type)
-    d, b = check_crave(nick, type)
-    return d
+  # @return [Boolean] disponibilita' dell'npc.  
+  def is_free?(nick)
+    #d, b = check_crave(nick, type)
+    return true
   end
   
   # Identificativo dell'npc.
@@ -244,5 +259,5 @@ class Npc
     return @name
   end
   
-  private :reply_start, :reply, :reply_info, :check_crave, :crave, :is_free?
+  private :reply_start, :reply, :reply_info, :check_crave, :level_crave, :cache_crave, :is_free?
 end
