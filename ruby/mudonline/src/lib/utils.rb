@@ -1,6 +1,7 @@
-# Insieme di utilities.
+# -*- coding: utf-8 -*-
+# Insieme di utilities, alcune custom per la lingua italiana.
 # = Description
-# Modulo contente una serie di utilities di vario genere.
+# Modulo contente una serie di utilities di vario genere, alcune custom per la lingua italiana.
 # = License
 # Nemesis - IRC Mud Multiplayer Online totalmente italiano
 #
@@ -43,7 +44,7 @@ module Utils
     
     @_msgs = {}
     @_counts = {}
-    root.elements["lang"].elements[lang].each_element do |val|
+    root.elements["lang"].elements[lang].elements["msgs"].each_element do |val|
       if val.name =~ /^(\w+)\_\d+$/
         @_msgs[val.name] = val.text
         @_counts[$1] = 0
@@ -55,7 +56,7 @@ module Utils
       @_counts[$1] += 1 if k =~ /^(\w+)\_\d+$/
     end
   end
-  
+    
   # Ritorna un messaggio rappresentate una risposta o affermazione del bot.
   # Usa attributi di instanza che devono essere al momento dell'utilizzo, 
   # queste variabili vengono inizializzate con la funzione localization.
@@ -183,6 +184,7 @@ module Utils
   end
   
   # Stabilisce l'articolo determinativo di un parola.
+  # Questa utilities e' specifica per la lingua italiana.
   #
   # Codice tipo:
   #
@@ -238,6 +240,7 @@ module Utils
   end
   
   # Stabilisce la preposizioni articolata 'di' di un articolo determinativo.
+  # Questa utilities e' specifica per la lingua italiana.
   # @param [String] art articolo determinativo.
   # @return [String] preposizione articolata 'di'.
   def pa_di(art)
@@ -260,6 +263,7 @@ module Utils
   end
   
   # Stabilisce la preposizioni articolata 'in' di un articolo determinativo.
+  # Questa utilities e' specifica per la lingua italiana.
   # @param [String] art articolo determinativo.
   # @return [String] preposizione articolata 'in'.
   def pa_in(art)
@@ -279,6 +283,15 @@ module Utils
     when "l'"
       return "nell'"
     end
+  end
+  
+  STOP_WORDS = ["ad", "al", "allo", "ai", "agli", "all", "agl", "alla", "alle", "con", "col", "coi", "da", "dal", "dallo", "dai", "dagli", "dall", "dagl", "dalla", "dalle", "di", "del", "dello", "dei", "degli", "dell", "degl", "della", "delle", "in", "nel", "nello", "nei", "negli", "nell", "negl", "nella", "nelle", "su", "sul", "sullo", "sui", "sugli", "sull", "sugl", "sulla", "sulle", "per", "tra", "contro", "mio", "mia", "miei", "mie", "tuo", "tua", "tuoi", "tue", "suo", "sua", "suoi", "sue", "nostro", "nostra", "nostri", "nostre", "vostro", "vostra", "vostri", "vostre", "mi", "ti", "ci", "vi", "lo", "la", "li", "le", "gli", "ne", "il", "un", "uno", "una", "ma", "ed", "se", "anche", "come", "dov", "dove", "che", "chi", "cui", "non", "quale", "quanto", "quanti", "quanta", "quante", "quello", "quelli", "quella", "quelle", "questo", "questi", "questa", "queste"]
+  
+  # Pulizia dalle stop words della lingua italiana.
+  # @param [String] text frase grezza da ripulire.
+  # @return [String] frase ripulita dalle stop words.
+  def clean(text)
+    return (text.split - STOP_WORDS).join(" ")
   end
   
 end

@@ -67,13 +67,13 @@ class Npc
     regex =  "(da\\w?|ha\\w?|sa\\w?|conosc\\w{1,3}|sapete|d\\w[rct]\\w{1,2}|qualche|alcun\\w)\\s"
     regex += "(particolar\\w|niente|cosa|qualcosa|info\\w*|notizi\\w|dettagl\\w{1,2})\\s"
     regex += "(su\\w{0,3}|d\\w{0,4}|riguardo)\\s([A-z\\ ]+)"
-        
+    
     case msg
     when /^_start_18278374937_$/
       return reply_start(nick)
-    when /^(ciao|salve)$/i
+    when /^(ciao|salve)/i
       return reply(nick, "welcome")
-    when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)$/i
+    when /^(arrivederci|addio|a\spresto|alla\sprossima|vado)/i
       return reply(nick, "goodbye")
     when /#{regex}/i
       return reply_info(nick, "quest_info", $4)
@@ -109,17 +109,21 @@ class Npc
   # @return [Array<Integer, String>] codice tipo e messaggio finale dell'npc.
   def reply(nick, type)
     r = 1
-    msg = _(type)
+    msg = ""
     if type == "goodbye"
       r = 0
+      msg = _(type)
     else
-      esito = type
       diff = level_crave(nick, type) - @max_type
       if diff >= 0
-        esito = "crave_#{esito}"
+        esito = "crave_#{type}"
         msg = __(esito, diff)
+        # @_counts e' presente nel modulo utils incluso
+        cache_crave(nick, type) if (diff < @_counts[esito])
+      else
+        msg = _(type)
+        cache_crave(nick, type)
       end
-      cache_crave(nick, type) if (diff < @_counts[esito])
     end
     return [r, bold(@name) + ": " + msg]
   end
@@ -135,24 +139,22 @@ class Npc
   def reply_info(nick, type, target)
     t = type.split("_")
     msg = ""
-    diff = level_crave(nick, type, target) - @max_type
-    puts diff
-    if diff < 0
-      msg = "ok"
-      cache_crave(nick, type, target)
+    diff = level_crave(nick, t[0], target) - @max_type
+    # aggingere in qualche modo la condizione dell'npc nella scelta
+    if diff >= 0
+      esito = "crave_#{t[0]}"
+      msg = __(esito, diff)
+      # @_counts e' presente nel modulo utils incluso
+      cache_crave(nick, t[0], target) if (diff < @_counts[esito])
     else
-      msg = __("crave_#{t[0]}", diff)
+      puts t[1]
+      pattern = clean(target).gsub(" ", "%")
+      info = @db.get("data",
+                     "npc_info",
+                     "type='#{t[1]}' and pattern like '%#{pattern}%'")
+      msg = (info.empty?) ? _("no_#{t[1]}") : info[0]
+      cache_crave(nick, t[0], target)
     end
-    #if not crave(nick, t[0], target)
-    #  puts t[1]
-    #  pattern = target.gsub(" ", "%")
-    #  info = @db.get("data",
-    #                 "npc_info",
-    #                 "type='#{t[1]}' and pattern like '%#{pattern}%'")
-    #  msg = (info.empty?) ? _("no_#{t[1]}") : info[0]
-    #else
-    #  msg = _("crave_#{t[0]}")
-    #end
     return [2, bold(@name) + ": " + msg]
   end
   
