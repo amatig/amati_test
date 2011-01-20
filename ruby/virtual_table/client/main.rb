@@ -1,3 +1,5 @@
+#!/usr/bin/ruby
+
 require "rubygems"
 require "rubygame"
 require "eventmachine"
@@ -16,16 +18,21 @@ class Game < EventMachine::Connection
     send_data "mario"
   end
   
+  def unbind
+    Rubygame.quit
+    @running = false
+  end
+  
   def tick
     @events.each do |ev|
-      puts ev
+      #puts ev
       case ev
       when Rubygame::MouseDownEvent
         send_data "ciao"
       when Rubygame::QuitEvent
-        Rubygame.quit
-        @running = false
+        unbind
       else
+        #puts ev
       end
     end
   end
@@ -33,12 +40,12 @@ class Game < EventMachine::Connection
   def receive_data(data)
     puts data
   end
-  
+    
 end
 
 
 EventMachine::run do
-  emg = EventMachine::connect("0.0.0.0", 8081, Game)
+  emg = EventMachine::connect("0.0.0.0", 3333, Game)
   timer = EventMachine.add_periodic_timer(0.1) do
     emg.tick
     unless emg.running
