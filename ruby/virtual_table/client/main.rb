@@ -14,6 +14,9 @@ class Game < EventMachine::Connection
                          0, 
                          [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF])
     @events = Rubygame::EventQueue.new
+    @events.enable_new_style_events
+    @background = Surface.load "images/cards.jpg"
+    @background.blit @screen, [0, 0]
     @running = true
     send_data "mario"
   end
@@ -25,11 +28,11 @@ class Game < EventMachine::Connection
   
   def tick
     @events.each do |ev|
-      #puts ev
+      puts ev.inspect
       case ev
-      when Rubygame::MouseDownEvent
+      when Rubygame::Events::MousePressed
         send_data "ciao"
-      when Rubygame::QuitEvent
+      when Rubygame::Events::QuitRequested
         unbind
       else
         #puts ev
