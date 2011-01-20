@@ -15,8 +15,15 @@ class Game < EventMachine::Connection
                          [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF])
     @events = Rubygame::EventQueue.new
     @events.enable_new_style_events
-    @background = Surface.load "images/cards.jpg"
-    @background.blit @screen, [0, 0]
+    
+    @cards = Surface.load "./images/cards.jpg"    
+    (0..11).each do |n|
+      m = (70 * n)
+      m += 2 if m != 0
+      @cards.blit @screen, [n * 50, n * 10], [3 + m, 5, 70, 109]
+      m += 10
+    end
+    
     @running = true
     send_data "mario"
   end
@@ -38,6 +45,7 @@ class Game < EventMachine::Connection
         #puts ev
       end
     end
+    @screen.flip
   end
   
   def receive_data(data)
