@@ -4,4 +4,4 @@ require 'drb'
 DRb.start_service
 server = DRbObject.new nil, ARGV.shift
 
-puts server.get(0)
+puts server.get(1)
