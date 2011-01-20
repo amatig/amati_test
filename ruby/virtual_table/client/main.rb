@@ -15,14 +15,13 @@ class Client
   
   def send(s)
     # Send a message to the irc server and print it to the screen
-    puts "--> #{s}"
     @irc.send "#{s}\r\n", 0 
   end
   
   def connect()
     # Connect to the IRC server
     @irc = TCPSocket.open(@server, @port)
-    #send "USER blah blah blah :blah blah"
+    send "user_#{rand(1000)}"
   end
   
   def handle_server_input(s)
@@ -63,10 +62,10 @@ end
 # The main program
 # If we get an exception, then print it out and keep going (we do NOT want
 # to disconnect unexpectedly!)
-irc = IRC.new('0.0.0.0', 8081)
-irc.connect()
+cl = Client.new('0.0.0.0', 8081)
+cl.connect()
 begin
-  irc.main_loop()
+  cl.main_loop()
 rescue Interrupt
 rescue Exception => detail
   puts detail.message()
