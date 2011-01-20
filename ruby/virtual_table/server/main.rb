@@ -8,7 +8,7 @@ module Server
     @identifier = self.object_id
     @@clients_list.merge!({@identifier => self})
     
-    send_data "ciao\r\n"
+    send_data "benvenuto"
   end
   
   def unbind
@@ -21,14 +21,16 @@ module Server
       @name ||= data.strip
     else
       @@clients_list.values.each do |client|
-        client.send_data("#{@name}: #{data}")
+        client.send_data "#{@name}: #{data}"
       end
     end
   end
   
 end
 
+
 EventMachine::run do
   EventMachine::start_server("0.0.0.0", 8081, Server)
+  trap("INT") { EventMachine::stop_event_loop }
   puts "Running chat server on 8081"
 end
