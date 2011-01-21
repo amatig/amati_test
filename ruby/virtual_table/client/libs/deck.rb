@@ -1,12 +1,11 @@
+require "libs/vobject"
 require "libs/card"
 
-class Deck1
-  attr_accessor :x, :y
+class Deck1 < VObject
   
   def initialize
     @images = Surface.load("./images/deck1/back1.png")
-    @x = 0
-    @y = 0
+    @rect = @images.make_rect
     @cards = []
   end
   
@@ -36,10 +35,6 @@ class Deck1
   
   def size
     @cards.size
-  end
-  
-  def draw(screen)
-    @images.blit(screen, [@x, @y])
   end
   
 end

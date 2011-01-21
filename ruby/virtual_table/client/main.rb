@@ -15,38 +15,48 @@ class Game < EventMachine::Connection
   attr_reader :running
   
   def initialize
-    @screen = Screen.new([800,600], 
+    @screen = Screen.new([800, 600], 
                          0, 
                          [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF])
     @events = Rubygame::EventQueue.new
-    @events.enable_new_style_events        
-    @running = true
+    @events.enable_new_style_events 
     
+    @images = Surface.load("./images/table1.png")
     @deck = Deck1.new
     @deck.load_54
-    @deck.draw(@screen)
-    puts @deck.size
     
     send_data "mario"
+    
+    @running = true
+  rescue Exception => e
+    p e
+    exit!
   end
   
   def unbind
-    Rubygame.quit
     @running = false
+    return
   end
   
   def tick
     @events.each do |ev|
-      puts ev.inspect
+      #puts ev.inspect
       case ev
       when Rubygame::Events::MousePressed
+        @deck.picked = true if @deck.collide?(*ev.pos)
         send_data "ciao"
+      when Rubygame::Events::MouseReleased
+        @deck.picked = false
+      when Rubygame::Events::MouseMoved
+        @deck.move(*ev.pos) if @deck.picked
       when Rubygame::Events::QuitRequested
         unbind
       else
         #puts ev
       end
     end
+    @images.blit(@screen, [0, 0])
+    @deck.draw(@screen)
     @screen.flip
   end
   
@@ -59,15 +69,17 @@ end
 
 EventMachine::run do
   emg = EventMachine::connect("0.0.0.0", 3333, Game)
-  timer = EventMachine.add_periodic_timer(0.1) do
+  give_tick = proc do 
     emg.tick
     unless emg.running
-      timer.cancel
+      Rubygame.quit
       EventMachine::stop_event_loop
     end
+    EventMachine.next_tick(give_tick)
   end
   trap("INT") do
-    timer.cancel
+    Rubygame.quit
     EventMachine::stop_event_loop
   end
+  give_tick.call
 end

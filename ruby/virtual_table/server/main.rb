@@ -11,6 +11,9 @@ module Server
     @@clients.merge!({@id => self})
     
     send_data "benvenuto"
+  rescue Exception => e
+    p e
+    exit!
   end
   
   def unbind
