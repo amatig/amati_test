@@ -1,10 +1,15 @@
 #!/usr/bin/ruby
 
+$SAFE=0
+
 require "rubygems"
 require "rubygame"
 require "eventmachine"
 
 include Rubygame
+
+require "libs/deck"
+
 
 class Game < EventMachine::Connection
   attr_reader :running
@@ -14,17 +19,14 @@ class Game < EventMachine::Connection
                          0, 
                          [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF])
     @events = Rubygame::EventQueue.new
-    @events.enable_new_style_events
-    
-    @cards = Surface.load "./images/cards.jpg"    
-    (0..11).each do |n|
-      m = (70 * n)
-      m += 2 if m != 0
-      @cards.blit @screen, [n * 50, n * 10], [3 + m, 5, 70, 109]
-      m += 10
-    end
-    
+    @events.enable_new_style_events        
     @running = true
+    
+    @deck = Deck1.new
+    @deck.load_54
+    @deck.draw(@screen)
+    puts @deck.size
+    
     send_data "mario"
   end
   
