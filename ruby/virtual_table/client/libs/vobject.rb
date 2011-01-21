@@ -1,5 +1,5 @@
 class VObject
-  attr_accessor :x, :y, :picked
+  attr_accessor :picked
   
   def initialize
     @images = nil
@@ -14,7 +14,7 @@ class VObject
   
   def move(x, y)
     if @picked
-      @rect.move!(x - @rect.x, y - @rect.y)
+      @rect.move!(x - @rect.centerx, y - @rect.centery)
     end
   end
   

@@ -1,13 +1,12 @@
 #!/usr/bin/ruby
 
-$SAFE=0
-
 require "rubygems"
 require "rubygame"
 require "eventmachine"
 
 include Rubygame
 
+require "libs/table"
 require "libs/deck"
 
 
@@ -21,11 +20,12 @@ class Game < EventMachine::Connection
     @events = Rubygame::EventQueue.new
     @events.enable_new_style_events 
     
-    @images = Surface.load("./images/table1.png")
-    @deck = Deck1.new
-    @deck.load_54
-    
     send_data "mario"
+    
+    table = Table.new("table1")
+    deck = Deck1.new
+    deck.load_54
+    @objects = [table, deck]
     
     @running = true
   rescue Exception => e
@@ -43,27 +43,28 @@ class Game < EventMachine::Connection
       #puts ev.inspect
       case ev
       when Rubygame::Events::MousePressed
-        @deck.picked = true if @deck.collide?(*ev.pos)
+        # @deck.picked = true if @deck.collide?(*ev.pos)
         send_data "ciao"
       when Rubygame::Events::MouseReleased
-        @deck.picked = false
+        # @deck.picked = false
       when Rubygame::Events::MouseMoved
-        @deck.move(*ev.pos) if @deck.picked
+        # @deck.move(*ev.pos) if @deck.picked
       when Rubygame::Events::QuitRequested
         unbind
       else
         #puts ev
       end
     end
-    @images.blit(@screen, [0, 0])
-    @deck.draw(@screen)
+    @objects.each do |o|
+      o.draw(@screen)
+    end
     @screen.flip
   end
   
   def receive_data(data)
     puts data
   end
-    
+  
 end
 
 

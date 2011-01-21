@@ -9,5 +9,5 @@ class Card < VObject
     @seed = s
     @number = n
   end
-    
+  
 end
