@@ -1,12 +1,16 @@
 require "libs/vobject"
 require "libs/card"
 
-class Deck1 < VObject
+class Deck < VObject
   
-  def initialize
-    @images = Surface.load("./images/deck1/back1.png")
-    @rect = @images.make_rect
+  def initialize(name)
+    @name = name
     @cards = []
+  end
+  
+  def init
+    @images = Surface.load("./images/#{@name}/back1.png")
+    @rect = @images.make_rect
   end
   
   def load_40
@@ -34,7 +38,15 @@ class Deck1 < VObject
   end
   
   def size
-    @cards.size
+    return @cards.size
+  end
+  
+end
+
+class Deck1 < Deck
+  
+  def initialize
+    super("deck1")
   end
   
 end

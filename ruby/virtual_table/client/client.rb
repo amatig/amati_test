@@ -6,9 +6,9 @@ require "eventmachine"
 
 include Rubygame
 
+require "libs/msg"
 require "libs/table"
 require "libs/deck"
-
 
 class Game < EventMachine::Connection
   attr_reader :running
@@ -20,14 +20,13 @@ class Game < EventMachine::Connection
     @events = Rubygame::EventQueue.new
     @events.enable_new_style_events 
     
-    send_data "mario"
+    send_data("user_#{rand 1000}")
     
-    table = Table.new("table1")
-    deck = Deck1.new
-    deck.load_54
-    @objects = [table, deck]
-    
+    @table = nil
+    @objects = []
+    @accepted = false
     @running = true
+    @picked = nil
   rescue Exception => e
     p e
     exit!
@@ -43,26 +42,48 @@ class Game < EventMachine::Connection
       #puts ev.inspect
       case ev
       when Rubygame::Events::MousePressed
-        # @deck.picked = true if @deck.collide?(*ev.pos)
-        send_data "ciao"
+        @objects.each do |o|
+          @picked = o if o.collide?(*ev.pos)
+        end
+        p @picked
+        #send_data "ciao"
       when Rubygame::Events::MouseReleased
-        # @deck.picked = false
+        @picked = nil
       when Rubygame::Events::MouseMoved
-        # @deck.move(*ev.pos) if @deck.picked
+        @picked.move(*ev.pos) if @picked
       when Rubygame::Events::QuitRequested
         unbind
       else
         #puts ev
       end
     end
-    @objects.each do |o|
-      o.draw(@screen)
+    if @accepted
+      @table.draw(@screen)
+      @objects.each do |o|
+        o.draw(@screen)
+      end
+      @screen.flip
     end
-    @screen.flip
   end
   
   def receive_data(data)
-    puts data
+    data.split("\r\n").each do |str|
+      m = Msg.load(str)
+      case m.type
+      when "init"
+        if m.data.kind_of?(Table)
+          @table = m.data
+          @table.init
+        elsif m.data.kind_of?(Array)
+          @objects = m.data
+          @objects.each do |o|
+            o.init
+            #o.load_54
+          end
+        end
+        @accepted = true
+      end
+    end
   end
   
 end

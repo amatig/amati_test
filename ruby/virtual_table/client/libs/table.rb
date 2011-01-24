@@ -2,10 +2,22 @@ require "libs/vobject"
 
 class Table < VObject
   
-  def initialize(table)
-    @images = Surface.load("./images/#{table}.png")
+  def initialize(name)
+    @name = name
+    @is_movable = false
+  end
+  
+  def init
+    @images = Surface.load("./images/#{@name}.png")
     @rect = @images.make_rect
-    #@is_movable = false
+  end
+  
+end
+
+class Table1 < Table
+  
+  def initialize
+    super("table1")
   end
   
 end

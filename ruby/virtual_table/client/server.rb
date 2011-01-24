@@ -3,14 +3,27 @@
 require "rubygems"
 require "eventmachine"
 
+require "libs/msg"
+require "libs/table"
+require "libs/deck"
+
 module Server
   @@clients ||= {}
+  @@waiting ||= {}
+  @@table = nil
+  @@objects ||= []
   
   def post_init
     @id = self.object_id
-    @@clients.merge!({@id => self})
-    
-    send_data "benvenuto"
+    if @@clients.empty?
+      @@table = Table1.new
+      send_data(Msg.dump(:type => "init", :data => @@table) + "\r\n")
+      @@objects = [Deck1.new]
+      send_data(Msg.dump(:type => "init", :data => @@objects) + "\r\n")
+      @@clients.merge!({@id => self})
+    else
+      @@waiting.merge!({@id => self})      
+    end
   rescue Exception => e
     p e
     exit!
@@ -26,7 +39,7 @@ module Server
       @name ||= data.strip
     else
       @@clients.values.each do |cl|
-        cl.send_data "#{@name}: #{data}"
+        #cl.send_data "#{@name}: #{data}"
         puts data
       end
     end

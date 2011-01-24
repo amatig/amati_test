@@ -4,10 +4,14 @@ class Card < VObject
   attr_reader :seed, :number
   
   def initialize(deck, s, n)
-    @images = Surface.load("./images/#{deck}/#{s}#{n}.png")
-    @rect = @images.make_rect
+    @deck = deck
     @seed = s
-    @number = n
+    @num = n
+  end
+  
+  def init
+    @images = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+    @rect = @images.make_rect
   end
   
 end
