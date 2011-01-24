@@ -11,9 +11,9 @@ class Server
   attr_accessor :connections, :table, :objects, :hash_objects
   
   def initialize
-    # clients data
+    # Clients data
     @connections = {}
-    # game data
+    # Game data
     @table = Table1.new
     @objects = [Deck1.new(54), Card.new("deck1", "c", 10)]
     @hash_objects = {}
@@ -46,7 +46,7 @@ class Connection < EventMachine::Connection
   end
   
   def receive_data(data)
-    #puts Thread.current
+    # puts Thread.current
     data.split("\r\n").each do |str|
       m = Msg.load(str)
       case m.type
