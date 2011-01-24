@@ -8,12 +8,18 @@ require "libs/table"
 require "libs/deck"
 
 class Server
-  attr_accessor :connections, :table, :objects
+  attr_accessor :connections, :table, :objects, :hash_objects
   
   def initialize
+    # clients data
     @connections = {}
+    # game data
     @table = Table1.new
     @objects = [Deck1.new(54), Card.new("deck1", "c", 10)]
+    @hash_objects = {}
+    @objects.each do |o|
+      @hash_objects[o.oid] = o
+    end
   end
   
   def start
@@ -29,6 +35,7 @@ class Connection < EventMachine::Connection
   attr_accessor :server
   
   def post_init
+    # ...
   rescue Exception => e
     p e
     exit!
@@ -44,17 +51,12 @@ class Connection < EventMachine::Connection
       m = Msg.load(str)
       case m.type
       when "Nick"
-        @name = m.data
+        @nick = m.data
         send_msg(Msg.dump(:type => "Object", :data => server.table))
         send_msg(Msg.dump(:type => "Object", :data => server.objects))
       when "Move"
-        server.objects.each do |o|
-          if o.oid == m.oid
-            o.set_pos(*m.args)
-            resend_msg(data)
-            break
-          end
-        end
+        server.hash_objects[m.oid].set_pos(*m.args)
+        resend_msg(data)
       end
     end
   end

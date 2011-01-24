@@ -24,6 +24,7 @@ class Game < EventMachine::Connection
     
     @table = nil
     @objects = []
+    @hash_objects = {}
     
     @picked = nil
     @accepted = false
@@ -86,16 +87,14 @@ class Game < EventMachine::Connection
           @table = m.data.init
         elsif m.data.kind_of?(Array)
           @objects = m.data
-          @objects.each { |o| o.init }
+          @objects.each do |o| 
+            o.init
+            @hash_objects[o.oid] = o
+          end
         end
         @accepted = true
       when "Move"
-        @objects.each do |o|
-          if o.oid == m.oid
-            o.set_pos(*m.args)
-            break
-          end
-        end
+        @hash_objects[m.oid].set_pos(*m.args)
       end
     end
   end
