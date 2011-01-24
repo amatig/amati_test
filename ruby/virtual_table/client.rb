@@ -18,9 +18,7 @@ class Game < EventMachine::Connection
                          0, 
                          [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF])
     @events = Rubygame::EventQueue.new
-    @events.enable_new_style_events 
-    
-    send_msg(Msg.dump(:type => "Nick", :data => "user_#{rand 1000}"))
+    @events.enable_new_style_events
     
     @table = nil
     @objects = []
@@ -29,6 +27,9 @@ class Game < EventMachine::Connection
     @picked = nil
     @accepted = false
     @running = true
+    
+    send_msg(Msg.dump(:type => "Nick", :data => "user_#{rand 1000}"))
+    
   rescue Exception => e
     p e
     exit!
