@@ -57,7 +57,9 @@ class Game < EventMachine::Connection
       when Rubygame::Events::MouseMoved
         if @picked
           move = @picked.move(*ev.pos)
-          send_msg(Msg.dump(:type => "Move", :oid => @picked.oid, :args => move)) if move
+          if move
+            send_msg(Msg.dump(:type => "Move", :oid => @picked.oid, :args => move))
+          end
         end
       when Rubygame::Events::QuitRequested
         unbind
