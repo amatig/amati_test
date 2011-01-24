@@ -57,6 +57,10 @@ class Connection < EventMachine::Connection
       when "Move"
         server.hash_objects[m.oid].set_pos(*m.args)
         resend_msg(data)
+      when "Lock"
+        temp = server.objects.delete(server.hash_objects[m.oid])
+        server.objects.push(temp)
+        resend_msg(data)
       end
     end
   end

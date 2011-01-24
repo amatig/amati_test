@@ -50,6 +50,11 @@ class Game < EventMachine::Connection
             break
           end
         end
+        if @picked
+          @objects.delete(@picked)
+          @objects.push(@picked)
+          send_msg(Msg.dump(:type => "Lock", :oid => @picked.oid))
+        end
       when Rubygame::Events::MouseReleased
         @picked = nil
       when Rubygame::Events::MouseMoved
@@ -95,6 +100,9 @@ class Game < EventMachine::Connection
         @accepted = true
       when "Move"
         @hash_objects[m.oid].set_pos(*m.args)
+      when "Lock"
+        temp = @objects.delete(@hash_objects[m.oid])
+        @objects.push(temp)
       end
     end
   end
