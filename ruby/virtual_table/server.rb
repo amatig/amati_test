@@ -7,32 +7,35 @@ require "libs/msg"
 require "libs/table"
 require "libs/deck"
 
-module Server
-  @@clients ||= {}
-  @@waiting ||= {}
+class Server
+  attr_accessor :connections, :table, :objects
   
-  def send_msg(msg)
-    send_data("#{msg}\r\n")
+  def initialize
+    @connections = {}
+    @table = Table1.new
+    @objects = [Deck1.new(54), Card.new("deck1", "c", 10)]
   end
   
+  def start
+    @signature = EventMachine.start_server('0.0.0.0', 3333, Connection) do |con|
+      con.server = self
+      @connections[con.object_id] = con
+    end
+  end
+  
+end
+
+class Connection < EventMachine::Connection
+  attr_accessor :server
+  
   def post_init
-    @@table ||= Table1.new
-    @@objects ||= [Deck1.new(54), Card.new("deck1", "c", 10)]
-    
-    #if @@clients.empty?
-      send_msg(Msg.dump(:type => "Object", :data => @@table))
-      send_msg(Msg.dump(:type => "Object", :data => @@objects))
-      @@clients[self.object_id] = self
-    #else
-    #  @@waiting[self.object_id] = self
-    #end
   rescue Exception => e
     p e
     exit!
   end
   
   def unbind
-    @@clients.delete(self.object_id)
+    server.connections.delete(self.object_id)
   end
   
   def receive_data(data)
@@ -42,8 +45,10 @@ module Server
       case m.type
       when "Nick"
         @name = m.data
+        send_msg(Msg.dump(:type => "Object", :data => server.table))
+        send_msg(Msg.dump(:type => "Object", :data => server.objects))
       when "Move"
-        @@objects.each do |o|
+        server.objects.each do |o|
           if o.oid == m.oid
             o.set_pos(*m.args)
             resend_msg(data)
@@ -54,8 +59,12 @@ module Server
     end
   end
   
+  def send_msg(msg)
+    send_data("#{msg}\r\n")
+  end
+  
   def resend_msg(data)
-    @@clients.values.each do |cl|
+    server.connections.values.each do |cl|
       if cl.object_id != self.object_id
         cl.send_data(data)
       end
@@ -66,7 +75,8 @@ end
 
 
 EventMachine::run do
-  EventMachine::start_server("0.0.0.0", 3333, Server)
+  s = Server.new
+  s.start
   trap("INT") { EventMachine::stop_event_loop }
   puts "Server is running..."
 end

@@ -12,11 +12,7 @@ require "libs/deck"
 
 class Game < EventMachine::Connection
   attr_reader :running
-  
-  def send_msg(msg)
-    send_data("#{msg}\r\n")
-  end
-  
+    
   def initialize
     @screen = Screen.new([800, 600], 
                          0, 
@@ -75,6 +71,10 @@ class Game < EventMachine::Connection
       end
       @screen.flip
     end
+  end
+  
+  def send_msg(msg)
+    send_data("#{msg}\r\n")
   end
   
   def receive_data(data)
