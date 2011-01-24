@@ -10,16 +10,19 @@ require "libs/deck"
 module Server
   @@clients ||= {}
   @@waiting ||= {}
-  @@table = nil
-  @@objects ||= []
+  
+  def send_msg(msg)
+    send_data("#{msg}\r\n")
+  end
   
   def post_init
+    @@table ||= Table1.new
+    @@objects ||= [Deck1.new(54), Card.new("deck1", "c", 10)]
+    
     @id = self.object_id
     if @@clients.empty?
-      @@table = Table1.new
-      send_data(Msg.dump(:type => "init", :data => @@table) + "\r\n")
-      @@objects = [Deck1.new]
-      send_data(Msg.dump(:type => "init", :data => @@objects) + "\r\n")
+      send_msg(Msg.dump(:type => "Object", :data => @@table))
+      send_msg(Msg.dump(:type => "Object", :data => @@objects))
       @@clients.merge!({@id => self})
     else
       @@waiting.merge!({@id => self})      
@@ -38,10 +41,10 @@ module Server
     if @name == nil then
       @name ||= data.strip
     else
-      @@clients.values.each do |cl|
+      # @@clients.values.each do |cl|
         #cl.send_data "#{@name}: #{data}"
-        puts data
-      end
+        puts "#{@name}: #{data}"
+      #end
     end
   end
   

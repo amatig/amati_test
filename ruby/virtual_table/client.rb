@@ -13,6 +13,10 @@ require "libs/deck"
 class Game < EventMachine::Connection
   attr_reader :running
   
+  def send_msg(msg)
+    send_data("#{msg}\r\n")
+  end
+  
   def initialize
     @screen = Screen.new([800, 600], 
                          0, 
@@ -20,13 +24,13 @@ class Game < EventMachine::Connection
     @events = Rubygame::EventQueue.new
     @events.enable_new_style_events 
     
-    send_data("user_#{rand 1000}")
+    send_msg("user_#{rand 1000}")
     
     @table = nil
     @objects = []
+    @picked = nil
     @accepted = false
     @running = true
-    @picked = nil
   rescue Exception => e
     p e
     exit!
@@ -42,11 +46,13 @@ class Game < EventMachine::Connection
       #puts ev.inspect
       case ev
       when Rubygame::Events::MousePressed
-        @objects.each do |o|
-          @picked = o if o.collide?(*ev.pos)
+        @objects.reverse.each do |o|
+          if o.collide?(*ev.pos)
+            @picked = o
+            break
+          end
         end
-        p @picked
-        #send_data "ciao"
+        #send_msg "ciao"
       when Rubygame::Events::MouseReleased
         @picked = nil
       when Rubygame::Events::MouseMoved
@@ -70,7 +76,7 @@ class Game < EventMachine::Connection
     data.split("\r\n").each do |str|
       m = Msg.load(str)
       case m.type
-      when "init"
+      when "Object"
         if m.data.kind_of?(Table)
           @table = m.data
           @table.init
@@ -78,7 +84,6 @@ class Game < EventMachine::Connection
           @objects = m.data
           @objects.each do |o|
             o.init
-            #o.load_54
           end
         end
         @accepted = true
@@ -100,7 +105,7 @@ EventMachine::run do
     EventMachine.next_tick(give_tick)
   end
   trap("INT") do
-    Rubygame.quit
+    #Rubygame.quit
     EventMachine::stop_event_loop
   end
   give_tick.call

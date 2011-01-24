@@ -4,6 +4,7 @@ require "libs/card"
 class Deck < VObject
   
   def initialize(name)
+    super()
     @name = name
     @cards = []
   end
@@ -11,30 +12,6 @@ class Deck < VObject
   def init
     @images = Surface.load("./images/#{@name}/back1.png")
     @rect = @images.make_rect
-  end
-  
-  def load_40
-    @cards = []
-    ["c", "q", "f", "p"].each do |s|
-      (1..10).each do |n|
-        @cards << Card.new("deck1", s, n)
-      end
-    end
-  end
-  
-  def load_52
-    @cards = []
-    ["c", "q", "f", "p"].each do |s|
-      (1..13).each do |n|
-        @cards << Card.new("deck1", s, n)
-      end
-    end
-  end
-  
-  def load_54
-    load_52
-    @cards << Card.new("deck1", "r", 0)
-    @cards << Card.new("deck1", "b", 0)
   end
   
   def size
@@ -45,8 +22,40 @@ end
 
 class Deck1 < Deck
   
-  def initialize
+  def initialize(size = 54)
     super("deck1")
+    case size
+    when 40
+      load_40
+    when 52
+      load_52
+    else
+      load_54
+    end
+  end
+  
+  def load_40
+    @cards = []
+    ["c", "q", "f", "p"].each do |s|
+      (1..10).each do |n|
+        @cards << [@name, s, n]
+      end
+    end
+  end
+  
+  def load_52
+    @cards = []
+    ["c", "q", "f", "p"].each do |s|
+      (1..13).each do |n|
+        @cards << [@name, s, n]
+      end
+    end
+  end
+  
+  def load_54
+    load_52
+    @cards << [@name, "r", 0]
+    @cards << [@name, "b", 0]
   end
   
 end

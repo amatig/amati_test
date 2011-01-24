@@ -4,6 +4,7 @@ class Card < VObject
   attr_reader :seed, :number
   
   def initialize(deck, s, n)
+    super()
     @deck = deck
     @seed = s
     @num = n

@@ -3,6 +3,7 @@ require "libs/vobject"
 class Table < VObject
   
   def initialize(name)
+    super()
     @name = name
     @is_movable = false
   end
