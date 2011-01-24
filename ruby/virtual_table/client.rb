@@ -51,12 +51,14 @@ class Game < EventMachine::Connection
           end
         end
         if @picked
+          # controllare che e' libero e prendere il lock
           @objects.delete(@picked)
           @objects.push(@picked)
           send_msg(Msg.dump(:type => "Lock", :oid => @picked.oid))
         end
       when Rubygame::Events::MouseReleased
         @picked = nil
+        # rilasciare il lock
       when Rubygame::Events::MouseMoved
         if @picked
           move = @picked.move(*ev.pos)
