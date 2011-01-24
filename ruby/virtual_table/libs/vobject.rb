@@ -1,5 +1,5 @@
 class VObject
-  attr_reader :oid
+  attr_reader :oid, :lock
   
   def initialize
     @oid = rand(1000000000)
@@ -8,6 +8,7 @@ class VObject
     @x = 0
     @y = 0
     @is_movable = true
+    @lock = nil
   end
   
   def collide?(x, y)
