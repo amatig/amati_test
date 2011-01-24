@@ -1,9 +1,11 @@
 class VObject
-  attr_reader :oid, :lock
+  attr_reader :oid
+  attr_accessor :lock
   
   def initialize
     @oid = rand(1000000000)
-    @images = nil
+    @image = nil
+    @image_lock = nil
     @rect = nil
     @x = 0
     @y = 0
@@ -36,7 +38,8 @@ class VObject
   end
   
   def draw(screen)
-    @images.blit(screen, @rect)
+    @image.blit(screen, @rect)
+    @image_lock.blit(screen, @rect) if @lock
   end
   
 end

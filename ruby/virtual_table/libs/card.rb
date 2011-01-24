@@ -11,8 +11,9 @@ class Card < VObject
   end
   
   def init
-    @images = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
-    @rect = @images.make_rect
+    @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+    @image_lock = Surface.load("./images/lock.png")
+    @rect = @image.make_rect
     set_pos(@x, @y)
     return self
   end

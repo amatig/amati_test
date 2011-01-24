@@ -9,8 +9,8 @@ class Table < VObject
   end
   
   def init
-    @images = Surface.load("./images/#{@name}.png")
-    @rect = @images.make_rect
+    @image = Surface.load("./images/#{@name}.png")
+    @rect = @image.make_rect
     return self
   end
   

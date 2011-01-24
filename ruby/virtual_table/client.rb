@@ -28,7 +28,8 @@ class Game < EventMachine::Connection
     @accepted = false
     @running = true
     
-    send_msg(Msg.dump(:type => "Nick", :data => "user_#{rand 1000}"))
+    @nick = "user_#{rand 1000}"
+    send_msg(Msg.dump(:type => "Nick", :data => @nick))
     
   rescue Exception => e
     p e
@@ -52,8 +53,10 @@ class Game < EventMachine::Connection
           end
         end
       when Rubygame::Events::MouseReleased
-        @picked = nil
-        # rilasciare il lock
+        if @picked
+          send_msg(Msg.dump(:type => "UnLock", :oid => @picked.oid))
+          @picked = nil
+        end
       when Rubygame::Events::MouseMoved
         #puts @picked
         if @picked
@@ -104,7 +107,9 @@ class Game < EventMachine::Connection
       when "Lock"
         temp = @objects.delete(@hash_objects[m.oid])
         @objects.push(temp)
-        # mettere immagine
+        temp.lock = m.data
+      when "UnLock"
+        @hash_objects[m.oid].lock = nil
       end
     end
   end

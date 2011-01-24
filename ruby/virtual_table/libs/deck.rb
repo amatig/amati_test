@@ -10,8 +10,9 @@ class Deck < VObject
   end
   
   def init
-    @images = Surface.load("./images/#{@name}/back1.png")
-    @rect = @images.make_rect
+    @image = Surface.load("./images/#{@name}/back1.png")
+    @image_lock = Surface.load("./images/lock.png")
+    @rect = @image.make_rect
     set_pos(@x, @y)
     return self
   end

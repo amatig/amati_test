@@ -58,13 +58,16 @@ class Connection < EventMachine::Connection
         server.hash_objects[m.oid].set_pos(*m.args)
         resend_all(data)
       when "Pick"
-        # if e' libero
-        temp = server.objects.delete(server.hash_objects[m.oid])
-        server.objects.push(temp)
-        # locka
-        send_data(data)
-        resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid))
-        # end
+        unless server.hash_objects[m.oid].lock
+          temp = server.objects.delete(server.hash_objects[m.oid])
+          server.objects.push(temp)
+          temp.lock = @nick
+          send_data(data)
+          resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :data => @nick) + "\r\n")
+        end
+      when "UnLock"
+        server.hash_objects[m.oid].lock = nil
+        resend_without_me(data)
       end
     end
   end
