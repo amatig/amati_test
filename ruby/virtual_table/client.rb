@@ -24,7 +24,7 @@ class Game < EventMachine::Connection
     @events = Rubygame::EventQueue.new
     @events.enable_new_style_events 
     
-    send_msg("user_#{rand 1000}")
+    send_msg(Msg.dump(:type => "Nick", :data => "user_#{rand 1000}"))
     
     @table = nil
     @objects = []
@@ -52,11 +52,13 @@ class Game < EventMachine::Connection
             break
           end
         end
-        #send_msg "ciao"
       when Rubygame::Events::MouseReleased
         @picked = nil
       when Rubygame::Events::MouseMoved
-        @picked.move(*ev.pos) if @picked
+        if @picked
+          move = @picked.move(*ev.pos)
+          send_msg(Msg.dump(:type => "Move", :oid => @picked.oid, :args => move)) if move
+        end
       when Rubygame::Events::QuitRequested
         unbind
       else
@@ -78,15 +80,19 @@ class Game < EventMachine::Connection
       case m.type
       when "Object"
         if m.data.kind_of?(Table)
-          @table = m.data
-          @table.init
+          @table = m.data.init
         elsif m.data.kind_of?(Array)
           @objects = m.data
-          @objects.each do |o|
-            o.init
-          end
+          @objects.each { |o| o.init }
         end
         @accepted = true
+      when "Move"
+        @objects.each do |o|
+          if o.oid == m.oid
+            o.set_pos(*m.args)
+            break
+          end
+        end
       end
     end
   end
@@ -105,7 +111,7 @@ EventMachine::run do
     EventMachine.next_tick(give_tick)
   end
   trap("INT") do
-    #Rubygame.quit
+    # Rubygame.quit
     EventMachine::stop_event_loop
   end
   give_tick.call

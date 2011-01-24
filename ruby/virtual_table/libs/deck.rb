@@ -12,6 +12,8 @@ class Deck < VObject
   def init
     @images = Surface.load("./images/#{@name}/back1.png")
     @rect = @images.make_rect
+    set_pos(@x, @y)
+    return self
   end
   
   def size

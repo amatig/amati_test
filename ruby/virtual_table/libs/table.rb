@@ -11,6 +11,7 @@ class Table < VObject
   def init
     @images = Surface.load("./images/#{@name}.png")
     @rect = @images.make_rect
+    return self
   end
   
 end

@@ -20,13 +20,13 @@ module Server
     @@objects ||= [Deck1.new(54), Card.new("deck1", "c", 10)]
     
     @id = self.object_id
-    if @@clients.empty?
+    #if @@clients.empty?
       send_msg(Msg.dump(:type => "Object", :data => @@table))
       send_msg(Msg.dump(:type => "Object", :data => @@objects))
       @@clients.merge!({@id => self})
-    else
-      @@waiting.merge!({@id => self})      
-    end
+    #else
+    #  @@waiting.merge!({@id => self})      
+    #end
   rescue Exception => e
     p e
     exit!
@@ -38,13 +38,28 @@ module Server
   
   def receive_data(data)
     #puts Thread.current
-    if @name == nil then
-      @name ||= data.strip
-    else
-      # @@clients.values.each do |cl|
-        #cl.send_data "#{@name}: #{data}"
-        puts "#{@name}: #{data}"
-      #end
+    data.split("\r\n").each do |str|
+      m = Msg.load(str)
+      case m.type
+      when "Nick"
+        @name = m.data
+      when "Move"
+        @@objects.each do |o|
+          if o.oid == m.oid
+            o.set_pos(*m.args)
+            resend_msg(data)
+            break
+          end
+        end
+      end
+    end
+  end
+  
+  def resend_msg(data)
+    @@clients.values.each do |cl|
+      if cl.object_id != @id
+        cl.send_data(data)
+      end
     end
   end
   

@@ -1,8 +1,12 @@
 class VObject
+  attr_reader :oid
   
   def initialize
+    @oid = rand(1000000000)
     @images = nil
     @rect = nil
+    @x = 0
+    @y = 0
     @is_movable = true
   end
   
@@ -10,9 +14,25 @@ class VObject
     return @rect.collide_point?(x, y)
   end
   
+  def get_pos
+    return [@x, @y]
+  end
+  
+  def set_pos(x, y)
+    if @rect
+      @rect.x = x
+      @rect.y = y
+    end
+    @x = x
+    @y = y
+  end
+  
   def move(x, y)
     if @is_movable
       @rect.move!(x - @rect.centerx, y - @rect.centery)
+      @x = @rect.x
+      @y = @rect.y
+      return get_pos
     end
   end
   
