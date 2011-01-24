@@ -22,9 +22,9 @@ module Server
     #if @@clients.empty?
       send_msg(Msg.dump(:type => "Object", :data => @@table))
       send_msg(Msg.dump(:type => "Object", :data => @@objects))
-      @@clients.merge!({self.object_id => self})
+      @@clients[self.object_id] = self
     #else
-    #  @@waiting.merge!({self.object_id => self})      
+    #  @@waiting[self.object_id] = self
     #end
   rescue Exception => e
     p e

@@ -28,6 +28,7 @@ class Game < EventMachine::Connection
     
     @table = nil
     @objects = []
+    
     @picked = nil
     @accepted = false
     @running = true
