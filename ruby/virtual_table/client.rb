@@ -46,20 +46,15 @@ class Game < EventMachine::Connection
       when Rubygame::Events::MousePressed
         @objects.reverse.each do |o|
           if o.collide?(*ev.pos)
-            @picked = o
+            send_msg(Msg.dump(:type => "Pick", :oid => o.oid))
             break
           end
-        end
-        if @picked
-          # controllare che e' libero e prendere il lock
-          @objects.delete(@picked)
-          @objects.push(@picked)
-          send_msg(Msg.dump(:type => "Lock", :oid => @picked.oid))
         end
       when Rubygame::Events::MouseReleased
         @picked = nil
         # rilasciare il lock
       when Rubygame::Events::MouseMoved
+        #puts @picked
         if @picked
           move = @picked.move(*ev.pos)
           if move
@@ -102,9 +97,13 @@ class Game < EventMachine::Connection
         @accepted = true
       when "Move"
         @hash_objects[m.oid].set_pos(*m.args)
+      when "Pick"
+        @picked = @objects.delete(@hash_objects[m.oid])
+        @objects.push(@picked)
       when "Lock"
         temp = @objects.delete(@hash_objects[m.oid])
         @objects.push(temp)
+        # mettere immagine
       end
     end
   end

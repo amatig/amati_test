@@ -52,24 +52,31 @@ class Connection < EventMachine::Connection
       case m.type
       when "Nick"
         @nick = m.data
-        send_msg(Msg.dump(:type => "Object", :data => server.table))
-        send_msg(Msg.dump(:type => "Object", :data => server.objects))
+        send_me(Msg.dump(:type => "Object", :data => server.table))
+        send_me(Msg.dump(:type => "Object", :data => server.objects))
       when "Move"
         server.hash_objects[m.oid].set_pos(*m.args)
-        resend_msg(data)
-      when "Lock"
+        resend_all(data)
+      when "Pick"
         temp = server.objects.delete(server.hash_objects[m.oid])
         server.objects.push(temp)
-        resend_msg(data)
+        send_data(data)
+        resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid))
       end
     end
   end
   
-  def send_msg(msg)
+  def send_me(msg)
     send_data("#{msg}\r\n")
   end
   
-  def resend_msg(data)
+  def resend_all(data)
+    server.connections.values.each do |cl|
+      cl.send_data(data)
+    end
+  end
+  
+  def resend_without_me(data)
     server.connections.values.each do |cl|
       if cl.object_id != self.object_id
         cl.send_data(data)
