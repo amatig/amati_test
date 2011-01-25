@@ -5,7 +5,8 @@ class Table < VObject
   def initialize(name)
     super()
     @name = name
-    @is_movable = false
+    @movable = false
+    @pickable = false
   end
   
   def init

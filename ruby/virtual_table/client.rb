@@ -114,7 +114,7 @@ class Game < EventMachine::Connection
         # preso l'oggetto in pick, va in primo piano
         @picked = @objects.delete(@hash_objects[m.oid])
         @objects.push(@picked)
-        @picked.pick_pos(*m.args) # salva il punto di click
+        @picked.save_pick_pos(*m.args) # salva il punto di click
       when "Lock"
         # porta l'oggetto in pick di un altro in primo piano
         temp = @objects.delete(@hash_objects[m.oid])
