@@ -74,9 +74,9 @@ class Connection < EventMachine::Connection
     end
   end
   
-  def send_msg(msg)
-    msg = "#{msg}#{$DELIM}" unless msg =~ /#{$DELIM}$/
-    send_data(msg)
+  def send_msg(data)
+    data = "#{data}#{$DELIM}" unless (data =~ /#{$DELIM}$/)
+    send_data(data)
   end
   
   def resend_all(data)
