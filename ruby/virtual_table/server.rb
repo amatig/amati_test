@@ -7,6 +7,8 @@ require "libs/msg"
 require "libs/table"
 require "libs/deck"
 
+$DELIM = "\r\n"
+
 class Server
   attr_accessor :connections, :table, :objects, :hash_objects
   
@@ -47,7 +49,7 @@ class Connection < EventMachine::Connection
   
   def receive_data(data)
     # puts Thread.current
-    data.split("\r\n").each do |str|
+    data.split($DELIM).each do |str|
       m = Msg.load(str)
       case m.type
       when "Nick"
@@ -62,8 +64,8 @@ class Connection < EventMachine::Connection
           temp = server.objects.delete(server.hash_objects[m.oid])
           server.objects.push(temp)
           temp.lock = @nick
-          send_data(data)
-          resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :data => @nick) + "\r\n")
+          send_msg(data)
+          resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :data => @nick))
         end
       when "UnLock"
         server.hash_objects[m.oid].lock = nil
@@ -73,19 +75,20 @@ class Connection < EventMachine::Connection
   end
   
   def send_msg(msg)
-    send_data("#{msg}\r\n")
+    msg = "#{msg}#{$DELIM}" unless msg =~ /#{$DELIM}$/
+    send_data(msg)
   end
   
   def resend_all(data)
     server.connections.values.each do |cl|
-      cl.send_data(data)
+      cl.send_msg(data)
     end
   end
   
   def resend_without_me(data)
     server.connections.values.each do |cl|
       if cl.object_id != self.object_id
-        cl.send_data(data)
+        cl.send_msg(data)
       end
     end
   end
