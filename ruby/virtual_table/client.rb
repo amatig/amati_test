@@ -10,6 +10,8 @@ require "libs/msg"
 require "libs/table"
 require "libs/deck"
 
+$DELIM = "\r\n"
+
 class Game < EventMachine::Connection
   attr_reader :running
     
@@ -48,7 +50,7 @@ class Game < EventMachine::Connection
       when Rubygame::Events::MousePressed
         @objects.reverse.each do |o|
           if o.collide?(*ev.pos)
-            send_msg(Msg.dump(:type => "Pick", :oid => o.oid))
+            send_msg(Msg.dump(:type => "Pick", :oid => o.oid, :args => ev.pos))
             break
           end
         end
@@ -58,7 +60,6 @@ class Game < EventMachine::Connection
           @picked = nil
         end
       when Rubygame::Events::MouseMoved
-        #puts @picked
         if @picked
           move = @picked.move(*ev.pos)
           if move
@@ -68,7 +69,7 @@ class Game < EventMachine::Connection
       when Rubygame::Events::QuitRequested
         unbind
       else
-        #puts ev
+        #puts ev.inspect
       end
     end
     if @accepted
@@ -81,11 +82,12 @@ class Game < EventMachine::Connection
   end
   
   def send_msg(msg)
-    send_data("#{msg}\r\n")
+    msg = "#{msg}#{$DELIM}" unless msg =~ /#{$DELIM}$/
+    send_data(msg)
   end
   
   def receive_data(data)
-    data.split("\r\n").each do |str|
+    data.split($DELIM).each do |str|
       m = Msg.load(str)
       case m.type
       when "Object"
@@ -104,6 +106,7 @@ class Game < EventMachine::Connection
       when "Pick"
         @picked = @objects.delete(@hash_objects[m.oid])
         @objects.push(@picked)
+        @picked.pick_pos(*m.args)
       when "Lock"
         temp = @objects.delete(@hash_objects[m.oid])
         @objects.push(temp)

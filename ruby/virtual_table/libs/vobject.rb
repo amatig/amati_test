@@ -7,14 +7,19 @@ class VObject
     @image = nil
     @image_lock = nil
     @rect = nil
-    @x = 0
-    @y = 0
+    @x = @px = 0
+    @y = @py = 0
     @is_movable = true
     @lock = nil
   end
   
   def collide?(x, y)
     return @rect.collide_point?(x, y)
+  end
+  
+  def pick_pos(x, y)
+    @px = x - @rect.x
+    @py = y - @rect.y
   end
   
   def get_pos
@@ -32,7 +37,7 @@ class VObject
   
   def move(x, y)
     if @is_movable
-      temp = @rect.move(x - @rect.centerx, y - @rect.centery)
+      temp = @rect.move(x - @rect.x - @px, y - @rect.y - @py)
       return [temp.x, temp.y]
     end
   end
