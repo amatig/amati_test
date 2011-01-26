@@ -1,5 +1,5 @@
 class VObject
-  attr_reader :oid
+  attr_reader :oid, :x, :y
   attr_accessor :lock
   
   def initialize
@@ -55,6 +55,10 @@ class VObject
       @y = temp.y
       return get_pos
     end
+  end
+  
+  def menu_actions
+    return []
   end
   
   def draw(screen)

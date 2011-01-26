@@ -21,6 +21,10 @@ class Deck < VObject
     return @cards.size
   end
   
+  def menu_actions
+    return ["Dai carta", "Mescola Mazzo", "Alza mazzo", "Riprendi carte"]
+  end
+  
 end
 
 class Deck1 < Deck

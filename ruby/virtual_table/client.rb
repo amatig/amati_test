@@ -9,6 +9,7 @@ include Rubygame
 require "libs/msg"
 require "libs/table"
 require "libs/deck"
+require "libs/menu"
 
 $DELIM = "\r\n"
 
@@ -27,6 +28,7 @@ class Game < EventMachine::Connection
     @table = nil # tavolo
     @objects = [] # lista degli oggetti sul tavolo
     @hash_objects = {} # per accedere agli oggetti + velocemente
+    @menu = nil # menu
     
     @picked = nil # oggetto preso col click e loccato, si assegna il nick
     @accepted = false # true quando il server accetta l'entrata in gioco
@@ -66,6 +68,7 @@ class Game < EventMachine::Connection
           # rilascio dell'oggetto in pick, e quindi lockato
           send_msg(Msg.dump(:type => "UnLock", :oid => @picked.oid))
           @picked = nil
+          @menu = nil
         end
       when Rubygame::Events::MouseMoved
         if @picked
@@ -88,6 +91,7 @@ class Game < EventMachine::Connection
     if @accepted
       @table.draw(@screen)
       @objects.each { |o| o.draw(@screen) }
+      @menu.draw(@screen) if @menu
       @screen.flip
     end
   end
@@ -124,7 +128,7 @@ class Game < EventMachine::Connection
           @objects.delete(@picked)
           @objects.push(@picked)
         else
-          puts "MENU"
+          @menu = Menu.new(m.args[1], @picked)
         end
       when "Lock"
         temp = @hash_objects[m.oid]
