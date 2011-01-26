@@ -64,7 +64,7 @@ class Connection < EventMachine::Connection
       m = Msg.load(str)
       case m.type
       when "Nick"
-        @nick = m.data # nick del client
+        @nick = m.args # nick del client
         # invio dei dati del gioco tavolo, oggetti
         send_msg(Msg.dump(:type => "Object", :data => server.table))
         send_msg(Msg.dump(:type => "Object", :data => server.objects))
@@ -75,13 +75,15 @@ class Connection < EventMachine::Connection
         o = server.hash_objects[m.oid]
         # vede se un oggetto e' disponibile
         if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
-          # preso l'oggeto lo si porta in primo piano
-          server.objects.delete(o)
-          server.objects.push(o)
+          if m.args[0] == :mouse_left
+            # preso l'oggeto lo si porta in primo piano
+            server.objects.delete(o)
+            server.objects.push(o)
+          end
           o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
           send_msg(data) # rinvio del pick a chi l'ha cliccato
           # rinvio a tutti gli altri del lock dell'oggetto
-          resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :data => @nick))
+          resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :args => [m.args[0], @nick]))
         end
       when "UnLock"
         # Unlock dell'oggetto in pick e rinvio a tutti

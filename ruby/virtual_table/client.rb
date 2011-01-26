@@ -34,7 +34,7 @@ class Game < EventMachine::Connection
     
     # Send nick
     @nick = "user_#{rand 1000}"
-    send_msg(Msg.dump(:type => "Nick", :data => @nick))
+    send_msg(Msg.dump(:type => "Nick", :args => @nick))
   rescue Exception => e
     p e
     exit!
@@ -56,7 +56,7 @@ class Game < EventMachine::Connection
           if o.collide?(*ev.pos)
             if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
               # richiesta del pick
-              send_msg(Msg.dump(:type => "Pick", :oid => o.oid, :args => ev.pos))
+              send_msg(Msg.dump(:type => "Pick", :oid => o.oid, :args => [ev.button, ev.pos]))
             end
             break
           end
@@ -69,10 +69,14 @@ class Game < EventMachine::Connection
         end
       when Rubygame::Events::MouseMoved
         if @picked
-          # spostamento se l'oggetto e' in pick
-          move = @picked.move(*ev.pos) # muove l'oggetto
-          if move
-            send_msg(Msg.dump(:type => "Move", :oid => @picked.oid, :args => move))
+          if ev.buttons[0] == :mouse_left
+            # spostamento se l'oggetto e' in pick
+            move = @picked.move(*ev.pos) # muove l'oggetto
+            if move
+              send_msg(Msg.dump(:type => "Move", :oid => @picked.oid, :args => move))
+            end
+          else
+            # menu
           end
         end
       when Rubygame::Events::QuitRequested
@@ -113,15 +117,23 @@ class Game < EventMachine::Connection
       when "Move"
         @hash_objects[m.oid].set_pos(*m.args)
       when "Pick"
-        # preso l'oggetto in pick, va in primo piano
-        @picked = @objects.delete(@hash_objects[m.oid])
-        @objects.push(@picked)
-        @picked.save_pick_pos(*m.args) # salva il punto di click
+        @picked = @hash_objects[m.oid]
+        @picked.save_pick_pos(*m.args[1]) # salva il punto di click
+        if m.args[0] == :mouse_left
+          # preso l'oggetto in pick, va in primo piano
+          @objects.delete(@picked)
+          @objects.push(@picked)
+        else
+          puts "MENU"
+        end
       when "Lock"
-        # porta l'oggetto in pick di un altro in primo piano
-        temp = @objects.delete(@hash_objects[m.oid])
-        @objects.push(temp)
-        temp.lock = m.data # lock, nick di chi ha fatto pick
+        temp = @hash_objects[m.oid]
+        if m.args[0] == :mouse_left
+          # porta l'oggetto in pick di un altro in primo piano
+          @objects.delete(temp)
+          @objects.push(temp)
+        end
+        temp.lock = m.args[1] # lock, nick di chi ha fatto pick
       when "UnLock"
         @hash_objects[m.oid].lock = nil # toglie il lock
       end
