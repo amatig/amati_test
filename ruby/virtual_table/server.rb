@@ -94,7 +94,7 @@ class Connection < EventMachine::Connection
   
   # Invia un messaggio al client.
   def send_msg(data)
-    data = "#{data}#{$DELIM}" unless (data =~ /#{$DELIM}$/)
+    data = "#{data}#{$DELIM}" unless data.end_with?($DELIM)
     send_data(data)
   end
   

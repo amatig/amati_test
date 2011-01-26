@@ -90,7 +90,7 @@ class Game < EventMachine::Connection
   
   # Invia messaggi al server.
   def send_msg(data)
-    data = "#{data}#{$DELIM}" unless (data =~ /#{$DELIM}$/)
+    data = "#{data}#{$DELIM}" unless data.end_with?($DELIM)
     send_data(data)
   end
   
