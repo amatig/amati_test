@@ -70,7 +70,7 @@ class Connection < EventMachine::Connection
         send_msg(Msg.dump(:type => "Object", :data => server.objects))
       when "Move"
         server.hash_objects[m.oid].set_pos(*m.args) # salva il movimento
-        resend_all(data) # rinvia a tutti il movimento dell'oggetto
+        resend_without_me(data) # rinvia a tutti gli altri il movimento dell'oggetto
       when "Pick"
         o = server.hash_objects[m.oid]
         # vede se un oggetto e' disponibile

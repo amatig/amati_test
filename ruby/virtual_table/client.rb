@@ -54,8 +54,10 @@ class Game < EventMachine::Connection
       when Rubygame::Events::MousePressed
         @objects.reverse.each do |o|
           if o.collide?(*ev.pos)
-            # richiesta del pick
-            send_msg(Msg.dump(:type => "Pick", :oid => o.oid, :args => ev.pos))
+            if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
+              # richiesta del pick
+              send_msg(Msg.dump(:type => "Pick", :oid => o.oid, :args => ev.pos))
+            end
             break
           end
         end
@@ -68,7 +70,7 @@ class Game < EventMachine::Connection
       when Rubygame::Events::MouseMoved
         if @picked
           # spostamento se l'oggetto e' in pick
-          move = @picked.move(*ev.pos) # ritorna nuove [x,y] senza modificarle nell'oggeto
+          move = @picked.move(*ev.pos) # muove l'oggetto
           if move
             send_msg(Msg.dump(:type => "Move", :oid => @picked.oid, :args => move))
           end

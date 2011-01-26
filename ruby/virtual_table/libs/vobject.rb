@@ -50,8 +50,10 @@ class VObject
   
   def move(x, y)
     if is_movable?
-      temp = @rect.move(x - @rect.x - @px, y - @rect.y - @py)
-      return [temp.x, temp.y]
+      temp = @rect.move!(x - @rect.x - @px, y - @rect.y - @py)
+      @x = temp.x
+      @y = temp.y
+      return get_pos
     end
   end
   
