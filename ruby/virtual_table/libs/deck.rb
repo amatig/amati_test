@@ -17,12 +17,39 @@ class Deck < VObject
     return self
   end
   
+  def set_datalinks(objects, hash_objects)
+    # servono per l'aggiunta di oggetti, le carte
+    @objects = objects
+    @hash_objects = hash_objects
+    return self
+  end
+  
   def size
     return @cards.size
   end
   
   def menu_actions
-    return ["Dai carta", "Mescola Mazzo", "Alza mazzo", "Riprendi carte"]
+    return [["Dai carta", "action_card"], 
+            ["Mescola Mazzo", "action_shuffle"], 
+            ["Alza mazzo", "action_cut"], 
+            ["Riprendi carte", "action_new"]]
+  end
+  
+  def action_card
+    c = Card.new(*@cards.delete(@cards.first))
+    c.init if @image
+    @objects << c
+    @hash_objects[c.oid] = c
+  end
+  
+  def action_shuffle
+    @cards.shuffle!
+  end
+  
+  def action_cut
+  end
+  
+  def action_new
   end
   
 end
@@ -31,6 +58,7 @@ class Deck1 < Deck
   
   def initialize(size = 54)
     super("deck1")
+    @max_size = size    
     case size
     when 40
       load_40

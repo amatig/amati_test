@@ -15,15 +15,16 @@ class Server
   # Costruttore della classe.
   def initialize
     # Clients data
-    @connections = {} # hash di tutti client connessi
+    @connections = {} # hash di tutti client connessi    
     
-    # Game data
+    # Game data all'avvio del server
     @table = Table1.new # tavolo
-    @objects = [Deck1.new(54), Card.new("deck1", "c", 10)] # lista oggetti sul tavolo
+    @objects = [] # lista oggetti sul tavolo
     @hash_objects = {} # per accedere agli oggetti + velocemente
-    @objects.each do |o|
-      @hash_objects[o.oid] = o # assignazione all'hash
-    end
+    deck = Deck1.new(54)
+    @objects << deck
+    @hash_objects[deck.oid] = deck
+    deck.set_datalinks(@objects, @hash_objects)
   end
   
   # Avvio della ricezione di connessioni da parte di client.
@@ -70,7 +71,7 @@ class Connection < EventMachine::Connection
         send_msg(Msg.dump(:type => "Object", :data => server.objects))
       when "Move"
         server.hash_objects[m.oid].set_pos(*m.args) # salva il movimento
-        resend_without_me(data) # rinvia a tutti gli altri il movimento dell'oggetto
+        resend_without_me(str) # rinvia a tutti gli altri il movimento dell'oggetto
       when "Pick"
         o = server.hash_objects[m.oid]
         # vede se un oggetto e' disponibile
@@ -81,7 +82,7 @@ class Connection < EventMachine::Connection
             server.objects.push(o)
           end
           o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
-          send_msg(data) # rinvio del pick a chi l'ha cliccato
+          send_msg(str) # rinvio del pick a chi l'ha cliccato
           # rinvio a tutti gli altri del lock dell'oggetto
           resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :args => [m.args[0], @nick]))
         end
@@ -89,7 +90,11 @@ class Connection < EventMachine::Connection
         # Unlock dell'oggetto in pick e rinvio a tutti
         # tranne a chi lo muoveva, perche' per lui non lockato
         server.hash_objects[m.oid].lock = nil # unlock
-        resend_without_me(data)
+        resend_without_me(str)
+      when "Action"
+        # azione su un oggetto
+        server.hash_objects[m.oid].send(m.args)
+        resend_without_me(str)
       end
     end
   end

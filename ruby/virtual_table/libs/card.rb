@@ -5,6 +5,7 @@ class Card < VObject
   
   def initialize(deck, s, n)
     super()
+    @oid = "#{deck}_#{s}_#{n}" # server un indice unico
     @deck = deck
     @seed = s
     @num = n

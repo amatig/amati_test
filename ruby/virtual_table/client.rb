@@ -65,10 +65,14 @@ class Game < EventMachine::Connection
         end
       when Rubygame::Events::MouseReleased
         if @picked
+          if (@menu and @menu.choice)
+            @picked.send(@menu.choice.to_sym)
+            send_msg(Msg.dump(:type => "Action", :oid => @picked.oid, :args => @menu.choice.to_sym))
+          end
+          @menu = nil
           # rilascio dell'oggetto in pick, e quindi lockato
           send_msg(Msg.dump(:type => "UnLock", :oid => @picked.oid))
           @picked = nil
-          @menu = nil
         end
       when Rubygame::Events::MouseMoved
         if @picked
@@ -79,7 +83,7 @@ class Game < EventMachine::Connection
               send_msg(Msg.dump(:type => "Move", :oid => @picked.oid, :args => move))
             end
           else
-            # menu
+            @menu.select(ev) if @menu
           end
         end
       when Rubygame::Events::QuitRequested
@@ -112,10 +116,13 @@ class Game < EventMachine::Connection
           @table = m.data.init # caricamento dell'immagine
         elsif m.data.kind_of?(Array)
           @objects = m.data # assegna l'array degli oggetti
+          deck = nil
           @objects.each do |o| 
             o.init # caricament dell'immagine
             @hash_objects[o.oid] = o # assegnazione all'hash
+            deck = o if o.kind_of?(Deck)
           end
+          deck.set_datalinks(@objects, @hash_objects) if deck
         end
         @accepted = true # accettato dal server, si iniziare a disegnare
       when "Move"
@@ -140,6 +147,8 @@ class Game < EventMachine::Connection
         temp.lock = m.args[1] # lock, nick di chi ha fatto pick
       when "UnLock"
         @hash_objects[m.oid].lock = nil # toglie il lock
+      when "Action"
+        @hash_objects[m.oid].send(m.args)
       end
     end
   end
