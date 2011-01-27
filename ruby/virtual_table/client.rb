@@ -21,6 +21,7 @@ class Game < EventMachine::Connection
     @screen = Screen.new([800, 600], 
                          0, 
                          [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF])
+    @screen.title = "Virtual Table"
     @events = Rubygame::EventQueue.new
     @events.enable_new_style_events
     

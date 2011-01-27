@@ -12,6 +12,7 @@ class Deck < VObject
   def init
     @image = Surface.load("./images/#{@name}/back1.png")
     @image_lock = Surface.load("./images/lock.png")
+    @image_empty = Surface.load("./images/#{@name}/back2.png")
     @rect = @image.make_rect
     set_pos(@x, @y)
     return self
@@ -37,11 +38,13 @@ class Deck < VObject
   end
   
   def action_card
-    c = Card.new(*@cards.delete(@cards.first))
-    c.init if @image
-    # aggiunta all'env di disegno
-    @objects << c
-    @hash_objects[c.oid] = c
+    unless @cards.empty?
+      c = Card.new(*@cards.delete(@cards.first))
+      c.init if @image
+      # aggiunta all'env di disegno
+      @objects << c
+      @hash_objects[c.oid] = c
+    end
   end
   
   def action_shuffle
@@ -52,6 +55,16 @@ class Deck < VObject
   end
   
   def action_new
+  end
+  
+  # Ridefinizione del metodo per il deck.
+  def draw(screen)
+    unless @cards.empty?
+      @image.blit(screen, @rect)
+    else
+      @image_empty.blit(screen, @rect)
+    end
+    @image_lock.blit(screen, @rect) if @lock
   end
   
 end
