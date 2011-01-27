@@ -33,7 +33,6 @@ class Deck < VObject
   def menu_actions
     return [["Dai carta", "action_card"], 
             ["Mescola Mazzo", "action_shuffle"], 
-            ["Alza mazzo", "action_cut"], 
             ["Riprendi carte", "action_new"]]
   end
   
@@ -47,14 +46,28 @@ class Deck < VObject
     end
   end
   
-  def action_shuffle
-    # @cards.shuffle!
-  end
-  
-  def action_cut
+  def action_shuffle(data = nil)
+    if @image
+      # client
+      if data != nil
+        @cards = data
+      end
+    else
+      # server
+      @cards.shuffle!
+      return @cards
+    end
   end
   
   def action_new
+    @hash_objects.keys.each do |oid|
+      o = @hash_objects[oid]
+      if (o.kind_of?(Card))
+        @objects.delete(o)
+        @hash_objects.delete(oid)
+      end
+    end
+    create
   end
   
   # Ridefinizione del metodo per il deck.
@@ -74,7 +87,11 @@ class Deck1 < Deck
   def initialize(size = 54)
     super("deck1")
     @max_size = size # salva il num di carte
-    case size
+    create
+  end
+  
+  def create
+    case @max_size
     when 40
       load_40
     when 52

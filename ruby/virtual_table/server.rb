@@ -93,8 +93,12 @@ class Connection < EventMachine::Connection
         resend_without_me(str)
       when "Action"
         # azione su un oggetto
-        server.hash_objects[m.oid].send(m.args)
-        resend_without_me(str)
+        new_data = server.hash_objects[m.oid].send(m.args)
+        unless m.args == :action_shuffle
+          resend_without_me(str)
+        else
+          resend_all(Msg.dump(:type => "Action", :oid => m.oid, :args => m.args, :data => new_data))
+        end
       end
     end
   end

@@ -149,7 +149,9 @@ class Game < EventMachine::Connection
       when "UnLock"
         @hash_objects[m.oid].lock = nil # toglie il lock
       when "Action"
-        @hash_objects[m.oid].send(m.args)
+        args = Array(m.args)
+        args << m.data if m.data
+        @hash_objects[m.oid].send(*args)
       end
     end
   end
