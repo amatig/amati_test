@@ -7,6 +7,8 @@ class Deck < VObject
     super()
     @name = name
     @cards = []
+    @x = 100
+    @y = 300
   end
   
   def init
@@ -18,11 +20,12 @@ class Deck < VObject
     return self
   end
   
-  def set_datalinks(objects, hash_objects)
+  def set_data_refs(objects, hash_objects, nick = nil)
     # servono per l'aggiunta di oggetti, le carte
     # link alle strutture locali dell'app
     @objects = objects
     @hash_objects = hash_objects
+    @nick = nick # e' l'oid della hand propria, per trovarla
     return self
   end
   
@@ -39,7 +42,10 @@ class Deck < VObject
   def action_card
     unless @cards.empty?
       c = Card.new(*@cards.delete(@cards.first))
-      c.init if @image
+      if @image
+        c.init
+        c.set_hand_refs(@hash_objects[@nick])
+      end
       # aggiunta all'env di disegno
       @objects << c
       @hash_objects[c.oid] = c

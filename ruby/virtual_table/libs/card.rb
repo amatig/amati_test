@@ -21,22 +21,21 @@ class Card < VObject
     return self
   end
   
+  def set_hand_refs(hand)
+    @hand = hand
+  end
+  
   def menu_actions
-    return [["Gira per te", "action_turn_me"], 
-            ["Gira per tutti", "action_turn_all"]]
+    return [["Gira carta", "action_turn"]]
   end
   
-  def action_turn_me
-    
-  end
-  
-  def action_turn_all
+  def action_turn
     @turn = (not @turn)
   end
   
   # Ridefinizione del metodo per il deck.
   def draw(screen)
-    unless @turn
+    if (@turn == false and not @hand.rect.collide_rect?(@rect))
       @image_back.blit(screen, @rect)
     else
       @image.blit(screen, @rect)

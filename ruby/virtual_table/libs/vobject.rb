@@ -1,5 +1,5 @@
 class VObject
-  attr_reader :oid, :x, :y
+  attr_reader :oid, :x, :y, :rect
   attr_accessor :lock
   
   def initialize

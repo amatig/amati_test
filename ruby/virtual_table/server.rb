@@ -25,7 +25,7 @@ class Server
     deck = Deck1.new(54)
     @objects << deck
     @hash_objects[deck.oid] = deck
-    deck.set_datalinks(@objects, @hash_objects)
+    deck.set_data_refs(@objects, @hash_objects)
   end
   
   # Avvio della ricezione di connessioni da parte di client.
@@ -74,6 +74,7 @@ class Connection < EventMachine::Connection
         # invio dei dati del gioco tavolo, oggetti
         send_msg(Msg.dump(:type => "Object", :data => server.table))
         send_msg(Msg.dump(:type => "Object", :data => server.objects))
+        # tiene riferimento ad hand e manda a tutti l'oggetto
         @hand = Hand.new(@nick)
         server.objects.insert(0, @hand)
         server.hash_objects[@hand.oid] = @hand
@@ -86,12 +87,12 @@ class Connection < EventMachine::Connection
         # vede se un oggetto e' disponibile
         if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
           if (m.args[0] == :mouse_left and not o.kind_of?(Hand))
-            # preso l'oggeto lo si porta in primo piano
+            # preso l'oggeto lo si porta in primo piano non per hand
             server.objects.delete(o)
             server.objects.push(o)
           end
           send_msg(str) # rinvio del pick a chi l'ha cliccato
-          unless o.kind_of?(Hand)
+          unless o.kind_of?(Hand) # e' sempre loggata hand
             o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
             # rinvio a tutti gli altri del lock dell'oggetto
             resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :args => [m.args[0], @nick]))
@@ -99,7 +100,7 @@ class Connection < EventMachine::Connection
         end
       when "UnLock"
         o = server.hash_objects[m.oid]
-        unless o.kind_of?(Hand)
+        unless o.kind_of?(Hand) # non unlock hand
           # Unlock dell'oggetto in pick e rinvio a tutti
           # tranne a chi lo muoveva, perche' per lui non lockato
           o.lock = nil # unlock

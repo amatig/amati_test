@@ -19,7 +19,7 @@ class Game < EventMachine::Connection
   
   # Costruttore della classe.
   def initialize
-    @screen = Screen.new([800, 600], 
+    @screen = Screen.new([1024, 768], 
                          0, 
                          [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF])
     @screen.title = "Virtual Table"
@@ -124,7 +124,7 @@ class Game < EventMachine::Connection
             @hash_objects[o.oid] = o # assegnazione all'hash
             deck = o if (o.kind_of?(Deck))
           end
-          deck.set_datalinks(@objects, @hash_objects) if deck
+          deck.set_data_refs(@objects, @hash_objects, @nick) if deck
         end
         @accepted = true # accettato dal server, si iniziare a disegnare
       when "Move"
@@ -134,7 +134,7 @@ class Game < EventMachine::Connection
         @picked.save_pick_pos(*m.args[1]) # salva il punto di click
         if m.args[0] == :mouse_left
           unless @picked.kind_of?(Hand)
-            # preso l'oggetto in pick, va in primo piano
+            # preso l'oggetto in pick, va in primo piano no per hand
             @objects.delete(@picked)
             @objects.push(@picked)
           end
@@ -151,10 +151,6 @@ class Game < EventMachine::Connection
         o.lock = m.args[1] # lock, nick di chi ha fatto pick
       when "UnLock"
         @hash_objects[m.oid].lock = nil # toglie il lock
-      when "Action"
-        args = Array(m.args)
-        args << m.data if m.data
-        @hash_objects[m.oid].send(*args)
       when "Hand"
         o = m.data.init
         @objects.insert(0, o)
@@ -163,6 +159,10 @@ class Game < EventMachine::Connection
         o = @hash_objects[m.oid]
         @objects.delete(o)
         @hash_objects.delete(o.oid)
+      when "Action"
+        args = Array(m.args)
+        args << m.data if m.data
+        @hash_objects[m.oid].send(*args)
       end
     end
   end
