@@ -158,6 +158,7 @@ class Game < EventMachine::Connection
   
 end
 
+
 puts "\nVirtual Table Client"
 print "Inserisci l'ip del server (0.0.0.0): "
 $IP = $stdin.gets.chomp
