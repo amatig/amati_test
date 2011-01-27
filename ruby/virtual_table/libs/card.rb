@@ -1,7 +1,7 @@
 require "libs/vobject"
 
 class Card < VObject
-  attr_reader :seed, :num
+  attr_reader :deck, :seed, :num
   
   def initialize(deck, s, n)
     super()

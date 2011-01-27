@@ -120,7 +120,7 @@ class Game < EventMachine::Connection
           @objects.each do |o| 
             o.init # caricament dell'immagine
             @hash_objects[o.oid] = o # assegnazione all'hash
-            deck = o if o.kind_of?(Deck)
+            deck = o if (o.kind_of?(Deck))
           end
           deck.set_datalinks(@objects, @hash_objects) if deck
         end

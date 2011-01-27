@@ -19,6 +19,7 @@ class Deck < VObject
   
   def set_datalinks(objects, hash_objects)
     # servono per l'aggiunta di oggetti, le carte
+    # link alle strutture locali dell'app
     @objects = objects
     @hash_objects = hash_objects
     return self
@@ -38,12 +39,13 @@ class Deck < VObject
   def action_card
     c = Card.new(*@cards.delete(@cards.first))
     c.init if @image
+    # aggiunta all'env di disegno
     @objects << c
     @hash_objects[c.oid] = c
   end
   
   def action_shuffle
-    @cards.shuffle!
+    # @cards.shuffle!
   end
   
   def action_cut
@@ -58,7 +60,7 @@ class Deck1 < Deck
   
   def initialize(size = 54)
     super("deck1")
-    @max_size = size    
+    @max_size = size # salva il num di carte
     case size
     when 40
       load_40

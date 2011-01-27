@@ -11,22 +11,18 @@ class Menu
     space = 0
     vobject.menu_actions.each do |label, method|
       i = Surface.load("./images/menu1.jpg")
-      ri = i.make_rect
       t = font.render_utf8(label, true, [0x00, 0x00, 0x00])
-      rt = t.make_rect
-      ri.x = pos[0]
-      ri.y = pos[1] + space * 20
-      rt.x = pos[0] + 5
-      rt.y = pos[1] + space * 20 + 3
-      @items << [i, ri, t, rt, label, method]
+      r = i.make_rect
+      r.topleft = [pos[0], pos[1] + space * 20]
+      @items << [i, t, r, label, method]
       space += 1
     end
   end
   
   def select(ev)
     @items.each do |item|
-      if item[1].collide_point?(*ev.pos)
-        @choice = item[5]
+      if item[2].collide_point?(*ev.pos)
+        @choice = item[4]
         break
       else
         @choice = nil
@@ -35,9 +31,14 @@ class Menu
   end
   
   def draw(screen)
-    @items.each do |i, r, t, rt|
-      i.blit(screen, r)
-      t.blit(screen, rt)
+    @items.each do |item|
+      if choice == item[4]
+        s = Surface.load("./images/menu2.jpg")
+        s.blit(screen, item[2])
+      else
+        item[0].blit(screen, item[2])
+      end
+      item[1].blit(screen, [item[2][0] + 5, item[2][1] + 3])
     end
   end
   

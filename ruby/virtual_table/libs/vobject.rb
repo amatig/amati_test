@@ -31,8 +31,10 @@ class VObject
   end
   
   def save_pick_pos(x, y)
-    @px = x - @rect.x
-    @py = y - @rect.y
+    if collide?(x, y)
+      @px = x - @rect.x
+      @py = y - @rect.y
+    end
   end
   
   def get_pos
@@ -40,10 +42,7 @@ class VObject
   end
   
   def set_pos(x, y)
-    if @rect
-      @rect.x = x
-      @rect.y = y
-    end
+    @rect.topleft = [x, y] if @rect
     @x = x
     @y = y
   end
