@@ -6,6 +6,7 @@ require "eventmachine"
 require "libs/msg"
 require "libs/table"
 require "libs/deck"
+require "libs/hand"
 
 $DELIM = "\r\n"
 
@@ -50,6 +51,10 @@ class Connection < EventMachine::Connection
   
   # Connessione persa o uscita del client.
   def unbind
+    # rimuove la hand da tutti e dal server
+    resend_all(Msg.dump(:type => "UnHand", :oid => @hand.oid))
+    server.objects.delete(@hand)
+    server.hash_objects.delete(@hand.oid)
     # unlock di tutti gli oggetti del client
     server.objects.each do |o|
       o.lock = nil if (o.lock == @nick)
@@ -69,6 +74,10 @@ class Connection < EventMachine::Connection
         # invio dei dati del gioco tavolo, oggetti
         send_msg(Msg.dump(:type => "Object", :data => server.table))
         send_msg(Msg.dump(:type => "Object", :data => server.objects))
+        @hand = Hand.new(@nick)
+        server.objects.insert(0, @hand)
+        server.hash_objects[@hand.oid] = @hand
+        resend_all(Msg.dump(:type => "Hand", :data => @hand))
       when "Move"
         server.hash_objects[m.oid].set_pos(*m.args) # salva il movimento
         resend_without_me(str) # rinvia a tutti gli altri il movimento dell'oggetto
@@ -76,21 +85,26 @@ class Connection < EventMachine::Connection
         o = server.hash_objects[m.oid]
         # vede se un oggetto e' disponibile
         if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
-          if m.args[0] == :mouse_left
+          if (m.args[0] == :mouse_left and not o.kind_of?(Hand))
             # preso l'oggeto lo si porta in primo piano
             server.objects.delete(o)
             server.objects.push(o)
           end
-          o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
           send_msg(str) # rinvio del pick a chi l'ha cliccato
-          # rinvio a tutti gli altri del lock dell'oggetto
-          resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :args => [m.args[0], @nick]))
+          unless o.kind_of?(Hand)
+            o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
+            # rinvio a tutti gli altri del lock dell'oggetto
+            resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :args => [m.args[0], @nick]))
+          end
         end
       when "UnLock"
-        # Unlock dell'oggetto in pick e rinvio a tutti
-        # tranne a chi lo muoveva, perche' per lui non lockato
-        server.hash_objects[m.oid].lock = nil # unlock
-        resend_without_me(str)
+        o = server.hash_objects[m.oid]
+        unless o.kind_of?(Hand)
+          # Unlock dell'oggetto in pick e rinvio a tutti
+          # tranne a chi lo muoveva, perche' per lui non lockato
+          o.lock = nil # unlock
+          resend_without_me(str)
+        end
       when "Action"
         # azione su un oggetto
         new_data = server.hash_objects[m.oid].send(m.args)

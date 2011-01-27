@@ -10,6 +10,7 @@ require "libs/msg"
 require "libs/table"
 require "libs/deck"
 require "libs/menu"
+require "libs/hand"
 
 $DELIM = "\r\n"
 
@@ -132,26 +133,36 @@ class Game < EventMachine::Connection
         @picked = @hash_objects[m.oid]
         @picked.save_pick_pos(*m.args[1]) # salva il punto di click
         if m.args[0] == :mouse_left
-          # preso l'oggetto in pick, va in primo piano
-          @objects.delete(@picked)
-          @objects.push(@picked)
+          unless @picked.kind_of?(Hand)
+            # preso l'oggetto in pick, va in primo piano
+            @objects.delete(@picked)
+            @objects.push(@picked)
+          end
         else
           @menu = Menu.new(m.args[1], @picked)
         end
       when "Lock"
-        temp = @hash_objects[m.oid]
+        o = @hash_objects[m.oid]
         if m.args[0] == :mouse_left
           # porta l'oggetto in pick di un altro in primo piano
-          @objects.delete(temp)
-          @objects.push(temp)
+          @objects.delete(o)
+          @objects.push(o)
         end
-        temp.lock = m.args[1] # lock, nick di chi ha fatto pick
+        o.lock = m.args[1] # lock, nick di chi ha fatto pick
       when "UnLock"
         @hash_objects[m.oid].lock = nil # toglie il lock
       when "Action"
         args = Array(m.args)
         args << m.data if m.data
         @hash_objects[m.oid].send(*args)
+      when "Hand"
+        o = m.data.init
+        @objects.insert(0, o)
+        @hash_objects[o.oid] = o
+      when "UnHand"
+        o = @hash_objects[m.oid]
+        @objects.delete(o)
+        @hash_objects.delete(o.oid)
       end
     end
   end
