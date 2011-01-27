@@ -158,9 +158,12 @@ class Game < EventMachine::Connection
   
 end
 
+puts "\nVirtual Table Client"
+print "Inserisci l'ip del server (0.0.0.0): "
+$IP = $stdin.gets.chomp
 
 EventMachine::run do
-  emg = EventMachine::connect("0.0.0.0", 3333, Game)
+  emg = EventMachine::connect($IP != "" ? $IP : "0.0.0.0", 3333, Game)
   give_tick = proc do 
     emg.tick
     unless emg.running
