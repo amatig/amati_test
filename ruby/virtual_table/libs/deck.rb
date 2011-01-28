@@ -47,6 +47,7 @@ class Deck < VObject
         c.init
         c.set_hand_refs(@hand)
       end
+      c.set_pos(@x + 90, @y + 2)
       # aggiunta all'env di disegno
       @objects << c
       @hash_objects[c.oid] = c
