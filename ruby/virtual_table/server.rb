@@ -19,10 +19,10 @@ class Server
     @connections = {} # hash di tutti client connessi    
     
     # Game data all'avvio del server
-    @table = Table1.new # tavolo
+    @table = Table.new # tavolo
     @objects = [] # lista oggetti sul tavolo
     @hash_objects = {} # per accedere agli oggetti + velocemente
-    deck = Deck1.new(54)
+    deck = DeckPoker.new(54)
     @objects << deck
     @hash_objects[deck.oid] = deck
     deck.set_data_refs(@objects, @hash_objects)
@@ -71,14 +71,15 @@ class Connection < EventMachine::Connection
       case m.type
       when "Nick"
         @nick = m.args # nick del client
+        @hand = Hand.new(@nick) # hand del client
+        server.objects.insert(0, @hand)
+        server.hash_objects[@hand.oid] = @hand
+        # resend_all(Msg.dump(:type => "Hand", :data => @hand))
         # invio dei dati del gioco tavolo, oggetti
         send_msg(Msg.dump(:type => "Object", :data => server.table))
         send_msg(Msg.dump(:type => "Object", :data => server.objects))
-        # tiene riferimento ad hand e manda a tutti l'oggetto
-        @hand = Hand.new(@nick)
-        server.objects.insert(0, @hand)
-        server.hash_objects[@hand.oid] = @hand
-        resend_all(Msg.dump(:type => "Hand", :data => @hand))
+        # manda a tutti gli altri la hand
+        resend_without_me(Msg.dump(:type => "Hand", :data => @hand))
       when "Move"
         server.hash_objects[m.oid].set_pos(*m.args) # salva il movimento
         resend_without_me(str) # rinvia a tutti gli altri il movimento dell'oggetto

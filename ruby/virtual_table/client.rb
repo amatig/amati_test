@@ -118,13 +118,15 @@ class Game < EventMachine::Connection
           @table = m.data.init # caricamento dell'immagine
         elsif m.data.kind_of?(Array)
           @objects = m.data # assegna l'array degli oggetti
-          deck = nil
-          @objects.each do |o| 
+          @objects.each do |o|
             o.init # caricament dell'immagine
             @hash_objects[o.oid] = o # assegnazione all'hash
-            deck = o if (o.kind_of?(Deck))
+            if (o.kind_of?(Deck))
+              o.set_data_refs(@objects, @hash_objects, @hash_objects[@nick])
+            elsif (o.kind_of?(Card))
+              o.set_hand_refs(@hash_objects[@nick]) # mette mio hand
+            end
           end
-          deck.set_data_refs(@objects, @hash_objects, @nick) if deck
         end
         @accepted = true # accettato dal server, si iniziare a disegnare
       when "Move"
@@ -152,9 +154,9 @@ class Game < EventMachine::Connection
       when "UnLock"
         @hash_objects[m.oid].lock = nil # toglie il lock
       when "Hand"
-        o = m.data.init
-        @objects.insert(0, o)
-        @hash_objects[o.oid] = o
+        m.data.init
+        @objects.insert(0, m.data)
+        @hash_objects[m.data.oid] = m.data
       when "UnHand"
         o = @hash_objects[m.oid]
         @objects.delete(o)

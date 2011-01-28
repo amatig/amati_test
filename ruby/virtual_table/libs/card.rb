@@ -23,6 +23,7 @@ class Card < VObject
   
   def set_hand_refs(hand)
     @hand = hand
+    return self
   end
   
   def menu_actions

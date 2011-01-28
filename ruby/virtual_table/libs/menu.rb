@@ -11,7 +11,7 @@ class Menu
     space = 0
     vobject.menu_actions.each do |label, method|
       i = Surface.load("./images/menu1.jpg")
-      t = font.render_utf8(label, true, [0x00, 0x00, 0x00])
+      t = font.render_utf8(label, true, [0, 0, 0])
       r = i.make_rect
       r.topleft = [pos[0], pos[1] + space * 20]
       @items << [i, t, r, label, method]

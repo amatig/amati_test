@@ -2,9 +2,9 @@ require "libs/vobject"
 
 class Table < VObject
   
-  def initialize(name)
+  def initialize
     super()
-    @name = name
+    @name = "table1"
     @movable = false
     @pickable = false
   end
@@ -15,12 +15,9 @@ class Table < VObject
     return self
   end
   
-end
-
-class Table1 < Table
-  
-  def initialize
-    super("table1")
+  def change_bg(name)
+    @name = name
+    @image = Surface.load("./images/#{@name}.jpg")
   end
   
 end

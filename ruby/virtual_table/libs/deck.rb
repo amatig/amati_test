@@ -20,12 +20,12 @@ class Deck < VObject
     return self
   end
   
-  def set_data_refs(objects, hash_objects, nick = nil)
+  def set_data_refs(objects, hash_objects, hand = nil)
     # servono per l'aggiunta di oggetti, le carte
     # link alle strutture locali dell'app
     @objects = objects
     @hash_objects = hash_objects
-    @nick = nick # e' l'oid della hand propria, per trovarla
+    @hand = hand # mia hand
     return self
   end
   
@@ -35,7 +35,7 @@ class Deck < VObject
   
   def menu_actions
     return [["Dai carta", "action_card"], 
-            ["Mescola Mazzo", "action_shuffle"], 
+            ["Mescola mazzo", "action_shuffle"], 
             ["Riprendi carte", "action_new"]]
   end
   
@@ -43,8 +43,9 @@ class Deck < VObject
     unless @cards.empty?
       c = Card.new(*@cards.delete(@cards.first))
       if @image
+        # e' un client
         c.init
-        c.set_hand_refs(@hash_objects[@nick])
+        c.set_hand_refs(@hand)
       end
       # aggiunta all'env di disegno
       @objects << c
@@ -54,12 +55,10 @@ class Deck < VObject
   
   def action_shuffle(data = nil)
     if @image
-      # client
-      if data != nil
-        @cards = data
-      end
+      # e' un client
+      @cards = data if data
     else
-      # server
+      # e' nel server
       @cards.shuffle!
       return @cards
     end
@@ -88,7 +87,7 @@ class Deck < VObject
   
 end
 
-class Deck1 < Deck
+class DeckPoker < Deck
   
   def initialize(size = 54)
     super("deck1")
