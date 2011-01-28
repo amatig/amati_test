@@ -20,12 +20,7 @@ class Card < VObject
     set_pos(@x, @y)
     return self
   end
-  
-  def set_hand_refs(hand)
-    @hand = hand
-    return self
-  end
-  
+    
   def menu_actions
     return [["Gira carta", "action_turn"]]
   end
@@ -36,7 +31,8 @@ class Card < VObject
   
   # Ridefinizione del metodo per il deck.
   def draw(screen)
-    if (@turn == false and not @hand.rect.collide_rect?(@rect))
+    hand = Env.instance.get_hand
+    if (@turn == false and not hand.rect.collide_rect?(@rect))
       @image_back.blit(screen, @rect)
     else
       @image.blit(screen, @rect)

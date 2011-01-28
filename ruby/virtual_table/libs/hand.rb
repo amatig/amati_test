@@ -6,17 +6,16 @@ class Hand < VObject
     super()
     @oid = nick
     @lock = nick
+    @label = nil # label nick
     @x = rand(450) + 100
     @y = rand(320) + 100
-    # dati font
-    @label = nil
   end
   
   def init
     if defined?(TTF)
       TTF.setup
       font = TTF.new("./fonts/FreeSans.ttf", 32)
-      @label = font.render_utf8(@lock, true, [255, 255, 255, 100])
+      @label = font.render_utf8(@lock, true, [255, 255, 255])
     end
     @image = Surface.load("./images/hand1.png")
     @rect = @image.make_rect

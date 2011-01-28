@@ -19,16 +19,7 @@ class Deck < VObject
     set_pos(@x, @y)
     return self
   end
-  
-  def set_data_refs(objects, hash_objects, hand = nil)
-    # servono per l'aggiunta di oggetti, le carte
-    # link alle strutture locali dell'app
-    @objects = objects
-    @hash_objects = hash_objects
-    @hand = hand # mia hand
-    return self
-  end
-  
+    
   def size
     return @cards.size
   end
@@ -42,15 +33,9 @@ class Deck < VObject
   def action_card
     unless @cards.empty?
       c = Card.new(*@cards.delete(@cards.first))
-      if @image
-        # e' un client
-        c.init
-        c.set_hand_refs(@hand)
-      end
+      c.init if @image # se e' un client
       c.set_pos(@x + 90, @y + 2)
-      # aggiunta all'env di disegno
-      @objects << c
-      @hash_objects[c.oid] = c
+      Env.instance.add_object(c)
     end
   end
   
@@ -66,13 +51,7 @@ class Deck < VObject
   end
   
   def action_new
-    @hash_objects.keys.each do |oid|
-      o = @hash_objects[oid]
-      if (o.kind_of?(Card))
-        @objects.delete(o)
-        @hash_objects.delete(oid)
-      end
-    end
+    Env.instance.del_all_card
     create
   end
   

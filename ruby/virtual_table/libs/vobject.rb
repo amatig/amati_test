@@ -4,7 +4,7 @@ class VObject
   
   def initialize
     # indice univoco
-    @oid = rand(1000000000)
+    @oid = (0...10).collect { rand(10) }.join
     # dati della grafica
     @image = nil
     @image_lock = nil
