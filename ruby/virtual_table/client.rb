@@ -71,7 +71,7 @@ class Game < EventMachine::Connection
             @picked.send(@menu.choice.to_sym)
             send_msg(Msg.dump(:type => "Action", :oid => @picked.oid, :args => @menu.choice.to_sym))
           end
-          @menu = nil
+          @menu = nil # chiusura menu
           # rilascio dell'oggetto in pick, e quindi lockato
           send_msg(Msg.dump(:type => "UnLock", :oid => @picked.oid))
           @picked = nil
@@ -141,16 +141,16 @@ class Game < EventMachine::Connection
             @objects.push(@picked)
           end
         else
-          @menu = Menu.new(m.args[1], @picked)
+          @menu = Menu.new(m.args[1], @picked) # apre menu
         end
       when "Lock"
         o = @hash_objects[m.oid]
+        o.lock = m.args[1] # lock, nick di chi ha fatto pick
         if m.args[0] == :mouse_left
           # porta l'oggetto in pick di un altro in primo piano
           @objects.delete(o)
           @objects.push(o)
         end
-        o.lock = m.args[1] # lock, nick di chi ha fatto pick
       when "UnLock"
         @hash_objects[m.oid].lock = nil # toglie il lock
       when "Hand"

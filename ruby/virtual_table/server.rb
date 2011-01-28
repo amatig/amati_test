@@ -81,8 +81,11 @@ class Connection < EventMachine::Connection
         # manda a tutti gli altri la hand
         resend_without_me(Msg.dump(:type => "Hand", :data => @hand))
       when "Move"
-        server.hash_objects[m.oid].set_pos(*m.args) # salva il movimento
-        resend_without_me(str) # rinvia a tutti gli altri il movimento dell'oggetto
+        o = server.hash_objects[m.oid]
+        if o.lock == @nick
+          o.set_pos(*m.args) # salva il movimento
+          resend_without_me(str) # rinvia a tutti gli altri il movimento dell'oggetto
+        end
       when "Pick"
         o = server.hash_objects[m.oid]
         # vede se un oggetto e' disponibile
@@ -101,19 +104,22 @@ class Connection < EventMachine::Connection
         end
       when "UnLock"
         o = server.hash_objects[m.oid]
-        unless o.kind_of?(Hand) # non unlock hand
+        if (not o.kind_of?(Hand) and o.lock == @nick) # non unlock hand
           # Unlock dell'oggetto in pick e rinvio a tutti
           # tranne a chi lo muoveva, perche' per lui non lockato
           o.lock = nil # unlock
           resend_without_me(str)
         end
       when "Action"
-        # azione su un oggetto
-        new_data = server.hash_objects[m.oid].send(m.args)
-        unless m.args == :action_shuffle
-          resend_without_me(str)
-        else
-          resend_all(Msg.dump(:type => "Action", :oid => m.oid, :args => m.args, :data => new_data))
+        o = server.hash_objects[m.oid]
+        if o.lock == @nick
+          # azione su un oggetto
+          new_data = o.send(m.args)
+          unless m.args == :action_shuffle
+            resend_without_me(str)
+          else
+            resend_all(Msg.dump(:type => "Action", :oid => m.oid, :args => m.args, :data => new_data))
+          end
         end
       end
     end
