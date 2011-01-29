@@ -14,13 +14,13 @@ class Card < VObject
   
   def init
     @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
-    @image_lock = Surface.load("./images/lock.png")
     @image_back = Surface.load("./images/#{@deck}/back1.png")
+    @image_lock = Surface.load("./images/lock.png")
     @rect = @image.make_rect
     set_pos(@x, @y)
     return self
   end
-    
+  
   def menu_actions
     return [["Gira carta", "action_turn"]]
   end

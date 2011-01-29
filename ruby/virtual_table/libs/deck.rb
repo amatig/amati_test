@@ -13,13 +13,13 @@ class Deck < VObject
   
   def init
     @image = Surface.load("./images/#{@name}/deck1.png")
-    @image_lock = Surface.load("./images/lock.png")
     @image_empty = Surface.load("./images/#{@name}/deck2.png")
+    @image_lock = Surface.load("./images/lock.png")
     @rect = @image.make_rect
     set_pos(@x, @y)
     return self
   end
-    
+  
   def size
     return @cards.size
   end
