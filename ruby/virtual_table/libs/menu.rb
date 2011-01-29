@@ -16,7 +16,7 @@ class Menu
       t = font.render_utf8(label, true, [0, 0, 0])
       r = @image.make_rect
       r.topleft = [pos[0], pos[1] + space * 20]
-      @items << [t, r, label, method]
+      @items.push([t, r, label, method])
       space += 1
     end
   end

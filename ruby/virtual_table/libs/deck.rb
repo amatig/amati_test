@@ -90,7 +90,7 @@ class DeckPoker < Deck
     @cards = []
     ["c", "q", "f", "p"].each do |s|
       (1..10).each do |n|
-        @cards << [@name, s, n]
+        @cards.push([@name, s, n])
       end
     end
   end
@@ -99,15 +99,15 @@ class DeckPoker < Deck
     @cards = []
     ["c", "q", "f", "p"].each do |s|
       (1..13).each do |n|
-        @cards << [@name, s, n]
+        @cards.push([@name, s, n])
       end
     end
   end
   
   def load_54
     load_52
-    @cards << [@name, "r", 0]
-    @cards << [@name, "b", 0]
+    @cards.push([@name, "r", 0])
+    @cards.push([@name, "b", 0])
   end
   
 end

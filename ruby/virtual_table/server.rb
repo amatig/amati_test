@@ -21,7 +21,7 @@ class Server
     
     # Game data all'avvio del server
     env = Env.instance
-    env.add_table(Table.new) # tavolo
+    env.table = Table.new # tavolo
     env.add_object(DeckPoker.new(54)) # deck
   end
   

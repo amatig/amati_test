@@ -3,12 +3,12 @@ require "libs/vobject"
 class Card < VObject
   attr_reader :deck, :seed, :num
   
-  def initialize(deck, s, n)
+  def initialize(deck, seed, num)
     super()
-    @oid = "#{deck}_#{s}_#{n}" # server un indice unico
+    @oid = "#{deck}_#{seed}_#{num}" # server un indice unico
     @deck = deck
-    @seed = s
-    @num = n
+    @seed = seed
+    @num = num
     @turn = false
   end
   
@@ -31,7 +31,7 @@ class Card < VObject
   
   # Ridefinizione del metodo per il deck.
   def draw(screen)
-    hand = Env.instance.get_hand
+    hand = Env.instance.hand
     if (@turn == false and not hand.rect.collide_rect?(@rect))
       @image_back.blit(screen, @rect)
     else

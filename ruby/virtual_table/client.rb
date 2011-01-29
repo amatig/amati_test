@@ -1,9 +1,8 @@
 #!/usr/bin/ruby
 
 require "rubygems"
-require "rubygame"
 require "eventmachine"
-
+require "rubygame"
 include Rubygame
 
 require "libs/env"
@@ -28,9 +27,7 @@ class Game < EventMachine::Connection
     @events.enable_new_style_events
     
     # Game data
-    Env.instance
-    @menu = nil # menu
-    
+    @menu = nil # menu    
     @picked = nil # oggetto preso col click e loccato, si assegna il nick
     @accepted = false # true quando il server accetta l'entrata in gioco
     @running = true # se false il client esce
@@ -118,12 +115,10 @@ class Game < EventMachine::Connection
         if m.data.kind_of?(Table)
           env.table = m.data.init # caricamento dell'immagine
         elsif m.data.kind_of?(Array)
-          env.objects = m.data # assegna l'array degli oggetti
-          env.objects.each do |o|
-            o.init # caricament dell'immagine
-            env.hash_objects[o.oid] = o # assegnazione all'hash
+          m.data.each do |o|
+            env.add_object(o.init)
           end
-          env.add_hand(env.get_object(@nick))
+          env.hand = env.get_object(@nick)
         end
         @accepted = true # accettato dal server, si iniziare a disegnare
       when "Move"
@@ -149,13 +144,12 @@ class Game < EventMachine::Connection
       when "UnLock"
         env.get_object(m.oid).lock = nil # toglie il lock
       when "Hand"
-        m.data.init
-        env.add_first_object(m.data)
+        env.add_first_object(m.data.init)
       when "UnHand"
         env.del_object_by_id(m.oid)
       when "Action"
         args = Array(m.args)
-        args << m.data if m.data
+        args.push(m.data) if m.data
         env.get_object(m.oid).send(*args)
       end
     end
