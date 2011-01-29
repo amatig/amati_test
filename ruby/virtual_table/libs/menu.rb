@@ -3,26 +3,28 @@ class Menu
   
   def initialize(pos, vobject)
     @choice = nil # azione scelta dal menu
-    # dati font
+    # init font
     TTF.setup
     font = TTF.new("./fonts/FreeSans.ttf", 12)
     # dati della grafica
+    @image = Surface.load("./images/menu1.jpg")
+    @image_sel = Surface.load("./images/menu2.jpg")
+    # data items
     @items = []
     space = 0
     vobject.menu_actions.each do |label, method|
-      i = Surface.load("./images/menu1.jpg")
       t = font.render_utf8(label, true, [0, 0, 0])
-      r = i.make_rect
+      r = @image.make_rect
       r.topleft = [pos[0], pos[1] + space * 20]
-      @items << [i, t, r, label, method]
+      @items << [t, r, label, method]
       space += 1
     end
   end
   
   def select(ev)
     @items.each do |item|
-      if item[2].collide_point?(*ev.pos)
-        @choice = item[4]
+      if item[1].collide_point?(*ev.pos)
+        @choice = item[3]
         break
       else
         @choice = nil
@@ -32,13 +34,12 @@ class Menu
   
   def draw(screen)
     @items.each do |item|
-      if choice == item[4]
-        s = Surface.load("./images/menu2.jpg")
-        s.blit(screen, item[2])
+      if choice == item[3]
+        @image_sel.blit(screen, item[1])
       else
-        item[0].blit(screen, item[2])
+        @image.blit(screen, item[1])
       end
-      item[1].blit(screen, [item[2][0] + 5, item[2][1] + 3])
+      item[0].blit(screen, [item[1][0] + 5, item[1][1] + 3])
     end
   end
   
