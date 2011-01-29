@@ -6,6 +6,7 @@ require "eventmachine"
 
 include Rubygame
 
+require "libs/env"
 require "libs/msg"
 require "libs/table"
 require "libs/deck"
@@ -27,9 +28,7 @@ class Game < EventMachine::Connection
     @events.enable_new_style_events
     
     # Game data
-    @table = nil # tavolo
-    @objects = [] # lista degli oggetti sul tavolo
-    @hash_objects = {} # per accedere agli oggetti + velocemente
+    Env.instance
     @menu = nil # menu
     
     @picked = nil # oggetto preso col click e loccato, si assegna il nick
@@ -52,11 +51,12 @@ class Game < EventMachine::Connection
   
   # Procedura che viene richiamata ciclicamente, loop del game.
   def tick
+    env = Env.instance
     @events.each do |ev|
       # puts ev.inspect
       case ev
       when Rubygame::Events::MousePressed
-        @objects.reverse.each do |o|
+        env.objects.reverse.each do |o|
           if o.collide?(*ev.pos)
             if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
               # richiesta del pick
@@ -95,8 +95,8 @@ class Game < EventMachine::Connection
       end
     end
     if @accepted
-      @table.draw(@screen)
-      @objects.each { |o| o.draw(@screen) }
+      env.table.draw(@screen)
+      env.objects.each { |o| o.draw(@screen) }
       @menu.draw(@screen) if @menu
       @screen.flip
     end
@@ -110,61 +110,53 @@ class Game < EventMachine::Connection
   
   # Ricezione e gestione dei messaggi del server.
   def receive_data(data)
+    env = Env.instance
     data.split($DELIM).each do |str|
       m = Msg.load(str)
       case m.type
       when "Object"
         if m.data.kind_of?(Table)
-          @table = m.data.init # caricamento dell'immagine
+          env.table = m.data.init # caricamento dell'immagine
         elsif m.data.kind_of?(Array)
-          @objects = m.data # assegna l'array degli oggetti
-          @objects.each do |o|
+          env.objects = m.data # assegna l'array degli oggetti
+          env.objects.each do |o|
             o.init # caricament dell'immagine
-            @hash_objects[o.oid] = o # assegnazione all'hash
-            if (o.kind_of?(Deck))
-              o.set_data_refs(@objects, @hash_objects, @hash_objects[@nick])
-            elsif (o.kind_of?(Card))
-              o.set_hand_refs(@hash_objects[@nick]) # mette mio hand
-            end
+            env.hash_objects[o.oid] = o # assegnazione all'hash
           end
+          env.add_hand(env.get_object(@nick))
         end
         @accepted = true # accettato dal server, si iniziare a disegnare
       when "Move"
-        @hash_objects[m.oid].set_pos(*m.args)
+        env.get_object(m.oid).set_pos(*m.args)
       when "Pick"
-        @picked = @hash_objects[m.oid]
+        @picked = env.get_object(m.oid)
         @picked.save_pick_pos(*m.args[1]) # salva il punto di click
         if m.args[0] == :mouse_left
           unless @picked.kind_of?(Hand)
             # preso l'oggetto in pick, va in primo piano no per hand
-            @objects.delete(@picked)
-            @objects.push(@picked)
+            env.to_front(@picked)
           end
         else
           @menu = Menu.new(m.args[1], @picked) # apre menu
         end
       when "Lock"
-        o = @hash_objects[m.oid]
+        o = env.get_object(m.oid)
         o.lock = m.args[1] # lock, nick di chi ha fatto pick
         if m.args[0] == :mouse_left
           # porta l'oggetto in pick di un altro in primo piano
-          @objects.delete(o)
-          @objects.push(o)
+          env.to_front(o)
         end
       when "UnLock"
-        @hash_objects[m.oid].lock = nil # toglie il lock
+        env.get_object(m.oid).lock = nil # toglie il lock
       when "Hand"
         m.data.init
-        @objects.insert(0, m.data)
-        @hash_objects[m.data.oid] = m.data
+        env.add_first_object(m.data)
       when "UnHand"
-        o = @hash_objects[m.oid]
-        @objects.delete(o)
-        @hash_objects.delete(o.oid)
+        env.del_object_by_id(m.oid)
       when "Action"
         args = Array(m.args)
         args << m.data if m.data
-        @hash_objects[m.oid].send(*args)
+        env.get_object(m.oid).send(*args)
       end
     end
   end

@@ -23,12 +23,12 @@ class Server
     env = Env.instance
     env.add_table(Table.new) # tavolo
     env.add_object(DeckPoker.new(54)) # deck
-    # deck.set_data_refs(@objects, @hash_objects)
   end
   
   # Avvio della ricezione di connessioni da parte di client.
   def start
     @signature = EventMachine.start_server('0.0.0.0', 3333, Connection) do |con|
+      con.server = self
       @connections[con.object_id] = con # aggiunge il nuovo client all'hash
     end
   end
@@ -71,8 +71,8 @@ class Connection < EventMachine::Connection
         @nick = m.args # nick del client
         @hand = env.add_first_object(Hand.new(@nick)) # hand
         # invio dei dati del gioco tavolo, oggetti
-        send_msg(Msg.dump(:type => "Object", :data => server.table))
-        send_msg(Msg.dump(:type => "Object", :data => server.objects))
+        send_msg(Msg.dump(:type => "Object", :data => env.table))
+        send_msg(Msg.dump(:type => "Object", :data => env.objects))
         # manda a tutti gli altri la hand
         resend_without_me(Msg.dump(:type => "Hand", :data => @hand))
       when "Move"
@@ -82,7 +82,7 @@ class Connection < EventMachine::Connection
           resend_without_me(str) # rinvia a tutti gli altri il movimento dell'oggetto
         end
       when "Pick"
-        o = env.get__object(m.oid)
+        o = env.get_object(m.oid)
         # vede se un oggetto e' disponibile
         if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
           if (m.args[0] == :mouse_left and not o.kind_of?(Hand))
