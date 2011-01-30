@@ -22,6 +22,12 @@ class Card < VObject
     return self
   end
   
+  def set_value(data)
+    @seed = data[0]
+    @num = data[1]
+    @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+  end
+  
   def menu_actions
     return [["Gira carta", "action_turn"]]
   end
@@ -30,9 +36,7 @@ class Card < VObject
     if @image
       # e' nel client
       if data
-        @seed = data[0]
-        @num = data[1]
-        @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+        set_value(data)
         @turn = (not @turn)
       end
     else
