@@ -107,11 +107,11 @@ class Connection < EventMachine::Connection
       when "Action"
         o = env.get_object(m.oid)
         if o.lock == @nick
-          ret = o.send(m.args) # azione su un oggetto
-          unless m.args == :action_shuffle
-            resend_without_me(str)
-          else
+          ret = o.send(*m.args) # azione su un oggetto
+          if (m.args == :action_shuffle or m.args == :action_turn or m.args == :action_create)
             resend_all(Msg.dump(:type => "Action", :oid => m.oid, :args => m.args, :data => ret))
+          else
+            resend_without_me(str)
           end
         end
       end

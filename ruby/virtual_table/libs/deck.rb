@@ -1,12 +1,15 @@
 require "libs/vobject"
+require "libs/secret_deck"
 require "libs/card"
 
 class Deck < VObject
+  attr_reader :cards_code, :cards_value
   
   def initialize(name)
     super()
     @name = name
-    @cards = []
+    @cards_code = []
+    @cards_value = []
     @x = 100
     @y = 300
   end
@@ -21,18 +24,18 @@ class Deck < VObject
   end
   
   def size
-    return @cards.size
+    return @cards_code.size
   end
   
   def menu_actions
     return [["Dai carta", "action_card"], 
             ["Mescola mazzo", "action_shuffle"], 
-            ["Riprendi carte", "action_new"]]
+            ["Riprendi carte", "action_create"]]
   end
   
   def action_card
-    unless @cards.empty?
-      c = Card.new(*@cards.delete(@cards.first))
+    unless @cards_code.empty?
+      c = Card.new(@name, @cards_code.delete(@cards_code.first))
       c.init if @image # se e' un client
       c.set_pos(@x + 90, @y + 2)
       Env.instance.add_object(c)
@@ -42,22 +45,29 @@ class Deck < VObject
   def action_shuffle(data = nil)
     if @image
       # e' un client
-      @cards = data if data
+      @cards_code = data if data
     else
       # e' nel server
-      @cards.shuffle!
-      return @cards
+      @cards_code.shuffle!
+      return @cards_code
     end
   end
   
-  def action_new
+  def action_create(data = nil)
     Env.instance.del_all_card
-    create
+    if @image
+      # e' un client
+      @cards_code = data if data
+    else
+      # e' nel server
+      create
+      return @cards_code
+    end
   end
   
   # Ridefinizione del metodo per il deck.
   def draw(screen)
-    unless @cards.empty?
+    unless @cards_code.empty?
       @image.blit(screen, @rect)
     else
       @image_empty.blit(screen, @rect)
@@ -76,38 +86,23 @@ class DeckPoker < Deck
   end
   
   def create
-    case @max_size
-    when 40
-      load_40
-    when 52
-      load_52
-    else
-      load_54
+    @cards_code = []
+    (1..@max_size).each do |n|
+      code = (0...10).collect { rand(10) }.join
+      @cards_code.push(code)
     end
-  end
-  
-  def load_40
-    @cards = []
-    ["c", "q", "f", "p"].each do |s|
-      (1..10).each do |n|
-        @cards.push([@name, s, n])
+    
+    @cards_value = []
+    ["c", "q", "f", "p"].each do |seed|
+      (1..13).each do |num|
+        @cards_value.push([seed, num])
       end
     end
-  end
-  
-  def load_52
-    @cards = []
-    ["c", "q", "f", "p"].each do |s|
-      (1..13).each do |n|
-        @cards.push([@name, s, n])
-      end
-    end
-  end
-  
-  def load_54
-    load_52
-    @cards.push([@name, "r", 0])
-    @cards.push([@name, "b", 0])
+    @cards_value.push(["r", 0])
+    @cards_value.push(["b", 0])
+    
+    SecretDeck.instance.create(self)
+    @cards_code.shuffle!
   end
   
 end

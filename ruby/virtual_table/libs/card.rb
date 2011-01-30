@@ -1,19 +1,20 @@
 require "libs/vobject"
+require "libs/secret_deck"
 
 class Card < VObject
-  attr_reader :deck, :seed, :num
+  attr_reader :seed, :num
   
-  def initialize(deck, seed, num)
+  def initialize(deck, code)
     super()
-    @oid = "#{deck}_#{seed}_#{num}" # server un indice unico
+    @oid = code # serve un indice unico
     @deck = deck
-    @seed = seed
-    @num = num
+    @seed = nil
+    @num = nil
     @turn = false
   end
   
   def init
-    @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+    @image = Surface.load("./images/#{@deck}/deck2.png")
     @image_back = Surface.load("./images/#{@deck}/back1.png")
     @image_lock = Surface.load("./images/lock.png")
     @rect = @image.make_rect
@@ -25,8 +26,20 @@ class Card < VObject
     return [["Gira carta", "action_turn"]]
   end
   
-  def action_turn
-    @turn = (not @turn)
+  def action_turn(data = nil)
+    if @image
+      # e' nel client
+      if data
+        @seed = data[0]
+        @num = data[1]
+        @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+        @turn = (not @turn)
+      end
+    else
+      # e' nel server
+      @turn = (not @turn)
+      return SecretDeck.instance.get_value(oid)
+    end
   end
   
   # Ridefinizione del metodo per il deck.
