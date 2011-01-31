@@ -14,7 +14,11 @@ class Card < VObject
   end
   
   def init
-    @image = Surface.load("./images/#{@deck}/deck2.png")
+    if (@seed == nil and @num == nil)
+      @image = Surface.load("./images/#{@deck}/deck2.png")
+    else
+      @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+    end
     @image_back = Surface.load("./images/#{@deck}/back1.png")
     @image_lock = Surface.load("./images/lock.png")
     @rect = @image.make_rect
@@ -22,10 +26,12 @@ class Card < VObject
     return self
   end
   
-  def set_value(data)
-    @seed = data[0]
-    @num = data[1]
-    @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+  def set_value(val)
+    @seed = val[0]
+    @num = val[1]
+    if @image
+      @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
+    end
   end
   
   def menu_actions
@@ -41,8 +47,10 @@ class Card < VObject
       end
     else
       # e' nel server
+      val = SecretDeck.instance.get_value(oid)
+      set_value(val)
       @turn = (not @turn)
-      return SecretDeck.instance.get_value(oid)
+      return val
     end
   end
   
