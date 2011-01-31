@@ -51,8 +51,9 @@ class Connection < EventMachine::Connection
   def unbind
     env = Env.instance
     # rimuove la hand da tutti e dal server
-    resend_all(Msg.dump(:type => "UnHand", :oid => @hand.oid))
-    env.del_object(@hand)
+    resend_all(Msg.dump(:type => "UnHand", :oid => env.hands[self.object_id].oid))
+    env.del_object(env.hands[self.object_id])
+    env.hands.delete(self.object_id)
     # unlock di tutti gli oggetti del client
     env.objects.each do |o|
       o.lock = nil if (o.lock == @nick)
@@ -70,12 +71,12 @@ class Connection < EventMachine::Connection
       case m.type
       when "Nick"
         @nick = m.args # nick del client
-        @hand = env.add_first_object(Hand.new(@nick)) # hand
+        env.hands[self.object_id] = env.add_first_object(Hand.new(@nick)) # hand
         # invio dei dati del gioco tavolo, oggetti
         send_msg(Msg.dump(:type => "Object", :data => env.table))
         send_msg(Msg.dump(:type => "Object", :data => env.objects))
         # manda a tutti gli altri la hand
-        resend_without_me(Msg.dump(:type => "Hand", :data => @hand))
+        resend_without_me(Msg.dump(:type => "Hand", :data => env.hands[self.object_id]))
       when "Move"
         o = env.get_object(m.oid)
         if o.lock == @nick
@@ -105,19 +106,25 @@ class Connection < EventMachine::Connection
           o.lock = nil # unlock
           resend_without_me(str)
         end
-        rhd = Rubygame::Rect.new(@hand.x, @hand.y, 315, 175)
-        temp = [] # lista temp di oggetti
+        hands = [] # lista temporanea di hands
+        cards = [] # lista temporanea di cards
         if o.kind_of?(Card)
-          temp.push(o)
+          hands = env.objects.select { |h| h.kind_of?(Hand) }
+          cards.push(o)
         elsif o.kind_of?(Hand)
-          temp = env.objects
+          hands.push(o)
+          cards = env.objects.select { |c| c.kind_of?(Card) }
         end
-        temp.each do |c|
-          if c.kind_of?(Card)
+        hands.each do |h|
+          rhd = Rubygame::Rect.new(h.x, h.y, 315, 175)
+          cards.each do |c|
             rc = Rubygame::Rect.new(c.x, c.y, 70, 109)
             if rc.collide_rect?(rhd)
               ret = SecretDeck.instance.get_value(c.oid)
-              send_msg(Msg.dump(:type => "Action", :oid => c.oid, :args => :set_value, :data => ret))
+              server.connections[env.hands.index(h)].send_msg(Msg.dump(:type => "Action", 
+                                                                       :oid => c.oid, 
+                                                                       :args => :set_value, 
+                                                                       :data => ret))
             end
           end
         end

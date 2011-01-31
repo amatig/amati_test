@@ -118,7 +118,7 @@ class Game < EventMachine::Connection
           m.data.each do |o|
             env.add_object(o.init)
           end
-          env.hand = env.get_object(@nick)
+          env.hands = env.get_object(@nick)
         end
         @accepted = true # accettato dal server, si iniziare a disegnare
       when "Move"

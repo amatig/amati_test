@@ -2,13 +2,13 @@ require "singleton"
 
 class Env
   include Singleton
-  attr_accessor :table, :objects, :hash_objects, :hand
+  attr_accessor :table, :objects, :hash_objects, :hands
   
   def initialize
     @table = nil
     @objects = [] # lista oggetti sul tavolo
     @hash_objects = {} # per accedere agli oggetti + velocemente
-    @hand = nil
+    @hands = {}
   end
     
   def add_object(o)
