@@ -71,7 +71,7 @@ class Connection < EventMachine::Connection
       case m.type
       when "Nick"
         @nick = m.args # nick del client
-        env.hands[self.object_id] = env.add_first_object(Hand.new(@nick)) # hand
+        env.hands[self.object_id] = env.add_first_object(Hand.new(@nick)) # add hand
         # invio dei dati del gioco tavolo, oggetti
         send_msg(Msg.dump(:type => "Object", :data => env.table))
         send_msg(Msg.dump(:type => "Object", :data => env.objects))
