@@ -81,21 +81,19 @@ class Connection < EventMachine::Connection
         if o.lock == @nick
           o.set_pos(*m.args) # salva il movimento
           resend_without_me(str) # rinvia a tutti gli altri il movimento dell'oggetto
-          if not o.kind_of?(Deck)
-            temp1 = Rubygame::Rect.new(@hand.x, @hand.y, 315, 175)
-            if o.kind_of?(Card)
-              temp2 = Rubygame::Rect.new(o.x, o.y, 70, 109)
-              if temp1.collide_rect?(temp2)
-                ret = SecretDeck.instance.get_value(o.oid)
-                send_msg(Msg.dump(:type => "Action", :oid => o.oid, :args => :set_value, :data => ret))
-              end
-            else
-              env.objects.each do |o|
-                temp2 = Rubygame::Rect.new(o.x, o.y, 70, 109)
-                if (o.kind_of?(Card) and temp1.collide_rect?(temp2))
-                  ret = SecretDeck.instance.get_value(o.oid)
-                  send_msg(Msg.dump(:type => "Action", :oid => o.oid, :args => :set_value, :data => ret))
-                end          
+          rhd = Rubygame::Rect.new(@hand.x, @hand.y, 315, 175)
+          temp = [] # lista temp di oggetti
+          if o.kind_of?(Card)
+            temp.push(o)
+          elsif o.kind_of?(Hand)
+            temp = env.objects
+          end
+          temp.each do |c|
+            if c.kind_of?(Card)
+              rc = Rubygame::Rect.new(c.x, c.y, 70, 109)
+              if rc.collide_rect?(rhd)
+                ret = SecretDeck.instance.get_value(c.oid)
+                send_msg(Msg.dump(:type => "Action", :oid => c.oid, :args => :set_value, :data => ret))
               end
             end
           end
