@@ -15,7 +15,7 @@ class Card < VObject
   
   def init
     if (@seed == nil and @num == nil)
-      @image = Surface.load("./images/#{@deck}/deck2.png")
+      @image = Surface.load("./images/#{@deck}/back0.png")
     else
       @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
     end
