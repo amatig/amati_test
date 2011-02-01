@@ -28,9 +28,10 @@ class Server
   
   # Avvio della ricezione di connessioni da parte di client.
   def start
-    @signature = EventMachine.start_server('0.0.0.0', 3333, Connection) do |con|
+    EventMachine.start_server('0.0.0.0', 3333, Connection) do |con|
       con.server = self
-      @connections[con.object_id] = con # aggiunge il nuovo client all'hash
+      # aggiunge il nuovo client all'hash
+      @connections[con.object_id] = con
     end
   end
   
@@ -51,7 +52,8 @@ class Connection < EventMachine::Connection
   def unbind
     env = Env.instance
     # rimuove la hand da tutti e dal server
-    resend_all(Msg.dump(:type => "UnHand", :oid => env.hands[self.object_id].oid))
+    resend_all(Msg.dump(:type => "UnHand", 
+                        :oid => env.hands[self.object_id].oid))
     env.del_object(env.hands[self.object_id])
     env.hands.delete(self.object_id)
     # unlock di tutti gli oggetti del client
@@ -70,18 +72,20 @@ class Connection < EventMachine::Connection
       m = Msg.load(str)
       case m.type
       when "Nick"
-        @nick = m.args # nick del client
-        env.hands[self.object_id] = env.add_first_object(Hand.new(@nick)) # add hand
+        @nick = m.args  # nick del client
+        # mette in hash la hand
+        env.hands[self.object_id] = env.add_first_object(Hand.new(@nick))
         # invio dei dati del gioco tavolo, oggetti
         send_msg(Msg.dump(:type => "Object", :data => env.table))
         send_msg(Msg.dump(:type => "Object", :data => env.objects))
         # manda a tutti gli altri la hand
-        resend_without_me(Msg.dump(:type => "Hand", :data => env.hands[self.object_id]))
+        resend_without_me(Msg.dump(:type => "Hand", 
+                                   :data => env.hands[self.object_id]))
       when "Move"
         o = env.get_object(m.oid)
         if o.lock == @nick
           o.set_pos(*m.args) # salva il movimento
-          resend_without_me(str) # rinvia a tutti gli altri il movimento dell'oggetto
+          resend_without_me(str) # rinvia agli altri move dell'oggetto
         end
       when "Pick"
         o = env.get_object(m.oid)
@@ -95,7 +99,9 @@ class Connection < EventMachine::Connection
           unless o.kind_of?(Hand) # e' sempre loggata hand
             o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
             # rinvio a tutti gli altri del lock dell'oggetto
-            resend_without_me(Msg.dump(:type => "Lock", :oid => m.oid, :args => [m.args[0], @nick]))
+            resend_without_me(Msg.dump(:type => "Lock", 
+                                       :oid => m.oid, 
+                                       :args => [m.args[0], @nick]))
           end
         end
       when "UnLock"
@@ -121,10 +127,11 @@ class Connection < EventMachine::Connection
             rc = Rubygame::Rect.new(c.x, c.y, 70, 109)
             if rc.collide_rect?(rhd)
               ret = SecretDeck.instance.get_value(c.oid)
-              server.connections[env.hands.index(h)].send_msg(Msg.dump(:type => "Action", 
-                                                                       :oid => c.oid, 
-                                                                       :args => :set_value, 
-                                                                       :data => ret))
+              key = env.hands.index(h)
+              server.connections[key].send_msg(Msg.dump(:type => "Action", 
+                                                        :oid => c.oid, 
+                                                        :args => :set_value, 
+                                                        :data => ret))
             end
           end
         end
@@ -132,8 +139,13 @@ class Connection < EventMachine::Connection
         o = env.get_object(m.oid)
         if o.lock == @nick
           ret = o.send(*m.args) # azione su un oggetto
-          if (m.args == :action_shuffle or m.args == :action_turn or m.args == :action_create)
-            resend_all(Msg.dump(:type => "Action", :oid => m.oid, :args => m.args, :data => ret))
+          if (m.args == :action_shuffle or 
+              m.args == :action_turn or 
+              m.args == :action_create)
+            resend_all(Msg.dump(:type => "Action", 
+                                :oid => m.oid, 
+                                :args => m.args, 
+                                :data => ret))
           else
             resend_without_me(str)
           end

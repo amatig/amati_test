@@ -57,7 +57,9 @@ class Game < EventMachine::Connection
           if o.collide?(*ev.pos)
             if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
               # richiesta del pick
-              send_msg(Msg.dump(:type => "Pick", :oid => o.oid, :args => [ev.button, ev.pos]))
+              send_msg(Msg.dump(:type => "Pick", 
+                                :oid => o.oid, 
+                                :args => [ev.button, ev.pos]))
             end
             break
           end
@@ -66,7 +68,9 @@ class Game < EventMachine::Connection
         if @picked
           if (@menu and @menu.choice)
             @picked.send(@menu.choice.to_sym)
-            send_msg(Msg.dump(:type => "Action", :oid => @picked.oid, :args => @menu.choice.to_sym))
+            send_msg(Msg.dump(:type => "Action", 
+                              :oid => @picked.oid, 
+                              :args => @menu.choice.to_sym))
           end
           @menu = nil # chiusura menu
           # rilascio dell'oggetto in pick, e quindi lockato
@@ -79,7 +83,9 @@ class Game < EventMachine::Connection
             # spostamento se l'oggetto e' in pick
             move = @picked.move(*ev.pos) # muove l'oggetto
             if move
-              send_msg(Msg.dump(:type => "Move", :oid => @picked.oid, :args => move))
+              send_msg(Msg.dump(:type => "Move", 
+                                :oid => @picked.oid, 
+                                :args => move))
             end
           else
             @menu.select(ev) if @menu
@@ -144,9 +150,9 @@ class Game < EventMachine::Connection
       when "UnLock"
         env.get_object(m.oid).lock = nil # toglie il lock
       when "Hand"
-        env.add_first_object(m.data.init)
+        env.add_first_object(m.data.init) # arriva un player
       when "UnHand"
-        env.del_object_by_id(m.oid)
+        env.del_object_by_id(m.oid) # va via un player
       when "Action"
         args = Array(m.args)
         args.push(m.data) if m.data
