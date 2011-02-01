@@ -14,7 +14,7 @@ class Hand < VObject
   def init
     if defined?(TTF)
       TTF.setup
-      font = TTF.new("./fonts/FreeSans.ttf", 32)
+      font = TTF.new("./fonts/FreeSans.ttf", 20)
       @label = font.render_utf8(@lock, true, [255, 255, 255])
     end
     @image = Surface.load("./images/hand1.png")
@@ -25,7 +25,7 @@ class Hand < VObject
   
   def draw(screen)
     @image.blit(screen, @rect)
-    @label.blit(screen, [@rect.x + 15, @rect.y + 7]) if @label
+    @label.blit(screen, [@rect.x + 20, @rect.y + 10]) if @label
   end
   
 end

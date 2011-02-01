@@ -23,7 +23,7 @@ class Server
     # Game data all'avvio del server
     env = Env.instance
     env.table = Table.new # tavolo
-    env.add_object(DeckPoker.new(54)) # deck
+    env.add_object(DeckPoker.new) # deck
   end
   
   # Avvio della ricezione di connessioni da parte di client.
@@ -141,7 +141,7 @@ class Connection < EventMachine::Connection
           ret = o.send(*m.args) # azione su un oggetto
           if (m.args == :action_shuffle or 
               m.args == :action_turn or 
-              m.args == :action_create)
+              m.args.to_s.start_with?("action_create"))
             resend_all(Msg.dump(:type => "Action", 
                                 :oid => m.oid, 
                                 :args => m.args, 
