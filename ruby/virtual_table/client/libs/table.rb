@@ -1,5 +1,3 @@
-require "libs/vobject"
-
 class Table < VObject
   
   def initialize
@@ -7,9 +5,10 @@ class Table < VObject
     @name = "table1"
     @movable = false
     @pickable = false
+    init_graph
   end
   
-  def init
+  def init_graph
     @image = Surface.load("./images/#{@name}.jpg")
     @rect = @image.make_rect
     return self
@@ -18,6 +17,10 @@ class Table < VObject
   def change_bg(name)
     @name = name
     @image = Surface.load("./images/#{@name}.jpg")
+  end
+  
+  def draw(screen)
+    @image.blit(screen, @rect)
   end
   
 end

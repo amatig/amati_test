@@ -2,15 +2,18 @@
 
 require "rubygems"
 require "eventmachine"
+require "singleton"
 require "rubygame"
 include Rubygame
 
 require "libs/env"
 require "libs/msg"
+require "libs/vobject"
 require "libs/table"
 require "libs/deck"
-require "libs/menu"
+require "libs/card"
 require "libs/hand"
+require "libs/menu"
 
 $DELIM = "\r\n"
 
@@ -119,10 +122,10 @@ class Game < EventMachine::Connection
       case m.type
       when "Object"
         if m.data.kind_of?(Table)
-          env.table = m.data.init # caricamento dell'immagine
+          env.table = m.data.init_graph
         elsif m.data.kind_of?(Array)
           m.data.each do |o|
-            env.add_object(o.init)
+            env.add_object(o.init_graph)
           end
           env.hands = env.get_object(@nick)
         end
@@ -150,7 +153,7 @@ class Game < EventMachine::Connection
       when "UnLock"
         env.get_object(m.oid).lock = nil # toglie il lock
       when "Hand"
-        env.add_first_object(m.data.init) # arriva un player
+        env.add_first_object(m.data.init_graph) # arriva un player
       when "UnHand"
         env.del_object_by_id(m.oid) # va via un player
       when "Action"

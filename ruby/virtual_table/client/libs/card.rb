@@ -1,6 +1,3 @@
-require "libs/vobject"
-require "libs/secret_deck"
-
 class Card < VObject
   attr_reader :seed, :num
   
@@ -11,9 +8,10 @@ class Card < VObject
     @seed = nil
     @num = nil
     @turn = false
+    init_graph
   end
   
-  def init
+  def init_graph
     if (@seed == nil and @num == nil)
       @image = Surface.load("./images/#{@deck}/back0.png")
     else
@@ -29,9 +27,7 @@ class Card < VObject
   def set_value(val)
     @seed = val[0]
     @num = val[1]
-    if @image
-      @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
-    end
+    @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
   end
   
   def menu_actions
@@ -39,18 +35,9 @@ class Card < VObject
   end
   
   def action_turn(data = nil)
-    if @image
-      # e' nel client
-      if data
-        set_value(data)
-        @turn = (not @turn)
-      end
-    else
-      # e' nel server
-      val = SecretDeck.instance.get_value(oid)
-      set_value(val)
+    if data
+      set_value(data)
       @turn = (not @turn)
-      return val
     end
   end
   

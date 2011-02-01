@@ -42,7 +42,7 @@ class VObject
   end
   
   def set_pos(x, y)
-    @rect.topleft = [x, y] if @rect
+    @rect.topleft = [x, y]
     @x = x
     @y = y
   end

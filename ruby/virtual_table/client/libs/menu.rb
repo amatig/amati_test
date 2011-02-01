@@ -2,7 +2,8 @@ class Menu
   attr_reader :choice
   
   def initialize(pos, vobject)
-    @choice = nil # azione scelta dal menu
+    # azione scelta dal menu
+    @choice = nil
     # init font
     TTF.setup
     font = TTF.new("./fonts/FreeSans.ttf", 12)

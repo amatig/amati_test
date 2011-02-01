@@ -3,11 +3,15 @@
 require "rubygems"
 require "eventmachine"
 require "rubygame/rect"
+require "singleton"
 
 require "libs/env"
 require "libs/msg"
+require "libs/vobject"
 require "libs/table"
 require "libs/deck"
+require "libs/secret_deck"
+require "libs/card"
 require "libs/hand"
 
 $DELIM = "\r\n"

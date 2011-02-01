@@ -1,7 +1,3 @@
-require "libs/vobject"
-require "libs/secret_deck"
-require "libs/card"
-
 class Deck < VObject
   attr_reader :cards_code, :cards_value
   
@@ -14,35 +10,13 @@ class Deck < VObject
     @y = 300
   end
   
-  def init
-    @image = Surface.load("./images/#{@name}/deck1.png")
-    @image_empty = Surface.load("./images/#{@name}/deck2.png")
-    @image_lock = Surface.load("./images/lock.png")
-    @rect = @image.make_rect
-    set_pos(@x, @y)
-    return self
-  end
-  
   def size
     return @cards_code.size
-  end
-  
-  def menu_actions
-    return [["Dai carta", "action_1card"],
-            ["1 carta a testa", "action_1card4all"], 
-            ["2 carte a testa", "action_2card4all"], 
-            ["3 carte a testa", "action_3card4all"], 
-            ["5 carte a testa", "action_5card4all"], 
-            ["Mazzo da 40", "action_create40"],
-            ["Mazzo da 52", "action_create52"],
-            ["Mazzo da 54", "action_create54"],
-            ["Mescola mazzo", "action_shuffle"]]
   end
   
   def action_1card(x = nil, y = nil)
     unless @cards_code.empty?
       c = Card.new(@name, @cards_code.delete(@cards_code.first))
-      c.init if @image # se e' un client
       if (x and y)
         c.set_pos(x, y)
       else
@@ -79,60 +53,25 @@ class Deck < VObject
   end
   
   def action_shuffle(data = nil)
-    if @image
-      # e' un client
-      @cards_code = data if data
-    else
-      # e' nel server
-      @cards_code.shuffle!
-      return @cards_code
-    end
+    return @cards_code.shuffle!
   end
   
   def action_create40(data = nil)
     Env.instance.del_all_card
-    if @image
-      # e' un client
-      @cards_code = data if data
-    else
-      # e' nel server
-      create(40)
-      return @cards_code
-    end
+    create(40)
+    return @cards_code
   end
   
   def action_create52(data = nil)
     Env.instance.del_all_card
-    if @image
-      # e' un client
-      @cards_code = data if data
-    else
-      # e' nel server
-      create(52)
-      return @cards_code
-    end
+    create(52)
+    return @cards_code
   end
   
   def action_create54(data = nil)
     Env.instance.del_all_card
-    if @image
-      # e' un client
-      @cards_code = data if data
-    else
-      # e' nel server
-      create(54)
-      return @cards_code
-    end
-  end
-  
-  # Ridefinizione del metodo per il deck.
-  def draw(screen)
-    unless @cards_code.empty?
-      @image.blit(screen, @rect)
-    else
-      @image_empty.blit(screen, @rect)
-    end
-    @image_lock.blit(screen, @rect) if @lock
+    create(54)
+    return @cards_code
   end
   
 end

@@ -1,5 +1,3 @@
-require "singleton"
-
 class Env
   include Singleton
   attr_accessor :table, :objects, :hash_objects, :hands
@@ -10,7 +8,7 @@ class Env
     @hash_objects = {} # per accedere agli oggetti + velocemente
     @hands = {}
   end
-    
+  
   def add_object(o)
     @objects.push(o)
     @hash_objects[o.oid] = o
