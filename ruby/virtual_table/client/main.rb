@@ -72,6 +72,9 @@ class Game < EventMachine::Connection
             send_msg(Msg.dump(:type => "Action", 
                               :oid => @picked.oid, 
                               :args => @menu.choice.to_sym))
+            if @menu.choice.end_with?("card4all")
+              send_msg(Msg.dump(:type => "GetValue"))
+            end
           end
           @menu = nil # chiusura menu
           # rilascio dell'oggetto in pick, e quindi lockato

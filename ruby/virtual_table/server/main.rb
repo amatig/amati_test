@@ -133,6 +133,17 @@ class Connection < EventMachine::Connection
             end
           end
         end
+      when "GetValue"
+        hand = env.get_hand(self.object_id)
+        cards = env.objects.select { |c| c.kind_of?(Card) }
+        cards.each do |c|
+          if hand.fixed_collide?(c)
+            ret = SecretDeck.instance.get_value(c.oid)
+            send_msg(Msg.dump(:type => "Action", 
+                              :oid => c.oid, 
+                              :args => [:set_value, ret]))
+          end
+        end
       when "Action"
         o = env.get_object(m.oid)
         if o.lock == @nick
