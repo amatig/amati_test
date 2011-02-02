@@ -25,7 +25,7 @@ class Deck < VObject
   end
   
   def menu_actions
-    return [["Dai carta", "action_1card"],
+    return [["1 carta", "action_1card"],
             ["1 carta a testa", "action_1card4all"], 
             ["2 carte a testa", "action_2card4all"], 
             ["3 carte a testa", "action_3card4all"], 
@@ -33,7 +33,7 @@ class Deck < VObject
             ["Mazzo da 40", "action_create40"],
             ["Mazzo da 52", "action_create52"],
             ["Mazzo da 54", "action_create54"],
-            ["Mescola mazzo", "action_shuffle"]]
+            ["Mescola", "action_shuffle"]]
   end
   
   def action_1card(x = nil, y = nil)
@@ -79,18 +79,24 @@ class Deck < VObject
   end
   
   def action_create40(data = nil)
-    Env.instance.del_all_card
-    @cards_code = data if data
+    if data
+      Env.instance.del_all_card
+      @cards_code = data
+    end
   end
   
   def action_create52(data = nil)
-    Env.instance.del_all_card
-    @cards_code = data if data
+    if data
+      Env.instance.del_all_card
+      @cards_code = data
+    end
   end
   
   def action_create54(data = nil)
-    Env.instance.del_all_card
-    @cards_code = data if data
+    if data
+      Env.instance.del_all_card
+      @cards_code = data
+    end
   end
   
   # Ridefinizione del metodo per il deck.

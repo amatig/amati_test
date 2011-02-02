@@ -156,7 +156,6 @@ class Game < EventMachine::Connection
         env.del_object_by_id(m.oid) # va via un player
       when "Action"
         args = Array(m.args)
-        args.push(m.data) if m.data
         env.get_object(m.oid).send(*args)
       end
     end
@@ -178,6 +177,7 @@ EventMachine::run do
       EventMachine::stop_event_loop
     end
     EventMachine.next_tick(give_tick)
+    # sleep 0.08
   end
   trap("INT") do
     # Rubygame.quit

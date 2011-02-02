@@ -129,23 +129,33 @@ class Connection < EventMachine::Connection
               client_id = env.get_hand_key(h)
               send_msg_to(client_id, Msg.dump(:type => "Action", 
                                               :oid => c.oid, 
-                                              :args => :set_value, 
-                                              :data => ret))
+                                              :args => [:set_value, ret]))
             end
           end
         end
       when "Action"
         o = env.get_object(m.oid)
         if o.lock == @nick
-          ret = o.send(*m.args) # azione su un oggetto
           if (m.args == :action_shuffle or 
               m.args == :action_turn or 
               m.args.to_s.start_with?("action_create"))
+            ret = o.send(m.args) # azione su un oggetto
             resend_all(Msg.dump(:type => "Action", 
                                 :oid => m.oid, 
-                                :args => m.args, 
-                                :data => ret))
+                                :args => [m.args, ret]))
+          elsif m.args == :action_take
+            hand = env.get_hand(self.object_id)
+            pos = [hand.x - 80, hand.y + 32]
+            o.send(:action_turnoff) # azione su un oggetto
+            o.send(m.args, pos) # azione su un oggetto
+            resend_all(Msg.dump(:type => "Action", 
+                                :oid => m.oid, 
+                                :args => :action_turnoff))
+            resend_all(Msg.dump(:type => "Action", 
+                                :oid => m.oid, 
+                                :args => [m.args, pos]))
           else
+            o.send(m.args) # azione su un oggetto
             resend_without_me(str)
           end
         end
