@@ -41,7 +41,7 @@ class Card < VObject
     end
   end
   
-  # Ridefinizione del metodo per il deck.
+  # Ridefinizione del metodo per il card.
   def draw(screen)
     hand = Env.instance.hands
     if (@turn == false and not hand.rect.collide_rect?(@rect))

@@ -19,6 +19,7 @@ class Table < VObject
     @image = Surface.load("./images/#{@name}.jpg")
   end
   
+  # Ridefinizione del metodo per il table.
   def draw(screen)
     @image.blit(screen, @rect)
   end

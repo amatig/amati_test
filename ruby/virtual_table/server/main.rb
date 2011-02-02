@@ -119,7 +119,7 @@ class Connection < EventMachine::Connection
         hands = [] # lista temporanea di hands
         cards = [] # lista temporanea di cards
         if o.kind_of?(Card)
-          hands = env.objects.select { |h| h.kind_of?(Hand) }
+          hands = env.hands.values
           cards.push(o)
         elsif o.kind_of?(Hand)
           hands.push(o)

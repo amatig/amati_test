@@ -18,6 +18,9 @@ class VObject
     @lock = nil
   end
   
+  def init_graph
+  end
+  
   def is_movable?
     return @movable
   end

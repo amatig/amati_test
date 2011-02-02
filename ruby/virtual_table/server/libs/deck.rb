@@ -27,10 +27,8 @@ class Deck < VObject
   end
   
   def action_1card4all(shift = 0)
-    Env.instance.objects.each do |o|
-      if o.kind_of?(Hand)
-        action_1card(o.x + 20 + shift, o.y + 42)
-      end
+    Env.instance.hands.values.each do |h|
+      action_1card(h.x + 20 + shift, h.y + 42)
     end
   end
   
@@ -52,23 +50,23 @@ class Deck < VObject
     end
   end
   
-  def action_shuffle(data = nil)
+  def action_shuffle
     return @cards_code.shuffle!
   end
   
-  def action_create40(data = nil)
+  def action_create40
     Env.instance.del_all_card
     create(40)
     return @cards_code
   end
   
-  def action_create52(data = nil)
+  def action_create52
     Env.instance.del_all_card
     create(52)
     return @cards_code
   end
   
-  def action_create54(data = nil)
+  def action_create54
     Env.instance.del_all_card
     create(54)
     return @cards_code
