@@ -73,6 +73,7 @@ class Game < EventMachine::Connection
                               :oid => @picked.oid, 
                               :args => @menu.choice.to_sym))
             if @menu.choice.end_with?("card4all")
+              # richiesta carte attiva
               send_msg(Msg.dump(:type => "GetValue"))
             end
           end
@@ -160,6 +161,9 @@ class Game < EventMachine::Connection
       when "Action"
         args = Array(m.args)
         env.get_object(m.oid).send(*args)
+        if args[0].to_s.end_with?("card4all") # richiesta carte passiva
+          send_msg(Msg.dump(:type => "GetValue"))
+        end
       end
     end
   end
