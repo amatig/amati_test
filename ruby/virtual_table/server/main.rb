@@ -147,10 +147,10 @@ class Connection < EventMachine::Connection
             hand = env.get_hand(self.object_id)
             pos = [hand.x - 80, hand.y + 32]
             o.send(:action_turnoff) # azione su un oggetto
-            o.send(m.args, pos) # azione su un oggetto
             resend_all(Msg.dump(:type => "Action", 
                                 :oid => m.oid, 
                                 :args => :action_turnoff))
+            o.send(m.args, pos) # azione su un oggetto
             resend_all(Msg.dump(:type => "Action", 
                                 :oid => m.oid, 
                                 :args => [m.args, pos]))
