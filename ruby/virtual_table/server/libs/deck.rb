@@ -27,8 +27,11 @@ class Deck < VObject
   end
   
   def action_1card4all(shift = 0)
-    Env.instance.hands.values.each do |h|
-      action_1card(h.x + 20 + shift, h.y + 42)
+    # serve stesso ordine di hand non usare hash
+    Env.instance.objects.each do |o|
+      if o.kind_of?(Hand)
+        action_1card(o.x + 20 + shift, o.y + 42)
+      end
     end
   end
   
