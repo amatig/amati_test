@@ -157,14 +157,20 @@ class Connection < EventMachine::Connection
           elsif m.args == :action_take
             hand = env.get_hand(self.object_id)
             pos = [hand.x - 80, hand.y + 32]
-            o.send(:action_turnoff) # azione su un oggetto
-            resend_all(Msg.dump(:type => "Action", 
-                                :oid => m.oid, 
-                                :args => :action_turnoff))
-            o.send(m.args, pos) # azione su un oggetto
-            resend_all(Msg.dump(:type => "Action", 
-                                :oid => m.oid, 
-                                :args => [m.args, pos]))
+            cards = env.objects.select do |c| 
+              c != o and c.kind_of?(Card) and c.fixed_collide?(o)
+            end
+            cards.push(o)
+            cards.each do |c|
+              c.send(:action_turnoff) # azione su un oggetto
+              resend_all(Msg.dump(:type => "Action", 
+                                  :oid => c.oid, 
+                                  :args => :action_turnoff))
+              c.send(m.args, pos) # azione su un oggetto
+              resend_all(Msg.dump(:type => "Action", 
+                                  :oid => c.oid, 
+                                  :args => [m.args, pos]))
+            end
           else
             o.send(m.args) # azione su un oggetto
             resend_without_me(str)

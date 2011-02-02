@@ -15,6 +15,12 @@ class Card < VObject
     @num = val[1]
   end
   
+  def fixed_collide?(card)
+    rc1 = Rubygame::Rect.new(@x, @y, 70, 109) # fissi
+    rc2 = Rubygame::Rect.new(card.x, card.y, 70, 109) # fissi
+    return rc1.collide_rect?(rc2)
+  end
+  
   def action_turnoff
     @turn = false
   end
