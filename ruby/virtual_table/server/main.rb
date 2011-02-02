@@ -23,10 +23,9 @@ class Server
   def initialize
     # Clients data
     @connections = {} # hash di tutti client connessi
-    
     # Game data all'avvio del server
     env = Env.instance
-    env.table = Table.new # tavolo
+    env.add_table(Table.new) # tavolo
     env.add_object(DeckPoker.new) # deck
   end
   
@@ -55,11 +54,10 @@ class Connection < EventMachine::Connection
   # Connessione persa o uscita del client.
   def unbind
     env = Env.instance
+    hand = env.get_hand(self.object_id)
     # rimuove la hand da tutti e dal server
-    resend_all(Msg.dump(:type => "UnHand", 
-                        :oid => env.hands[self.object_id].oid))
-    env.del_object(env.hands[self.object_id])
-    env.hands.delete(self.object_id)
+    resend_all(Msg.dump(:type => "UnHand", :oid => hand.oid))
+    env.del_hand(hand)
     # unlock di tutti gli oggetti del client
     env.objects.each do |o|
       o.lock = nil if (o.lock == @nick)
@@ -77,14 +75,13 @@ class Connection < EventMachine::Connection
       case m.type
       when "Nick"
         @nick = m.args  # nick del client
-        # mette in hash la hand
-        env.hands[self.object_id] = env.add_first_object(Hand.new(@nick))
+        # mette in hash la hand e in object
+        hand = env.add_hand(self.object_id, Hand.new(@nick))
         # invio dei dati del gioco tavolo, oggetti
         send_msg(Msg.dump(:type => "Object", :data => env.table))
         send_msg(Msg.dump(:type => "Object", :data => env.objects))
         # manda a tutti gli altri la hand
-        resend_without_me(Msg.dump(:type => "Hand", 
-                                   :data => env.hands[self.object_id]))
+        resend_without_me(Msg.dump(:type => "Hand", :data => hand))
       when "Move"
         o = env.get_object(m.oid)
         if o.lock == @nick
@@ -126,16 +123,14 @@ class Connection < EventMachine::Connection
           cards = env.objects.select { |c| c.kind_of?(Card) }
         end
         hands.each do |h|
-          rhd = Rubygame::Rect.new(h.x, h.y, 315, 175)
           cards.each do |c|
-            rc = Rubygame::Rect.new(c.x, c.y, 70, 109)
-            if rc.collide_rect?(rhd)
+            if h.fixed_collide?(c)
               ret = SecretDeck.instance.get_value(c.oid)
-              key = env.hands.index(h)
-              server.connections[key].send_msg(Msg.dump(:type => "Action", 
-                                                        :oid => c.oid, 
-                                                        :args => :set_value, 
-                                                        :data => ret))
+              client_id = env.get_hand_key(h)
+              send_msg_to(client_id, Msg.dump(:type => "Action", 
+                                              :oid => c.oid, 
+                                              :args => :set_value, 
+                                              :data => ret))
             end
           end
         end
@@ -162,6 +157,11 @@ class Connection < EventMachine::Connection
   def send_msg(data)
     data = "#{data}#{$DELIM}" unless data.end_with?($DELIM)
     send_data(data)
+  end
+  
+  # Invia un messaggio ad un client preciso.
+  def send_msg_to(client_id, data)
+    server.connections[client_id].send_msg(data)
   end
   
   # Invia un messaggio a tutti i client.

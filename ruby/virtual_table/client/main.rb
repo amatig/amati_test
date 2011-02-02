@@ -27,14 +27,12 @@ class Game < EventMachine::Connection
                          [Rubygame::HWSURFACE, Rubygame::DOUBLEBUF])
     @screen.title = "Virtual Table"
     @events = Rubygame::EventQueue.new
-    @events.enable_new_style_events
-    
+    @events.enable_new_style_events    
     # Game data
-    @menu = nil # menu    
     @picked = nil # oggetto preso col click e loccato, si assegna il nick
+    @menu = nil # menu
     @accepted = false # true quando il server accetta l'entrata in gioco
     @running = true # se false il client esce
-    
     # Send nick
     @nick = "user_#{rand 1000}"
     send_msg(Msg.dump(:type => "Nick", :args => @nick))
@@ -122,12 +120,12 @@ class Game < EventMachine::Connection
       case m.type
       when "Object"
         if m.data.kind_of?(Table)
-          env.table = m.data.init_graph
+          env.add_table(m.data.init_graph)
         elsif m.data.kind_of?(Array)
           m.data.each do |o|
             env.add_object(o.init_graph)
           end
-          env.hands = env.get_object(@nick)
+          env.add_hand(env.get_object(@nick))
         end
         @accepted = true # accettato dal server, si iniziare a disegnare
       when "Move"

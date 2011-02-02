@@ -43,7 +43,7 @@ class Card < VObject
   
   # Ridefinizione del metodo per il card.
   def draw(screen)
-    hand = Env.instance.hands
+    hand = Env.instance.hand
     if (@turn == false and not hand.rect.collide_rect?(@rect))
       @image_back.blit(screen, @rect)
     else
