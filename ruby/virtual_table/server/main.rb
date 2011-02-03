@@ -69,12 +69,12 @@ class Connection < EventMachine::Connection
       m = Msg.load(str)
       case m.type
       when "Nick"
-        @nick = m.args  # nick del client
+        @nick = m.args # nick del client
         # mette in hash la hand e in object
         hand = env.add_hand(self.object_id, Hand.new(@nick))
         # invio dei dati del gioco tavolo, oggetti
-        send_msg(Msg.dump(:type => "Object", :data => env.table))
-        send_msg(Msg.dump(:type => "Object", :data => env.objects))
+        send_me(Msg.dump(:type => "Object", :data => env.table))
+        send_me(Msg.dump(:type => "Object", :data => env.objects))
         # manda a tutti gli altri la hand
         resend_without_me(Msg.dump(:type => "Hand", :data => hand))
       when "Move"
@@ -91,7 +91,7 @@ class Connection < EventMachine::Connection
             # preso l'oggeto lo si porta in primo piano non per hand
             env.to_front(o)
           end
-          send_msg(str) # rinvio del pick a chi l'ha cliccato
+          send_me(str) # rinvio del pick a chi l'ha cliccato
           unless o.kind_of?(Hand) # e' sempre loggata hand
             o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
             # rinvio a tutti gli altri del lock dell'oggetto
@@ -122,9 +122,9 @@ class Connection < EventMachine::Connection
             if h.fixed_collide?(c)
               ret = SecretDeck.instance.get_value(c.oid)
               client_id = env.get_hand_key(h)
-              send_msg_to(client_id, Msg.dump(:type => "Action", 
-                                              :oid => c.oid, 
-                                              :args => [:set_value, ret]))
+              send_to(client_id, Msg.dump(:type => "Action", 
+                                          :oid => c.oid, 
+                                          :args => [:set_value, ret]))
             end
           end
         end
@@ -134,9 +134,9 @@ class Connection < EventMachine::Connection
         cards.each do |c|
           if hand.fixed_collide?(c)
             ret = SecretDeck.instance.get_value(c.oid)
-            send_msg(Msg.dump(:type => "Action", 
-                              :oid => c.oid, 
-                              :args => [:set_value, ret]))
+            send_me(Msg.dump(:type => "Action", 
+                             :oid => c.oid, 
+                             :args => [:set_value, ret]))
           end
         end
       when "Action"
@@ -176,20 +176,20 @@ class Connection < EventMachine::Connection
   end
   
   # Invia un messaggio al client.
-  def send_msg(data)
+  def send_me(data)
     data = "#{data}#{$DELIM}" unless data.end_with?($DELIM)
     send_data(data)
   end
   
   # Invia un messaggio ad un client preciso.
-  def send_msg_to(client_id, data)
-    Env.instance.get_client(client_id).send_msg(data)
+  def send_to(client_id, data)
+    Env.instance.get_client(client_id).send_me(data)
   end
   
   # Invia un messaggio a tutti i client.
   def resend_all(data)
     Env.instance.clients.values.each do |cl|
-      cl.send_msg(data)
+      cl.send_me(data)
     end
   end
   
@@ -197,7 +197,7 @@ class Connection < EventMachine::Connection
   def resend_without_me(data)
     Env.instance.clients.values.each do |cl|
       if cl.object_id != self.object_id
-        cl.send_msg(data)
+        cl.send_me(data)
       end
     end
   end
