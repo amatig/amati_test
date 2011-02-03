@@ -14,6 +14,9 @@ class VObject
     @lock = nil
   end
   
+  def to_front
+  end
+  
   def is_movable?
     return @movable
   end

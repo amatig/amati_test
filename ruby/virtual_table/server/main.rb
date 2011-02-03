@@ -69,8 +69,8 @@ class Connection < EventMachine::Connection
       m = Msg.load(str)
       case m.type
       when "Nick"
-        @nick = m.args # nick del client
-        # mette in hash la hand e in object
+        @nick = m.args
+        # mette in hash e objects la nuova hand
         hand = env.add_hand(self.object_id, Hand.new(@nick))
         # invio dei dati del gioco tavolo, oggetti
         send_me(Msg.dump(:type => "Object", :data => env.table))
@@ -87,11 +87,10 @@ class Connection < EventMachine::Connection
         o = env.get_object(m.oid)
         # vede se un oggetto e' disponibile
         if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
-          if (m.args[0] == :mouse_left and not o.kind_of?(Hand))
-            # preso l'oggeto lo si porta in primo piano non per hand
-            env.to_front(o)
-          end
-          send_me(str) # rinvio del pick a chi l'ha cliccato
+          # porta in primo piano (carte o deck)
+          o.to_front if (m.args[0] == :mouse_left)
+          # rinvio del pick a chi l'ha cliccato
+          send_me(str)
           unless o.kind_of?(Hand) # e' sempre loggata hand
             o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
             # rinvio a tutti gli altri del lock dell'oggetto

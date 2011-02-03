@@ -21,6 +21,10 @@ class Card < VObject
     return rc1.collide_rect?(rc2)
   end
   
+  def to_front
+    Env.instance.to_front(self)
+  end
+  
   def action_turnoff
     @turn = false
   end

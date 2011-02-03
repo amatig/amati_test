@@ -14,6 +14,10 @@ class Deck < VObject
     return @cards_code.size
   end
   
+  def to_front
+    Env.instance.to_front(self)
+  end
+  
   def action_1card(x = nil, y = nil)
     unless @cards_code.empty?
       c = Card.new(@name, @cards_code.delete(@cards_code.first))
