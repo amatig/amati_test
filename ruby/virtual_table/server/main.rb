@@ -17,12 +17,9 @@ require "libs/hand"
 $DELIM = "\r\n"
 
 class Server
-  attr_accessor :connections
   
   # Costruttore della classe.
   def initialize
-    # Clients data
-    @connections = {} # hash di tutti client connessi
     # Game data all'avvio del server
     env = Env.instance
     env.add_table(Table.new) # tavolo
@@ -31,17 +28,15 @@ class Server
   
   # Avvio della ricezione di connessioni da parte di client.
   def start
-    EventMachine.start_server('0.0.0.0', 3333, Connection) do |con|
-      con.server = self
+    EventMachine.start_server('0.0.0.0', 3333, Connection) do |conn|
       # aggiunge il nuovo client all'hash
-      @connections[con.object_id] = con
+      Env.instance.add_client(conn)
     end
   end
   
 end
 
 class Connection < EventMachine::Connection
-  attr_accessor :server
   
   # Init della connessione del client.
   def post_init
@@ -63,7 +58,7 @@ class Connection < EventMachine::Connection
       o.lock = nil if (o.lock == @nick)
     end
     # rimuove il client dell'hash delle connessioni
-    server.connections.delete(self.object_id)
+    env.del_client(self)
   end
   
   # Ricezione e gestione dei messaggi del client.
@@ -188,19 +183,19 @@ class Connection < EventMachine::Connection
   
   # Invia un messaggio ad un client preciso.
   def send_msg_to(client_id, data)
-    server.connections[client_id].send_msg(data)
+    Env.instance.get_client(client_id).send_msg(data)
   end
   
   # Invia un messaggio a tutti i client.
   def resend_all(data)
-    server.connections.values.each do |cl|
+    Env.instance.clients.values.each do |cl|
       cl.send_msg(data)
     end
   end
   
   # Invia un messaggio a tutti i client tranne l'attuale.
   def resend_without_me(data)
-    server.connections.values.each do |cl|
+    Env.instance.clients.values.each do |cl|
       if cl.object_id != self.object_id
         cl.send_msg(data)
       end
