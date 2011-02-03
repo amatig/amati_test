@@ -30,7 +30,7 @@ class Card < VObject
   end
   
   def action_turn
-    val = SecretDeck.instance.get_value(oid)
+    val = SecretDeck.instance.get_value(self)
     set_value(val)
     @turn = (not @turn)
     return val
