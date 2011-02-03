@@ -30,7 +30,7 @@ class Game < EventMachine::Connection
     @events.enable_new_style_events    
     # Game data
     @picked = nil # oggetto preso col click e loccato, si assegna il nick
-    @menu = nil # menu
+    @menu = nil
     @accepted = false # true quando il server accetta l'entrata in gioco
     @running = true # se false il client esce
     # Send nick
@@ -56,7 +56,7 @@ class Game < EventMachine::Connection
       when Rubygame::Events::MousePressed
         env.objects.reverse.each do |o|
           if o.collide?(*ev.pos)
-            if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
+            if (o.is_pickable? and (o.locker == nil or o.is_locked?(@nick)))
               # richiesta del pick
               send_msg(Msg.dump(:type => "Pick", 
                                 :oid => o.oid, 
@@ -68,31 +68,34 @@ class Game < EventMachine::Connection
       when Rubygame::Events::MouseReleased
         if @picked
           if (@menu and @menu.choice)
+            # azione sull'oggetto e invio al server
             @picked.send(@menu.choice.to_sym)
             send_msg(Msg.dump(:type => "Action", 
                               :oid => @picked.oid, 
                               :args => @menu.choice.to_sym))
             if @menu.choice.end_with?("card4all")
-              # richiesta carte attiva
+              # richiesta valore carte attiva
               send_msg(Msg.dump(:type => "GetValue"))
             end
           end
           @menu = nil # chiusura menu
-          # rilascio dell'oggetto in pick, e quindi lockato
+          # rilascio dell'oggetto in pick e quindi lockato
           send_msg(Msg.dump(:type => "UnLock", :oid => @picked.oid))
           @picked = nil
         end
       when Rubygame::Events::MouseMoved
         if @picked
-          if ev.buttons[0] == :mouse_left
+          if (ev.buttons[0] == :mouse_left)
             # spostamento se l'oggetto e' in pick
             move = @picked.move(*ev.pos) # muove l'oggetto
             if move
+              # se si vuole lo manda al server
               send_msg(Msg.dump(:type => "Move", 
                                 :oid => @picked.oid, 
                                 :args => move))
             end
           else
+            # se e' click destro l'evento passa al menu
             @menu.select(ev) if @menu
           end
         end
@@ -137,31 +140,31 @@ class Game < EventMachine::Connection
       when "Pick"
         @picked = env.get_object(m.oid)
         @picked.save_pick_pos(*m.args[1]) # salva il punto di click
-        if m.args[0] == :mouse_left
+        if (m.args[0] == :mouse_left)
           unless @picked.kind_of?(Hand)
             # preso l'oggetto in pick, va in primo piano no per hand
-            env.to_front(@picked)
+            @picked.to_front
           end
         else
-          @menu = Menu.new(m.args[1], @picked) # apre menu
+          # click destro si crea un menu in base all'oggetto
+          @menu = Menu.new(m.args[1], @picked)
         end
       when "Lock"
         o = env.get_object(m.oid)
-        o.lock = m.args[1] # lock, nick di chi ha fatto pick
-        if m.args[0] == :mouse_left
-          # porta l'oggetto in pick di un altro in primo piano
-          env.to_front(o)
-        end
+        o.lock(m.args[1]) # lock, nick di chi ha fatto pick
+        # prim piano oggetto in pick, lockato, da un altro client
+        o.to_front if (m.args[0] == :mouse_left)
       when "UnLock"
-        env.get_object(m.oid).lock = nil # toglie il lock
+        env.get_object(m.oid).unlock # toglie il lock
       when "Hand"
-        env.add_first_object(m.data.init_graph) # arriva un player
+        env.add_first_object(m.data.init_graph) # hand nuovo giocatore
       when "UnHand"
-        env.del_object_by_id(m.oid) # va via un player
+        env.del_object_by_id(m.oid) # va via un giocatore
       when "Action"
         args = Array(m.args)
-        env.get_object(m.oid).send(*args)
-        if args[0].to_s.end_with?("card4all") # richiesta carte passiva
+        env.get_object(m.oid).send(*args) # azione sull'oggetto
+        # richiesta passiva valore carte
+        if (args[0].to_s.end_with?("card4all"))
           send_msg(Msg.dump(:type => "GetValue"))
         end
       end

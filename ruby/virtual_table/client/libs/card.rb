@@ -30,6 +30,10 @@ class Card < VObject
     @image = Surface.load("./images/#{@deck}/#{@seed}#{@num}.png")
   end
   
+  def to_front
+    Env.instance.to_front(self)
+  end
+  
   def menu_actions
     return [["Gira", "action_turn"],
             ["Copri", "action_turnoff"],
