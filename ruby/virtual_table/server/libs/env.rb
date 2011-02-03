@@ -40,13 +40,19 @@ class Env
     return @hands[client_id]
   end
   
-  def get_hand_key(o)
+  def get_key_hand(o)
     return @hands.index(o)
   end
   
   def del_hand(o)
     del_object(o)
-    @hands.delete(get_hand_key(o))
+    @hands.delete(get_key_hand(o))
+    return o
+  end
+  
+  def del_hand_by_id(client_id)
+    o = get_hand(client_id)
+    del_hand(o)
     return o
   end
   

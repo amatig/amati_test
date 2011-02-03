@@ -1,6 +1,5 @@
 class VObject
-  attr_reader :oid, :x, :y
-  attr_accessor :lock
+  attr_reader :oid, :x, :y, :lock
   
   def initialize
     # indice univoco
@@ -15,6 +14,22 @@ class VObject
   end
   
   def to_front
+  end
+  
+  def locker
+    return @lock
+  end
+  
+  def lock(nick)
+    @lock = nick
+  end
+  
+  def unlock
+    @lock = nil
+  end
+  
+  def is_locked?(nick)
+    return (@lock == nick)
   end
   
   def is_movable?

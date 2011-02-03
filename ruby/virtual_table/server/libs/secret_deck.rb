@@ -9,8 +9,8 @@ class SecretDeck
     end
   end
   
-  def get_value(code)
-    return @secret_cards[code]
+  def get_value(card)
+    return @secret_cards[card.oid]
   end
   
 end

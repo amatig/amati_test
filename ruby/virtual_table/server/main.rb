@@ -2,8 +2,8 @@
 
 require "rubygems"
 require "eventmachine"
-require "rubygame/rect"
 require "singleton"
+require "rubygame/rect"
 
 require "libs/env"
 require "libs/msg"
@@ -49,13 +49,12 @@ class Connection < EventMachine::Connection
   # Connessione persa o uscita del client.
   def unbind
     env = Env.instance
-    hand = env.get_hand(self.object_id)
-    # rimuove la hand da tutti e dal server
+    # rimuove la hand dal server e da tutti i client
+    hand = env.del_hand_by_id(self.object_id)
     resend_all(Msg.dump(:type => "UnHand", :oid => hand.oid))
-    env.del_hand(hand)
     # unlock di tutti gli oggetti del client
     env.objects.each do |o|
-      o.lock = nil if (o.lock == @nick)
+      o.unlock if (o.is_locked?(@nick))
     end
     # rimuove il client dell'hash delle connessioni
     env.del_client(self)
@@ -79,20 +78,20 @@ class Connection < EventMachine::Connection
         resend_without_me(Msg.dump(:type => "Hand", :data => hand))
       when "Move"
         o = env.get_object(m.oid)
-        if o.lock == @nick
+        if o.is_locked?(@nick)
           o.set_pos(*m.args) # salva il movimento
           resend_without_me(str) # rinvia agli altri move dell'oggetto
         end
       when "Pick"
         o = env.get_object(m.oid)
         # vede se un oggetto e' disponibile
-        if (o.is_pickable? and (o.lock == nil or o.lock == @nick))
-          # porta in primo piano (carte o deck)
+        if (o.is_pickable? and (o.locker == nil or o.is_locked?(@nick)))
+          # porta in primo piano (carte o deck) se non e' menu
           o.to_front if (m.args[0] == :mouse_left)
           # rinvio del pick a chi l'ha cliccato
           send_me(str)
-          unless o.kind_of?(Hand) # e' sempre loggata hand
-            o.lock = @nick # lock oggetto col nick di chi l'ha cliccato
+          unless o.kind_of?(Hand) # e' sempre locked la hand
+            o.lock(@nick) # lock oggetto col nick di chi l'ha cliccato
             # rinvio a tutti gli altri del lock dell'oggetto
             resend_without_me(Msg.dump(:type => "Lock", 
                                        :oid => m.oid, 
@@ -101,14 +100,12 @@ class Connection < EventMachine::Connection
         end
       when "UnLock"
         o = env.get_object(m.oid)
-        if (not o.kind_of?(Hand) and o.lock == @nick) # non unlock hand
-          # Unlock dell'oggetto in pick e rinvio a tutti
-          # tranne a chi lo muoveva, perche' per lui non lockato
-          o.lock = nil # unlock
+        if (not o.kind_of?(Hand) and o.is_locked?(@nick)) # non unlock hand
+          # unlock oggetto in pick e comunicazione a tutti gli altri
+          o.unlock
           resend_without_me(str)
         end
-        hands = [] # lista temporanea di hands
-        cards = [] # lista temporanea di cards
+        hands = cards = []
         if o.kind_of?(Card)
           hands = env.hands.values
           cards.push(o)
@@ -119,8 +116,8 @@ class Connection < EventMachine::Connection
         hands.each do |h|
           cards.each do |c|
             if h.fixed_collide?(c)
-              ret = SecretDeck.instance.get_value(c.oid)
-              client_id = env.get_hand_key(h)
+              ret = SecretDeck.instance.get_value(c)
+              client_id = env.get_key_hand(h)
               send_to(client_id, Msg.dump(:type => "Action", 
                                           :oid => c.oid, 
                                           :args => [:set_value, ret]))
@@ -132,7 +129,7 @@ class Connection < EventMachine::Connection
         cards = env.objects.select { |c| c.kind_of?(Card) }
         cards.each do |c|
           if hand.fixed_collide?(c)
-            ret = SecretDeck.instance.get_value(c.oid)
+            ret = SecretDeck.instance.get_value(c)
             send_me(Msg.dump(:type => "Action", 
                              :oid => c.oid, 
                              :args => [:set_value, ret]))
@@ -140,7 +137,7 @@ class Connection < EventMachine::Connection
         end
       when "Action"
         o = env.get_object(m.oid)
-        if o.lock == @nick
+        if o.is_locked?(@nick)
           if (m.args == :action_shuffle or 
               m.args == :action_turn or 
               m.args.to_s.start_with?("action_create"))
