@@ -10,8 +10,7 @@ class Menu
     # dati della grafica
     @image = Surface.load("./images/menu1.jpg")
     @image_sel = Surface.load("./images/menu2.jpg")
-    # data items
-    @items = []
+    @items = [] # entry del menu
     space = 0
     vobject.menu_actions.each do |label, method|
       t = font.render_utf8(label, true, [0, 0, 0])

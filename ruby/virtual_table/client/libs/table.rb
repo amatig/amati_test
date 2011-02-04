@@ -1,5 +1,5 @@
 class Table < VObject
-    
+  
   def init_graph
     @image = Surface.load("./images/#{@name}.jpg")
     @rect = @image.make_rect
