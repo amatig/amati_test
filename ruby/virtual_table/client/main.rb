@@ -105,7 +105,12 @@ class Game < EventMachine::Connection
         # puts ev.inspect
       end
     end
+    update_scene
+  end
+  
+  def update_scene
     if @accepted
+      env = Env.instance
       env.table.draw(@screen)
       env.objects.each { |o| o.draw(@screen) }
       @menu.draw(@screen) if @menu
