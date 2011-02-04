@@ -1,13 +1,5 @@
 class Table < VObject
-  
-  def initialize
-    super()
-    @name = "table1"
-    @movable = false
-    @pickable = false
-    init_graph
-  end
-  
+    
   def init_graph
     @image = Surface.load("./images/#{@name}.jpg")
     @rect = @image.make_rect

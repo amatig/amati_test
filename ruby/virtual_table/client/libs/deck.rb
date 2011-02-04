@@ -1,23 +1,23 @@
 class Deck < VObject
   attr_reader :cards_code, :cards_value
   
-  def initialize(name)
-    super()
-    @name = name
-    @cards_code = []
-    @cards_value = []
-    @x = 100
-    @y = 300
-    init_graph
-  end
-  
   def init_graph
+    # init font
+    TTF.setup
+    @font = TTF.new("./fonts/FreeSans.ttf", 17)
+    # graph
+    @max_size = size
+    update_label
     @image = Surface.load("./images/#{@name}/deck1.png")
     @image_empty = Surface.load("./images/#{@name}/deck2.png")
     @image_lock = Surface.load("./images/lock.png")
     @rect = @image.make_rect
     set_pos(@x, @y)
     return self
+  end
+  
+  def update_label
+    @label = @font.render_utf8("#{size}/#{@max_size}", true, [255, 255, 255])
   end
   
   def size
@@ -39,6 +39,7 @@ class Deck < VObject
   def action_1card(x = nil, y = nil)
     unless @cards_code.empty?
       c = Card.new(@name, @cards_code.delete(@cards_code.first))
+      update_label
       if (x and y)
         c.set_pos(x, y)
       else
@@ -58,19 +59,19 @@ class Deck < VObject
   
   def action_2card4all
     (0..1).each do |n|
-      action_1card4all(n * 35)
+      action_1card4all(n * 36)
     end
   end
   
   def action_3card4all
     (0..2).each do |n|
-      action_1card4all(n * 35)
+      action_1card4all(n * 36)
     end
   end
   
   def action_5card4all
     (0..4).each do |n|
-      action_1card4all(n * 35)
+      action_1card4all(n * 36)
     end
   end
   
@@ -82,6 +83,8 @@ class Deck < VObject
     if data
       Env.instance.del_all_card
       @cards_code = data
+      @max_size = size
+      update_label
     end
   end
   
@@ -89,6 +92,8 @@ class Deck < VObject
     if data
       Env.instance.del_all_card
       @cards_code = data
+      @max_size = size
+      update_label
     end
   end
   
@@ -96,6 +101,8 @@ class Deck < VObject
     if data
       Env.instance.del_all_card
       @cards_code = data
+      @max_size = size
+      update_label
     end
   end
   
@@ -106,6 +113,7 @@ class Deck < VObject
     else
       @image_empty.blit(screen, @rect)
     end
+    @label.blit(screen, [@rect.x, @rect.y - 22])
     @image_lock.blit(screen, @rect) if @lock
   end
   

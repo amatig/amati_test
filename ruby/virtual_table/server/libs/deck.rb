@@ -41,19 +41,19 @@ class Deck < VObject
   
   def action_2card4all
     (0..1).each do |n|
-      action_1card4all(n * 35)
+      action_1card4all(n * 36)
     end
   end
   
   def action_3card4all
     (0..2).each do |n|
-      action_1card4all(n * 35)
+      action_1card4all(n * 36)
     end
   end
   
   def action_5card4all
     (0..4).each do |n|
-      action_1card4all(n * 35)
+      action_1card4all(n * 36)
     end
   end
   

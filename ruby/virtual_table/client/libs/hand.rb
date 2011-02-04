@@ -1,15 +1,5 @@
 class Hand < VObject
-  
-  def initialize(nick)
-    super()
-    @oid = nick
-    @lock = nick
-    @label = nil # label nick
-    @x = rand(450) + 100
-    @y = rand(320) + 100
-    init_graph
-  end
-  
+    
   def init_graph
     # init font
     TTF.setup
