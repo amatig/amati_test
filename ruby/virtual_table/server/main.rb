@@ -79,8 +79,19 @@ class Connection < EventMachine::Connection
       when "Move"
         o = env.get_object(m.oid)
         if o.is_locked?(@nick)
+          temp_pos = o.get_pos # serve per le carte sulla mano
           o.set_pos(*m.args) # salva il movimento
           resend_without_me(str) # rinvia agli altri move dell'oggetto
+          if o.kind_of?(Hand)
+            # sposta tutte le carte con la mano
+            o.cards.each do |c|
+              pos = [c.x + o.x - temp_pos[0], c.y + o.y - temp_pos[1]]
+              c.set_pos(*pos)
+              resend_all(Msg.dump(:type => "Move", 
+                                  :oid => c.oid,
+                                  :args => pos))
+            end
+          end
         end
       when "Pick"
         o = env.get_object(m.oid)
@@ -96,6 +107,12 @@ class Connection < EventMachine::Connection
             resend_without_me(Msg.dump(:type => "Lock", 
                                        :oid => m.oid, 
                                        :args => [m.args[0], @nick]))
+          else
+            env.objects.each do |c| 
+              if (c.kind_of?(Card) and o.fixed_collide?(c))
+                o.cards.push(c)
+              end
+            end
           end
         end
       when "UnLock"
@@ -112,6 +129,7 @@ class Connection < EventMachine::Connection
           hands = env.hands.values
           cards.push(o)
         elsif o.kind_of?(Hand)
+          o.cards = [] # rimuove le carte in links per lo spostamento
           hands.push(o)
           cards = env.objects.select { |c| c.kind_of?(Card) }
         end

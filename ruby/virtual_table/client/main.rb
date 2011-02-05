@@ -93,7 +93,7 @@ class Game < EventMachine::Connection
         end
       when Rubygame::Events::MouseMoved
         if @picked
-          if (ev.buttons[0] == :mouse_left)
+          if (ev.buttons[0] == :mouse_left and @menu == nil)
             # spostamento se l'oggetto e' in pick
             move = @picked.move(*ev.pos) # muove l'oggetto
             if move
