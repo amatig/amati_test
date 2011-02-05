@@ -66,6 +66,13 @@ class Game < EventMachine::Connection
             break
           end
         end
+      when Rubygame::Events::KeyPressed
+        if @picked
+          @picked.send(:action_turn)
+          send_msg(Msg.dump(:type => "Action", 
+                            :oid => @picked.oid, 
+                            :args => :action_turn))
+        end
       when Rubygame::Events::MouseReleased
         if @picked
           if (@menu and @menu.choice)
