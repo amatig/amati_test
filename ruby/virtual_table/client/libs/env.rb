@@ -1,12 +1,14 @@
 class Env
   include Singleton
   attr_reader :table, :objects, :hash_objects, :hand
+  attr_accessor :flag
   
   def initialize
     @table = nil
     @objects = [] # lista oggetti sul tavolo
     @hash_objects = {} # per accedere agli oggetti + velocemente
     @hand = nil
+    @flag = false # dice se si deve ridisegnare o no
   end
   
   def add_table(o)

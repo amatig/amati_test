@@ -51,6 +51,7 @@ class Game < EventMachine::Connection
   def tick
     env = Env.instance
     @events.each do |ev|
+      env.flag = true # arrivato evento si disegna
       # puts ev.inspect
       case ev
       when Rubygame::Events::MousePressed
@@ -105,12 +106,12 @@ class Game < EventMachine::Connection
         # puts ev.inspect
       end
     end
-    update_scene
   end
   
   def update_scene
-    if @accepted
-      env = Env.instance
+    env = Env.instance
+    if @accepted and env.flag
+      env.flag = false # imposta come disegnato
       env.table.draw(@screen)
       env.objects.each { |o| o.draw(@screen) }
       @menu.draw(@screen) if @menu
@@ -127,6 +128,7 @@ class Game < EventMachine::Connection
   # Ricezione e gestione dei messaggi del server.
   def receive_data(data)
     env = Env.instance
+    env.flag = true # arrivato messaggio si disegna
     data.split($DELIM).each do |str|
       m = Msg.load(str)
       case m.type
@@ -185,13 +187,18 @@ $IP = $stdin.gets.chomp
 
 EventMachine::run do
   emg = EventMachine::connect($IP != "" ? $IP : "0.0.0.0", 3333, Game)
+  time = Time.now
   give_tick = proc do 
     emg.tick
+    if Time.now - time > 0.03 # tempo refresh scena
+      time = Time.now
+      emg.update_scene
+    end
     unless emg.running
       Rubygame.quit
       EventMachine::stop_event_loop
     end
-    # sleep 0.02
+    sleep 0.001 # sleep loop
     EventMachine.next_tick(give_tick)
   end
   trap("INT") do
