@@ -191,8 +191,8 @@ EventMachine::run do
       Rubygame.quit
       EventMachine::stop_event_loop
     end
+    # sleep 0.02
     EventMachine.next_tick(give_tick)
-    # sleep 0.08
   end
   trap("INT") do
     # Rubygame.quit
