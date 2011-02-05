@@ -1,10 +1,11 @@
 class Env
   include Singleton
-  attr_reader :clients, :table, :objects, :hash_objects, :hands
+  attr_reader :clients, :table, :deck, :objects, :hash_objects, :hands
   
   def initialize
     @clients = {} # connessioni socket dei client
     @table = nil
+    @deck = nil
     @objects = [] # lista oggetti sul tavolo
     @hash_objects = {} # per accedere agli oggetti + velocemente
     @hands = {}
@@ -28,6 +29,11 @@ class Env
   
   def add_table(o)
     @table = o
+    return o
+  end
+  
+  def set_deck(o)
+    @deck = o
     return o
   end
   

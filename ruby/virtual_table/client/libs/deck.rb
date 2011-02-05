@@ -106,6 +106,16 @@ class Deck < VObject
     end
   end
   
+  def action_in_deck(data = nil)
+    if data
+      data.each do |c|
+        Env.instance.del_object_by_id(c)
+      end
+      @cards_code.concat(data)
+      update_label
+    end
+  end
+  
   # Ridefinizione del metodo per il deck.
   def draw(screen)
     unless @cards_code.empty?

@@ -79,6 +79,14 @@ class Deck < VObject
     return @cards_code
   end
   
+  def action_in_deck(data)
+    data.each do |c|
+      Env.instance.del_object_by_id(c)
+    end
+    @cards_code.concat(data)
+    return @cards_code
+  end
+  
 end
 
 class DeckPoker < Deck

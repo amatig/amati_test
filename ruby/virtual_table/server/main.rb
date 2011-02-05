@@ -23,7 +23,7 @@ class Server
     # Game data all'avvio del server
     env = Env.instance
     env.add_table(Table.new) # tavolo
-    env.add_object(DeckPoker.new) # deck
+    env.add_object(env.set_deck(DeckPoker.new)) # aggiunge deck
   end
   
   # Avvio della ricezione di connessioni da parte di client.
@@ -100,6 +100,8 @@ class Connection < EventMachine::Connection
         end
       when "UnLock"
         o = env.get_object(m.oid)
+        return unless o # nel caso si elimina una carta
+                        # non esiste + oggetto da unlockare
         if (not o.kind_of?(Hand) and o.is_locked?(@nick)) # non unlock hand
           # unlock oggetto in pick e comunicazione a tutti gli altri
           o.unlock
@@ -162,6 +164,17 @@ class Connection < EventMachine::Connection
                                   :oid => c.oid, 
                                   :args => [m.args, pos]))
             end
+          elsif m.args == :action_in_deck
+            cards = [o.oid]
+            env.objects.each do |c| 
+              if (c != o and c.kind_of?(Card) and c.fixed_collide?(o))
+                cards.push(c.oid)
+              end
+            end
+            env.deck.send(m.args, cards) # azione su un oggetto
+            resend_all(Msg.dump(:type => "Action", 
+                                :oid => env.deck.oid, 
+                                :args => [m.args, cards]))
           else
             o.send(m.args) # azione su un oggetto
             resend_without_me(str)

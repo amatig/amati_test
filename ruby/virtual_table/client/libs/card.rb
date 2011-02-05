@@ -37,7 +37,8 @@ class Card < VObject
   def menu_actions
     return [["Gira", "action_turn"],
             ["Copri", "action_turnoff"],
-            ["Raccogli", "action_take"]]
+            ["Raccogli", "action_take"],
+            ["Metti in mazzo", "action_in_deck"]]
   end
   
   def action_turnoff
@@ -53,6 +54,9 @@ class Card < VObject
   
   def action_take(data = nil)
     set_pos(*data) if data
+  end
+  
+  def action_in_deck(data = nil)
   end
   
   # Ridefinizione del metodo per il card.
