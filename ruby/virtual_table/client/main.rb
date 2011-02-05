@@ -51,7 +51,6 @@ class Game < EventMachine::Connection
   def tick
     env = Env.instance
     @events.each do |ev|
-      env.flag = true # arrivato evento si disegna
       # puts ev.inspect
       case ev
       when Rubygame::Events::MousePressed
@@ -67,7 +66,8 @@ class Game < EventMachine::Connection
           end
         end
       when Rubygame::Events::KeyPressed
-        if @picked
+        if (@picked and @picked.kind_of?(Card) and ev.key == :left_ctrl)
+          env.flag = true # arrivato evento si disegna
           @picked.send(:action_turn)
           send_msg(Msg.dump(:type => "Action", 
                             :oid => @picked.oid, 
@@ -75,6 +75,7 @@ class Game < EventMachine::Connection
         end
       when Rubygame::Events::MouseReleased
         if @picked
+          env.flag = true # arrivato evento si disegna
           if (@menu and @menu.choice)
             # azione sull'oggetto e invio al server
             @picked.send(@menu.choice.to_sym)
@@ -93,6 +94,7 @@ class Game < EventMachine::Connection
         end
       when Rubygame::Events::MouseMoved
         if @picked
+          env.flag = true # arrivato evento si disegna
           if (ev.buttons[0] == :mouse_left and @menu == nil)
             # spostamento se l'oggetto e' in pick
             move = @picked.move(*ev.pos) # muove l'oggetto
@@ -117,7 +119,8 @@ class Game < EventMachine::Connection
   
   def update_scene
     env = Env.instance
-    if @accepted and env.flag
+    # disegna se c'e stato un cambiamento (flag) ed e' accettato
+    if (@accepted and env.flag)
       env.flag = false # imposta come disegnato
       env.table.draw(@screen)
       env.objects.each { |o| o.draw(@screen) }
@@ -137,7 +140,11 @@ class Game < EventMachine::Connection
     env = Env.instance
     env.flag = true # arrivato messaggio si disegna
     data.split($DELIM).each do |str|
-      m = Msg.load(str)
+      begin
+        m = Msg.load(str)
+      rescue
+        next
+      end
       case m.type
       when "Object"
         if m.data.kind_of?(Table)
@@ -197,7 +204,7 @@ EventMachine::run do
   time = Time.now
   give_tick = proc do 
     emg.tick
-    if Time.now - time > 0.03 # tempo refresh scena
+    if Time.now - time > 0.02 # tempo refresh scena
       time = Time.now
       emg.update_scene
     end
@@ -205,7 +212,7 @@ EventMachine::run do
       Rubygame.quit
       EventMachine::stop_event_loop
     end
-    sleep 0.001 # sleep loop
+    sleep 0.003 # sleep loop
     EventMachine.next_tick(give_tick)
   end
   trap("INT") do

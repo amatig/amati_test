@@ -65,7 +65,11 @@ class Connection < EventMachine::Connection
     env = Env.instance
     # puts Thread.current
     data.split($DELIM).each do |str|
-      m = Msg.load(str)
+      begin
+        m = Msg.load(str)
+      rescue
+        next
+      end
       case m.type
       when "Nick"
         @nick = m.args
@@ -82,16 +86,16 @@ class Connection < EventMachine::Connection
           temp_pos = o.get_pos # serve per le carte sulla mano
           o.set_pos(*m.args) # salva il movimento
           resend_without_me(str) # rinvia agli altri move dell'oggetto
-          if o.kind_of?(Hand)
+          #if o.kind_of?(Hand)
             # sposta tutte le carte con la mano
-            o.cards.each do |c|
-              pos = [c.x + o.x - temp_pos[0], c.y + o.y - temp_pos[1]]
-              c.set_pos(*pos)
-              resend_all(Msg.dump(:type => "Move", 
-                                  :oid => c.oid,
-                                  :args => pos))
-            end
-          end
+          #  o.cards.each do |c|
+          #    pos = [c.x + o.x - temp_pos[0], c.y + o.y - temp_pos[1]]
+          #    c.set_pos(*pos)
+          #    resend_all(Msg.dump(:type => "Move", 
+          #                        :oid => c.oid,
+          #                        :args => pos))
+          #  end
+          #end
         end
       when "Pick"
         o = env.get_object(m.oid)
