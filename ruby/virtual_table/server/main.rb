@@ -51,10 +51,13 @@ class Connection < EventMachine::Connection
     env = Env.instance
     # rimuove la hand dal server e da tutti i client
     hand = env.del_hand_by_id(self.object_id)
-    resend_all(Msg.dump(:type => "UnHand", :oid => hand.oid))
+    resend_without_me(Msg.dump(:type => "UnHand", :oid => hand.oid))
     # unlock di tutti gli oggetti del client
     env.objects.each do |o|
-      o.unlock if (o.is_locked?(@nick))
+      if o.is_locked?(@nick)
+        o.unlock 
+        resend_without_me(Msg.dump(:type => "UnLock", :oid => o.oid))
+      end
     end
     # rimuove il client dell'hash delle connessioni
     env.del_client(self)
