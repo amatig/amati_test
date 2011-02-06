@@ -43,7 +43,7 @@ class Connection < EventMachine::Connection
     # ...
   rescue Exception => e
     p e
-    exit!
+    exit
   end
   
   # Connessione persa o uscita del client.

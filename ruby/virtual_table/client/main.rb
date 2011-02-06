@@ -35,7 +35,7 @@ class Game < EventMachine::Connection
     @running = true # se false il client esce
   rescue Exception => e
     p e
-    exit!
+    exit
   end
   
   def set_nick(nick)
@@ -47,7 +47,6 @@ class Game < EventMachine::Connection
   # Connessione persa o uscita dal client.
   def unbind
     @running = false
-    return
   end
   
   # Procedura che viene richiamata ciclicamente, loop del game.
@@ -119,7 +118,7 @@ class Game < EventMachine::Connection
     end
   end
   
-  def update_scene
+  def update
     env = Env.instance
     # disegna se c'e stato un cambiamento (flag) ed e' accettato
     if (@accepted and env.flag)
@@ -199,11 +198,15 @@ end
 
 if __FILE__ == $0
   
-  trap("INT") do
+  game_exit = proc do
     Rubygame.quit
     EventMachine::stop_event_loop if EventMachine::reactor_running?
     puts
     exit
+  end
+  
+  trap("INT") do
+    game_exit.call
   end
   
   puts "\nVirtual Table Client"
@@ -219,15 +222,12 @@ if __FILE__ == $0
     clock.target_framerate = 30    
     game_loop = proc do 
       emg.loop
-      unless emg.running
-        Rubygame.quit
-        EventMachine::stop_event_loop
-      end
-      emg.update_scene
+      game_exit.call unless emg.running
+      emg.update
       clock.tick
       EventMachine.next_tick(game_loop)
     end
     game_loop.call
   end
-
+  
 end
