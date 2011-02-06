@@ -51,7 +51,7 @@ class Game < EventMachine::Connection
   end
   
   # Procedura che viene richiamata ciclicamente, loop del game.
-  def tick
+  def loop
     env = Env.instance
     @events.each do |ev|
       # puts ev.inspect
@@ -197,32 +197,37 @@ class Game < EventMachine::Connection
 end
 
 
-puts "\nVirtual Table Client"
-print "Inserisci l'ip del server (0.0.0.0): "
-$IP = $stdin.gets.chomp
-print "Inserisci un nick: "
-$NICK = $stdin.gets.chomp
-
-EventMachine::run do
-  emg = EventMachine::connect($IP != "" ? $IP : "0.0.0.0", 3333, Game)
-  emg.set_nick($NICK)
-  time = Time.now
-  give_tick = proc do 
-    emg.tick
-    if Time.now - time > 0.02 # tempo refresh scena
-      time = Time.now
-      emg.update_scene
-    end
-    unless emg.running
-      Rubygame.quit
-      EventMachine::stop_event_loop
-    end
-    sleep 0.003 # sleep loop
-    EventMachine.next_tick(give_tick)
-  end
+if __FILE__ == $0
+  
   trap("INT") do
-    # Rubygame.quit
-    EventMachine::stop_event_loop
+    Rubygame.quit
+    EventMachine::stop_event_loop if EventMachine::reactor_running?
+    puts
+    exit
   end
-  give_tick.call
+  
+  puts "\nVirtual Table Client"
+  print "Inserisci l'ip del server (0.0.0.0): "
+  $IP = $stdin.gets.chomp
+  print "Inserisci un nick: "
+  $NICK = $stdin.gets.chomp
+  
+  EventMachine::run do
+    emg = EventMachine::connect($IP != "" ? $IP : "0.0.0.0", 3333, Game)
+    emg.set_nick($NICK)
+    clock = Rubygame::Clock.new
+    clock.target_framerate = 30    
+    game_loop = proc do 
+      emg.loop
+      unless emg.running
+        Rubygame.quit
+        EventMachine::stop_event_loop
+      end
+      emg.update_scene
+      clock.tick
+      EventMachine.next_tick(game_loop)
+    end
+    game_loop.call
+  end
+
 end
