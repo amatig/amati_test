@@ -80,23 +80,6 @@ class Connection < EventMachine::Connection
         send_me(Msg.dump(:type => "Object", :data => env.objects))
         # manda a tutti gli altri la hand
         resend_without_me(Msg.dump(:type => "Hand", :data => hand))
-      when "Move"
-        o = env.get_object(m.oid)
-        if o.is_locked?(@nick)
-          temp_pos = o.get_pos # serve per le carte sulla mano
-          o.set_pos(*m.args) # salva il movimento
-          resend_without_me(str) # rinvia agli altri move dell'oggetto
-          #if o.kind_of?(Hand)
-            # sposta tutte le carte con la mano
-          #  o.cards.each do |c|
-          #    pos = [c.x + o.x - temp_pos[0], c.y + o.y - temp_pos[1]]
-          #    c.set_pos(*pos)
-          #    resend_all(Msg.dump(:type => "Move", 
-          #                        :oid => c.oid,
-          #                        :args => pos))
-          #  end
-          #end
-        end
       when "Pick"
         o = env.get_object(m.oid)
         # vede se un oggetto e' disponibile
@@ -112,10 +95,30 @@ class Connection < EventMachine::Connection
                                        :oid => m.oid, 
                                        :args => [m.args[0], @nick]))
           else
+            # se hand si tiene temporaneam. i ref delle carte per spostarle
             env.objects.each do |c| 
               if (c.kind_of?(Card) and o.fixed_collide?(c))
+                c.lock(@nick)
+                # metto gli oggetti tanto solo in pick esistono
                 o.cards.push(c)
               end
+            end
+          end
+        end
+      when "Move"
+        o = env.get_object(m.oid)
+        if o.is_locked?(@nick)
+          temp_pos = o.get_pos # serve per le carte sulla mano
+          o.set_pos(*m.args) # salva il movimento
+          resend_without_me(str) # rinvia agli altri move dell'oggetto
+          if o.kind_of?(Hand)
+            # sposta tutte le carte con la mano
+            o.cards.each do |c|
+              pos = [c.x + o.x - temp_pos[0], c.y + o.y - temp_pos[1]]
+              c.set_pos(*pos)
+              resend_all(Msg.dump(:type => "Move", 
+                                  :oid => c.oid,
+                                  :args => pos))
             end
           end
         end
@@ -133,7 +136,9 @@ class Connection < EventMachine::Connection
           hands = env.hands.values
           cards.push(o)
         elsif o.kind_of?(Hand)
-          o.cards = [] # rimuove le carte in links per lo spostamento
+          # rimuove le carte in links per lo spostamento
+          o.cards.each { |c| c.unlock }
+          o.cards = []
           hands.push(o)
           cards = env.objects.select { |c| c.kind_of?(Card) }
         end

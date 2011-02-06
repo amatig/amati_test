@@ -68,7 +68,6 @@ class Game < EventMachine::Connection
       when Rubygame::Events::KeyPressed
         if (@picked and @picked.kind_of?(Card) and ev.key == :left_ctrl)
           env.flag = true # arrivato evento si disegna
-          @picked.send(:action_turn)
           send_msg(Msg.dump(:type => "Action", 
                             :oid => @picked.oid, 
                             :args => :action_turn))
