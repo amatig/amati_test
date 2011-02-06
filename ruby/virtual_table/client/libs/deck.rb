@@ -20,6 +20,10 @@ class Deck < VObject
     @label = @font.render_utf8("#{size}/#{@max_size}", true, [255, 255, 255])
   end
   
+  def to_front
+    Env.instance.to_front(self)
+  end
+  
   def size
     return @cards_code.size
   end
