@@ -40,7 +40,7 @@ class Game < EventMachine::Connection
   
   def set_nick(nick)
     # Send nick
-    @nick = nick
+    @nick = nick != "" ? nick.capitalize : "Guest_#{rand 1000}"
     send_msg(Msg.dump(:type => "Nick", :args => @nick))
   end
   
