@@ -6,6 +6,7 @@ class Deck < VObject
     @name = name
     @cards_code = []
     @cards_value = []
+    @max_size = 0
     @x = 100
     @y = 300
   end
@@ -97,6 +98,7 @@ class DeckPoker < Deck
   end
   
   def create(size = 54)
+    @max_size = size
     @cards_code = []
     (1..size).each do |n|
       code = (0...10).collect { rand(10) }.join

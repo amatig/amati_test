@@ -90,6 +90,15 @@ class Env
     end
   end
   
+  def order_points(cards)
+    temp = {}
+    cards.each do |c|
+      temp[c.seed] ||= []
+      temp[c.seed].push(c)
+    end
+    return temp
+  end
+  
   def to_front(o)
     @objects.push(@objects.delete(o))
   end

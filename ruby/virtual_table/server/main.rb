@@ -158,13 +158,14 @@ class Connection < EventMachine::Connection
         end
       when "GetValue"
         hand = env.get_hand(self.object_id)
-        cards = env.objects.select { |c| c.kind_of?(Card) }
-        cards.each do |c|
-          if hand.fixed_collide?(c)
-            ret = SecretDeck.instance.get_value(c)
-            send_me(Msg.dump(:type => "Action", 
-                             :oid => c.oid, 
-                             :args => [:set_value, ret]))
+        env.objects.each do |c| 
+          if c.kind_of?(Card)
+            if hand.fixed_collide?(c)
+              ret = SecretDeck.instance.get_value(c)
+              send_me(Msg.dump(:type => "Action", 
+                               :oid => c.oid, 
+                               :args => [:set_value, ret]))
+            end
           end
         end
       when "Action"
@@ -193,6 +194,35 @@ class Connection < EventMachine::Connection
               resend_all(Msg.dump(:type => "Action", 
                                   :oid => c.oid, 
                                   :args => [m.args, pos]))
+            end
+          elsif m.args == :action_show
+            cards = env.objects.select do |c| 
+              c != o and c.kind_of?(Card) and c.fixed_collide?(o)
+            end
+            cards.push(o)
+            cards.each do |c|
+              ret = c.send(:action_turnon) # azione su un oggetto
+              resend_all(Msg.dump(:type => "Action", 
+                                  :oid => c.oid, 
+                                  :args => [:action_turnon, ret]))
+            end
+            cards = env.order_points(cards)
+            y = 0
+            cards.each do |k, v|
+              x = 0
+              v.each do |c|
+                c.to_front # azione su un oggetto
+                resend_all(Msg.dump(:type => "Action", 
+                                    :oid => c.oid, 
+                                    :args => :to_front))
+                pos = [c.x + x * 20, c.y + y * 30]
+                c.send(:action_take, pos) # azione su un oggetto
+                resend_all(Msg.dump(:type => "Action", 
+                                    :oid => c.oid, 
+                                    :args => [:action_take, pos]))
+                x += 1
+              end
+              y += 1
             end
           elsif m.args == :action_in_deck
             cards = [o.oid]

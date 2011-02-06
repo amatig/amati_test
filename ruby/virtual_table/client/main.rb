@@ -33,12 +33,15 @@ class Game < EventMachine::Connection
     @menu = nil
     @accepted = false # true quando il server accetta l'entrata in gioco
     @running = true # se false il client esce
-    # Send nick
-    @nick = "user_#{rand 1000}"
-    send_msg(Msg.dump(:type => "Nick", :args => @nick))
   rescue Exception => e
     p e
     exit!
+  end
+  
+  def set_nick(nick)
+    # Send nick
+    @nick = nick
+    send_msg(Msg.dump(:type => "Nick", :args => @nick))
   end
   
   # Connessione persa o uscita dal client.
@@ -197,9 +200,12 @@ end
 puts "\nVirtual Table Client"
 print "Inserisci l'ip del server (0.0.0.0): "
 $IP = $stdin.gets.chomp
+print "Inserisci un nick: "
+$NICK = $stdin.gets.chomp
 
 EventMachine::run do
   emg = EventMachine::connect($IP != "" ? $IP : "0.0.0.0", 3333, Game)
+  emg.set_nick($NICK)
   time = Time.now
   give_tick = proc do 
     emg.tick

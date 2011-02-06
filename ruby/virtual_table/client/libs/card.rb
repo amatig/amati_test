@@ -38,7 +38,15 @@ class Card < VObject
     return [["Gira", "action_turn"],
             ["Copri", "action_turnoff"],
             ["Raccogli", "action_take"],
-            ["Metti in mazzo", "action_in_deck"]]
+            ["Metti in mazzo", "action_in_deck"],
+            ["Mostra punti", "action_show"]]
+  end
+  
+  def action_turnon(data = nil)
+    if data
+      set_value(data)
+      @turn = true
+    end
   end
   
   def action_turnoff
@@ -57,6 +65,9 @@ class Card < VObject
   end
   
   def action_in_deck(data = nil)
+  end
+  
+  def action_show(data = nil)
   end
   
   # Ridefinizione del metodo per il card.

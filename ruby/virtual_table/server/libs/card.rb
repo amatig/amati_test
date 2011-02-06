@@ -25,6 +25,13 @@ class Card < VObject
     Env.instance.to_front(self)
   end
   
+  def action_turnon
+    val = SecretDeck.instance.get_value(self)
+    set_value(val)
+    @turn = true
+    return val
+  end
+  
   def action_turnoff
     @turn = false
   end

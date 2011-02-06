@@ -6,7 +6,6 @@ class Deck < VObject
     TTF.setup
     @font = TTF.new("./fonts/FreeSans.ttf", 17)
     # graph
-    @max_size = size
     update_label
     @image = Surface.load("./images/#{@name}/deck1.png")
     @image_empty = Surface.load("./images/#{@name}/deck2.png")
