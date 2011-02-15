@@ -4,3 +4,6 @@
 [submodule "NetSmith"]
 	path = NetSmith
 	url = git@github.com:amatig/NetSmith.git
+[submodule "babel4iphone"]
+	path = babel4iphone
+	url = git@github.com:amatig/babel4iphone.git
