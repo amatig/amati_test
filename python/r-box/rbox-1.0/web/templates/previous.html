@@ -1,0 +1,29 @@
+<form id="prev_form" action="javascript:return false;" onsubmit="return checkForm(4, '/add/previous/');" method="post">
+  
+  <div class="err" style="display:none;">{{ err }}</div>
+  <table>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.first.label }}</td>
+      <td class="valx">
+	{{ form.first }}
+	{{ form.first.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.last.label }}</td>
+      <td class="valx">
+	{{ form.last }}
+	{{ form.last.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.dest.label }}</td>
+      <td class="valx">
+	{{ form.dest }}
+	{{ form.dest.errors }}
+      </td>
+    </tr>
+  </table>
+  <div class="loading">Initializing...</div>
+  
+</form>

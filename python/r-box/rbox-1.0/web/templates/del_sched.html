@@ -1,0 +1,20 @@
+<form id="sched_form" action="javascript:return false;" onsubmit="return checkForm2('/del/schedule/{{pk}}/');" method="post">
+  
+  <table>
+    {% for e in list %}
+    <tr class="fieldWrapper">
+      <td class="labelx2">Start: {{ e.s_start }}<br />End: {{ e.s_start }}</td>
+      <td class="valx">
+	<input name="{{e.pk}}" type="checkbox" />
+      </td>
+    </tr>
+    {% empty %}
+    <tr class="fieldWrapper">
+      <td class="labelx2">No schedule to delete.</td>
+      <td class="valx"></td>
+    </tr>
+    {% endfor %}
+  </table>
+  <div class="loading">Initializing...</div>
+
+</form>

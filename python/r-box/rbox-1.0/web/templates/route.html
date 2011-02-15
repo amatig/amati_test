@@ -1,0 +1,65 @@
+<form id="route_form" action="javascript:return false;" onsubmit="return checkForm(3, '/add/route/');" method="post">
+  
+  <div class="err" style="display:none;">{{ err }}</div>
+  <table>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.label.label }}</td>
+      <td class="valx">
+	{{ form.label }}
+	{{ form.label.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.origin.label }}</td>
+      <td class="valx">
+	{{ form.origin }}
+	{{ form.origin.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.dest.label }}</td>
+      <td class="valx">
+	{{ form.dest }}
+	{{ form.dest.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.start.label }}</td>
+      <td class="valx">
+	{{ form.start }}
+	{{ form.start.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.end.label }}</td>
+      <td class="valx">
+	{{ form.end }}
+	{{ form.end.errors }}
+      </td>
+    </tr>
+
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form2.s_start.label }}</td>
+      <td class="valx">
+	{{ form2.s_start }}
+	{{ form2.s_start.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form2.s_end.label }}</td>
+      <td class="valx">
+	{{ form2.s_end }}
+	{{ form2.s_end.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form2.force.label }}</td>
+      <td class="valx">
+	{{ form2.force }}
+	{{ form2.force.errors }}
+      </td>
+    </tr>
+  </table>
+  <div class="loading">Initializing...</div>
+
+</form>

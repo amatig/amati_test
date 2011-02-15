@@ -1,0 +1,62 @@
+[
+  {
+    "model": "rbox.setting",
+    "pk": 1,
+    "fields": {
+      "name": "LOG.filename",
+      "value": "web.log",
+      "editable": true,
+      "description": ""
+    }
+  },
+  {
+    "model": "rbox.setting",
+    "pk": 2,
+    "fields": {
+      "name": "LOG.path",
+      "value": "/var/log/",
+      "editable": true,
+      "description": ""
+    }
+  },
+  {
+    "model": "rbox.setting",
+    "pk": 3,
+    "fields": {
+      "name": "LOG.loglevel",
+      "value": "INFO",
+      "editable": true,
+      "description": ""
+    }
+  },
+  {
+    "model": "rbox.setting",
+    "pk": 4,
+    "fields": {
+      "name": "TMP.path",
+      "value": "/tmp/",
+      "editable": true,
+      "description": ""
+    }
+  },
+  {
+    "model": "rbox.setting",
+    "pk": 5,
+    "fields": {
+      "name": "SYSINFO.ssh-key",
+      "value": "",
+      "editable": false,
+      "description": ""
+    }
+  },
+  {
+    "model": "rbox.setting",
+    "pk": 6,
+    "fields": {
+      "name": "NOTIFY.email",
+      "value": "",
+      "editable": true,
+      "description": ""
+    }
+  }
+]

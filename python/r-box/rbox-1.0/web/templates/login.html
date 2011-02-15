@@ -1,0 +1,23 @@
+<form id="login_form" action="javascript:return false;" onsubmit="return checkForm(100, '/login/');" method="post">
+  
+  <div class="err" style="display:none;">{{ err }}</div>
+  <table>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.username.label }}</td>
+      <td class="valx">
+	{{ form.username }}
+	{{ form.username.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.passwd.label }}</td>
+      <td class="valx">
+	{{ form.passwd }}
+	{{ form.passwd.errors }}
+	{% if err2 %}<ul class="errorlist"><li>Username or password wrong.</li></ul>{% endif %}
+      </td>
+    </tr>
+  </table>
+  <div class="loading">Initializing...</div>
+  
+</form>

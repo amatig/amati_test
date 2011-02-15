@@ -1,0 +1,29 @@
+<form id="sched_form" action="javascript:return false;" onsubmit="return checkForm(10, '/add/schedule/{{pk}}/');" method="post">
+  
+  <div class="err" style="display:none;">{{ err }}</div>
+  <table>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.s_start.label }}</td>
+      <td class="valx">
+	{{ form.s_start }}
+	{{ form.s_start.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.s_end.label }}</td>
+      <td class="valx">
+	{{ form.s_end }}
+	{{ form.s_end.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.force.label }}</td>
+      <td class="valx">
+	{{ form.force }}
+	{{ form.force.errors }}
+      </td>
+    </tr>
+  </table>
+  <div class="loading">Initializing...</div>
+
+</form>

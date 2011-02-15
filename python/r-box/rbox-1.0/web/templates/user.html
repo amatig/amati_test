@@ -1,0 +1,31 @@
+<form id="login_form" action="javascript:return false;" onsubmit="return checkForm(6, '/{% if form.username %}add{% else %}edit{% endif %}/user/{{ pk }}');" method="post">
+  
+  <div class="err" style="display:none;">{{ err }}</div>
+  <table>
+    {% if form.username %}
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.username.label }}</td>
+      <td class="valx">
+	{{ form.username }}
+	{{ form.username.errors }}
+      </td>
+    </tr>
+    {% endif %}
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.password.label }}</td>
+      <td class="valx">
+	{{ form.password }}
+	{{ form.password.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.is_superuser.label }}</td>
+      <td class="valx">
+	{{ form.is_superuser }}
+	{{ form.is_superuser.errors }}
+      </td>
+    </tr>
+  </table>
+  <div class="loading">Initializing...</div>
+  
+</form>

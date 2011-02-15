@@ -1,0 +1,36 @@
+<form id="dest_form" action="javascript:return false;" onsubmit="return checkForm(2, '/add/dest/');" method="post">
+  
+  <div class="err" style="display:none;">{{ err }}</div>
+  <table>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.label.label }}</td>
+      <td class="valx">
+	{{ form.label }}
+	{{ form.label.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.ip.label }}</td>
+      <td class="valx">
+	{{ form.ip }}
+	{{ form.ip.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.dtype.label }}</td>
+      <td class="valx">
+	{{ form.dtype }}
+	{{ form.dtype.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.path.label }}</td>
+      <td class="valx">
+	{{ form.path }}
+	{{ form.path.errors }}
+      </td>
+    </tr>
+  </table>
+  <div class="loading">Initializing...</div>
+  
+</form>

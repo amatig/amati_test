@@ -1,0 +1,2 @@
+*/10 * * * * python -O /usr/local/fdt-arch/rbox2/rbox.py >/dev/null 2>&1
+*/15 * * * * wget http://localhost:8080/timeout/check/all/ -O /dev/null >/dev/null 2>&1

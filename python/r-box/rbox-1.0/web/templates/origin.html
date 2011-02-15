@@ -1,0 +1,57 @@
+<form id="origin_form" action="javascript:return false;" onsubmit="return checkForm(1, '/add/origin/');" method="post">
+  
+  <div class="err" style="display:none;">{{ err }}</div>
+  <table>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.label.label }}</td>
+      <td class="valx">
+	{{ form.label }}
+	{{ form.label.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.code.label }}</td>
+      <td class="valx">
+	{{ form.code }}
+	{{ form.code.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.ip.label }}</td>
+      <td class="valx">
+	{{ form.ip }}
+	{{ form.ip.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.otype.label }}</td>
+      <td class="valx">
+	{{ form.otype }}
+	{{ form.otype.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.path.label }}</td>
+      <td class="valx">
+	{{ form.path }}
+	{{ form.path.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.bc.label }}</td>
+      <td class="valx">
+	{{ form.bc }}
+	{{ form.bc.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.tollerance.label }}</td>
+      <td class="valx">
+	{{ form.tollerance }}
+	{{ form.tollerance.errors }}
+      </td>
+    </tr>
+  </table>
+  <div class="loading">Initializing...</div>
+
+</form>

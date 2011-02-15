@@ -1,0 +1,168 @@
+<!doctype html>
+<html>
+  <head>
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Language" content="en-us" />
+    <title>R-Box</title>
+    <link type="text/css" href="/site_media/css/ui-lightness/jquery-ui-1.8.1.custom.css" rel="stylesheet" />
+    <link type="text/css" href="/site_media/css/jquery.alerts.css" rel="stylesheet" />
+    <link type="text/css" href="/site_media/css/base.css" rel="stylesheet" />
+    <script type="text/javascript" src="/site_media/js/jquery-1.4.2.min.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery-ui-1.8.1.custom.min.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery.timers-1.2.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery-ui-timepicker-addon-0.4.min.js"></script>
+    <script type="text/javascript" src="/site_media/js/jquery.alerts.js"></script>
+    <script type="text/javascript" src="/site_media/js/base.js"></script>
+  </head>
+  <body>
+    
+    <div id="header">
+      <div class="login"><button style="display:none;" id="b_login" class="b_login">{{ l_label }}</button></div>
+    </div>
+    
+    <div id="container">
+      <!-- Tabs -->
+      <div id="tabs">
+	<ul>
+	  <li id="t0"><a href="#tabs-0">Home</a></li>
+	  <li id="t1" style="display:none;"><a href="#tabs-1">Origins</a></li>
+	  <li id="t2" style="display:none;"><a href="#tabs-2">Dests</a></li>
+	  <li id="t3" style="display:none;"><a href="#tabs-3">Routes</a></li>
+	  <li id="t4" style="display:none;"><a href="#tabs-4">Previous History</a></li>
+	  <li id="t5" style="display:none;"><a href="#tabs-5">Search Record</a></li>
+	  <li id="t6" style="display:none;"><a href="#tabs-6">Notifies</a></li>
+	  {% if user.is_superuser %}
+	  <li id="t7" style="display:none;"><a href="#tabs-7">Manage Users</a></li>
+	  {% else %}
+	  <li id="t7" style="display:none;"><a href="#">Manage Users</a></li>
+	  {% endif %}
+	  <li id="t8" style="display:none;"><a href="#tabs-8">Settings</a></li>
+	  <li id="t9"><a href="#tabs-9">About</a></li>
+	</ul>
+	
+	<div id="tabs-0">
+	  <h2 class="demoHeaders h2fix">Welcome to RBox</h2>
+	  {% load webdesign %}
+	  <!-- <div id="show_cont"> -->
+	  {% lorem 5 p %}
+	  <!-- </div> -->
+	</div>
+	
+	<div id="tabs-1">
+	  <div id="accordion1" class="accordion">
+	    <div class="titlex"><h2 class="demoHeaders">Details Origins</h2></div>
+	    <div class="add"><button class="button_add" type="button">Add new</button></div>
+	    <div id="list1"></div>
+	  </div>
+	</div>
+	
+	<div id="tabs-2">
+	  <div id="accordion2" class="accordion">
+	    <div class="titlex"><h2 class="demoHeaders">Details Dests</h2></div>
+	    <div class="add"><button class="button_add" type="button">Add new</button></div>
+	    <div id="list2"></div>
+	  </div>
+	</div>
+	
+	<div id="tabs-3">
+	  <div id="accordion3" class="accordion">
+	    <div class="titlex"><h2 class="demoHeaders">Details Routes</h2></div>
+	    <div class="add"><button class="button_add" type="button">Add new</button></div>
+	    <div id="list3"></div>
+	  </div>
+	</div>
+	
+	<div id="tabs-4">
+	  <div id="page4" style="display:none;">0</div>
+	  <div class="titlex"><h2 class="demoHeaders h2fix">Details Previous History</h2></div>
+	  <div class="add"><button class="button_add" type="button">Add new</button></div>
+	  <div id="show_prev4" class="show_prev"></div>
+	</div>
+	
+	<div id="tabs-5">
+	  <div class="titlex"><h2 class="demoHeaders h2fix">Search Record</h2></div>
+	  <div id="show_prev5" class="show_prev">
+	    <div class="search">
+	      <input id="filexx" class="filename" type="text" maxlength="15" onKeyPress="return enter_find_record(this, event);" />
+	      <button class="button_search" type="submit">Search</button>
+	    </div>
+	    <div id="sresult"></div>
+	  </div>
+	</div>
+	
+	<div id="tabs-6">
+	  <div id="page6" style="display:none;">0</div>
+	  <div class="titlex"><h2 class="demoHeaders h2fix">Details Notifies</h2></div>
+	  <div class="add"><button id="clean_all" class="button_ca" type="button">Clean all</button></div>
+	  <div class="add"><button id="clean_positive" class="button_ce commands" type="button">Clean positive</button></div>
+	  <div id="show_prev6" class="show_prev"></div>
+	</div>
+	
+	{% if user.is_superuser %}
+	<div id="tabs-7">
+	  <div id="page7" style="display:none;">0</div>
+	  <div class="titlex"><h2 class="demoHeaders h2fix">Manage Users</h2></div>
+	  <div class="add"><button class="button_add" type="button">Add new</button></div>
+	  <div id="show_prev7" class="show_prev"></div>
+	</div>
+	{% endif %}
+	
+	<div id="tabs-8">
+	  <div id="accordion8" class="accordion">
+	    <div class="titlex"><h2 class="demoHeaders">Details Settings</h2></div>
+	    <div id="list8"></div>
+	  </div>
+	</div>
+	
+	<div id="tabs-9">
+	  <h2 class="demoHeaders h2fix">About</h2>
+	  <div id="show_cont">
+	    FastDataTel via Angelo Bruntetti, 8 - Milano - Italia.
+	  </div>
+	</div>
+	
+      </div>
+    </div>
+    
+    <div id="dialog"></div>
+    
+    <script type="text/javascript">
+      $("#tabs").tabs({select: function(event, ui) { getData(ui.index); }});
+      
+      $(".button_add", ".add").button(); // style ai bottoni di add
+      $(".button_add").click(runAdd);
+      
+      $(".button_ce", ".add").button();
+      $(".button_ce").click(clean_positive);
+      
+      $(".button_ca", ".add").button();
+      $(".button_ca").click(clean_all);
+      
+      $(".button_search", ".search").button();
+      $(".button_search").click(find_record);
+      
+      $("#dialog").dialog({
+	    autoOpen: false,
+	    modal: true,
+            width: 400,
+            resizable: false,
+            show: "blind",
+            hide: "blind",
+            buttons: {"Submit": function() { $("#dialog form").submit() },
+                      "Abort": function() { $(this).dialog("close"); } },
+	    position: [400, 100]
+            //position: "center"
+      });
+      $(".ui-dialog-titlebar-close").hide(); // nasconde tasto clode dialog
+      
+      $(document).everyTime(4000, function() {
+          getData(-1);
+      });
+      
+      $(document).ready(function() {
+          getData(-1);
+      });
+    </script>
+    
+  </body>
+</html>

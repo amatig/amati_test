@@ -1,0 +1,22 @@
+[
+  {
+    "model": "rbox.foldtype",
+    "pk": 1,
+    "fields": {
+      "name": "LocalFold",
+      "need_user": false,
+      "need_passwd": false,
+      "need_rpath": false
+    }
+  },
+  {
+    "model": "rbox.foldtype",
+    "pk": 2,
+    "fields": {
+      "name": "SshFold",
+      "need_user": true,
+      "need_passwd": false,
+      "need_rpath": true
+    }
+  }
+]
