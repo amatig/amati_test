@@ -1,3 +1,6 @@
 [submodule "virtual_table"]
 	path = virtual_table
 	url = git@github.com:amatig/virtual_table.git
+[submodule "NetSmith"]
+	path = NetSmith
+	url = git@github.com:amatig/NetSmith.git
