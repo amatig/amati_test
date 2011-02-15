@@ -7,3 +7,6 @@
 [submodule "babel4iphone"]
 	path = babel4iphone
 	url = git@github.com:amatig/babel4iphone.git
+[submodule "mudonline"]
+	path = mudonline
+	url = git@github.com:amatig/mudonline.git
