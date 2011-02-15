@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Ajax</title>
+  <%= stylesheet_link_tag 'ui-lightness/jquery-ui', 'application' %>
+  <%= javascript_include_tag 'jquery', 'jquery-ui', 'jrails', 'application' %>
+  <%= csrf_meta_tag %>
+</head>
+<body>
+
+<%= yield %>
+
+<script>
+  $(function() {
+  $("button").button();
+  $(".accordion").accordion();
+  });
+</script>
+
+</body>
+</html>
