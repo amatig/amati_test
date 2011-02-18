@@ -7,6 +7,11 @@ static VALUE cPerson;
 static VALUE
 cPerson_initialize(VALUE self)
 {
+  VALUE name;
+
+  name = Qnil;
+  rb_iv_set(self, "@name", name);
+
   VALUE arr;
 
   arr = rb_ary_new();

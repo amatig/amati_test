@@ -1,2 +1,3 @@
-require 'mkmf'
-create_makefile('prova')
+require "mkmf"
+dir_config("prova")
+create_makefile("prova")
