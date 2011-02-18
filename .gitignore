@@ -2,6 +2,7 @@ Makefile
 configure
 config.*
 depcomp
+*.log
 missing
 stamp-h1
 install-sh
