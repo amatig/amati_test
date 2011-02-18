@@ -4,17 +4,23 @@
 static VALUE cNua;
 static VALUE cUrl;
 
+/* nua */
+
 static VALUE
 cNua_initialize(VALUE self)
 {
   return self;
 }
 
+/* url */
+
 static VALUE
 cUrl_initialize(VALUE self)
 {
   return self;
 }
+
+/* init */
 
 void
 Init_sofia_sip()
