@@ -1,19 +1,19 @@
 #include <ruby.h>
 #include <sofia-sip/nua.h>
 
+static VALUE cApp;
+
 /* c type */
 
 typedef struct app_s
 {
-  su_home_t       home[1];  /* memory home */
-  su_root_t      *root;     /* root object */
-  nua_t          *nua;      /* NUA stack object */
-  int num;                  // test
+  su_home_t  home[1];  /* memory home */
+  su_root_t* root;     /* root object */
+  nua_t*     nua;      /* NUA stack object */
+  int        num;      // test
 } app_t;
 
 /* application class */
-
-static VALUE cApp;
 
 static VALUE
 cApp_new(VALUE class)
@@ -21,11 +21,12 @@ cApp_new(VALUE class)
   VALUE info;
 
   /* alloc */
-  //app_t context[1] = {{{{(sizeof context)}}}};
   app_t *context = ALLOC(app_t);
+  //app_t context[1] = {{{{(sizeof context)}}}};
 
-  info = Data_Wrap_Struct(class, 0, 0, context);
+  info = Data_Wrap_Struct(class, 0, 0, context);  // 3th free pointer
   rb_obj_call_init(info, 0, 0);
+
   return info;
 }
 
@@ -50,44 +51,60 @@ cApp_initialize(VALUE self)
 static VALUE
 cApp_main_loop(VALUE self)
 {
-  VALUE info;
-  app_t* appl;
+  app_t* context;
+  Data_Get_Struct(self, app_t, context);
 
-  Data_Get_Struct(self, app_t, appl);
-
-  if (appl->root != NULL) {
+  if (context->root != NULL) {
     /* create NUA stack */
-    appl->nua = nua_create(appl->root,
-			   NULL, // app_callback
-			   appl,
-			   /* tags as necessary ...*/
-			   TAG_NULL());
+    context->nua = nua_create(context->root,
+			      NULL, // app_callback
+			      context,
+			      /* tags as necessary ...*/
+			      TAG_NULL());
 
-    if (appl->nua != NULL) {
+    if (context->nua != NULL) {
       /* set necessary parameters */
-      nua_set_params(appl->nua,
+      nua_set_params(context->nua,
 		     /* tags as necessary ... */
 		     TAG_NULL());
 
       /* enter main loop for processing of messages */
-      su_root_run(appl->root);
+      su_root_run(context->root);
 
       /* destroy NUA stack */
-      nua_destroy(appl->nua);
+      nua_destroy(context->nua);
     }
 
     /* deinit root object */
-    su_root_destroy(appl->root);
-    appl->root = NULL;
+    su_root_destroy(context->root);
+    context->root = NULL;
   }
+
+  return Qnil;
+}
+
+static VALUE
+cApp_shutdown(VALUE self)
+{
+  app_t* context;
+  Data_Get_Struct(self, app_t, context);
+
+  /* deinitialize memory handling */
+  su_home_deinit(context->home);
+  /* deinitialize system utilities */
+  su_deinit();
+
+  nua_shutdown(context->nua);
+
+  return Qnil;
 }
 
 static VALUE
 cApp_check(VALUE self)
 {
   app_t* context;
-
   Data_Get_Struct(self, app_t, context);
+
   return rb_int_new(context->num);
 }
 
@@ -100,5 +117,6 @@ Init_sofia_sip()
   rb_define_singleton_method(cApp, "new", cApp_new, 0);
   rb_define_method(cApp, "initialize", cApp_initialize, 0);
   rb_define_method(cApp, "main_loop", cApp_main_loop, 0);
+  rb_define_method(cApp, "shutdown", cApp_shutdown, 0);
   rb_define_method(cApp, "check", cApp_check, 0);
 }
