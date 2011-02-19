@@ -48,6 +48,19 @@ cApp_initialize(VALUE self)
   return self;
 }
 
+void app_callback(nua_event_t   event,
+                  int           status,
+                  char const   *phrase,
+                  nua_t        *nua,
+                  nua_magic_t  *magic,
+                  nua_handle_t *nh,
+                  nua_hmagic_t *hmagic,
+                  sip_t const  *sip,
+                  tagi_t        tags[])
+{
+
+}
+
 static VALUE
 cApp_main_loop(VALUE self)
 {
@@ -57,7 +70,7 @@ cApp_main_loop(VALUE self)
   if (context->root != NULL) {
     /* create NUA stack */
     context->nua = nua_create(context->root,
-			      NULL, // app_callback
+			      app_callback,
 			      context,
 			      /* tags as necessary ...*/
 			      TAG_NULL());
@@ -105,6 +118,7 @@ cApp_check(VALUE self)
   app_t* context;
   Data_Get_Struct(self, app_t, context);
 
+  context->num = context->num + 3;
   return rb_int_new(context->num);
 }
 
