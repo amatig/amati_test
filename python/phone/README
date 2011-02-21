@@ -1,0 +1,14 @@
+svn co http://svn.pjsip.org/repos/pjproject/trunk
+
+cd trunk
+// in alcuni casi mettere in user.mak il flag -fPIC
+./configure
+make dep
+make
+sudo make install
+
+cd pjsip-apps
+cd src
+cd python
+make
+sudo python setup.py install
