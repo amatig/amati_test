@@ -59,7 +59,7 @@ class MyAccountCallback(pj.AccountCallback):
 # Callback to receive events from Call
 class MyCallCallback(pj.CallCallback):
 
-    def __init__(self, call=None):
+    def __init__(self, call = None):
         pj.CallCallback.__init__(self, call)
 
     # Notification when call state has changed
@@ -105,11 +105,11 @@ class Main:
         
         self.lib.start()
         
-        acc_conf = self.lib.create_account(pj.AccountConfig("192.168.64.228", "200", "200"))
-        acc_event = MyAccountCallback(acc_conf)
-        acc_conf.set_callback(acc_event)
+        acc = self.lib.create_account(pj.AccountConfig("192.168.64.228", "200", "200"))
+        acc_event = MyAccountCallback(acc)
+        acc.set_callback(acc_event)
         #acc_conf.set_registration(True)
-        acc_conf.set_transport(transport)
+        acc.set_transport(transport)
         acc_event.wait()
         
     def clicked(self, ev):
