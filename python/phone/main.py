@@ -1,17 +1,10 @@
 #!/usr/bin/env python
 
-import sys
-try:
-    import pygtk
-    pygtk.require("2.0")
-except:
-    pass
-try:
-    import gtk
-    import gtk.glade
-except:
-    sys.exit(1)
+from PyQt4.QtGui import *
+from PyQt4.QtCore import *
+from PyQt4.uic import loadUi
 
+import sys
 import pjsua as pj
 import threading
 
@@ -85,19 +78,21 @@ class MyCallCallback(pj.CallCallback):
         else:
             print "Media is inactive"
 
-class Main:
-    
-    def __init__(self):        
-        # Set the Glade file
-        self.gladefile = "gui.glade"  
-        self.wTree = gtk.glade.XML(self.gladefile)         
-        # Get the Main Window, and connect the "destroy" event
-        self.window = self.wTree.get_widget("window1")
-        if (self.window):
-            dic = { "on_button1_clicked" : self.clicked,
-                    "on_window1_destroy" : self.quit }
-            self.wTree.signal_autoconnect(dic)
-        
+
+class MainWindow(QMainWindow):
+
+    def __init__(self):
+        QMainWindow.__init__(self)
+
+        tree = loadUi('phone.ui', self)
+
+        self.button = tree.findChild(QPushButton, "pushButton")
+        #self.button.enable(False)
+        self.connect(self.button, SIGNAL('clicked()'), self.click)
+
+        self.setWindowTitle('Phone')
+        self.center()
+
         self.lib = pj.Lib()
         self.lib.init(log_cfg = pj.LogConfig(level=4, callback=log_cb))
         
@@ -109,18 +104,29 @@ class Main:
         acc_event = MyAccountCallback(acc)
         acc.set_callback(acc_event)
         #acc_conf.set_registration(True)
-        acc.set_transport(transport)
+        #acc.set_transport(transport)
         acc_event.wait()
         
-    def clicked(self, ev):
+    def center(self):
+        screen = QDesktopWidget().screenGeometry()
+        size =  self.geometry()
+        self.move((screen.width()-size.width())/2, (screen.height()-size.height())/2)
+        
+    def click(self):
         print "ciao"
         
     def quit(self, ev):
         self.lib.destroy()
         self.lib = None
-        gtk.main_quit
-        sys.exit(0)
 
-if __name__ == "__main__":
-    hwg = Main()
-    gtk.main()
+
+def main(args):
+    app = QApplication(args)
+    window = MainWindow()
+    window.show()
+    #app.connect(app, SIGNAL("lastWindowClosed()"), app, SLOT("quit()"))
+    #app.exec_()
+    sys.exit(app.exec_())
+
+if __name__=="__main__":
+    main(sys.argv)
