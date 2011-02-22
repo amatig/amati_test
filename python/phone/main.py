@@ -22,7 +22,7 @@ class MyAccountCallback(pj.AccountCallback):
     def wait(self):
         self.sem = threading.Semaphore(0)
         self.sem.acquire()
-        print "ciao"
+        print "xxxx"
 
     def on_reg_state(self):
         print "qui"
