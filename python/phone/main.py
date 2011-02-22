@@ -100,9 +100,11 @@ class MainWindow(QMainWindow):
         
         self.lib.start()
         
-        acc = self.lib.create_account(pj.AccountConfig("192.168.64.228", "200", "200"))
-        acc_event = MyAccountCallback(acc)
-        acc.set_callback(acc_event)
+        #acc = self.lib.create_account(pj.AccountConfig("192.168.0.102", "200", "200"))
+        acc2 = self.lib.create_account_for_transport(transport)
+        acc_event = MyAccountCallback(acc2)
+        #acc.set_callback(acc_event)
+        acc2.set_callback(acc_event)
         #acc_conf.set_registration(True)
         #acc.set_transport(transport)
         acc_event.wait()
