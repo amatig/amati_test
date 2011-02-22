@@ -80,33 +80,29 @@ class MyCallCallback(pj.CallCallback):
 
 
 class MainWindow(QMainWindow):
-
+    
     def __init__(self):
         QMainWindow.__init__(self)
         tree = loadUi('phone.ui', self)
         
-        self.button = tree.findChild(QPushButton, "pushButton")
+        self.button = tree.findChild(QPushButton, "btn_call")
         #self.button.enable(False)
         self.connect(self.button, SIGNAL('clicked()'), self.click)
         
-        self.setWindowTitle('Phone')
         self.center()
         
-        self.lib = pj.Lib()
-        self.lib.init(log_cfg = pj.LogConfig(level=4, callback=log_cb))
+        # self.lib = pj.Lib()
+        # self.lib.init(log_cfg = pj.LogConfig(level=4, callback=log_cb))
         
-        transport = self.lib.create_transport(pj.TransportType.UDP, pj.TransportConfig(5069))
+        # transport = self.lib.create_transport(pj.TransportType.UDP, pj.TransportConfig(5069))
         
-        self.lib.start()
+        # self.lib.start()
         
-        acc = self.lib.create_account(pj.AccountConfig("192.168.0.102", "200", "200"))
-        #acc2 = self.lib.create_account_for_transport(transport)
-        acc_event = MyAccountCallback(acc)
-        acc.set_callback(acc_event)
-        #acc2.set_callback(acc_event)
-        #acc_conf.set_registration(True)
-        acc.set_transport(transport)
-        acc_event.wait()
+        # acc = self.lib.create_account(pj.AccountConfig("192.168.0.102", "200", "200"))
+        # acc_event = MyAccountCallback(acc)
+        # acc.set_callback(acc_event)
+        # acc.set_transport(transport)
+        # acc_event.wait()
         
     def center(self):
         screen = QDesktopWidget().screenGeometry()
