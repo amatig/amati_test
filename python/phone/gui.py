@@ -25,6 +25,13 @@ class MainWindow(QMainWindow):
         self.connect(self.btn_hold, SIGNAL("clicked()"), self.btn_hold_click)
         self.connect(self.btn_transfer, SIGNAL("clicked()"), self.btn_transfer_click)
         
+        self.btn_call.setEnabled(False)
+        self.btn_answer.setEnabled(False)
+        self.btn_bye.setEnabled(False)
+        self.btn_reject.setEnabled(False)
+        self.btn_hold.setEnabled(False)
+        self.btn_transfer.setEnabled(False)
+        
         self.center()
         
     def center(self):
