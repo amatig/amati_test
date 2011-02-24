@@ -5,7 +5,7 @@ from PyQt4.QtCore import *
 from PyQt4.uic import loadUi
 import sys
 
-class MainWindow(QMainWindow):
+class Gui(QMainWindow):
     
     def __init__(self):
         QMainWindow.__init__(self)
@@ -33,6 +33,9 @@ class MainWindow(QMainWindow):
         self.btn_transfer.setEnabled(False)
         
         self.center()
+                
+        from phone_pjsip import PhonePJSIP
+        PhonePJSIP()
         
     def center(self):
         screen = QDesktopWidget().screenGeometry()
@@ -64,7 +67,7 @@ class MainWindow(QMainWindow):
 
 def main(args):
     app = QApplication(args)
-    window = MainWindow()
+    window = Gui()
     window.show()
     sys.exit(app.exec_())
 
