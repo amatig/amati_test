@@ -37,10 +37,10 @@ class Gui(QMainWindow):
         
         # config and init stack
         self.config = ConfigObj("phone.cfg")
-        module_name = self.config["sip"]["stack"]
+        module_name = self.config["client"]["stack"]
         module = __import__(module_name)
         stack_class = getattr(module, module_name.capitalize())
-        self.stack = stack_class()
+        self.stack = stack_class(self.config)
         
     def center(self):
         screen = QDesktopWidget().screenGeometry()
@@ -66,7 +66,7 @@ class Gui(QMainWindow):
         self.stack.transfer()
         
     def closeEvent(self, ev):
-        print "quit"
+        self.stack.close()
         QMainWindow.closeEvent(self, ev)
 
 
