@@ -12,5 +12,7 @@ install-sh
 *.cache
 *.o
 *.so
+*pyo
+*pyc
 .*
 *~

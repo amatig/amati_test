@@ -3,6 +3,7 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4.uic import loadUi
+from configobj import ConfigObj
 import sys
 
 class Gui(QMainWindow):
@@ -25,17 +26,21 @@ class Gui(QMainWindow):
         self.connect(self.btn_hold, SIGNAL("clicked()"), self.btn_hold_click)
         self.connect(self.btn_transfer, SIGNAL("clicked()"), self.btn_transfer_click)
         
-        self.btn_call.setEnabled(False)
-        self.btn_answer.setEnabled(False)
-        self.btn_bye.setEnabled(False)
-        self.btn_reject.setEnabled(False)
-        self.btn_hold.setEnabled(False)
-        self.btn_transfer.setEnabled(False)
+        #self.btn_call.setEnabled(False)
+        #self.btn_answer.setEnabled(False)
+        #self.btn_bye.setEnabled(False)
+        #self.btn_reject.setEnabled(False)
+        #self.btn_hold.setEnabled(False)
+        #self.btn_transfer.setEnabled(False)
         
         self.center()
-                
-        from phone_pjsip import PhonePJSIP
-        PhonePJSIP()
+        
+        # config and init stack
+        self.config = ConfigObj("phone.cfg")
+        module_name = self.config["sip"]["stack"]
+        module = __import__(module_name)
+        stack_class = getattr(module, module_name.capitalize())
+        self.stack = stack_class()
         
     def center(self):
         screen = QDesktopWidget().screenGeometry()
@@ -43,22 +48,22 @@ class Gui(QMainWindow):
         self.move((screen.width()-size.width())/2, (screen.height()-size.height())/2)
         
     def btn_call_click(self):
-        print "1"
+        self.stack.call()
         
     def btn_answer_click(self):
-        print "2"
+        self.stack.answer()
         
     def btn_bye_click(self):
-        print "3"
+        self.stack.bye()
         
     def btn_reject_click(self):
-        print "4"
+        self.stack.reject()
         
     def btn_hold_click(self):
-        print "5"
+        self.stack.hold()
         
     def btn_transfer_click(self):
-        print "6"
+        self.stack.transfer()
         
     def closeEvent(self, ev):
         print "quit"
