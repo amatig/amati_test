@@ -14,7 +14,7 @@ class Pjsip(StackInterface):
         lib = pj.Lib()
         lib.init(log_cfg = pj.LogConfig(level = 4, callback = self.log_cb))        
         self.transport = lib.create_transport(pj.TransportType.UDP, 
-                                             pj.TransportConfig(int(self.config["client"]["port"])))
+                                              pj.TransportConfig(int(self.config["client"]["port"])))
         lib.start()
         self.acc = lib.create_account(pj.AccountConfig(self.config["account"]["domain"], 
                                                        self.config["account"]["ext"], 
