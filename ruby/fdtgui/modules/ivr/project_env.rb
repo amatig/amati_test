@@ -1,12 +1,29 @@
+# -*- coding: utf-8 -*-
 class ProjectEnv
   include Singleton
   
   def initialize
     @node = {} # father static
-    
     @message = {}
     @variable = {}
     @restricted = {}
+  end
+  
+  def clear
+    @variable.each do |k, v|
+      del(v.class.to_s, v.node_id)
+    end
+    @restricted.each do |k, v|
+      del(v.class.to_s, v.node_id)
+    end
+    @message.each do |k, v|
+      del(v.class.to_s, v.node_id)
+    end
+  end
+  
+  def getResourceWav
+    temp = @message.map { |k, v| [v.name, "Message§#{@node[v.parent].node_id}§#{v.node_id}"] }
+    return temp
   end
   
   # add father static
@@ -15,21 +32,34 @@ class ProjectEnv
   end
   
   # esempio per caricare da xml
+  def load(xmlNode)
+    # start loading Messages
+    mf = REXML::XPath.first(xmlNode, "*/MessageFolder")
+    fold = @node["MessageFolder"]
+    fold.node_id = mf.attributes["ID"]
+    REXML::XPath.each(mf, "Message") do | message |
+      t = Message.new(message)
+      add(t,"MessageFolder")
+    end
+  end
   
-  # def add_variable(id, name, description, type, value)
-  #   temp = Variable.new
-  #   temp.id = id
-  #   temp.name = name
-  #   temp.description = description
-  #   temp.type = type
-  #   temp.value = value
-  #   add(temp, ApplicationVariableList)
-  # end
+  def serialize(rNode)
+    #starting from messages
+    mfl = REXML::Element.new "MessagesFolderList"
+    rNode.add_element(mfl)
+    fold = @node["MessageFolder"]
+    mf = REXML::Element.new "MessageFolder"
+    mf.attributes["ID"] = fold.node_id
+    mfl.add_element(mf)
+    @message.each do | key, value |
+      value.serialize(mf)
+    end
+  end
   
   def add(obj, parent_name)
     n = Qt::TreeWidgetItem.new
     n.setText(0, obj.name)
-    n.setText(1, obj.id)
+    n.setText(1, obj.node_id)
     n.setText(2, obj.class.to_s)
     n.setIcon(0, Qt::Icon.new("images/#{obj.class.to_s}.ico"))
     obj.graph = n
@@ -38,9 +68,9 @@ class ProjectEnv
     father.insertChild(father.childCount, n)    
     case obj
     when Variable
-      @variable[obj.id] = obj
+      @variable[obj.node_id] = obj
     when Message
-      @message[obj.id] = obj
+      @message[obj.node_id] = obj
     end
   end
   
@@ -69,9 +99,10 @@ class ProjectEnv
 end
 
 class Node
-  attr_accessor :graph, :parent
+  attr_accessor :node_id, :graph, :parent
   
   def initialize(qtnode, parent_name)
+    @node_id = "#{Time.now.to_i}#{rand(10000000)}"
     @graph = qtnode
     @parent = parent_name
   end
@@ -79,10 +110,10 @@ class Node
 end
 
 class Variable < Node
-  attr_accessor :id, :name, :description, :type, :value
+  attr_accessor :name, :description, :type, :value
   
   def initialize
-    @id = (rand 10000000).to_s
+    super(nil, nil)
     @name = ""
     @description = ""
     @type = "STRING"
@@ -108,13 +139,20 @@ class Variable < Node
 end
 
 class Message < Node
-  attr_accessor :id, :name, :description, :file
+  attr_accessor :name, :description, :file
   
-  def initialize
-    @id = (rand 10000000).to_s
-    @name = ""
-    @description = ""
-    @file = ""
+  def initialize(node=nil)
+    super(nil, nil)
+    if node==nil
+      @name = ""
+      @description = ""
+      @file = ""
+    else
+      @node_id = node.attributes["ID"]
+      @name = node.attributes["Name"]
+      @description = node.attributes["Description"]
+      @file = node.attributes["FileDefault"]
+    end
   end
   
   def set_fields(fields)
@@ -131,4 +169,14 @@ class Message < Node
            ]
   end
   
+  def serialize(rNode)
+    ms = REXML::Element.new self.class.to_s
+    ms.attributes["ID"] = @node_id
+    ms.attributes["Name"] = @name
+    ms.attributes["Description"] = @description
+    ms.attributes["FileDefault"] = @file
+    #append languages here
+    rNode.add_element ms
+  end
+
 end

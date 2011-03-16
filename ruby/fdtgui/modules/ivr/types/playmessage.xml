@@ -12,7 +12,7 @@
     <edges>none</edges> <!-- none, one, more -->
   </properties>
   <edit>
-    <attr name="PlayMessage" type="wav" not_null="true" />
+    <attr name="PlayMessage" type="choice" value="resource_wav" />
     <attr name="ClearDigit" type="bool" />
     <group name="StopOnDigit" type="simple" />
   </edit>

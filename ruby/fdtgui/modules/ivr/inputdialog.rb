@@ -51,7 +51,7 @@ class InputDialog < Qt::Dialog
         when "Int"
           memstorage[k].value = items[k][1].text.to_i
         when "Choice"
-          memstorage[k].value = items[k][1].itemData(items[k][1].currentIndex).toInt
+          memstorage[k].value = items[k][1].itemData(items[k][1].currentIndex).toString
         when "Bool", "Connector"
           if items[k][1].respond_to?("checkState")
             memstorage[k].value = (items[k][1].checkState == 2)

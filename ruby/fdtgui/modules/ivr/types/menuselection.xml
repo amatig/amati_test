@@ -12,7 +12,7 @@
     <edges>none</edges> <!-- none, one, more -->
   </properties>
   <edit>
-    <attr name="PlayMessage" type="wav" not_null="true" />
+    <attr name="PlayMessage" type="choice" value="resource_wav" />
     <attr name="ClearDigit" type="bool" />
     <attr name="SelectionTimeout" type="int" not_null="true" />
     <group name="Digits" type="numpad" />

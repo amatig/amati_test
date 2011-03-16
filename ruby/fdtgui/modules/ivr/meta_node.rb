@@ -14,8 +14,8 @@ class FdtNode
     type = xmlnode.attributes["Type"]
     f = new(id, type.downcase)
     clip = ClipBoard.instance
-    f.memstorage.each do | key, value |  #fix here we need to use memstorage.each
-      f.memstorage[key] = xmlnode.attributes[key] #the childs node are initialized here
+    f.memstorage.each do | key, value |
+      f.memstorage[key] = xmlnode.attributes[key]
     end
     f.internal_checkChilds
     
@@ -47,7 +47,7 @@ class FdtNode
   
   # unique id
   def self.generate_id()
-    return "#{Time.now.to_i}_#{rand(10000000)}"
+    return "#{Time.now.to_i}#{rand(10000000)}"
   end
   
   def initialize(id, type)
@@ -78,7 +78,8 @@ class FdtNode
       if e.name == "attr"
         @memstorage.add_entity(e.attributes["name"], 
                                e.attributes["type"], 
-                               e.attributes["not_null"] == "true")
+                               e.attributes["not_null"] == "true",
+                               e.attributes["value"])
       else
         @memstorage.add_group(e.attributes["name"], 
                               e.attributes["type"])
@@ -106,7 +107,7 @@ class FdtNode
     if @raw_childs.length > 0
       @memstorage.add_entity("Layout", "Choice", 
                              false, 
-                             ["Bottom", "Left", "Top", "Right"])
+                             [["Bottom", "0"], ["Left", "1"], ["Top", "2"], ["Right", "3"]])
     end
     # fix nome di base
     if (@type == "Begin" or @type == "End")

@@ -44,8 +44,8 @@ class MemStorage
       begin
         const = Kernel.const_get(type.capitalize)
         elem = const.new(value, not_null)
-      rescue
-        raise TypeError, "Unsupported type: #{type.capitalize}"
+      rescue Exception => e
+        raise TypeError, "Unsupported type: #{type.capitalize} - details: #{e}"
       end
       group = "Ungrouped" if (group == nil)
       unless @grouped.key?(group.capitalize)

@@ -146,17 +146,25 @@ class Choice < Input
   def initialize(def_val, not_null)
     super
     @choice = def_val ? def_val : []
-    @value = @choice.first
+    @value = @choice.empty? ? "" : @choice.first[1]
   end
   
   def add_widget(i, graph)
     input = Qt::ComboBox.new(graph)
-    index = 0
-    @choice.each do |name|
-      input.addItem(name, Qt::Variant.new(index))
-      index += 1
+    
+    temp = @choice
+    case @choice
+    when "resource_wav"
+      temp = ProjectEnv.instance.getResourceWav
     end
-    input.setCurrentIndex(@value.to_i)
+    
+    temp.each do |v|
+      input.addItem(v[0], Qt::Variant.new(v[1]))
+    end
+    begin
+      input.setCurrentIndex(input.findData(Qt::Variant.new(@value)))
+    rescue
+    end
     input.setGeometry(0, 0, 113, 25)
     input.move(165, 22 + 40 * i)
     return i, input

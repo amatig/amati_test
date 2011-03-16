@@ -21,7 +21,7 @@ class IvrWidget < Qt::Widget
     splitter = Qt::Splitter.new
     splitter.add_widget(MenuTree.new)
     splitter.add_widget(@graph)
-    splitter.add_widget(MyTreeWidget.new)
+    splitter.add_widget(ResourcesTree.new)
     
     self.layout = Qt::VBoxLayout.new
     self.layout.add_widget(splitter)
@@ -53,52 +53,3 @@ class IvrWidget < Qt::Widget
 
 end
 
-class MenuTree < Qt::TreeWidget
-  
-  def initialize
-    super
-    setHeaderLabels(["Widgets"])
-    setAnimated(true)
-    
-    temp = {}
-    
-    Dir.glob("modules/ivr/types/*xml") do |type|
-      begin
-        type = type.split("/").last[0..-5]
-      rescue
-      end
-      file = File.new "modules/ivr/types/#{type.downcase}.xml"
-      doc = REXML::Document.new(file)      
-      type = REXML::XPath.first(doc, "//type").text
-      section = REXML::XPath.first(doc, "//section")
-      
-      if section
-        section = section.text
-        
-        unless temp.has_key?(section)
-          r = Qt::TreeWidgetItem.new
-          r.setText(0, section)
-          addTopLevelItem(r)
-          temp[section] = r
-        end
-        sect = temp[section]
-        
-        r1 = Qt::TreeWidgetItem.new
-        r1.setText(0, type)
-        r1.setIcon(0, Qt::Icon.new("images/#{type}.ico"))
-        sect.insertChild(sect.childCount, r1)
-      end
-    end
-    
-    expand_all
-  end
-  
-  def mouseDoubleClickEvent(event)
-    super
-    if (event.button == 1)
-      item = itemAt(event.pos)
-      MyGraphicsView.instance.createNode(item.text(0)) if item
-    end
-  end
-  
-end

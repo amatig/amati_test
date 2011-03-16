@@ -30,6 +30,7 @@ class MyGraphicsView < Qt::GraphicsView
   
   def new(flag = true)
     scene.clear
+    ProjectEnv.instance.clear
     @join = nil
     @project = nil
     if flag
@@ -54,6 +55,12 @@ class MyGraphicsView < Qt::GraphicsView
     clip.destroy
     file = File.new filename
     doc = REXML::Document.new file
+    penv = ProjectEnv.instance
+    res = REXML::XPath.first(doc,"//ResouceList")
+    if res
+      penv.load(res)
+    end
+    
     REXML::XPath.each(doc, "//Block") do |node|
       tmp = FdtNode.loadInstance(node)
     end
@@ -89,13 +96,24 @@ class MyGraphicsView < Qt::GraphicsView
     end
     
     doc = REXML::Document.new "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
-    root = REXML::Element.new "items"
-    doc.add_element root
+    dh = REXML::Element.new "DocumentHeader"
+    pj = REXML::Element.new "Project"
+    al = REXML::Element.new "ApplicationList"
+    ap = REXML::Element.new "Application"
+    fb = REXML::Element.new "FlowBlocks"
+    rl = REXML::Element.new "ResouceList"
+    doc.add_element dh
+    dh.add_element pj
+    pj.add_element al
+    al.add_element ap
+    ap.add_element fb
+    pj.add_element rl
     scene.items.each do |i|
       node = i.serialize()
-      root.add_element node if node
+      fb.add_element node if node
     end
-    #HERE WE NEED TO SAVE SOME OTHER THINGS LIKE MESSAGES
+    penv = ProjectEnv.instance
+    penv.serialize(rl)
     file = File.new(filename, File::CREAT|File::TRUNC|File::RDWR)
     doc.write(file, 2)
     file.close

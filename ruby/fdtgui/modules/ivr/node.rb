@@ -202,12 +202,12 @@ class FdtNode < Qt::GraphicsItem
       else
         shift = 30 * Integer(@childs.length / 2)
       end
-      case @memstorage["Layout"].value.to_i
-      when 2 # top
+      case @memstorage["Layout"].value
+      when "2" # top
         c.setPos(pos.x - shift + 30 * i, pos.y - 50)
-      when 1 # left
+      when "1" # left
         c.setPos(pos.x - 65, pos.y - shift + 30 * i)
-      when 3 # right
+      when "3" # right
         c.setPos(pos.x + @width - 10, pos.y - shift + 30 * i)
       else # bottom
         c.setPos(pos.x - shift + 30 * i, pos.y + @height + 10)
