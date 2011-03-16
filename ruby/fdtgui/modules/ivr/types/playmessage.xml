@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>PlayMessage</type>
+  <section>Voice Functions</section>
+  <description>Riproduzione Messaggio</description>
+  <style>
+    <image>Message.png</image>
+    <width>74</width>
+    <height>58</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="PlayMessage" type="wav" not_null="true" />
+    <attr name="ClearDigit" type="bool" />
+    <group name="StopOnDigit" type="simple" />
+  </edit>
+  <connections>
+    <connector type="OnFinish" optional="false" index="0" color="#48ef54" />
+    <connector type="OnDigit" optional="true" group="StopOnDigit" index="1" color="#fbf200" />
+  </connections>
+</node>

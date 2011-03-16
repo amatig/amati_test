@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>MenuSelection</type>
+  <section>Voice Functions</section>
+  <description>Menu' di Selezione</description>
+  <style>
+    <image>Selection.png</image>
+    <width>74</width>
+    <height>58</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="PlayMessage" type="wav" not_null="true" />
+    <attr name="ClearDigit" type="bool" />
+    <attr name="SelectionTimeout" type="int" not_null="true" />
+    <group name="Digits" type="numpad" />
+  </edit>
+  <connections>
+    <connector type="OnChoice1" optional="true" group="Digits" index="0" color="#ea7fff" />
+    <connector type="OnChoice2" optional="true" group="Digits" index="1" color="#ea7fff" />
+    <connector type="OnChoice3" optional="true" group="Digits" index="2" color="#ea7fff" />
+    <connector type="OnChoice4" optional="true" group="Digits" index="3" color="#ea7fff" />
+    <connector type="OnChoice5" optional="true" group="Digits" index="4" color="#ea7fff" />
+    <connector type="OnChoice6" optional="true" group="Digits" index="5" color="#ea7fff" />
+    <connector type="OnChoice7" optional="true" group="Digits" index="6" color="#ea7fff" />
+    <connector type="OnChoice8" optional="true" group="Digits" index="7" color="#ea7fff" />
+    <connector type="OnChoice9" optional="true" group="Digits" index="8" color="#ea7fff" />
+    <connector type="OnChoiceStar" optional="true" group="Digits" index="9" color="#ea7fff" />
+    <connector type="OnChoice0" optional="true" group="Digits" index="10" color="#ea7fff" />
+    <connector type="OnChoicePound" optional="true" group="Digits" index="11" color="#ea7fff" />
+    <connector type="OnChoiceInvalid" optional="false" index="12" color="#ef6b23" />
+    <connector type="OnChoiceTimeout" optional="false" index="13" color="#fbf200" />
+  </connections>
+</node>

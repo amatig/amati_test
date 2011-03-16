@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>End</type>
+  <description>Fine Applicazione</description>
+  <style>
+    <image>End.png</image>
+    <width>74</width>
+    <height>58</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+  </edit>
+</node>

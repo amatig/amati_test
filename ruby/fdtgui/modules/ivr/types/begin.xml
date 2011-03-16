@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>Begin</type>
+  <description>Inizio Applicazione</description>
+  <style>
+    <image>Begin.png</image>
+    <width>74</width>
+    <height>58</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+  </edit>
+  <connections>
+    <connector type="OnContinue" optional="false" color="#79bee5" />
+  </connections>
+</node>
