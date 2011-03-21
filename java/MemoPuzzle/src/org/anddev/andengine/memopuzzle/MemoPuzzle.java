@@ -52,8 +52,8 @@ public class MemoPuzzle extends BaseGameActivity {
 
 	public void onLoadResources() {
 		TextureRegionFactory.setAssetBasePath("gfx/");
-		this.mBox1 = new Texture(32, 32, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		this.box = TextureRegionFactory.createFromAsset(this.mBox1, this, "face_box.png", 0, 0);
+		this.mBox1 = new Texture(128, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.box = TextureRegionFactory.createFromAsset(this.mBox1, this, "1.png", 0, 0);
 
 		this.mEngine.getTextureManager().loadTextures(this.mBox1);
 	}
@@ -61,12 +61,12 @@ public class MemoPuzzle extends BaseGameActivity {
 	public Scene onLoadScene() {
 		this.mEngine.registerUpdateHandler(new FPSLogger());
 		
-        final Scene scene = new Scene(2);
-        scene.setBackground(new ColorBackground(0, 0, 0));
+        final Scene scene = new Scene(1);
+        scene.setBackground(new ColorBackground(256, 256, 256));
 
         this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
         
-        final Rectangle ground = new Rectangle(0, CAMERA_HEIGHT - 2, CAMERA_WIDTH, 2);
+        final Rectangle ground = new Rectangle(0, CAMERA_HEIGHT, CAMERA_WIDTH, 2);
         
         final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f);
 		PhysicsFactory.createBoxBody(this.mPhysicsWorld, ground, BodyType.StaticBody, wallFixtureDef);
@@ -82,9 +82,9 @@ public class MemoPuzzle extends BaseGameActivity {
         //        return true;
         //    }
         //};
-		face.setScale(3);
-		face2.setScale(3);
-		face3.setScale(3);
+		//face.setScale(0.8f);
+		//face2.setScale(0.8f);
+		//face3.setScale(0.8f);
 		final FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f);
 		final Body body = PhysicsFactory.createCircleBody(this.mPhysicsWorld, face, BodyType.DynamicBody, objectFixtureDef);
 		final Body body2 = PhysicsFactory.createCircleBody(this.mPhysicsWorld, face2, BodyType.DynamicBody, objectFixtureDef);
