@@ -1,11 +1,11 @@
 package org.anddev.andengine.memopuzzle;
 
-import org.anddev.andengine.engine.Engine;
+import java.util.LinkedList;
+
 import org.anddev.andengine.entity.primitive.Rectangle;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
 import org.anddev.andengine.entity.sprite.Sprite;
-import org.anddev.andengine.entity.util.FPSLogger;
 import org.anddev.andengine.extension.physics.box2d.PhysicsConnector;
 import org.anddev.andengine.extension.physics.box2d.PhysicsFactory;
 import org.anddev.andengine.extension.physics.box2d.PhysicsWorld;
@@ -13,7 +13,6 @@ import org.anddev.andengine.opengl.texture.Texture;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
-import org.anddev.andengine.util.MathUtils;
 
 import android.hardware.SensorManager;
 
@@ -23,38 +22,53 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
 public class SumBox extends Scene {
+	private static final int SUP = 9;
+	private static final int INF = 1;
 	
-	public SumBox(TextureRegion tex1reg) {
+	public SumBox(MemoPuzzle game) {
 		super(1);
+		
+    	// fisica
+    	PhysicsWorld mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
+    	registerUpdateHandler(mPhysicsWorld);
+    	
+		// background
         setBackground(new ColorBackground(1, 1, 1));
         
-        PhysicsWorld mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH), false);
-        
-        final Rectangle ground = new Rectangle(0, MemoPuzzle.CAMERA_HEIGHT, MemoPuzzle.CAMERA_WIDTH, 2);  		
-		final Sprite face = new Sprite(100, 0, tex1reg);
-		final Sprite face2 = new Sprite(100, 160, tex1reg);
-		final Sprite face3 = new Sprite(100, 320, tex1reg);
-		
-		getLastChild().attachChild(ground);
-		getLastChild().attachChild(face);
-		getLastChild().attachChild(face2);
-		getLastChild().attachChild(face3);
-		
-        final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f);
-		PhysicsFactory.createBoxBody(mPhysicsWorld, ground, BodyType.StaticBody, wallFixtureDef);
-		
-		final FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f);
-		final Body body = PhysicsFactory.createCircleBody(mPhysicsWorld, face, BodyType.DynamicBody, objectFixtureDef);
-		final Body body2 = PhysicsFactory.createCircleBody(mPhysicsWorld, face2, BodyType.DynamicBody, objectFixtureDef);
-		final Body body3 = PhysicsFactory.createCircleBody(mPhysicsWorld, face3, BodyType.DynamicBody, objectFixtureDef);
-		
-		//setTouchAreaBindingEnabled(true);
-		registerUpdateHandler(mPhysicsWorld);
-		
-		mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face, body, true, false)); // false updata la rotazione
-		mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face2, body2, true, false));
-		mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face3, body3, true, false));
-	
+        // texture
+    	final Texture tex1  = new Texture(128, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+    	final TextureRegion tex1reg = TextureRegionFactory.createFromAsset(tex1, game, "gfx/1.png", 0, 0);
+    	
+    	game.getEngine().getTextureManager().loadTexture(tex1); // prende + text con la ,
+    	
+        // objects
+    	final Rectangle ground = new Rectangle(0, MemoPuzzle.CAMERA_HEIGHT, MemoPuzzle.CAMERA_WIDTH, 2);  		
+		final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0.5f, 0.5f);
+    	PhysicsFactory.createBoxBody(mPhysicsWorld, ground, BodyType.StaticBody, wallFixtureDef);
+       	getLastChild().attachChild(ground);
+       	
+    	int num = 5;
+        for (int i = 1; i <= num; i++) {
+        	int range = SUP - INF + 1;
+        	int value = (int)(range * Math.random()) + INF;
+        	
+        	final Sprite face1 = new Sprite(185, - i * 150, tex1reg);
+        	switch (value%3) {
+        		case 0: 
+        			face1.setColor(1.0f, (float)value/SUP, (float)value/SUP);
+        			break;
+        		case 1: 
+        			face1.setColor((float)value/SUP, 1.0f, (float)value/SUP);
+        			break;
+        		case 2: 
+        			face1.setColor((float)value/SUP, (float)value/SUP, 1.0f);
+        			break;
+        	}
+        	final FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(1, 0.5f, 0.5f);
+        	final Body body1 = PhysicsFactory.createCircleBody(mPhysicsWorld, face1, BodyType.DynamicBody, objectFixtureDef);
+        	getLastChild().attachChild(face1);        	
+        	mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face1, body1, true, false)); // false updata la rotazione
+        }
 	}
 	
 }
