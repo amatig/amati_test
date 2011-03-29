@@ -6,9 +6,13 @@ import org.anddev.andengine.engine.options.EngineOptions;
 import org.anddev.andengine.engine.options.EngineOptions.ScreenOrientation;
 import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.anddev.andengine.entity.scene.Scene;
+import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
+import org.anddev.andengine.entity.scene.Scene.ITouchArea;
+import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
+import android.widget.Toast;
 
-public class MemoPuzzle extends BaseGameActivity {
+public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener {
     public static final int CAMERA_WIDTH = 480;
     public static final int CAMERA_HEIGHT = 720;
 	
@@ -27,7 +31,15 @@ public class MemoPuzzle extends BaseGameActivity {
 	}
 	
 	public Scene onLoadScene() {
-		return new SumBox(this);
+		return  new SumBox(this);
+	}
+	
+	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, ITouchArea pTouchArea, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+		if (pSceneTouchEvent.isActionDown()) {
+			((SumBox) getEngine().getScene()).touch(pTouchArea);
+			return true;
+		}
+		return false;
 	}
 	
 }

@@ -1,7 +1,6 @@
 package org.anddev.andengine.memopuzzle;
 
 import java.util.LinkedList;
-
 import org.anddev.andengine.entity.primitive.Rectangle;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
@@ -10,6 +9,7 @@ import org.anddev.andengine.entity.text.Text;
 import org.anddev.andengine.extension.physics.box2d.PhysicsConnector;
 import org.anddev.andengine.extension.physics.box2d.PhysicsFactory;
 import org.anddev.andengine.extension.physics.box2d.PhysicsWorld;
+import org.anddev.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.font.FontFactory;
 import org.anddev.andengine.opengl.texture.Texture;
@@ -17,11 +17,8 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 import org.anddev.andengine.util.HorizontalAlign;
-
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.hardware.SensorManager;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
@@ -31,15 +28,20 @@ public class SumBox extends Scene {
 	private static final int SUP = 9;
 	private static final int INF = 1;
 	
+	private PhysicsWorld mPhysicsWorld;
+	
 	public SumBox(MemoPuzzle game) {
 		super(1);
 		
     	// fisica
-    	PhysicsWorld mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH + 15), false);
+    	mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH + 15), false);
     	registerUpdateHandler(mPhysicsWorld);
     	
 		// background
         setBackground(new ColorBackground(1, 1, 1));
+        
+        // touch listner
+        setOnAreaTouchListener(game);
         
         // texture
     	final Texture tex1  = new Texture(128, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -79,6 +81,8 @@ public class SumBox extends Scene {
         			break;
         	}
         	getLastChild().attachChild(face1);
+        	registerTouchArea(face1); // reg touch
+        	
         	final Text label = new Text(32, 19, font1, Integer.toString(value), HorizontalAlign.CENTER);
         	face1.attachChild(label);
         	
@@ -87,6 +91,20 @@ public class SumBox extends Scene {
         	
         	mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(face1, body1, true, false)); // false updata la rotazione
         }
+    	
+	}
+	
+	private void pushBox(final Sprite face) {
+		final Body faceBody = mPhysicsWorld.getPhysicsConnectorManager().findBodyByShape(face);
+		
+		final Vector2 velocity = Vector2Pool.obtain(-50, 0);
+		faceBody.setLinearVelocity(velocity);
+		Vector2Pool.recycle(velocity);
+	}
+	
+	public void touch(ITouchArea pTouchArea) {
+		final Sprite face = (Sprite)pTouchArea;
+		pushBox(face);
 	}
 	
 }
