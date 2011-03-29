@@ -8,7 +8,10 @@ import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolic
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.scene.Scene.ITouchArea;
+import org.anddev.andengine.entity.util.FPSLogger;
 import org.anddev.andengine.input.touch.TouchEvent;
+import org.anddev.andengine.memopuzzle.game.SumBox;
+import org.anddev.andengine.memopuzzle.utils.IGameScene;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
 import android.widget.Toast;
 
@@ -31,12 +34,17 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	}
 	
 	public Scene onLoadScene() {
-		return  new SumBox(this);
+		getEngine().registerUpdateHandler(new FPSLogger());
+		return new SumBox(this);
+	}
+	
+	public void nextScene() {
+		getEngine().setScene(new SumBox(this));
 	}
 	
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, ITouchArea pTouchArea, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.isActionDown()) {
-			((SumBox) getEngine().getScene()).touch(pTouchArea);
+			((IGameScene) getEngine().getScene()).manageTouch(pTouchArea);
 			return true;
 		}
 		return false;
