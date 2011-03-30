@@ -5,6 +5,7 @@ import org.anddev.andengine.entity.primitive.Rectangle;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
 import org.anddev.andengine.entity.sprite.Sprite;
+import org.anddev.andengine.entity.text.ChangeableText;
 import org.anddev.andengine.entity.text.Text;
 import org.anddev.andengine.extension.physics.box2d.PhysicsConnector;
 import org.anddev.andengine.extension.physics.box2d.PhysicsFactory;
@@ -42,9 +43,10 @@ public class SumBox extends Scene implements IGameScene {
 	
 	public SumBox(MemoPuzzle game) {
 		super(1);
-		this.mGame = game;
+		setBackground(new ColorBackground(1f, 1f, 1f));
 		
 		// dati
+		this.mGame = game;
 		this.mListValue = new LinkedList<Integer>();
 		this.mTempListValue = new LinkedList<Integer>();
 		
@@ -52,40 +54,29 @@ public class SumBox extends Scene implements IGameScene {
     	this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH + 30), false);
     	registerUpdateHandler(this.mPhysicsWorld);
     	
-		// background
-        setBackground(new ColorBackground(1f, 1f, 1f));
-        
-        // touch listner
-        setOnAreaTouchListener(game);
-        
-        // texture
-    	final Texture tex1  = new Texture(128, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-    	final TextureRegion tex1reg = TextureRegionFactory.createFromAsset(tex1, game, "gfx/1.png", 0, 0);
-    	
-    	game.getEngine().getTextureManager().loadTexture(tex1); // prende + text con la ,
-    	
-    	// font
-    	final Texture tex2 = new Texture(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-    	
-		final Font font1 = FontFactory.createFromAsset(tex2, game, "font/akaDylan Collage.ttf", 48, true, Color.WHITE);
-
-		game.getEngine().getTextureManager().loadTexture(tex2);
-		game.getEngine().getFontManager().loadFont(font1);
-		
-        // objects
+        // base
     	final Rectangle ground = new Rectangle(0, MemoPuzzle.CAMERA_HEIGHT - 2, MemoPuzzle.CAMERA_WIDTH, 2);  		
 		final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0f, 0f);
     	PhysicsFactory.createBoxBody(this.mPhysicsWorld, ground, BodyType.StaticBody, wallFixtureDef);
        	getLastChild().attachChild(ground);
-       	
-    	int num = 4; // difficult
+         
+        // texture
+    	final Texture tex1  = new Texture(128, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+    	final TextureRegion regTex1 = TextureRegionFactory.createFromAsset(tex1, game, "gfx/1.png", 0, 0);
+    	
+    	game.getEngine().getTextureManager().loadTexture(tex1); // prende + text con la ,
+		
+    	int num = 5; // difficult
         for (int i = 1; i <= num; i++) {
         	int value = Enviroment.random(INF, SUP);
         	
         	this.mListValue.add(new Integer(value));
         	this.mTempListValue.add(new Integer(value));
         	
-        	final Sprite box = new Sprite(185, - i * 150, tex1reg);
+        	final Sprite box = new Sprite(185, - i * 150, regTex1);
+        	final Text label1 = new MyText(32, 19, game.mFontBig, Integer.toString(value), HorizontalAlign.CENTER);
+        	
+        	// color
         	switch (value%3) {
         		case 0: 
         			box.setColor(1.0f, (float)value/SUP, (float)value/SUP);
@@ -97,17 +88,15 @@ public class SumBox extends Scene implements IGameScene {
         			box.setColor((float)value/SUP, (float)value/SUP, 1.0f);
         			break;
         	}
-        	getLastChild().attachChild(box);
-        	registerTouchArea(box); // reg touch
-        	
-        	//Toast.makeText(mGame, Integer.toString(value), Toast.LENGTH_SHORT).show();
-        	final Text label = new MyText(32, 19, font1, Integer.toString(value), HorizontalAlign.CENTER);
-        	box.attachChild(label);
         	
         	final FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(0, 0f, 0f);
         	final Body bodyBox = PhysicsFactory.createBoxBody(this.mPhysicsWorld, box, BodyType.DynamicBody, objectFixtureDef);
         	
         	this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(box, bodyBox, true, false)); // false updata la rotazione
+        	
+        	registerTouchArea(box); // reg touch
+        	getLastChild().attachChild(box);
+        	box.attachChild(label1);
         }
     	
         // logic
@@ -116,32 +105,44 @@ public class SumBox extends Scene implements IGameScene {
     		int index = Enviroment.random(0, this.mTempListValue.size() - 1);         	
     		this.mTempListValue.remove(index);
     	}
+    	
     	sum = new Integer(0);
     	for (int i = 0; i < this.mTempListValue.size(); i++) {
-    		sum += (Integer)this.mTempListValue.get(i);
+    		sum += this.mTempListValue.get(i);
     	}
-    	Toast.makeText(game, sum.toString(), Toast.LENGTH_LONG).show();
+    	
+    	// touch listner
+        setOnAreaTouchListener(game);
+        
+        final ChangeableText fpsText = new ChangeableText(20, 20, game.mFontSmall, "Sum:" + sum.toString(), "Sum: XXXXX".length());
+        getLastChild().attachChild(fpsText);
 	}
 	
 	public void manageTouch(ITouchArea pTouchArea) {
 		final Sprite box = (Sprite)pTouchArea;
 		final Body bodyBox = this.mPhysicsWorld.getPhysicsConnectorManager().findBodyByShape(box);
+		
 		final Vector2 velocity = Vector2Pool.obtain(-50, 0);
 		bodyBox.setLinearVelocity(velocity);
 		Vector2Pool.recycle(velocity);
 		
-		Integer value = new Integer(((MyText)box.getFirstChild()).getText());
-		Toast.makeText(mGame, ((MyText)box.getFirstChild()).getText(), Toast.LENGTH_LONG).show();
+		Integer value = Integer.parseInt(((MyText)box.getFirstChild()).getText());
+		//Toast.makeText(mGame, ((MyText)box.getFirstChild()).getText(), Toast.LENGTH_LONG).show();
 		this.mListValue.remove(value);
 		
 		Integer temp_sum = new Integer(0);
     	for (int i = 0; i < this.mListValue.size(); i++) {
-    		temp_sum += (Integer)this.mListValue.get(i);
+    		temp_sum += this.mListValue.get(i);
     	}
-    	//Toast.makeText(mGame, temp_sum.toString(), Toast.LENGTH_LONG).show();
-    	if (temp_sum <= this.sum) {
+    	
+    	if (temp_sum < this.sum) {
+    		Toast.makeText(mGame, "Sbagliato", Toast.LENGTH_LONG).show();
     		this.mGame.nextScene();
-    	}
+    	} else 
+    		if (temp_sum == this.sum) {
+    			Toast.makeText(mGame, "Giusto", Toast.LENGTH_LONG).show();
+    			this.mGame.nextScene();
+    		}
 	}
 	
 }
