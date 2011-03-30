@@ -1,16 +1,15 @@
 package org.anddev.andengine.memopuzzle.utils;
 
-import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.memopuzzle.MemoPuzzle;
 
 public class MyGameScene extends Scene {
 	protected MemoPuzzle mGame;
 	
-	public MyGameScene(MemoPuzzle game, Layer score) {
+	public MyGameScene() {
 		super(1);
-		this.mGame = game;
-		this.attachChild(score);
+		this.attachChild(Enviroment.instance().getScoreLayer());
+		this.mGame = Enviroment.instance().getGame();
 	}
 
 	public void manageTouch(ITouchArea pTouchArea) {
