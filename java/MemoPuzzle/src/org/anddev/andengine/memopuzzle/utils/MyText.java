@@ -9,10 +9,12 @@ public class MyText extends Text {
 	
 	public MyText(final float pX, final float pY, final Font pFont, final String pText) {
         super(pX, pY, pFont, pText);
+        this.mText2 = pText;
 	}
 	
 	public MyText(final float pX, final float pY, final Font pFont, final String pText, final HorizontalAlign pHorizontalAlign) {
         super(pX, pY, pFont, pText, pHorizontalAlign);
+        this.mText2 = pText;
 	}
 	
 	protected MyText(float pX, float pY, Font pFont, String pText, HorizontalAlign pHorizontalAlign, int pCharactersMaximum) {

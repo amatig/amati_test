@@ -1,8 +1,9 @@
 package org.anddev.andengine.memopuzzle.game;
 
 import java.util.LinkedList;
+
+import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.entity.primitive.Rectangle;
-import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.ChangeableText;
@@ -13,16 +14,13 @@ import org.anddev.andengine.extension.physics.box2d.PhysicsWorld;
 import org.anddev.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.anddev.andengine.memopuzzle.MemoPuzzle;
 import org.anddev.andengine.memopuzzle.utils.Enviroment;
-import org.anddev.andengine.memopuzzle.utils.IGameScene;
+import org.anddev.andengine.memopuzzle.utils.MyGameScene;
 import org.anddev.andengine.memopuzzle.utils.MyText;
-import org.anddev.andengine.opengl.font.Font;
-import org.anddev.andengine.opengl.font.FontFactory;
 import org.anddev.andengine.opengl.texture.Texture;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 import org.anddev.andengine.util.HorizontalAlign;
-import android.graphics.Color;
 import android.hardware.SensorManager;
 import android.widget.Toast;
 
@@ -31,22 +29,19 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class SumBox extends Scene implements IGameScene {
+public class SumBox extends MyGameScene {
 	private static final int SUP = 9;
 	private static final int INF = 1;
-	
 	private PhysicsWorld mPhysicsWorld;
 	private LinkedList<Integer> mListValue;
 	private LinkedList<Integer> mTempListValue;
 	private Integer sum;
-	private MemoPuzzle mGame;
 	
 	public SumBox(MemoPuzzle game) {
-		super(1);
+		super(game, new Layer());
 		setBackground(new ColorBackground(1f, 1f, 1f));
 		
 		// dati
-		this.mGame = game;
 		this.mListValue = new LinkedList<Integer>();
 		this.mTempListValue = new LinkedList<Integer>();
 		
@@ -64,7 +59,7 @@ public class SumBox extends Scene implements IGameScene {
     	final Texture tex1  = new Texture(128, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
     	final TextureRegion regTex1 = TextureRegionFactory.createFromAsset(tex1, game, "gfx/1.png", 0, 0);
     	
-    	game.getEngine().getTextureManager().loadTexture(tex1); // prende + text con la ,
+    	this.mGame.getEngine().getTextureManager().loadTexture(tex1); // prende + text con la ,
 		
     	int num = 5; // difficult
         for (int i = 1; i <= num; i++) {
@@ -74,7 +69,7 @@ public class SumBox extends Scene implements IGameScene {
         	this.mTempListValue.add(new Integer(value));
         	
         	final Sprite box = new Sprite(185, - i * 150, regTex1);
-        	final Text label1 = new MyText(32, 19, game.mFontBig, Integer.toString(value), HorizontalAlign.CENTER);
+        	final Text label1 = new MyText(32, 19, this.mGame.mFontBig, Integer.toString(value), HorizontalAlign.CENTER);
         	
         	// color
         	switch (value%3) {
@@ -114,7 +109,7 @@ public class SumBox extends Scene implements IGameScene {
     	// touch listner
         setOnAreaTouchListener(game);
         
-        final ChangeableText fpsText = new ChangeableText(20, 20, game.mFontSmall, "Sum:" + sum.toString(), "Sum: XXXXX".length());
+        final ChangeableText fpsText = new ChangeableText(20, 20, this.mGame.mFontSmall, "Sum:" + sum.toString(), "Sum: XXXXX".length());
         getLastChild().attachChild(fpsText);
 	}
 	

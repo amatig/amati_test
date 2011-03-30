@@ -8,15 +8,14 @@ import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolic
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.scene.Scene.ITouchArea;
-import org.anddev.andengine.entity.util.FPSLogger;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.memopuzzle.game.SumBox;
-import org.anddev.andengine.memopuzzle.utils.IGameScene;
 import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.font.FontFactory;
 import org.anddev.andengine.opengl.texture.Texture;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
+import org.anddev.andengine.memopuzzle.utils.MyGameScene;
 import android.graphics.Color;
 import android.widget.Toast;
 
@@ -60,7 +59,7 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, ITouchArea pTouchArea, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.isActionDown()) {
-			((IGameScene) getEngine().getScene()).manageTouch(pTouchArea);
+			((MyGameScene) getEngine().getScene()).manageTouch(pTouchArea);
 			return true;
 		}
 		return false;
