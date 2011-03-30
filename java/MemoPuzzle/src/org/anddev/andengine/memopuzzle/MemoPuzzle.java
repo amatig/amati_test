@@ -17,16 +17,15 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
 import org.anddev.andengine.memopuzzle.utils.MyGameScene;
 import android.graphics.Color;
-import android.widget.Toast;
 
 public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener {
     public static final int CAMERA_WIDTH = 480;
     public static final int CAMERA_HEIGHT = 720;
+	public Font mFontBigWhite;
+	public Font mFontSmallBlack;
 	
     private Texture mTexFont1;
     private Texture mTexFont2;
-	public Font mFontBig;
-	public Font mFontSmall;
 	
 	public void onLoadComplete() {
 		
@@ -41,11 +40,12 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
     	this.mTexFont1 = new Texture(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);    	
     	this.mTexFont2 = new Texture(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);    	
 		
-    	this.mFontBig = FontFactory.createFromAsset(this.mTexFont1, this, "font/akaDylan Collage.ttf", 48, true, Color.WHITE);
-		this.mFontSmall = FontFactory.createFromAsset(this.mTexFont2, this, "font/akaDylan Collage.ttf", 30, true, Color.BLACK);
+    	this.mFontBigWhite = FontFactory.createFromAsset(this.mTexFont1, this, "font/akaDylan Collage.ttf", 48, true, Color.WHITE);
+    	
+		this.mFontSmallBlack = FontFactory.createFromAsset(this.mTexFont2, this, "font/akaDylan Collage.ttf", 30, true, Color.BLACK);
 		
 		getEngine().getTextureManager().loadTextures(this.mTexFont1, this.mTexFont2);
-		getEngine().getFontManager().loadFonts(this.mFontBig, this.mFontSmall);
+		getEngine().getFontManager().loadFonts(this.mFontBigWhite, this.mFontSmallBlack);
 	}
 	
 	public Scene onLoadScene() {

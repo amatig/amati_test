@@ -69,7 +69,7 @@ public class SumBox extends MyGameScene {
         	this.mTempListValue.add(new Integer(value));
         	
         	final Sprite box = new Sprite(185, - i * 150, regTex1);
-        	final Text label1 = new MyText(32, 19, this.mGame.mFontBig, Integer.toString(value), HorizontalAlign.CENTER);
+        	final Text label1 = new MyText(32, 19, this.mGame.mFontBigWhite, Integer.toString(value), HorizontalAlign.CENTER);
         	
         	// color
         	switch (value%3) {
@@ -109,7 +109,7 @@ public class SumBox extends MyGameScene {
     	// touch listner
         setOnAreaTouchListener(game);
         
-        final ChangeableText fpsText = new ChangeableText(20, 20, this.mGame.mFontSmall, "Sum:" + sum.toString(), "Sum: XXXXX".length());
+        final ChangeableText fpsText = new ChangeableText(20, 20, this.mGame.mFontSmallBlack, "Sum:" + sum.toString(), "Sum: XXXXX".length());
         getLastChild().attachChild(fpsText);
 	}
 	
