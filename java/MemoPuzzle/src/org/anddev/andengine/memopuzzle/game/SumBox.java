@@ -36,7 +36,7 @@ public class SumBox extends GameScene {
 	private LinkedList<Integer> mTempListValue;
 	private Integer sum;
 	private Texture tex;
-	private TextureRegion regTex;
+	private TextureRegion texReg;
 	private Rectangle mBorder;
 	
 	public SumBox() {
@@ -61,7 +61,7 @@ public class SumBox extends GameScene {
        	
         // texture shared
     	this.tex  = new Texture(128, 128, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-    	this.regTex = TextureRegionFactory.createFromAsset(tex, this.mGame, "gfx/1.png", 0, 0);
+    	this.texReg = TextureRegionFactory.createFromAsset(tex, this.mGame, "gfx/1.png", 0, 0);
     	
     	this.mGame.getEngine().getTextureManager().loadTexture(this.tex); // prende + text con la ,
 		
@@ -103,7 +103,7 @@ public class SumBox extends GameScene {
     	this.mListValue.add(new Integer(value));
     	this.mTempListValue.add(new Integer(value));
     	
-		final Sprite box = new Sprite(185, - pos * 150, this.regTex);
+		final Sprite box = new Sprite(185, - pos * 150, this.texReg);
 		final Font font = Enviroment.instance().getFont(1);
     	final MyChangeableText label = new MyChangeableText(32, 19, font, Integer.toString(value));
     	
