@@ -19,7 +19,7 @@ public class ScoreLayer extends Layer {
 		final Font font = Enviroment.instance().getFont(2);
 		
 		this.mStep = 0;
-		this.mStepText = new MyChangeableText(20, 20, font, this.mStepLabel + "0");
+		this.mStepText = new MyChangeableText(90, 20, font, this.mStepLabel + "0");
 		
 		attachChild(this.mStepText);
 		

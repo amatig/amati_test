@@ -90,7 +90,7 @@ public class SumBox extends GameScene {
     	
     	// label
     	final Font font = Enviroment.instance().getFont(2);
-    	final Text sumText = new Text(20, 60, font, "Sum: " + this.sum.toString());		
+    	final Text sumText = new Text(90, 60, font, "Sum: " + this.sum.toString());		
     	getGameLayer().attachChild(sumText);
 		
         // phisic
