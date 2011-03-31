@@ -2,7 +2,6 @@ package org.anddev.andengine.memopuzzle.utils;
 
 import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.memopuzzle.MemoPuzzle;
-import org.anddev.andengine.memopuzzle.ScoreLayer;
 import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.font.FontFactory;
 import org.anddev.andengine.opengl.texture.Texture;

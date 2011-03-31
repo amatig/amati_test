@@ -13,7 +13,7 @@ import org.anddev.andengine.extension.physics.box2d.PhysicsWorld;
 import org.anddev.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.anddev.andengine.memopuzzle.MemoPuzzle;
 import org.anddev.andengine.memopuzzle.utils.Enviroment;
-import org.anddev.andengine.memopuzzle.utils.MyGameScene;
+import org.anddev.andengine.memopuzzle.utils.GameScene;
 import org.anddev.andengine.memopuzzle.utils.MyChangeableText;
 import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.texture.Texture;
@@ -27,7 +27,7 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.BodyDef.BodyType;
 
-public class SumBox extends MyGameScene {
+public class SumBox extends GameScene {
 	private static final int SUP = 9;
 	private static final int INF = 1;
 	

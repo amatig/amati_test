@@ -12,7 +12,7 @@ import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.memopuzzle.game.SumBox;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
 import org.anddev.andengine.memopuzzle.utils.Enviroment;
-import org.anddev.andengine.memopuzzle.utils.MyGameScene;
+import org.anddev.andengine.memopuzzle.utils.GameScene;
 
 public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener {
     public static final int CAMERA_WIDTH = 480;
@@ -44,7 +44,7 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, ITouchArea pTouchArea, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.isActionDown()) {
-			((MyGameScene) getEngine().getScene()).manageTouch(pTouchArea);
+			((GameScene) getEngine().getScene()).manageTouch(pTouchArea);
 			return true;
 		}
 		return false;
