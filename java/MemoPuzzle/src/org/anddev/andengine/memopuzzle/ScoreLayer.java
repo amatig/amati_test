@@ -11,7 +11,7 @@ public class ScoreLayer extends Layer {
 	private MyChangeableText mStepText;
 	
 	public ScoreLayer() {
-		final Font font = Enviroment.instance().getGame().mFontSmallBlack;
+		final Font font = Enviroment.instance().getFont(2);
 		
 		this.mStep = 0;
 		this.mStepText = new MyChangeableText(20, 20, font, this.mStepLabel + "0");
@@ -23,4 +23,5 @@ public class ScoreLayer extends Layer {
 		this.mStep += value;
 		this.mStepText.setText(this.mStepLabel + Integer.toString(this.mStep));
 	}
+	
 }

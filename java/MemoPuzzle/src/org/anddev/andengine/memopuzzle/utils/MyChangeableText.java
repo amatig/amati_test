@@ -19,5 +19,5 @@ public class MyChangeableText extends ChangeableText {
 		super.updateText(pText);
 		this.mText2 = pText;
 	}
-
+	
 }

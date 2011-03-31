@@ -10,23 +10,13 @@ import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.scene.Scene.ITouchArea;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.memopuzzle.game.SumBox;
-import org.anddev.andengine.opengl.font.Font;
-import org.anddev.andengine.opengl.font.FontFactory;
-import org.anddev.andengine.opengl.texture.Texture;
-import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
 import org.anddev.andengine.memopuzzle.utils.Enviroment;
 import org.anddev.andengine.memopuzzle.utils.MyGameScene;
-import android.graphics.Color;
 
 public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener {
     public static final int CAMERA_WIDTH = 480;
     public static final int CAMERA_HEIGHT = 720;
-    
-    private Texture mTexFont1;
-    private Texture mTexFont2;
-	public Font mFontBigWhite;
-	public Font mFontSmallBlack;
 	
 	public void onLoadComplete() {
 		
@@ -40,19 +30,11 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	}
 	
 	public void onLoadResources() {
-    	this.mTexFont1 = new Texture(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-    	this.mTexFont2 = new Texture(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-    	this.mFontBigWhite = FontFactory.createFromAsset(this.mTexFont1, this, "font/akaDylan Collage.ttf", 48, true, Color.WHITE);
-		this.mFontSmallBlack = FontFactory.createFromAsset(this.mTexFont2, this, "font/akaDylan Collage.ttf", 30, true, Color.BLACK);
-		
-		getEngine().getTextureManager().loadTextures(this.mTexFont1, this.mTexFont2);
-		getEngine().getFontManager().loadFonts(this.mFontBigWhite, this.mFontSmallBlack);
+		Enviroment.instance().loadResource(this); // setta tutto per iniziare
 	}
 	
 	public Scene onLoadScene() {
 		// getEngine().registerUpdateHandler(new FPSLogger());
-		Enviroment.instance().setGame(this); // setta tutto per iniziare
-		
 		return new SumBox();
 	}
 	

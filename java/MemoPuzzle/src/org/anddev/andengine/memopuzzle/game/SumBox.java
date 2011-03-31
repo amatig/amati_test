@@ -12,10 +12,10 @@ import org.anddev.andengine.extension.physics.box2d.PhysicsFactory;
 import org.anddev.andengine.extension.physics.box2d.PhysicsWorld;
 import org.anddev.andengine.extension.physics.box2d.util.Vector2Pool;
 import org.anddev.andengine.memopuzzle.MemoPuzzle;
-import org.anddev.andengine.memopuzzle.ScoreLayer;
 import org.anddev.andengine.memopuzzle.utils.Enviroment;
 import org.anddev.andengine.memopuzzle.utils.MyGameScene;
 import org.anddev.andengine.memopuzzle.utils.MyChangeableText;
+import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.texture.Texture;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
@@ -54,7 +54,7 @@ public class SumBox extends MyGameScene {
     	final Rectangle ground = new Rectangle(0, MemoPuzzle.CAMERA_HEIGHT - 2, MemoPuzzle.CAMERA_WIDTH, 2);  		
     	final FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0f, 0f);
     	PhysicsFactory.createBoxBody(this.mPhysicsWorld, ground, BodyType.StaticBody, wallFixtureDef);
-    	getFirstChild().attachChild(ground);
+    	getGameLayer().attachChild(ground);
         
        	// border for collisione, non aggiunto alla scena
        	this.mBorder = new Rectangle(-200, 100, 2, MemoPuzzle.CAMERA_HEIGHT);
@@ -89,8 +89,9 @@ public class SumBox extends MyGameScene {
     	}
     	
     	// label
-    	final Text sumText = new Text(20, 60, this.mGame.mFontSmallBlack, "Sum: " + this.sum.toString());		
-    	getFirstChild().attachChild(sumText);
+    	final Font font = Enviroment.instance().getFont(2);
+    	final Text sumText = new Text(20, 60, font, "Sum: " + this.sum.toString());		
+    	getGameLayer().attachChild(sumText);
 		
         // phisic
         registerUpdateHandler(this.mPhysicsWorld);
@@ -103,19 +104,20 @@ public class SumBox extends MyGameScene {
     	this.mTempListValue.add(new Integer(value));
     	
 		final Sprite box = new Sprite(185, - pos * 150, this.regTex);
-    	final MyChangeableText label = new MyChangeableText(32, 19, this.mGame.mFontBigWhite, Integer.toString(value));
+		final Font font = Enviroment.instance().getFont(1);
+    	final MyChangeableText label = new MyChangeableText(32, 19, font, Integer.toString(value));
     	
     	// color
     	switch (value%3) {
-    		case 0: 
-    			box.setColor(1.0f, (float)value/SUP, (float)value/SUP);
-    			break;
-    		case 1: 
-    			box.setColor((float)value/SUP, 1.0f, (float)value/SUP);
-    			break;
-    		case 2: 
-    			box.setColor((float)value/SUP, (float)value/SUP, 1.0f);
-    			break;
+    	case 0: 
+    		box.setColor(1.0f, (float)value/SUP, (float)value/SUP);
+    		break;
+    	case 1: 
+    		box.setColor((float)value/SUP, 1.0f, (float)value/SUP);
+    		break;
+    	case 2: 
+    		box.setColor((float)value/SUP, (float)value/SUP, 1.0f);
+    		break;
     	}
     	
     	final FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(0, 0f, 0f);
@@ -125,7 +127,7 @@ public class SumBox extends MyGameScene {
     	registerTouchArea(box); // reg touch
     	
     	box.attachChild(label);
-    	getFirstChild().attachChild(box);
+    	getGameLayer().attachChild(box);
     	
     	/* The actual collision-checking. */
 		registerUpdateHandler(new IUpdateHandler() {
@@ -147,7 +149,7 @@ public class SumBox extends MyGameScene {
     	if (temp_sum < this.sum) {
     		this.mGame.nextScene();
     	} else if (temp_sum == this.sum) {
-    		((ScoreLayer) getLastChild()).increaseStep(1);
+    		getScoreLayer().increaseStep(1);
     		this.mGame.nextScene();
     	}
 	}
