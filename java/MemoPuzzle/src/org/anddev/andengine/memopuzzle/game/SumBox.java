@@ -6,7 +6,6 @@ import org.anddev.andengine.engine.handler.IUpdateHandler;
 import org.anddev.andengine.entity.primitive.Rectangle;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
 import org.anddev.andengine.entity.sprite.Sprite;
-import org.anddev.andengine.entity.text.ChangeableText;
 import org.anddev.andengine.entity.text.Text;
 import org.anddev.andengine.extension.physics.box2d.PhysicsConnector;
 import org.anddev.andengine.extension.physics.box2d.PhysicsFactory;
@@ -16,12 +15,11 @@ import org.anddev.andengine.memopuzzle.MemoPuzzle;
 import org.anddev.andengine.memopuzzle.ScoreLayer;
 import org.anddev.andengine.memopuzzle.utils.Enviroment;
 import org.anddev.andengine.memopuzzle.utils.MyGameScene;
-import org.anddev.andengine.memopuzzle.utils.MyText;
+import org.anddev.andengine.memopuzzle.utils.MyChangeableText;
 import org.anddev.andengine.opengl.texture.Texture;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
-import org.anddev.andengine.util.HorizontalAlign;
 import android.hardware.SensorManager;
 
 import com.badlogic.gdx.math.Vector2;
@@ -90,6 +88,7 @@ public class SumBox extends MyGameScene {
     		this.sum += this.mTempListValue.get(i);
     	}
     	
+    	// label
     	final Text sumText = new Text(20, 60, this.mGame.mFontSmallBlack, "Sum: " + this.sum.toString());		
     	getFirstChild().attachChild(sumText);
 		
@@ -104,7 +103,7 @@ public class SumBox extends MyGameScene {
     	this.mTempListValue.add(new Integer(value));
     	
 		final Sprite box = new Sprite(185, - pos * 150, this.regTex);
-    	final Text label = new MyText(32, 19, this.mGame.mFontBigWhite, Integer.toString(value), HorizontalAlign.CENTER);
+    	final MyChangeableText label = new MyChangeableText(32, 19, this.mGame.mFontBigWhite, Integer.toString(value));
     	
     	// color
     	switch (value%3) {
@@ -147,11 +146,10 @@ public class SumBox extends MyGameScene {
     	}   	
     	if (temp_sum < this.sum) {
     		this.mGame.nextScene();
-    	} else 
-    		if (temp_sum == this.sum) {
-    			((ScoreLayer) getLastChild()).increaseStep(1);
-    			this.mGame.nextScene();
-    		}
+    	} else if (temp_sum == this.sum) {
+    		((ScoreLayer) getLastChild()).increaseStep(1);
+    		this.mGame.nextScene();
+    	}
 	}
 	
 	public void manageTouch(ITouchArea pTouchArea) {
@@ -162,7 +160,7 @@ public class SumBox extends MyGameScene {
 		bodyBox.setLinearVelocity(velocity);
 		Vector2Pool.recycle(velocity);
 		
-		Integer value = Integer.parseInt(((MyText)box.getFirstChild()).getText());
+		Integer value = Integer.parseInt(((MyChangeableText)box.getFirstChild()).getText());
 		this.mListValue.remove(value);
 	}
 	

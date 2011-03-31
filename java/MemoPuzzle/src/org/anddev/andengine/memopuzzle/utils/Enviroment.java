@@ -6,6 +6,7 @@ import org.anddev.andengine.memopuzzle.ScoreLayer;
 
 public class Enviroment {
 	private static Enviroment mInstance = null;
+	
 	private int mDifficult = 1;  // 0 Easy 1 Normal 2 Hard
 	private MemoPuzzle mGame = null;
 	private Layer mScore = null;
@@ -24,6 +25,10 @@ public class Enviroment {
 		int range = max - min + 1;
     	int value = (int)(range * Math.random()) + min;
     	return value;
+	}
+	
+	public void setDifficult(int value) {
+		this.mDifficult = value;
 	}
 	
 	public int getDifficult() {

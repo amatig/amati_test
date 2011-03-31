@@ -5,11 +5,9 @@ import org.anddev.andengine.engine.camera.Camera;
 import org.anddev.andengine.engine.options.EngineOptions;
 import org.anddev.andengine.engine.options.EngineOptions.ScreenOrientation;
 import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
-import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.scene.Scene.ITouchArea;
-import org.anddev.andengine.entity.text.ChangeableText;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.memopuzzle.game.SumBox;
 import org.anddev.andengine.opengl.font.Font;
@@ -53,7 +51,7 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	
 	public Scene onLoadScene() {
 		// getEngine().registerUpdateHandler(new FPSLogger());
-		Enviroment.instance().setGame(this);
+		Enviroment.instance().setGame(this); // setta tutto per iniziare
 		
 		return new SumBox();
 	}
