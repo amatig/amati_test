@@ -1,6 +1,5 @@
 package org.anddev.andengine.memopuzzle.utils;
 
-import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.memopuzzle.MemoPuzzle;
 import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.font.FontFactory;
@@ -15,7 +14,7 @@ public class Enviroment {
 	
 	private int mDifficult = 1;  // 0 Easy 1 Normal 2 Hard
 	private MemoPuzzle mGame = null;
-	private Layer mScore = null;
+	private ScoreLayer mScore = null;
 	
 	private float mColor[][];
 	private Texture mTexFont0;
@@ -95,7 +94,7 @@ public class Enviroment {
         return this.mGame;
 	}
 	
-	public Layer getScoreLayer() {
+	public ScoreLayer getScoreLayer() {
         return this.mScore;
 	}
 	

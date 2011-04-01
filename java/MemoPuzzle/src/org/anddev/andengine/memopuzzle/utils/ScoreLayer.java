@@ -12,6 +12,11 @@ public class ScoreLayer extends Layer {
 	private String mStepLabel = "Step ";
 	private int mStep;
 	private MyChangeableText mStepText;
+	
+	private String mTimeLabel = "Time ";
+	private int mTime;
+	private MyChangeableText mTimeText;
+	
 	private Texture tex;
 	private TextureRegion texReg;
 	
@@ -19,23 +24,31 @@ public class ScoreLayer extends Layer {
 		final Font font = Enviroment.instance().getFont(2);
 		
 		this.mStep = 0;
-		this.mStepText = new MyChangeableText(90, 20, font, this.mStepLabel + "0");
-		
+		this.mStepText = new MyChangeableText(90, 20, font, this.mStepLabel + "0", 15);
 		attachChild(this.mStepText);
+		
+		this.mTime = 0;
+		this.mTimeText = new MyChangeableText(90, 60, font, this.mTimeLabel + "0", 15);
+		attachChild(this.mTimeText);
 		
 		this.tex  = new Texture(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
     	this.texReg = TextureRegionFactory.createFromAsset(this.tex, Enviroment.instance().getGame(), "gfx/back.png", 0, 0);
     	
     	Enviroment.instance().getGame().getEngine().getTextureManager().loadTexture(this.tex);
     	
-    	final Sprite back = new Sprite(0, 0, this.texReg);
+    	final Sprite front = new Sprite(0, 0, this.texReg);
     	
-    	attachChild(back);
+    	attachChild(front);
 	}
 	
 	public void increaseStep(int value) {
 		this.mStep += value;
 		this.mStepText.setText(this.mStepLabel + Integer.toString(this.mStep));
+	}
+	
+	public void increaseTime(int value) {
+		this.mTime += value;
+		this.mTimeText.setText(this.mTimeLabel + Integer.toString(this.mTime));
 	}
 	
 }
