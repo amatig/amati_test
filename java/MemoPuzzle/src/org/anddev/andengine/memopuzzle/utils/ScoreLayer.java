@@ -9,7 +9,7 @@ import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
 
 public class ScoreLayer extends Layer {
-	private String mStepLabel = "Step: ";
+	private String mStepLabel = "Step ";
 	private int mStep;
 	private MyChangeableText mStepText;
 	private Texture tex;

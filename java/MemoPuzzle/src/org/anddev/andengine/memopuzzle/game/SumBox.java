@@ -90,7 +90,7 @@ public class SumBox extends GameScene {
     	
     	// label
     	final Font font = Enviroment.instance().getFont(2);
-    	final Text sumText = new Text(90, 60, font, "Sum: " + this.sum.toString());		
+    	final Text sumText = new Text(90, 60, font, "Sum " + this.sum.toString());		
     	getGameLayer().attachChild(sumText);
 		
         // phisic
@@ -103,22 +103,12 @@ public class SumBox extends GameScene {
     	this.mListValue.add(new Integer(value));
     	this.mTempListValue.add(new Integer(value));
     	
-		final Sprite box = new Sprite(185, - pos * 150, this.texReg);
+		final Sprite box = new Sprite(190, - pos * 150, this.texReg);
 		final Font font = Enviroment.instance().getFont(1);
     	final MyChangeableText label = new MyChangeableText(32, 19, font, Integer.toString(value));
     	
-    	// color
-    	switch (value%3) {
-    	case 0: 
-    		box.setColor(1.0f, (float)value/SUP, (float)value/SUP);
-    		break;
-    	case 1: 
-    		box.setColor((float)value/SUP, 1.0f, (float)value/SUP);
-    		break;
-    	case 2: 
-    		box.setColor((float)value/SUP, (float)value/SUP, 1.0f);
-    		break;
-    	}
+    	final float[][] color = Enviroment.instance().getColor();
+    	box.setColor(color[value-1][0], color[value-1][1], color[value-1][2]);
     	
     	final FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(0, 0f, 0f);
     	final Body bodyBox = PhysicsFactory.createBoxBody(this.mPhysicsWorld, box, BodyType.DynamicBody, objectFixtureDef); 	
