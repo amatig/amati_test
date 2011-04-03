@@ -12,7 +12,9 @@ import org.anddev.andengine.entity.scene.menu.MenuScene;
 import org.anddev.andengine.entity.scene.menu.MenuScene.IOnMenuItemClickListener;
 import org.anddev.andengine.entity.scene.menu.item.IMenuItem;
 import org.anddev.andengine.input.touch.TouchEvent;
+import org.anddev.andengine.memopuzzle.game.EndScene;
 import org.anddev.andengine.memopuzzle.game.MainMenu;
+import org.anddev.andengine.memopuzzle.game.StartScene;
 import org.anddev.andengine.memopuzzle.game.SumBox;
 import org.anddev.andengine.ui.activity.BaseGameActivity;
 import org.anddev.andengine.memopuzzle.utils.Enviroment;
@@ -56,9 +58,8 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	
 	public void nextScene() {
 		Scene scene = null;
-		int indexScene = Enviroment.instance().nextMiniGame();
-		switch (indexScene) {
-		case 0: scene = new MainMenu(); break;
+		switch (Enviroment.instance().nextMiniGame()) {
+		case 0: scene = new EndScene(); break;
 		case 1: scene = new SumBox(null, null); break;
 		}
 		getEngine().setScene(scene);
@@ -93,15 +94,15 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 		switch(pMenuItem.getID()) {
 		case MENU_EASY:
 			Enviroment.instance().setDifficult(0);
-			nextScene();
+			setScene(new StartScene());
 			return true;
 		case MENU_NORMAL:
 			Enviroment.instance().setDifficult(1);
-			nextScene();
+			setScene(new StartScene());
 			return true;
 		case MENU_HARD:
 			Enviroment.instance().setDifficult(2);
-			nextScene();
+			setScene(new StartScene());
 			return true;
 		case MENU_AUDIO:
 			Enviroment.instance().toggleAudio();

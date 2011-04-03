@@ -18,8 +18,6 @@ public class MainMenu extends Scene {
 	
 	public MainMenu() {
 		super(1);
-		Enviroment.instance().createScoreLayer();
-		
 		setBackground(new ColorBackground(1f, 1f, 1f));
 		
     	Sprite back = new Sprite(0, 0, Enviroment.instance().texBack);
@@ -56,7 +54,7 @@ public class MainMenu extends Scene {
 		
 		mainMenu.setOnMenuItemClickListener(Enviroment.instance().getGame());
 		
-		mainMenu.setPosition(0, 150);
+		mainMenu.setPosition(0, 180);
 		
 		return mainMenu;
 	}

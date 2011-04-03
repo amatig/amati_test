@@ -3,7 +3,6 @@ package org.anddev.andengine.memopuzzle.utils;
 import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.entity.sprite.Sprite;
-import org.anddev.andengine.opengl.font.Font;
 
 public class ScoreLayer extends Layer {
 	private static int SPACE = 45;

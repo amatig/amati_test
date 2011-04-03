@@ -29,6 +29,7 @@ public class Enviroment {
 	public Font fontMainMenu;
 	public Font fontMainTitle;
 	public TextureRegion texBack;
+	public TextureRegion texBack2;
 	public TextureRegion texTrue;
 	public TextureRegion texFalse;
 	public TextureRegion texBox;
@@ -101,15 +102,17 @@ public class Enviroment {
     	this.mColor[7][0] = 0.7f; this.mColor[7][1] = 0.4f; this.mColor[7][2] = 0.4f;
     	this.mColor[8][0] = 1.0f; this.mColor[8][1] = 0.8f; this.mColor[8][2] = 1.0f;
     	
+    	// global
     	this.texTrue = getTexture(512, 512, "true");
     	this.texFalse = getTexture(512, 512, "false");
+    	this.texBack2 = getTexture(512, 1024, "back2");
 		
 		// main
     	this.texBack = getTexture(512, 1024, "back");
     	this.fontMainTitle = getFont("akaDylan Plain", 55, 4, Color.WHITE, Color.BLACK);
     	this.fontMainMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
-    	// menu
+    	// comtext menu
     	this.fontMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
     	// score layer
