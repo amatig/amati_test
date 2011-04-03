@@ -70,7 +70,9 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	public boolean onKeyDown(final int pKeyCode, final KeyEvent pEvent) {	
 		if (pKeyCode == KeyEvent.KEYCODE_MENU && pEvent.getAction() == KeyEvent.ACTION_DOWN) {
 			if (this.mEngine.getScene().hasChildScene()) {
-				this.mEngine.getScene().back();
+				if (!(this.mEngine.getScene() instanceof MainMenu)) {
+					this.mEngine.getScene().back();
+				}
 			} else {
 				this.mEngine.getScene().setChildScene(new GameMenu(), false, true, true);
 			}

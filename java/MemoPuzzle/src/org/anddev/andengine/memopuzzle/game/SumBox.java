@@ -4,7 +4,6 @@ import java.util.LinkedList;
 
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
-import org.anddev.andengine.entity.primitive.Rectangle;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.Text;
 import org.anddev.andengine.extension.physics.box2d.PhysicsConnector;
@@ -43,7 +42,8 @@ public class SumBox extends GameScene {
     	this.mPhysicsWorld = new PhysicsWorld(new Vector2(0, SensorManager.GRAVITY_EARTH + 30), false);
     	
         // base
-		Rectangle ground = new Rectangle(0, MemoPuzzle.CAMERA_HEIGHT - 2, MemoPuzzle.CAMERA_WIDTH, 2);  		
+    	Sprite ground = new Sprite(134, MemoPuzzle.CAMERA_HEIGHT - 55, Enviroment.instance().texBase);
+		//Rectangle ground = new Rectangle(0, MemoPuzzle.CAMERA_HEIGHT - 2, MemoPuzzle.CAMERA_WIDTH, 2);  		
     	FixtureDef wallFixtureDef = PhysicsFactory.createFixtureDef(0, 0f, 0f);
     	PhysicsFactory.createBoxBody(this.mPhysicsWorld, ground, BodyType.StaticBody, wallFixtureDef);
     	getGameLayer().attachChild(ground);

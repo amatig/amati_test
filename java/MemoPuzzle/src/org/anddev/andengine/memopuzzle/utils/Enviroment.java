@@ -7,6 +7,7 @@ import org.anddev.andengine.opengl.texture.Texture;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TextureRegionFactory;
+import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import android.graphics.Color;;
 
@@ -17,6 +18,7 @@ public class Enviroment {
 	private boolean mAudio = true;
 	
 	private MemoPuzzle mGame = null;
+	private ScoreLayer mScoreLayer;
 	
 	private float mColor[][];
 	
@@ -26,6 +28,9 @@ public class Enviroment {
 	public TextureRegion texTrue;
 	public TextureRegion texFalse;
 	public TextureRegion texBox;
+	public TextureRegion texBase;
+	public TextureRegion texStep;
+	public TiledTextureRegion texAnimStep;
 	public Font fontBox;
 	public Font fontSum;
 	public Font fontScore;
@@ -83,20 +88,25 @@ public class Enviroment {
     	this.texFalse = getTexture(512, 512, "false");
 		
 		// main
-    	this.texBack = getTexture(1024, 1024, "back");
-    	this.fontMainMenu = getFont("akaDylan Plain", 40, 2, Color.WHITE, Color.BLACK);
-    	this.fontMainTitle = getFont("akaDylan Plain", 45, 4, Color.WHITE, Color.BLACK);
+    	this.texBack = getTexture(512, 1024, "back");
+    	this.fontMainTitle = getFont("akaDylan Plain", 55, 4, Color.WHITE, Color.BLACK);
+    	this.fontMainMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
     	// menu
-    	this.fontMenu = getFont("akaDylan Plain", 40, 2, Color.WHITE, Color.BLACK);
+    	this.fontMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
     	// score layer
-    	fontScore = getFont("akaDylan Plain", 35, 2, Color.WHITE, Color.BLACK);
+    	this.fontScore = getFont("akaDylan Plain", 35, 2, Color.WHITE, Color.BLACK);
+    	this.texStep = getTexture(64, 64, "step");
+    	this.texAnimStep = getTiledTexture(256, 64, "step2", 3, 1);
     	
 		// sum box
+    	this.texBase = getTexture(256, 128, "base");
     	this.texBox = getTexture(128, 128, "box");
     	this.fontBox = getFont("akaDylan Plain", 48, 4, Color.WHITE, Color.BLACK);
     	this.fontSum = getFont("akaDylan Plain", 35, 2, Color.WHITE, Color.BLACK);
+    	
+    	this.mScoreLayer = new ScoreLayer();
 	}
 	
 	public Font getFont(String name, int size, int width, int fillColor, int borderColor) {
@@ -118,8 +128,19 @@ public class Enviroment {
 		return texReg;
 	}
 	
+	public TiledTextureRegion getTiledTexture(int w, int h, String name, int col, int row) {
+		Texture tex = new Texture(w, h, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		TiledTextureRegion texReg = TextureRegionFactory.createTiledFromAsset(tex, this.mGame, "gfx/" + name + ".png", 0, 0, col, row);
+		this.mGame.getEngine().getTextureManager().loadTexture(tex);
+		return texReg;
+	}
+	
 	public MemoPuzzle getGame() {
         return this.mGame;
+	}
+	
+	public ScoreLayer getScoreLayer() {
+        return this.mScoreLayer;
 	}
 	
 }

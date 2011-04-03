@@ -21,9 +21,11 @@ public class MainMenu extends Scene {
 		setBackground(new ColorBackground(1f, 1f, 1f));
 		
     	Sprite back = new Sprite(0, 0, Enviroment.instance().texBack);
+    	back.setScale(0.9f);
     	attachChild(back);
     	
-    	Text titleText = new Text(40, 20, Enviroment.instance().fontMainTitle, "Brain\nChallenge");
+    	Text titleText = new Text(70, 180, Enviroment.instance().fontMainTitle, "Brain\nChallenge");
+    	titleText.setColor(0.5f, 1.0f, 0.2f);
     	attachChild(titleText);
     	
     	setChildScene(createMenu(), false, true, true);
@@ -34,15 +36,15 @@ public class MainMenu extends Scene {
 		
 		Font font = Enviroment.instance().fontMainMenu;
 		
-		IMenuItem eMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_EASY, font, "EASY"), 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		IMenuItem eMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_EASY, font, "EASY"), 1.0f, 0.1f, 0.1f, 1.0f, 1.0f, 0.5f);
 		eMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		mainMenu.addMenuItem(eMenuItem);
 		
-		IMenuItem nMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_NORMAL, font, "NORMAL"), 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		IMenuItem nMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_NORMAL, font, "NORMAL"), 1.0f, 0.1f, 0.1f, 1.0f, 1.0f, 0.5f);
 		nMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		mainMenu.addMenuItem(nMenuItem);
 		
-		IMenuItem hMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_HARD, font, "HARD"), 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		IMenuItem hMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_HARD, font, "HARD"), 1.0f, 0.1f, 0.1f, 1.0f, 1.0f, 0.5f);
 		hMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		mainMenu.addMenuItem(hMenuItem);
 		
@@ -52,7 +54,7 @@ public class MainMenu extends Scene {
 		
 		mainMenu.setOnMenuItemClickListener(Enviroment.instance().getGame());
 		
-		mainMenu.setPosition(0, 240);
+		mainMenu.setPosition(0, 150);
 		
 		return mainMenu;
 	}

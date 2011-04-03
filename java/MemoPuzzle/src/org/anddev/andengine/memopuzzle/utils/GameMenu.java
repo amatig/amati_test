@@ -22,11 +22,11 @@ public class GameMenu extends MenuScene {
 		
 		Font font = Enviroment.instance().fontMenu;
 		
-		IMenuItem resetMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_AUDIO, font, "AUDIO " + audio), 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		IMenuItem resetMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_AUDIO, font, "AUDIO " + audio), 1.0f, 0.1f, 0.1f, 1.0f, 1.0f, 0.5f);
 		resetMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		addMenuItem(resetMenuItem);
 		
-		IMenuItem quitMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_EXIT, font, "EXIT"), 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+		IMenuItem quitMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_EXIT, font, "EXIT"), 1.0f, 0.1f, 0.1f, 1.0f, 1.0f, 0.5f);
 		quitMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		addMenuItem(quitMenuItem);
 		
