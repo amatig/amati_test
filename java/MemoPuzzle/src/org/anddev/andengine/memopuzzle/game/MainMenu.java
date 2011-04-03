@@ -18,14 +18,16 @@ public class MainMenu extends Scene {
 	
 	public MainMenu() {
 		super(1);
+		Enviroment.instance().createScoreLayer();
+		
 		setBackground(new ColorBackground(1f, 1f, 1f));
 		
     	Sprite back = new Sprite(0, 0, Enviroment.instance().texBack);
-    	back.setScale(0.9f);
+    	back.setScale(0.95f);
     	attachChild(back);
     	
-    	Text titleText = new Text(70, 180, Enviroment.instance().fontMainTitle, "Brain\nChallenge");
-    	titleText.setColor(0.5f, 1.0f, 0.2f);
+    	Text titleText = new Text(69, 183, Enviroment.instance().fontMainTitle, "Brain\nChallenge");
+    	titleText.setColor(0.5f, 0.9f, 0.5f);
     	attachChild(titleText);
     	
     	setChildScene(createMenu(), false, true, true);
@@ -36,15 +38,15 @@ public class MainMenu extends Scene {
 		
 		Font font = Enviroment.instance().fontMainMenu;
 		
-		IMenuItem eMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_EASY, font, "EASY"), 1.0f, 0.1f, 0.1f, 1.0f, 1.0f, 0.5f);
+		IMenuItem eMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_EASY, font, "EASY"), 1.0f, 0.2f, 0.2f, 1.0f, 1.0f, 0.5f);
 		eMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		mainMenu.addMenuItem(eMenuItem);
 		
-		IMenuItem nMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_NORMAL, font, "NORMAL"), 1.0f, 0.1f, 0.1f, 1.0f, 1.0f, 0.5f);
+		IMenuItem nMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_NORMAL, font, "NORMAL"), 1.0f, 0.2f, 0.2f, 1.0f, 1.0f, 0.5f);
 		nMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		mainMenu.addMenuItem(nMenuItem);
 		
-		IMenuItem hMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_HARD, font, "HARD"), 1.0f, 0.1f, 0.1f, 1.0f, 1.0f, 0.5f);
+		IMenuItem hMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MemoPuzzle.MENU_HARD, font, "HARD"), 1.0f, 0.2f, 0.2f, 1.0f, 1.0f, 0.5f);
 		hMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		mainMenu.addMenuItem(hMenuItem);
 		

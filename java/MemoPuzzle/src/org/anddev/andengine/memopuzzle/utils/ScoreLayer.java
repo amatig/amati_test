@@ -6,39 +6,33 @@ import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.opengl.font.Font;
 
 public class ScoreLayer extends Layer {
-	private String mStepLabel = "Step ";
-	private int mStep;
-	private MyChangeableText mStepText;
+	private static int SPACE = 45;
+	private int mStep = 0;
 	
 	private String mTimeLabel = "Time ";
-	private int mTime;
 	private MyChangeableText mTimeText;
+	private int mTime = 0;
 	
 	public ScoreLayer() {
-		Font font = Enviroment.instance().fontScore;
-		
-		this.mStep = 0;
-		this.mStepText = new MyChangeableText(90, 20, font, this.mStepLabel + "0", 15);
-		attachChild(this.mStepText);
-		
-		this.mTime = 0;
-		this.mTimeText = new MyChangeableText(90, 60, font, this.mTimeLabel + "0", 15);
+		this.mTimeText = new MyChangeableText(23, 72, Enviroment.instance().fontTime, this.mTimeLabel + "0", 15);
+		this.mTimeText.setColor(0.5f, 1.0f, 0.2f);
 		attachChild(this.mTimeText);
 		
-		for (int i = 0; i < 10; i++) {
-			Sprite step = new Sprite(20, 20 + i * 56, Enviroment.instance().texStep);
+		for (int i = 0; i < Enviroment.MINIGAME; i++) {
+			Sprite step = new Sprite(10 + i * SPACE, 10, Enviroment.instance().texStep);
 			step.setColor(1.0f, 1.0f, 0.5f);
+			step.setScale(0.6f);
 			attachChild(step);
 		}
 	}
 	
 	public void increaseStep(int value) {
 		this.mStep += value;
-		this.mStepText.setText(this.mStepLabel + Integer.toString(this.mStep));
 		
-		AnimatedSprite step = new AnimatedSprite(20, 20 + (10 - this.mStep) * 56, Enviroment.instance().texAnimStep);
-		step.animate(new long[] { 300, 200, 100 }, 0, 2, false);
+		AnimatedSprite step = new AnimatedSprite(10 + (this.mStep - 1) * SPACE, 10, Enviroment.instance().texAnimStep);
+		step.animate(new long[] { 70, 70, 70 }, 0, 2, false);
 		step.setColor(0.5f, 1.0f, 0.2f);
+		step.setScale(0.7f);
 		attachChild(step);
 	}
 	

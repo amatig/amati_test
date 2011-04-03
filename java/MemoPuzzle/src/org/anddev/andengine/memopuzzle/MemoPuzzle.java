@@ -48,7 +48,6 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	public Scene onLoadScene() {
 		// getEngine().registerUpdateHandler(new FPSLogger());
 		return new MainMenu();
-		//return new SumBox(null, null);
 	}
 	
 	public void setScene(Scene scene) {
@@ -56,7 +55,13 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	}
 	
 	public void nextScene() {
-		getEngine().setScene(new SumBox(null, null));
+		Scene scene = null;
+		int indexScene = Enviroment.instance().nextMiniGame();
+		switch (indexScene) {
+		case 0: scene = new MainMenu(); break;
+		case 1: scene = new SumBox(null, null); break;
+		}
+		getEngine().setScene(scene);
 	}
 	
 	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, ITouchArea pTouchArea, float pTouchAreaLocalX, float pTouchAreaLocalY) {

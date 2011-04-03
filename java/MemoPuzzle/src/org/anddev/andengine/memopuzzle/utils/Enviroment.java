@@ -14,6 +14,10 @@ import android.graphics.Color;;
 public class Enviroment {
 	private static Enviroment mInstance = null;
 	
+	public static int MINIGAME = 10;
+	private int[] mMiniGameScene;
+	private int mCurrenteMiniGame = -1;
+	
 	private int mDifficult = 1;  // 0 Easy 1 Normal 2 Hard
 	private boolean mAudio = true;
 	
@@ -33,7 +37,7 @@ public class Enviroment {
 	public TiledTextureRegion texAnimStep;
 	public Font fontBox;
 	public Font fontSum;
-	public Font fontScore;
+	public Font fontTime;
 	public Font fontMenu;
 	
 	// Costruttore
@@ -72,6 +76,19 @@ public class Enviroment {
 	public void loadResource(MemoPuzzle game) {
 		this.mGame = game;
 		
+		// minigame
+		this.mMiniGameScene = new int[MINIGAME];
+		this.mMiniGameScene[0] = 1;
+		this.mMiniGameScene[1] = 1;
+		this.mMiniGameScene[2] = 1;
+		this.mMiniGameScene[3] = 1;
+		this.mMiniGameScene[4] = 1;
+		this.mMiniGameScene[5] = 1;
+		this.mMiniGameScene[6] = 1;
+		this.mMiniGameScene[7] = 1;
+		this.mMiniGameScene[8] = 1;
+		this.mMiniGameScene[9] = 1;
+		
 		// color
     	this.mColor = new float[9][3];
     	this.mColor[0][0] = 1.0f; this.mColor[0][1] = 0.3f; this.mColor[0][2] = 0.3f;
@@ -96,7 +113,7 @@ public class Enviroment {
     	this.fontMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
     	// score layer
-    	this.fontScore = getFont("akaDylan Plain", 35, 2, Color.WHITE, Color.BLACK);
+    	this.fontTime = getFont("akaDylan Plain", 26, 2, Color.WHITE, Color.BLACK);
     	this.texStep = getTexture(64, 64, "step");
     	this.texAnimStep = getTiledTexture(256, 64, "step2", 3, 1);
     	
@@ -105,8 +122,10 @@ public class Enviroment {
     	this.texBox = getTexture(128, 128, "box");
     	this.fontBox = getFont("akaDylan Plain", 48, 4, Color.WHITE, Color.BLACK);
     	this.fontSum = getFont("akaDylan Plain", 35, 2, Color.WHITE, Color.BLACK);
-    	
-    	this.mScoreLayer = new ScoreLayer();
+	}
+	
+	public void createScoreLayer() {
+		this.mScoreLayer = new ScoreLayer();
 	}
 	
 	public Font getFont(String name, int size, int width, int fillColor, int borderColor) {
@@ -119,6 +138,16 @@ public class Enviroment {
 	
 	public float[][] getColor() {
 		return this.mColor;
+	}
+	
+	public int nextMiniGame() {
+		this.mCurrenteMiniGame += 1;
+		if (this.mCurrenteMiniGame < MINIGAME)
+			return this.mMiniGameScene[this.mCurrenteMiniGame];
+		else {
+			this.mCurrenteMiniGame = -1;
+			return 0;
+		}
 	}
 	
 	public TextureRegion getTexture(int w, int h, String name) {

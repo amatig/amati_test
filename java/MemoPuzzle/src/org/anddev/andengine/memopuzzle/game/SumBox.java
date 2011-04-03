@@ -101,7 +101,7 @@ public class SumBox extends GameScene {
     	}
     	
     	// label
-    	Text sumText = new Text(90, 100, Enviroment.instance().fontSum, "Sum " + this.mSum.toString());
+    	Text sumText = new Text(23, 110, Enviroment.instance().fontSum, "Sum " + this.mSum.toString());
     	getGameLayer().attachChild(sumText);
 		
         // physics
@@ -147,6 +147,7 @@ public class SumBox extends GameScene {
     		setOnAreaTouchListener(null);
     		
     		Sprite falseSprite = new Sprite(90, 200, Enviroment.instance().texFalse);
+    		falseSprite.setAlpha(0.8f);
     		getGameLayer().attachChild(falseSprite);
     		
     		registerUpdateHandler(new TimerHandler(1f, false, new ITimerCallback() {
@@ -161,6 +162,7 @@ public class SumBox extends GameScene {
     		getScoreLayer().increaseStep(1);
     		
     		Sprite trueSprite = new Sprite(80, 200, Enviroment.instance().texTrue);
+    		trueSprite.setAlpha(0.8f);
     		getGameLayer().attachChild(trueSprite);
     		
     		registerUpdateHandler(new TimerHandler(1f, false, new ITimerCallback() {
