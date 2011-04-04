@@ -28,6 +28,7 @@ public class Enviroment {
 	
 	public Font fontMainMenu;
 	public Font fontMainTitle;
+	public Font fontCountDown;
 	public TextureRegion texBack;
 	public TextureRegion texBack2;
 	public TextureRegion texTrue;
@@ -107,12 +108,15 @@ public class Enviroment {
     	this.texFalse = getTexture(512, 512, "false");
     	this.texBack2 = getTexture(512, 1024, "back2");
 		
-		// main
+		// main menu
     	this.texBack = getTexture(512, 1024, "back");
     	this.fontMainTitle = getFont("akaDylan Plain", 55, 4, Color.WHITE, Color.BLACK);
     	this.fontMainMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
-    	// comtext menu
+    	// start scene
+    	this.fontCountDown = getFont(1024, 1024, "akaDylan Plain", 250, 4, Color.WHITE, Color.BLACK);
+    	
+    	// covtext menu
     	this.fontMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
     	// score layer
@@ -131,14 +135,6 @@ public class Enviroment {
 		this.mScoreLayer = new ScoreLayer();
 	}
 	
-	public Font getFont(String name, int size, int width, int fillColor, int borderColor) {
-		Texture tex = new Texture(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		Font font = FontFactory.createStrokeFromAsset(tex, this.mGame, "font/" + name + ".ttf", size, true, fillColor, width, borderColor, false);
-		this.mGame.getEngine().getTextureManager().loadTexture(tex);
-		this.mGame.getEngine().getFontManager().loadFont(font);
-		return font;
-	}
-	
 	public float[][] getColor() {
 		return this.mColor;
 	}
@@ -151,6 +147,22 @@ public class Enviroment {
 			this.mCurrenteMiniGame = -1;
 			return 0;
 		}
+	}
+	
+	public Font getFont(String name, int size, int width, int fillColor, int borderColor) {
+		Texture tex = new Texture(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		Font font = FontFactory.createStrokeFromAsset(tex, this.mGame, "font/" + name + ".ttf", size, true, fillColor, width, borderColor, false);
+		this.mGame.getEngine().getTextureManager().loadTexture(tex);
+		this.mGame.getEngine().getFontManager().loadFont(font);
+		return font;
+	}
+	
+	public Font getFont(int w, int h, String name, int size, int width, int fillColor, int borderColor) {
+		Texture tex = new Texture(w, h, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		Font font = FontFactory.createStrokeFromAsset(tex, this.mGame, "font/" + name + ".ttf", size, true, fillColor, width, borderColor, false);
+		this.mGame.getEngine().getTextureManager().loadTexture(tex);
+		this.mGame.getEngine().getFontManager().loadFont(font);
+		return font;
 	}
 	
 	public TextureRegion getTexture(int w, int h, String name) {

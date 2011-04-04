@@ -102,6 +102,7 @@ public class SumBox extends GameScene {
     	
     	// label
     	Text sumText = new Text(23, 110, Enviroment.instance().fontSum, "Sum " + this.mSum.toString());
+    	sumText.setColor(1.0f, 1.0f, 0.5f);
     	getGameLayer().attachChild(sumText);
 		
         // physics
