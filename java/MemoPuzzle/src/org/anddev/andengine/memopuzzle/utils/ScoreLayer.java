@@ -14,7 +14,7 @@ public class ScoreLayer extends Layer {
 	
 	public ScoreLayer() {
 		this.mTimeText = new MyChangeableText(23, 72, Enviroment.instance().fontTime, this.mTimeLabel + "0", 15);
-		this.mTimeText.setColor(0.5f, 1.0f, 0.2f);
+		this.mTimeText.setColor(1.0f, 1.0f, 1.0f);
 		attachChild(this.mTimeText);
 		
 		for (int i = 0; i < Enviroment.MINIGAME; i++) {

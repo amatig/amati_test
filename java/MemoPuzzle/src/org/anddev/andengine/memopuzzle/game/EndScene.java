@@ -9,9 +9,9 @@ public class EndScene extends Scene {
 	
 	public EndScene() {
 		super(1);
-		setBackground(new ColorBackground(1f, 1f, 1f));
+		setBackground(new ColorBackground(0,9f, 0.5f, 0.5f));
 		
-    	Sprite back = new Sprite(0, 0, Enviroment.instance().texBack2);
+    	Sprite back = new Sprite(0, 0, Enviroment.instance().texBack);
     	back.setScale(0.95f);
     	attachChild(back);
 	}

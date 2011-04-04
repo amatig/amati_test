@@ -30,7 +30,6 @@ public class Enviroment {
 	public Font fontMainTitle;
 	public Font fontCountDown;
 	public TextureRegion texBack;
-	public TextureRegion texBack2;
 	public TextureRegion texTrue;
 	public TextureRegion texFalse;
 	public TextureRegion texBox;
@@ -41,6 +40,7 @@ public class Enviroment {
 	public Font fontSum;
 	public Font fontTime;
 	public Font fontMenu;
+	public Font fontPlayer;
 	
 	// Costruttore
 	private Enviroment() {
@@ -106,7 +106,6 @@ public class Enviroment {
     	// global
     	this.texTrue = getTexture(512, 512, "true");
     	this.texFalse = getTexture(512, 512, "false");
-    	this.texBack2 = getTexture(512, 1024, "back2");
 		
 		// main menu
     	this.texBack = getTexture(512, 1024, "back");
@@ -114,13 +113,14 @@ public class Enviroment {
     	this.fontMainMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
     	// start scene
-    	this.fontCountDown = getFont(1024, 1024, "akaDylan Plain", 250, 4, Color.WHITE, Color.BLACK);
+    	this.fontPlayer = getFont("akaDylan Plain", 50, 4, Color.WHITE, Color.BLACK);
+    	this.fontCountDown = getFont(1024, 1024, "akaDylan Plain", 250, 6, Color.WHITE, Color.BLACK);
     	
-    	// covtext menu
+    	// context menu
     	this.fontMenu = getFont("akaDylan Plain", 40, 3, Color.WHITE, Color.BLACK);
     	
     	// score layer
-    	this.fontTime = getFont("akaDylan Plain", 26, 2, Color.WHITE, Color.BLACK);
+    	this.fontTime = getFont("akaDylan Plain", 30, 3, Color.WHITE, Color.BLACK);
     	this.texStep = getTexture(64, 64, "step");
     	this.texAnimStep = getTiledTexture(256, 64, "step2", 3, 1);
     	
@@ -128,7 +128,7 @@ public class Enviroment {
     	this.texBase = getTexture(256, 128, "base");
     	this.texBox = getTexture(128, 128, "box");
     	this.fontBox = getFont("akaDylan Plain", 48, 4, Color.WHITE, Color.BLACK);
-    	this.fontSum = getFont("akaDylan Plain", 35, 2, Color.WHITE, Color.BLACK);
+    	this.fontSum = getFont("akaDylan Plain", 30, 3, Color.WHITE, Color.BLACK);
 	}
 	
 	public void createScoreLayer() {

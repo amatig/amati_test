@@ -18,14 +18,14 @@ public class MainMenu extends Scene {
 	
 	public MainMenu() {
 		super(1);
-		setBackground(new ColorBackground(1f, 1f, 1f));
+		setBackground(new ColorBackground(0.6f, 0.8f, 0.6f));
 		
     	Sprite back = new Sprite(0, 0, Enviroment.instance().texBack);
     	back.setScale(0.95f);
     	attachChild(back);
     	
-    	Text titleText = new Text(69, 183, Enviroment.instance().fontMainTitle, "Brain\nChallenge");
-    	titleText.setColor(0.5f, 0.9f, 0.5f);
+    	Text titleText = new Text(70, 193, Enviroment.instance().fontMainTitle, "Brain\nChallenge");
+    	titleText.setColor(1.0f, 0.5f, 0.2f);
     	attachChild(titleText);
     	
     	setChildScene(createMenu(), false, true, true);

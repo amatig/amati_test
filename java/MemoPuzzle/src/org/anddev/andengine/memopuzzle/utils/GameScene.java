@@ -12,7 +12,6 @@ public class GameScene extends Scene {
 	
 	public GameScene() {
 		super(0);
-		setBackground(new ColorBackground(1f, 1f, 1f));
 		
 		attachChild(new Layer());
 		attachChild(new Layer());
