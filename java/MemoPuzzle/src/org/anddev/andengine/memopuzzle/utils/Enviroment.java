@@ -19,7 +19,7 @@ public class Enviroment {
 	private int mCurrenteMiniGame = -1;
 	
 	private int mCurrentPlayer = 1;
-	private int mNumPlayers = 1;
+	private int mNumPlayers = 2;
 	
 	private int mDifficult = 1;  // 0 Easy 1 Normal 2 Hard
 	private boolean mAudio = true;
