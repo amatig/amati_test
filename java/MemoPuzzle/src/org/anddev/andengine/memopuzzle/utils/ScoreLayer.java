@@ -25,8 +25,8 @@ public class ScoreLayer extends Layer {
 		}
 	}
 	
-	public void increaseStep(int value) {
-		this.mStep += value;
+	public void nextStep() {
+		this.mStep += 1;
 		
 		AnimatedSprite step = new AnimatedSprite(10 + (this.mStep - 1) * SPACE, 10, Enviroment.instance().texAnimStep);
 		step.animate(new long[] { 70, 70, 70 }, 0, 2, false);

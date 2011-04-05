@@ -59,7 +59,12 @@ public class MemoPuzzle extends BaseGameActivity implements IOnAreaTouchListener
 	public void nextScene() {
 		Scene scene = null;
 		switch (Enviroment.instance().nextMiniGame()) {
-		case 0: scene = new EndScene(); break;
+		case 0:
+			if (Enviroment.instance().nextPlayer() != 0)
+				scene = new StartScene();
+			else
+				scene = new EndScene();
+			break;
 		case 1: scene = new SumBox(null, null); break;
 		}
 		getEngine().setScene(scene);

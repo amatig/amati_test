@@ -18,6 +18,9 @@ public class Enviroment {
 	private int[] mMiniGameScene;
 	private int mCurrenteMiniGame = -1;
 	
+	private int mCurrentPlayer = 1;
+	private int mNumPlayers = 1;
+	
 	private int mDifficult = 1;  // 0 Easy 1 Normal 2 Hard
 	private boolean mAudio = true;
 	
@@ -73,6 +76,34 @@ public class Enviroment {
 	
 	public int getDifficult() {
 		return this.mDifficult;
+	}
+	
+	public int nextPlayer() {
+		this.mCurrentPlayer += 1;
+		if (this.mCurrentPlayer <= this.mNumPlayers)
+			return this.mCurrentPlayer;
+		else {
+			this.mCurrentPlayer = 0;
+			return 0;
+		}
+	}
+	
+	public int getCurrentPlayer() {
+		return this.mCurrentPlayer;
+	}
+	
+	public int getNumPlayers() {
+		return this.mNumPlayers;
+	}
+	
+	public int nextMiniGame() {
+		this.mCurrenteMiniGame += 1;
+		if (this.mCurrenteMiniGame < MINIGAME)
+			return this.mMiniGameScene[this.mCurrenteMiniGame];
+		else {
+			this.mCurrenteMiniGame = -1;
+			return 0;
+		}
 	}
 	
 	public void loadResource(MemoPuzzle game) {
@@ -137,16 +168,6 @@ public class Enviroment {
 	
 	public float[][] getColor() {
 		return this.mColor;
-	}
-	
-	public int nextMiniGame() {
-		this.mCurrenteMiniGame += 1;
-		if (this.mCurrenteMiniGame < MINIGAME)
-			return this.mMiniGameScene[this.mCurrenteMiniGame];
-		else {
-			this.mCurrenteMiniGame = -1;
-			return 0;
-		}
 	}
 	
 	public Font getFont(String name, int size, int width, int fillColor, int borderColor) {

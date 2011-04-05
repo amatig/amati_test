@@ -161,7 +161,7 @@ public class SumBox extends GameScene {
     	} else if (this.mTempSum == this.mSum) {
     		setOnAreaTouchListener(null);
     		
-    		getScoreLayer().increaseStep(1);
+    		getScoreLayer().nextStep(); // pallini
     		
     		Sprite trueSprite = new Sprite(80, 200, Enviroment.instance().texTrue);
     		trueSprite.setAlpha(0.8f);

@@ -23,7 +23,8 @@ public class StartScene extends Scene {
     	back.setScale(0.95f);
     	attachChild(back);
     	
-    	Text playerText = new Text(100, 195, Enviroment.instance().fontPlayer, "Player 1");
+    	int player = Enviroment.instance().getCurrentPlayer();
+    	Text playerText = new Text(100, 195, Enviroment.instance().fontPlayer, "Player " + Integer.toString(player));
 		playerText.setColor(0.6f, 0.7f, 1.0f);
 		attachChild(playerText);
 		

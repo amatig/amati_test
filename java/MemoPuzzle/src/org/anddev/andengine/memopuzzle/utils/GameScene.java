@@ -4,7 +4,6 @@ import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.entity.scene.Scene;
-import org.anddev.andengine.entity.scene.background.ColorBackground;
 import org.anddev.andengine.memopuzzle.MemoPuzzle;
 
 public class GameScene extends Scene {
