@@ -6,6 +6,7 @@ depcomp
 *.log
 missing
 stamp-h1
+*.class
 install-sh
 *.m4
 *.in
