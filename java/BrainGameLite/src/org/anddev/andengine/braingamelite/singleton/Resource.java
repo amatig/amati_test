@@ -46,12 +46,14 @@ public class Resource {
 	private float mColor[][];
 	
 	// summary
+	public Font fontLook;
 	public Font fontCount;
 	public Font fontFind;
+	public Font fontBall;
+	public Font fontCatch;
 	public Font fontSum;
 	
 	// font
-	public Font fontScore;
 	public Font fontMainMenu;
 	public Font fontCountDown; // start countdown
 	public Font fontBalloon;
@@ -62,6 +64,10 @@ public class Resource {
 	public Font fontMenu;
 	public Font fontPlayer; // numero dello start
 	public Font fontPlayer2; // numeri p1 e p2 della end
+	public Font fontSeqNum1;
+	public Font fontSeqNum2;
+	public Font fontSeqNote1;
+	public Font fontSeqNote2;
 	public Font fontErrorP1;
 	public Font fontErrorP2;
 	public Font fontTimeP1;
@@ -70,7 +76,6 @@ public class Resource {
 	// texture
 	public TextureRegion texInfo;
 	public TextureRegion texTitle;
-	public TextureRegion texScore;
 	public TextureRegion texQuad;
 	public TextureRegion texQuad2;
 	public TextureRegion texSplash;
@@ -82,15 +87,21 @@ public class Resource {
 	public TextureRegion texBox;
 	public TextureRegion texBase;
 	public TextureRegion texStep;
+	public TextureRegion texPos;
 	public TextureRegion texSomm;
+	public TextureRegion texArrow;
 	public TextureRegion texBalloon;
 	public TextureRegion texTazza;
 	public TextureRegion texShadow;
+	public TextureRegion texTubo;
+	public TextureRegion texTubo2;
+	public TextureRegion texPaletta;
 	public TextureRegion texSlot;
 	public TextureRegion texLavagna;
 	public TextureRegion texLavagnaProf;
 	public TextureRegion texTitlePlayer;
 	public TextureRegion texTitleFinish;
+	public TextureRegion texCloud;
 	
 	// Costruttore
 	private Resource() {
@@ -106,7 +117,7 @@ public class Resource {
 	public void loadResources(BrainGameLite game) {
 		this.mGame = game;
 		
-		this.mDone = Resource.instance().getSound("ok");
+		this.mDone = Resource.instance().getSound("done");
 		this.mFail = Resource.instance().getSound("fail");
 		
 		// color
@@ -130,6 +141,7 @@ public class Resource {
     	this.texSplash = getTexture(512, 1024, "splash");
     	this.texQuad = getTexture(512, 512, "quad"); // sommario quadrante
     	this.texQuad2 = getTexture(512, 512, "quad2");
+    	this.texPos = getTexture(64, 64, "step2"); // cubetti
     	this.texSomm = getTexture(256, 256, "somm"); // sommario piccolo
     	this.texInfo = getTexture(256, 256, "info"); // info
     	
@@ -156,10 +168,6 @@ public class Resource {
     	// context menu
     	this.fontMenu = getFont(512, 512, "akaDylan Plain", 48, 3, Color.WHITE, Color.BLACK);
     	
-    	// score
-    	this.texScore = getTexture(512, 128, "score");
-    	this.fontScore = getFont(512, 512, "akaDylan Plain", 33, 3, Color.WHITE, Color.BLACK);
-    	
     	// score layer
     	this.fontTime = getFont("akaDylan Plain", 30, 3, Color.WHITE, Color.BLACK);
     	this.texStep = getTexture(64, 64, "step1");
@@ -171,6 +179,21 @@ public class Resource {
     	this.texBox = getTexture(128, 128, "box");
     	this.fontBox = getFont("akaDylan Plain", 48, 4, Color.WHITE, Color.BLACK);
     	
+    	// mem sequence
+    	this.fontLook = getFont("akaDylan Plain", 38, 3, Color.WHITE, Color.BLACK);
+    	this.texSlot = getTexture(128, 128, "slot");
+    	this.fontSeqNum1 = getFont("akaDylan Plain", 48, 4, Color.WHITE, Color.BLACK);
+    	this.fontSeqNum2 = getFont(512, 512, "akaDylan Plain", 75, 4, Color.WHITE, Color.BLACK);
+    	this.fontSeqNote1 = getFont("akaDylan Plain", 43, 4, Color.WHITE, Color.BLACK);
+    	this.fontSeqNote2 = getFont(512, 512, "akaDylan Plain", 51, 4, Color.WHITE, Color.BLACK);
+    	
+    	// catch elem
+    	this.fontCatch = getFont("akaDylan Plain", 38, 3, Color.WHITE, Color.BLACK);
+    	this.texArrow = getTexture(128, 128, "arrow");
+    	this.texPaletta = getTexture(128, 128, "paletta");
+    	this.texTubo = getTexture(128, 128, "tubo");
+    	this.texTubo2 = getTexture(128, 32, "tubo2");
+    	
     	// count down ballon
     	this.fontCount = getFont("akaDylan Plain", 38, 3, Color.WHITE, Color.BLACK);
     	this.texBalloon = getTexture(256, 256, "balloon");
@@ -180,6 +203,10 @@ public class Resource {
     	this.fontFind = getFont("akaDylan Plain", 38, 3, Color.WHITE, Color.BLACK);
     	this.texTazza = getTexture(128, 128, "tazza");
     	this.texShadow = getTexture(128, 64, "shadow");
+    	
+    	// fly ball
+    	this.fontBall = getFont("akaDylan Plain", 32, 3, Color.WHITE, Color.BLACK);
+    	this.texCloud = getTexture(256, 128, "cloud");
 	}
 	
 	public float[][] getColor() {

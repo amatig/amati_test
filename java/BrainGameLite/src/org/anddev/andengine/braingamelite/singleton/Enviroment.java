@@ -12,23 +12,35 @@ You should have received a copy of the GNU General Public License along with thi
 
 package org.anddev.andengine.braingamelite.singleton;
 
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.anddev.andengine.braingamelite.BrainGameLite;
 import org.anddev.andengine.braingamelite.layer.ScoreLayer;
+import org.anddev.andengine.braingamelite.scene.CatchElement;
 import org.anddev.andengine.braingamelite.scene.CountDown;
 import org.anddev.andengine.braingamelite.scene.End;
+import org.anddev.andengine.braingamelite.scene.FlyBall;
+import org.anddev.andengine.braingamelite.scene.MemSequence;
 import org.anddev.andengine.braingamelite.scene.MemShuffle;
 import org.anddev.andengine.braingamelite.scene.Start;
 import org.anddev.andengine.braingamelite.scene.SumBox;
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.entity.scene.Scene;
 
+import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
+
+import com.openfeint.api.OpenFeint;
+import com.openfeint.api.OpenFeintDelegate;
+import com.openfeint.api.OpenFeintSettings;
+import com.openfeint.api.resource.Leaderboard;
+import com.openfeint.api.resource.Score;
 
 public class Enviroment {
 	public static final int CAMERA_WIDTH = 480;
@@ -108,42 +120,51 @@ public class Enviroment {
 		this.mMiniGameScene = new int[NUMMINIGAME];
 		
 		getEngine().enableVibrator(this.mGame);
-		this.mAudioManager = (AudioManager) this.mGame.getSystemService(Service.AUDIO_SERVICE); 
-	}
-	
-	public void setDBValue(String key, int value) {
-		this.mScoreDbEditor.putInt(key, value);
-		this.mScoreDbEditor.commit();
-	}
-	
-	public int getDBValue(String key) {
-		return this.mScoreDb.getInt(key, 0);
+		this.mAudioManager = (AudioManager) this.mGame.getSystemService(Service.AUDIO_SERVICE);
+		
+		Map<String, Object> options = new HashMap<String, Object>();
+        options.put(OpenFeintSettings.SettingCloudStorageCompressionStrategy, OpenFeintSettings.CloudStorageCompressionStrategyDefault);
+        // use the below line to set orientation
+        options.put(OpenFeintSettings.RequestedOrientation, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		OpenFeintSettings settings = new OpenFeintSettings("BrainGameLite", "65oDEKQO5acTLj6ql9hfA", "oKqSm3PcDNxSVbJiUi5X7NLqfgLP02Z7QkCmxf0", "294813", options);
+        
+        OpenFeint.initialize(this.mGame, settings, new OpenFeintDelegate() { });
 	}
 	
 	public void addScore(int value) {
-		LinkedList<Integer> temp = new LinkedList<Integer>();
-		for (int i = 0; i < 10; i++) {
-			int time = getDBValue(Integer.toString(i));
-			if (time != 0)
-				temp.add(new Integer(time));
-		}
-		temp.add(new Integer(value));
-		Collections.sort(temp);
-		for (int i = 0; i < temp.size(); i++)
-			setDBValue(Integer.toString(i), temp.get(i));
+		Score s = new Score((long)value, null); // Second parameter is null to indicate that custom display text is not used.
+		Leaderboard l = null;
+		if (this.mDifficultStart == 0)
+			l = new Leaderboard("756276");
+		else if (this.mDifficultStart == 1)
+			l = new Leaderboard("756286");
+		else
+			l = new Leaderboard("756296");
+		s.submitTo(l, new Score.SubmitToCB() {
+			@Override public void onSuccess(boolean newHighScore) {
+				// sweet, score posted
+				getGame().setResult(Activity.RESULT_OK);
+				//getGame().finish();
+			}
+			
+			@Override public void onFailure(String exceptionMessage) {
+				getGame().setResult(Activity.RESULT_CANCELED);
+				//getGame().finish();
+			}
+		});
 	}
 	
 	public void reInitVariables() {
-		this.mMiniGameScene[0] = 4;
-		this.mMiniGameScene[1] = 1;
-		this.mMiniGameScene[2] = 5;
-		this.mMiniGameScene[3] = 4;
-		this.mMiniGameScene[4] = 1;
-		this.mMiniGameScene[5] = 5;
-		this.mMiniGameScene[6] = 4;
-		this.mMiniGameScene[7] = 1;
-		this.mMiniGameScene[8] = 5;
-		this.mMiniGameScene[9] = 4;
+		this.mMiniGameScene[0] = 1;
+		this.mMiniGameScene[1] = 2;
+		this.mMiniGameScene[2] = 3;
+		this.mMiniGameScene[3] = 1;
+		this.mMiniGameScene[4] = 2;
+		this.mMiniGameScene[5] = 3;
+		this.mMiniGameScene[6] = 1;
+		this.mMiniGameScene[7] = 2;
+		this.mMiniGameScene[8] = 3;
+		this.mMiniGameScene[9] = 1;
 		
 		this.mCurrenteMiniGame = -1;
 		this.mDifficult = 0;
@@ -201,9 +222,12 @@ public class Enviroment {
 			else
 				scene = new End();
 			break;
-		case 1: scene = new SumBox(null, 0); break;
-		case 4: scene = new CountDown(null, null); break;
-		case 5: scene = new MemShuffle(null, null, null); break;
+		case 2: scene = new SumBox(null, 0); break;
+		//case 2: scene = new MemSequence(null); break;
+		//case 3: scene = new CatchElement(null); break;
+		case 1: scene = new CountDown(null, null); break;
+		case 3: scene = new MemShuffle(null, null, null); break;
+		//case 6: scene = new FlyBall(null, 0); break;
 		}
 		setScene(scene);
 	}

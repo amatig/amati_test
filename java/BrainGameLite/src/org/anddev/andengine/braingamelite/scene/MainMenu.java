@@ -24,6 +24,8 @@ import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.input.touch.TouchEvent;
 
+import com.openfeint.api.ui.Dashboard;
+
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
@@ -119,7 +121,7 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 		} else if ((int)item.getY() == 422 + 70) {
 			Enviroment.instance().setScene(new Start());
 		} else if ((int)item.getY() == 422 + 140) {
-			Enviroment.instance().setScene(new Score());
+			Dashboard.open();
 		}
 	}
 	
