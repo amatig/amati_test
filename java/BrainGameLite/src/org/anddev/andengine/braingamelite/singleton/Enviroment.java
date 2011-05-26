@@ -13,16 +13,12 @@ You should have received a copy of the GNU General Public License along with thi
 package org.anddev.andengine.braingamelite.singleton;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import org.anddev.andengine.braingamelite.BrainGameLite;
 import org.anddev.andengine.braingamelite.layer.ScoreLayer;
-import org.anddev.andengine.braingamelite.scene.CatchElement;
 import org.anddev.andengine.braingamelite.scene.CountDown;
 import org.anddev.andengine.braingamelite.scene.End;
-import org.anddev.andengine.braingamelite.scene.FlyBall;
-import org.anddev.andengine.braingamelite.scene.MemSequence;
 import org.anddev.andengine.braingamelite.scene.MemShuffle;
 import org.anddev.andengine.braingamelite.scene.Start;
 import org.anddev.andengine.braingamelite.scene.SumBox;
@@ -132,7 +128,7 @@ public class Enviroment {
 	}
 	
 	public void addScore(int value) {
-		Score s = new Score((long)value, null); // Second parameter is null to indicate that custom display text is not used.
+		Score s = new Score((long)value, toTime(value)); // Second parameter is null to indicate that custom display text is not used.
 		Leaderboard l = null;
 		if (this.mDifficultStart == 0)
 			l = new Leaderboard("756276");

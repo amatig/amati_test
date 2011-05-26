@@ -24,11 +24,11 @@ import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.input.touch.TouchEvent;
 
-import com.openfeint.api.ui.Dashboard;
-
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
+
+import com.openfeint.api.ui.Dashboard;
 
 public class MainMenu extends Scene implements IOnAreaTouchListener {
 	private MySound mDone;
