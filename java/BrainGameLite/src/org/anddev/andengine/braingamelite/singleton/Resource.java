@@ -272,11 +272,11 @@ public class Resource {
 		((MyScene) Enviroment.instance().getScene()).getGameLayer().attachChild(trueSprite);
 		
 		this.mDone.play();
-		Enviroment.instance().getScoreLayer().nextStep(); // pallino del livello
+		StoreMyData.instance().getScoreLayer().nextStep(); // pallino del livello
 		if (Enviroment.instance().getCurrentPlayer() == 1)
-			Enviroment.instance().setTimeP1(Enviroment.instance().getScoreLayer().getTime());
+			StoreMyData.instance().setTimeP1(StoreMyData.instance().getScoreLayer().getTime());
 		else
-			Enviroment.instance().setTimeP2(Enviroment.instance().getScoreLayer().getTime());
+			StoreMyData.instance().setTimeP2(StoreMyData.instance().getScoreLayer().getTime());
 		
 		Enviroment.instance().getScene().registerUpdateHandler(new TimerHandler(1.5f, false, new ITimerCallback() {
 			@Override
@@ -300,9 +300,9 @@ public class Resource {
 		this.mFail.play();
 		Enviroment.instance().vibrate();
 		if (Enviroment.instance().getCurrentPlayer() == 1)
-			Enviroment.instance().incErrorP1();
+			StoreMyData.instance().incErrorP1();
 		else
-			Enviroment.instance().incErrorP2();
+			StoreMyData.instance().incErrorP2();
 		
 		Enviroment.instance().getScene().registerUpdateHandler(new TimerHandler(1.5f, false, new ITimerCallback() {
 			@Override

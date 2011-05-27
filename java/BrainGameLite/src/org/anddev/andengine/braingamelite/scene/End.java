@@ -14,6 +14,7 @@ package org.anddev.andengine.braingamelite.scene;
 
 import org.anddev.andengine.braingamelite.singleton.Enviroment;
 import org.anddev.andengine.braingamelite.singleton.Resource;
+import org.anddev.andengine.braingamelite.singleton.StoreMyData;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
@@ -62,13 +63,13 @@ public class End extends Scene implements IOnSceneTouchListener {
     		int lose = p2;
     		int y_info = 130;
         	
-    		if (Enviroment.instance().getTimeP1() > Enviroment.instance().getTimeP2()) {
+    		if (StoreMyData.instance().getTimeP1() > StoreMyData.instance().getTimeP2()) {
     			adjust1 = -10;
     			adjust2 = -7;
     			win = p2 - 15;
     			lose = p1;
-    		} else if (Enviroment.instance().getTimeP1() == Enviroment.instance().getTimeP2()) {
-    			if (Enviroment.instance().getErrorP1() > Enviroment.instance().getErrorP2()) {
+    		} else if (StoreMyData.instance().getTimeP1() == StoreMyData.instance().getTimeP2()) {
+    			if (StoreMyData.instance().getErrorP1() > StoreMyData.instance().getErrorP2()) {
     				adjust1 = -10;
         			adjust2 = -7;
     				win = p2 - 15;
@@ -115,10 +116,12 @@ public class End extends Scene implements IOnSceneTouchListener {
     		);
     	}
     	
-    	Enviroment.instance().addScore(Enviroment.instance().getTimeP1());
-    	String time1 = Enviroment.toTime(Enviroment.instance().getTimeP1());
+    	// ADD SCORE
+    	StoreMyData.instance().addScore(1, StoreMyData.instance().getTimeP1());
+    	
+    	String time1 = Enviroment.toTime(StoreMyData.instance().getTimeP1());
     	Text timeP1 = new Text(60, 254 + adjust1, Resource.instance().fontTimeP1, time1);
-    	Text errorP1 = new Text(60, 324 + adjust1, Resource.instance().fontErrorP1, Integer.toString(Enviroment.instance().getErrorP1()) + " Err");
+    	Text errorP1 = new Text(60, 324 + adjust1, Resource.instance().fontErrorP1, Integer.toString(StoreMyData.instance().getErrorP1()) + " Err");
     	
     	getLastChild().attachChild(timeP1);
     	getLastChild().attachChild(errorP1);
@@ -140,10 +143,12 @@ public class End extends Scene implements IOnSceneTouchListener {
 		getLastChild().attachChild(lp1);
     	
     	if (Enviroment.instance().getNumPlayers() == 2) {
-    		Enviroment.instance().addScore(Enviroment.instance().getTimeP2());
-    		String time2 = Enviroment.toTime(Enviroment.instance().getTimeP2());
+    		// ADD SCORE
+    		StoreMyData.instance().addScore(2, StoreMyData.instance().getTimeP2());
+    		
+    		String time2 = Enviroment.toTime(StoreMyData.instance().getTimeP2());
         	Text timeP2 = new Text(60, 475 + adjust2, Resource.instance().fontTimeP2, time2);
-        	Text errorP2 = new Text(60, 545 + adjust2, Resource.instance().fontErrorP2, Integer.toString(Enviroment.instance().getErrorP2()) + " Err");
+        	Text errorP2 = new Text(60, 545 + adjust2, Resource.instance().fontErrorP2, Integer.toString(StoreMyData.instance().getErrorP2()) + " Err");
         	
         	getLastChild().attachChild(timeP2);
         	getLastChild().attachChild(errorP2);

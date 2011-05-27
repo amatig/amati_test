@@ -17,6 +17,7 @@ import org.anddev.andengine.braingamelite.layer.FadeLayer;
 import org.anddev.andengine.braingamelite.layer.ScoreLayer;
 import org.anddev.andengine.braingamelite.singleton.Enviroment;
 import org.anddev.andengine.braingamelite.singleton.Resource;
+import org.anddev.andengine.braingamelite.singleton.StoreMyData;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.layer.Layer;
@@ -36,7 +37,7 @@ public class MyScene extends Scene implements IOnAreaTouchListener  {
 		attachChild(new Layer());
 		attachChild(new Layer());
 		attachChild(new Layer());
-		attachChild(Enviroment.instance().getScoreLayer());
+		attachChild(StoreMyData.instance().getScoreLayer());
 		attachChild(new FadeLayer());
 		
 		registerUpdateHandler(new TimerHandler(1f, true, new ITimerCallback() {

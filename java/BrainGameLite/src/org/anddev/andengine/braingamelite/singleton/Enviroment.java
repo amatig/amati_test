@@ -12,31 +12,20 @@ You should have received a copy of the GNU General Public License along with thi
 
 package org.anddev.andengine.braingamelite.singleton;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.anddev.andengine.braingamelite.BrainGameLite;
-import org.anddev.andengine.braingamelite.layer.ScoreLayer;
+import org.anddev.andengine.braingamelite.scene.CatchElement;
 import org.anddev.andengine.braingamelite.scene.CountDown;
 import org.anddev.andengine.braingamelite.scene.End;
+import org.anddev.andengine.braingamelite.scene.FlyBall;
+import org.anddev.andengine.braingamelite.scene.MemSequence;
 import org.anddev.andengine.braingamelite.scene.MemShuffle;
 import org.anddev.andengine.braingamelite.scene.Start;
 import org.anddev.andengine.braingamelite.scene.SumBox;
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.entity.scene.Scene;
 
-import android.app.Activity;
 import android.app.Service;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.media.AudioManager;
-
-import com.openfeint.api.OpenFeint;
-import com.openfeint.api.OpenFeintDelegate;
-import com.openfeint.api.OpenFeintSettings;
-import com.openfeint.api.resource.Leaderboard;
-import com.openfeint.api.resource.Score;
 
 public class Enviroment {
 	public static final int CAMERA_WIDTH = 480;
@@ -46,7 +35,6 @@ public class Enviroment {
 	
 	// data utils
 	private BrainGameLite mGame = null;
-	private ScoreLayer mScoreLayer = null;
 	
 	// mini game vars
 	private int[] mMiniGameScene;
@@ -57,12 +45,6 @@ public class Enviroment {
 	private int mCurrentPlayer = 1;
 	private int mNumPlayers = 1;
 	
-	// stats
-	private int mErrorPlayer1 = 0;
-	private int mErrorPlayer2 = 0;
-	private int mTimePlayer1 = 0;
-	private int mTimePlayer2 = 0;
-	
 	// seting global
 	private int mDifficult = 0;  // 0 Easy 1 Normal 2 Hard
 	private int mDifficultStart = 0;
@@ -70,10 +52,6 @@ public class Enviroment {
 	private boolean mVibro = true;
 	
 	private AudioManager mAudioManager;
-	
-	// store date
-	private SharedPreferences mScoreDb;
-	private SharedPreferences.Editor mScoreDbEditor;
 	
 	// Costruttore
 	private Enviroment() {
@@ -102,52 +80,17 @@ public class Enviroment {
 		return m + ":" + s;
 	}
 	
-	public void loadVariables(BrainGameLite game) {
+	public void initVariables(BrainGameLite game) {
 		this.mGame = game;
 		
-		// init db
-		this.mScoreDb = this.mGame.getSharedPreferences("BrainGameData", Context.MODE_PRIVATE);
-		this.mScoreDbEditor = this.mScoreDb.edit();
-		
-		this.mAudio = this.mScoreDb.getBoolean("audio", true);
-		this.mVibro = this.mScoreDb.getBoolean("vibro", true);
+		this.mAudio = StoreMyData.instance().getDBValue("audio", true);
+		this.mVibro = StoreMyData.instance().getDBValue("vibro", true);
 		
 		// minigame
 		this.mMiniGameScene = new int[NUMMINIGAME];
 		
 		getEngine().enableVibrator(this.mGame);
 		this.mAudioManager = (AudioManager) this.mGame.getSystemService(Service.AUDIO_SERVICE);
-		
-		Map<String, Object> options = new HashMap<String, Object>();
-        options.put(OpenFeintSettings.SettingCloudStorageCompressionStrategy, OpenFeintSettings.CloudStorageCompressionStrategyDefault);
-        // use the below line to set orientation
-        options.put(OpenFeintSettings.RequestedOrientation, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		OpenFeintSettings settings = new OpenFeintSettings("BrainGameLite", "65oDEKQO5acTLj6ql9hfA", "oKqSm3PcDNxSVbJiUi5X7NLqfgLP02Z7QkCmxf0", "294813", options);
-        
-        OpenFeint.initialize(this.mGame, settings, new OpenFeintDelegate() { });
-	}
-	
-	public void addScore(int value) {
-		Score s = new Score((long)value, toTime(value)); // Second parameter is null to indicate that custom display text is not used.
-		Leaderboard l = null;
-		if (this.mDifficultStart == 0)
-			l = new Leaderboard("756276");
-		else if (this.mDifficultStart == 1)
-			l = new Leaderboard("756286");
-		else
-			l = new Leaderboard("756296");
-		s.submitTo(l, new Score.SubmitToCB() {
-			@Override public void onSuccess(boolean newHighScore) {
-				// sweet, score posted
-				getGame().setResult(Activity.RESULT_OK);
-				//getGame().finish();
-			}
-			
-			@Override public void onFailure(String exceptionMessage) {
-				getGame().setResult(Activity.RESULT_CANCELED);
-				//getGame().finish();
-			}
-		});
 	}
 	
 	public void reInitVariables() {
@@ -167,10 +110,6 @@ public class Enviroment {
 		this.mDifficultStart = 0;
 		this.mCurrentPlayer = 1;
 		this.mNumPlayers = 1;
-		this.mErrorPlayer1 = 0;
-		this.mErrorPlayer2 = 0;
-		this.mTimePlayer1 = 0;
-		this.mTimePlayer2 = 0;
 	}
 	
 	public AudioManager getAudioManager() {
@@ -184,15 +123,6 @@ public class Enviroment {
 	public Engine getEngine() {
 		return this.mGame.getEngine();
 	}
-	
-	public void createScoreLayer() {
-		// need clean object layer....
-		this.mScoreLayer = new ScoreLayer();
-	}
-	
-	public ScoreLayer getScoreLayer() {
-        return this.mScoreLayer;
-	}
 		
 	public Scene getScene() {
 		return this.mGame.getEngine().getScene();
@@ -201,6 +131,16 @@ public class Enviroment {
 	public void setScene(Scene scene) {
 		// need clean object old scene
 		this.mGame.getEngine().setScene(scene);
+	}
+	
+	public int nextMiniGame() {
+		this.mCurrenteMiniGame += 1;
+		if (this.mCurrenteMiniGame < NUMMINIGAME)
+			return this.mMiniGameScene[this.mCurrenteMiniGame];
+		else {
+			this.mCurrenteMiniGame = -1;
+			return 0;
+		}
 	}
 	
 	public void nextScene() {
@@ -219,79 +159,21 @@ public class Enviroment {
 				scene = new End();
 			break;
 		case 2: scene = new SumBox(null, 0); break;
-		//case 2: scene = new MemSequence(null); break;
-		//case 3: scene = new CatchElement(null); break;
+		case 4: scene = new MemSequence(null); break;
+		case 5: scene = new CatchElement(null); break;
 		case 1: scene = new CountDown(null, null); break;
 		case 3: scene = new MemShuffle(null, null, null); break;
-		//case 6: scene = new FlyBall(null, 0); break;
+		case 6: scene = new FlyBall(null, 0); break;
 		}
 		setScene(scene);
 	}
 	
-	public void incErrorP1() {
-		this.mErrorPlayer1 += 1;
-	}
-	
-	public void incErrorP2() {
-		this.mErrorPlayer2 += 1;
-	}
-	
-	public int getErrorP1() {
-		return this.mErrorPlayer1;
-	}
-	
-	public int getErrorP2() {
-		return this.mErrorPlayer2;
-	}
-	
-	public void setTimeP1(int time) {
-		this.mTimePlayer1 = time;
-	}
-	
-	public void setTimeP2(int time) {
-		this.mTimePlayer2 = time;
-	}
-	
-	public int getTimeP1() {
-		return this.mTimePlayer1;
-	}
-	
-	public int getTimeP2() {
-		return this.mTimePlayer2;
-	}
-	
-	public boolean getAudio() {
-		return this.mAudio;
-	}
-	
-	public void toggleAudio() {
-		this.mAudio = !(this.mAudio);
-		this.mScoreDbEditor.putBoolean("audio", this.mAudio);
-		this.mScoreDbEditor.commit();
-	}
-	
-	public boolean getVibro() {
-		return this.mVibro;
-	}
-	
-	public void toggleVibro() {
-		this.mVibro = !(this.mVibro);
-		this.mScoreDbEditor.putBoolean("vibro", this.mVibro);
-		this.mScoreDbEditor.commit();
-	}
-	
-	public void vibrate() {
-		int mode = this.mAudioManager.getRingerMode();
-		if (mode >= AudioManager.RINGER_MODE_VIBRATE && this.mVibro) {
-			try {
-				getEngine().vibrate(500);
-			} catch (Exception e) {
-			}
-		}
-	}
-	
 	public int getDifficult() {
 		return this.mDifficult;
+	}
+	
+	public int getDifficultStart() {
+		return this.mDifficultStart;
 	}
 	
 	public void toggleDifficult() {
@@ -325,13 +207,31 @@ public class Enviroment {
 			this.mNumPlayers = 1;
 	}
 	
-	public int nextMiniGame() {
-		this.mCurrenteMiniGame += 1;
-		if (this.mCurrenteMiniGame < NUMMINIGAME)
-			return this.mMiniGameScene[this.mCurrenteMiniGame];
-		else {
-			this.mCurrenteMiniGame = -1;
-			return 0;
+	public boolean getAudio() {
+		return this.mAudio;
+	}
+	
+	public void toggleAudio() {
+		this.mAudio = !(this.mAudio);
+		StoreMyData.instance().setDBValue("audio", this.mAudio);
+	}
+	
+	public boolean getVibro() {
+		return this.mVibro;
+	}
+	
+	public void toggleVibro() {
+		this.mVibro = !(this.mVibro);
+		StoreMyData.instance().setDBValue("vibro", this.mVibro);
+	}
+	
+	public void vibrate() {
+		int mode = this.mAudioManager.getRingerMode();
+		if (mode >= AudioManager.RINGER_MODE_VIBRATE && this.mVibro) {
+			try {
+				getEngine().vibrate(500);
+			} catch (Exception e) {
+			}
 		}
 	}
 	

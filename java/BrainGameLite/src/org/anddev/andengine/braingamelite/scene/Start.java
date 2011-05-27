@@ -14,6 +14,7 @@ package org.anddev.andengine.braingamelite.scene;
 
 import org.anddev.andengine.braingamelite.singleton.Enviroment;
 import org.anddev.andengine.braingamelite.singleton.Resource;
+import org.anddev.andengine.braingamelite.singleton.StoreMyData;
 import org.anddev.andengine.braingamelite.util.MyChangeableText;
 import org.anddev.andengine.braingamelite.util.MySound;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
@@ -36,7 +37,7 @@ public class Start extends Scene implements IOnAreaTouchListener {
 	
 	public Start() {
 		super(1);
-		Enviroment.instance().createScoreLayer(); // create new score
+		StoreMyData.instance().createScoreLayer(); // create new score
 		
 		this.mBeep = Resource.instance().getSound("beep");
 		

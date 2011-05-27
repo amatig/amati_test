@@ -16,6 +16,7 @@ import org.anddev.andengine.braingamelite.menu.GameMenu;
 import org.anddev.andengine.braingamelite.scene.MainMenu;
 import org.anddev.andengine.braingamelite.singleton.Enviroment;
 import org.anddev.andengine.braingamelite.singleton.Resource;
+import org.anddev.andengine.braingamelite.singleton.StoreMyData;
 import org.anddev.andengine.braingamelite.util.MyScene;
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.engine.camera.Camera;
@@ -45,7 +46,8 @@ public class BrainGameLite extends BaseGameActivity {
 	
 	public void onLoadResources() {
 		Resource.instance().loadResources(this);
-		Enviroment.instance().loadVariables(this); // setta tutto per iniziare
+		StoreMyData.instance().initVariables(this);
+		Enviroment.instance().initVariables(this); // setta tutto per iniziare
 	}
 	
 	public Scene onLoadScene() {
