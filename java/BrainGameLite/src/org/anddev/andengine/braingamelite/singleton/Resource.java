@@ -269,7 +269,7 @@ public class Resource {
 		trueSprite.registerEntityModifier(
 				new ScaleModifier(0.2f, 0f, 1.0f)
 		);
-		((MyScene) Enviroment.instance().getScene()).getGameLayer().attachChild(trueSprite);
+		((MyScene) Enviroment.instance().getScene()).getExtraGameLayer().attachChild(trueSprite);
 		
 		this.mDone.play();
 		StoreMyData.instance().getScoreLayer().nextStep(); // pallino del livello
@@ -295,7 +295,7 @@ public class Resource {
 		falseSprite.registerEntityModifier(
                 new ScaleModifier(0.2f, 0f, 1.0f)
 		);
-		((MyScene) Enviroment.instance().getScene()).getGameLayer().attachChild(falseSprite);
+		((MyScene) Enviroment.instance().getScene()).getExtraGameLayer().attachChild(falseSprite);
 		
 		this.mFail.play();
 		Enviroment.instance().vibrate();

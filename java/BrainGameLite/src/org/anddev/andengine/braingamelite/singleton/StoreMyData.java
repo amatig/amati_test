@@ -125,6 +125,7 @@ public class StoreMyData {
 		}
 		submitScore(level, value);
 		
+		// OBIETTIVI
 		if (getDBValue(nw, true)) {
 			if (player == 1 && this.mErrorPlayer1 == 0)
 				unlockObj(nw);
@@ -138,20 +139,24 @@ public class StoreMyData {
 				unlockObj(hb);
 		}
 		
-		if (getDBValue(simple, true) && getDBValue(simple + "_counter", 0) >= 10)
-			unlockObj(simple);
-		else
-			setDBValue(simple + "_counter", getDBValue(simple + "_counter", 0) + 1);
-		
-		if (getDBValue(hyper, true) && getDBValue(hyper + "_counter", 0) >= 30)
-			unlockObj(hyper);
-		else
-			setDBValue(hyper + "_counter", getDBValue(hyper + "_counter", 0) + 1);
-		
-		if (getDBValue(insane, true) && getDBValue(insane + "_counter", 0) >= 50)
-			unlockObj(insane);
-		else
-			setDBValue(insane + "_counter", getDBValue(insane + "_counter", 0) + 1);
+		if (getDBValue(simple, true)) { 
+			if (getDBValue(simple + "_counter", 0) >= 20)
+				unlockObj(simple);
+			else
+				setDBValue(simple + "_counter", getDBValue(simple + "_counter", 0) + 1);
+		}
+		if (getDBValue(hyper, true)) {
+			if (getDBValue(hyper + "_counter", 0) >= 50)
+				unlockObj(hyper);
+			else
+				setDBValue(hyper + "_counter", getDBValue(hyper + "_counter", 0) + 1);
+		}
+		if (getDBValue(insane, true)) {
+			if (getDBValue(insane + "_counter", 0) >= 100)
+				unlockObj(insane);
+			else
+				setDBValue(insane + "_counter", getDBValue(insane + "_counter", 0) + 1);
+		}
 	}
 	
 	private void submitScore(String leaderID, int value) {
