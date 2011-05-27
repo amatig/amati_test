@@ -19,18 +19,17 @@ import org.anddev.andengine.braingamelite.util.MyChangeableText;
 import org.anddev.andengine.braingamelite.util.MySound;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
-import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
 import org.anddev.andengine.entity.modifier.MoveXModifier;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
 import org.anddev.andengine.entity.modifier.SequenceEntityModifier;
 import org.anddev.andengine.entity.scene.Scene;
-import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
+import org.anddev.andengine.entity.scene.Scene.IOnSceneTouchListener;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.Text;
 import org.anddev.andengine.input.touch.TouchEvent;
 
-public class Start extends Scene implements IOnAreaTouchListener {
+public class Start extends Scene implements IOnSceneTouchListener {
 	private int mTimeRemaining;
 	private MyChangeableText mText;
 	private MySound mBeep;
@@ -83,47 +82,28 @@ public class Start extends Scene implements IOnAreaTouchListener {
 		);
     	getLastChild().attachChild(info);
     	
-		Text startText = new Text(49, 375, Resource.instance().fontStart, "Go");
-		/*startText.registerEntityModifier(
-				new LoopEntityModifier(
-						null, 
-						-1, 
-						null,
-						new SequenceEntityModifier(
-								new ScaleModifier(0.3f, 1f, 1.3f),
-								new ScaleModifier(0.3f, 1.3f, 1f)
-						)
-				)
-		);*/
-		getLastChild().attachChild(startText);
-		registerTouchArea(startText); // reg touch
+    	this.mTimeRemaining = 3;
+    	this.mText = new MyChangeableText(65, 350, Resource.instance().fontCountDown, Integer.toString(Start.this.mTimeRemaining), 1);
+    	this.mText.registerEntityModifier(
+				new ScaleModifier(0.3f, 0f, 1f)
+		);
+		getLastChild().attachChild(this.mText);
 		
-		setOnAreaTouchListener(this);
+		setOnSceneTouchListener(this);
 	}
 	
 	@Override
-	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, ITouchArea pTouchArea, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		if (pSceneTouchEvent.isActionDown()) {
-			manageTouch(pTouchArea);
+			manageTouch(pSceneTouchEvent);
 			return true;
 		}
 		return false;
 	}
 	
-	public void manageTouch(ITouchArea pTouchArea) {
-		IEntity startText = (IEntity)pTouchArea;
-		unregisterTouchArea(pTouchArea);
-		getLastChild().detachChild(startText);
+	private void manageTouch(TouchEvent pSceneTouchEvent) {
+		setOnSceneTouchListener(null);
 		
-		Start.this.mBeep.play();
-    	this.mTimeRemaining = 3;
-    	
-    	this.mText = new MyChangeableText(65, 350, Resource.instance().fontCountDown, Integer.toString(Start.this.mTimeRemaining), 1);
-    	this.mText.registerEntityModifier(
-				new ScaleModifier(0.3f, 0f, 1f)
-		);
-    	getLastChild().attachChild(this.mText);
-    	
     	registerUpdateHandler(new TimerHandler(1f, true, new ITimerCallback() {
     		@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {

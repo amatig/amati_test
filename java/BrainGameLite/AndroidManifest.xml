@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionName="1.2.7" android:versionCode="10" package="org.anddev.andengine.braingamelite">
+      android:versionName="1.2.8" android:versionCode="11" package="org.anddev.andengine.braingamelite">
 
 <uses-permission android:name="android.permission.VIBRATE" />
 <uses-permission android:name="android.permission.INTERNET" />
