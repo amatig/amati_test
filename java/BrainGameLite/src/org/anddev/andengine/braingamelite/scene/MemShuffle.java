@@ -135,7 +135,7 @@ public class MemShuffle extends MyScene {
 		}
 		
 		Sprite quad = new Sprite(21, 133, Resource.instance().texQuad2);
-    	Text look = new Text(90, 23, Resource.instance().fontFind, "Find balls");
+    	Text look = new Text(88, 23, Resource.instance().fontFind, "Find balls");
 		quad.attachChild(look);
 		getGameLayer().attachChild(quad);
 	}
@@ -144,13 +144,13 @@ public class MemShuffle extends MyScene {
 		// show ball
 		for (int i = 0; i < this.mNum; i++) {
 			final IEntity tazza = getGameLayer().getChild(i).getLastChild();
-			tazza.registerUpdateHandler(new TimerHandler(1f, false, new ITimerCallback() {
+			tazza.registerUpdateHandler(new TimerHandler(0.5f, false, new ITimerCallback() {
 				@Override
 				public void onTimePassed(TimerHandler pTimerHandler) {
 					tazza.registerEntityModifier(new MoveYModifier(0.4f, tazza.getY(), tazza.getY() - 52f));
 				}
 			}));
-			tazza.registerUpdateHandler(new TimerHandler(4f, false, new ITimerCallback() {
+			tazza.registerUpdateHandler(new TimerHandler(1.6f, false, new ITimerCallback() {
 				@Override
 				public void onTimePassed(TimerHandler pTimerHandler) {
 					tazza.registerEntityModifier(new MoveYModifier(0.4f, tazza.getY(), tazza.getY() + 52f));
@@ -159,10 +159,10 @@ public class MemShuffle extends MyScene {
 		}
 		
 		for (int i = 0; i < this.mListShuffleA.size(); i++) {
-			registerUpdateHandler(new TimerHandler(5f + i, false, new ITimerCallback() {
+			registerUpdateHandler(new TimerHandler(2.6f + i, false, new ITimerCallback() {
 				@Override
 				public void onTimePassed(TimerHandler pTimerHandler) {
-					int pos = (int)pTimerHandler.getTimerSeconds() - 5;
+					int pos = (int)(pTimerHandler.getTimerSeconds() - 2.5f);
 					MemShuffle.this.shuffle(pos);
 					if (pos == MemShuffle.this.mListShuffleA.size() - 1)
 						MemShuffle.this.finish();

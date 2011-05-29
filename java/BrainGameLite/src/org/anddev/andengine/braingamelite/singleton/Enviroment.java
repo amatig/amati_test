@@ -13,11 +13,8 @@ You should have received a copy of the GNU General Public License along with thi
 package org.anddev.andengine.braingamelite.singleton;
 
 import org.anddev.andengine.braingamelite.BrainGameLite;
-import org.anddev.andengine.braingamelite.scene.CatchElement;
 import org.anddev.andengine.braingamelite.scene.CountDown;
 import org.anddev.andengine.braingamelite.scene.End;
-import org.anddev.andengine.braingamelite.scene.FlyBall;
-import org.anddev.andengine.braingamelite.scene.MemSequence;
 import org.anddev.andengine.braingamelite.scene.MemShuffle;
 import org.anddev.andengine.braingamelite.scene.Start;
 import org.anddev.andengine.braingamelite.scene.SumBox;
@@ -159,11 +156,8 @@ public class Enviroment {
 				scene = new End();
 			break;
 		case 2: scene = new SumBox(null, 0); break;
-		case 4: scene = new MemSequence(null); break;
-		case 5: scene = new CatchElement(null); break;
 		case 1: scene = new CountDown(null, null); break;
 		case 3: scene = new MemShuffle(null, null, null); break;
-		case 6: scene = new FlyBall(null, 0); break;
 		}
 		setScene(scene);
 	}

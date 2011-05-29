@@ -83,7 +83,7 @@ public class Start extends Scene implements IOnSceneTouchListener {
     	getLastChild().attachChild(info);
     	
     	this.mTimeRemaining = 3;
-    	this.mText = new MyChangeableText(65, 350, Resource.instance().fontCountDown, Integer.toString(Start.this.mTimeRemaining), 1);
+    	this.mText = new MyChangeableText(61, 348, Resource.instance().fontCountDown, Integer.toString(Start.this.mTimeRemaining), 1);
     	this.mText.registerEntityModifier(
 				new ScaleModifier(0.3f, 0f, 1f)
 		);
@@ -108,13 +108,15 @@ public class Start extends Scene implements IOnSceneTouchListener {
     		@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				Start.this.mTimeRemaining--;
-				if (Start.this.mTimeRemaining == 0)
+				if (Start.this.mTimeRemaining == -1)
 					Enviroment.instance().nextScene();
 				else {
 					Start.this.mBeep.play();
 					Start.this.mText.setText(Integer.toString(Start.this.mTimeRemaining));
 					if (Start.this.mTimeRemaining == 1)
-						Start.this.mText.setPosition(Start.this.mText.getX() + 30, Start.this.mText.getY() + 10); // fix num 1
+						Start.this.mText.setPosition(Start.this.mText.getX() + 30, Start.this.mText.getY() + 13); // fix num 1
+					if (Start.this.mTimeRemaining == 0)
+						Start.this.mText.setPosition(Start.this.mText.getX() - 30, Start.this.mText.getY() - 12); // fix num 0
 					Start.this.mText.registerEntityModifier(
 							new ScaleModifier(0.3f, 0f, 1f)
 					);

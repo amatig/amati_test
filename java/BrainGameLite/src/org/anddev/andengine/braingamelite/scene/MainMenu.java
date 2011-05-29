@@ -16,13 +16,16 @@ import org.anddev.andengine.braingamelite.singleton.Enviroment;
 import org.anddev.andengine.braingamelite.singleton.Resource;
 import org.anddev.andengine.braingamelite.util.MyChangeableText;
 import org.anddev.andengine.braingamelite.util.MySound;
+import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
 import org.anddev.andengine.entity.modifier.SequenceEntityModifier;
+import org.anddev.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.input.touch.TouchEvent;
+import org.anddev.andengine.util.modifier.IModifier;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -68,7 +71,7 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
     	score.setPosition(x - score.getWidthScaled() / 2, y + 140);
     	score.setColor(1.0f, 1.0f, 0.6f);
     	
-    	MyChangeableText player= new MyChangeableText(0, 0, Resource.instance().fontMainMenu, "FULL VERSION", 12);
+    	MyChangeableText player= new MyChangeableText(0, 0, Resource.instance().fontMainMenu, "FULL VERS.", 10);
     	player.setPosition(x - player.getWidthScaled() / 2, y + 210);
     	player.setColor(1.0f, 1.0f, 0.6f);
     	
@@ -88,9 +91,23 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 	}
 	
 	@Override
-	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, ITouchArea pTouchArea, float pTouchAreaLocalX, float pTouchAreaLocalY) {
+	public boolean onAreaTouched(TouchEvent pSceneTouchEvent, final ITouchArea pTouchArea, float pTouchAreaLocalX, float pTouchAreaLocalY) {
 		if (pSceneTouchEvent.isActionDown()) {
-			manageTouch(pTouchArea);
+			final MyChangeableText item = (MyChangeableText) pTouchArea;
+			item.setColor(1f, 0.7f, 0.7f);
+			this.mDone.play();
+			item.registerEntityModifier(
+					new SequenceEntityModifier(
+							new IEntityModifierListener() {
+								@Override
+								public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+									item.setColor(1.0f, 1.0f, 0.6f);
+									MainMenu.this.manageTouch(pTouchArea);
+								}
+							},
+							new ScaleModifier(0.1f, 1f, 1.3f),
+							new ScaleModifier(0.1f, 1.3f, 1f)
+			));
 			return true;
 		}
 		return false;
@@ -98,12 +115,6 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 	
 	private void manageTouch(ITouchArea pTouchArea) {
 		MyChangeableText item = (MyChangeableText) pTouchArea;
-		this.mDone.play();
-		item.registerEntityModifier(
-				new SequenceEntityModifier(
-						new ScaleModifier(0.1f, 1f, 1.3f),
-						new ScaleModifier(0.1f, 1.3f, 1f)
-		));
 		if ((int)item.getY() == 422) {
 			Enviroment.instance().toggleDifficult();
 			if (Enviroment.instance().getDifficult() == 0)

@@ -22,8 +22,6 @@ import org.anddev.andengine.braingamelite.singleton.Resource;
 import org.anddev.andengine.braingamelite.util.MyChangeableText;
 import org.anddev.andengine.braingamelite.util.MyScene;
 import org.anddev.andengine.braingamelite.util.MySound;
-import org.anddev.andengine.engine.handler.timer.ITimerCallback;
-import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
 import org.anddev.andengine.entity.modifier.RotationModifier;
 import org.anddev.andengine.entity.modifier.SequenceEntityModifier;
@@ -68,7 +66,7 @@ public class CountDown extends MyScene {
     	
         // base
     	Shape ground = new Rectangle(0, Enviroment.CAMERA_HEIGHT, Enviroment.CAMERA_WIDTH, 0);
-		Shape roof = new Rectangle(0, 70, Enviroment.CAMERA_WIDTH, 0);
+		Shape roof = new Rectangle(0, 90, Enviroment.CAMERA_WIDTH, 0);
 		Shape left = new Rectangle(0, 0, 0, Enviroment.CAMERA_HEIGHT);
 		Shape right = new Rectangle(Enviroment.CAMERA_WIDTH, 0, 0, Enviroment.CAMERA_HEIGHT);
 		
@@ -124,7 +122,7 @@ public class CountDown extends MyScene {
     	
     	// label
     	Sprite quad = new Sprite(21, 133, Resource.instance().texQuad2);
-    	Text look = new Text(30, 23, Resource.instance().fontCount, "Small to large");
+    	Text look = new Text(28, 23, Resource.instance().fontCount, "Small to large");
 		quad.attachChild(look);
 		getGameLayer().attachChild(quad);
 		
@@ -133,15 +131,15 @@ public class CountDown extends MyScene {
 	}
 	
 	public void start() {
-		registerUpdateHandler(new TimerHandler(1f, false, new ITimerCallback() {
-			@Override
-			public void onTimePassed(TimerHandler pTimerHandler) {
+		//registerUpdateHandler(new TimerHandler(0.5f, false, new ITimerCallback() {
+		//	@Override
+		//	public void onTimePassed(TimerHandler pTimerHandler) {
 				// add balloon
 				for (int i = 0; i < CountDown.this.mListValue.size(); i++)
 					addBalloon(CountDown.this.mListValue.get(i).doubleValue(), i);				
-			}
+		//	}
 			
-		}));
+		//}));
 	}
 	
 	private void addBalloon(double value, int pos) {

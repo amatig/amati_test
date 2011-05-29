@@ -31,6 +31,8 @@ public class End extends Scene implements IOnSceneTouchListener {
 	
 	public End() {
 		super(1);
+		int leftx = 57;
+		
 		Sprite back = new Sprite(0, 0, Resource.instance().texBack2);
 		getLastChild().attachChild(back);
 		Sprite ptitle = new Sprite(17, 62, Resource.instance().texTitleFinish);
@@ -120,8 +122,8 @@ public class End extends Scene implements IOnSceneTouchListener {
     	StoreMyData.instance().addScore(1, StoreMyData.instance().getTimeP1());
     	
     	String time1 = Enviroment.toTime(StoreMyData.instance().getTimeP1());
-    	Text timeP1 = new Text(60, 254 + adjust1, Resource.instance().fontTimeP1, time1);
-    	Text errorP1 = new Text(60, 324 + adjust1, Resource.instance().fontErrorP1, Integer.toString(StoreMyData.instance().getErrorP1()) + " Err");
+    	Text timeP1 = new Text(leftx, 254 + adjust1, Resource.instance().fontTimeP1, time1);
+    	Text errorP1 = new Text(leftx, 324 + adjust1, Resource.instance().fontErrorP1, Integer.toString(StoreMyData.instance().getErrorP1()) + " Err");
     	
     	getLastChild().attachChild(timeP1);
     	getLastChild().attachChild(errorP1);
@@ -147,8 +149,8 @@ public class End extends Scene implements IOnSceneTouchListener {
     		StoreMyData.instance().addScore(2, StoreMyData.instance().getTimeP2());
     		
     		String time2 = Enviroment.toTime(StoreMyData.instance().getTimeP2());
-        	Text timeP2 = new Text(60, 475 + adjust2, Resource.instance().fontTimeP2, time2);
-        	Text errorP2 = new Text(60, 545 + adjust2, Resource.instance().fontErrorP2, Integer.toString(StoreMyData.instance().getErrorP2()) + " Err");
+        	Text timeP2 = new Text(leftx, 475 + adjust2, Resource.instance().fontTimeP2, time2);
+        	Text errorP2 = new Text(leftx, 545 + adjust2, Resource.instance().fontErrorP2, Integer.toString(StoreMyData.instance().getErrorP2()) + " Err");
         	
         	getLastChild().attachChild(timeP2);
         	getLastChild().attachChild(errorP2);

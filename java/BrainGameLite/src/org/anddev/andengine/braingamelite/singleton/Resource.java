@@ -263,7 +263,7 @@ public class Resource {
 	public void done() {
 		Enviroment.instance().getScene().setOnAreaTouchListener(null);
 		
-		Sprite trueSprite = new Sprite(90, 250, Resource.instance().texTrue);
+		Sprite trueSprite = new Sprite(85, 250, Resource.instance().texTrue);
 		trueSprite.setAlpha(0.8f);
 		
 		trueSprite.registerEntityModifier(
@@ -289,7 +289,7 @@ public class Resource {
 	public void fail(final MyScene scene) {
 		Enviroment.instance().getScene().setOnAreaTouchListener(null);
 		
-		Sprite falseSprite = new Sprite(90, 250, Resource.instance().texFalse);
+		Sprite falseSprite = new Sprite(85, 250, Resource.instance().texFalse);
 		falseSprite.setAlpha(0.8f);
 		
 		falseSprite.registerEntityModifier(

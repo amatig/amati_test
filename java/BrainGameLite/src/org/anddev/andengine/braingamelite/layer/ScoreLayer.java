@@ -35,7 +35,7 @@ public class ScoreLayer extends Layer {
 			attachChild(step);
 		}
 		
-		this.mTimeText = new MyChangeableText(21, 75, Resource.instance().fontTime, "00:00", 5);
+		this.mTimeText = new MyChangeableText(20, 75, Resource.instance().fontTime, "00:00", 5);
 		this.mTimeText.setColor(1.0f, 1.0f, 1.0f);
 		attachChild(this.mTimeText);
 	}
