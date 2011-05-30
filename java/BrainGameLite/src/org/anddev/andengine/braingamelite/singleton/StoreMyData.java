@@ -164,35 +164,39 @@ public class StoreMyData {
 	}
 	
 	private void submitScore(String leaderID, int value) {
-		Score s = new Score((long)value, Enviroment.toTime(value));
-		Leaderboard l = new Leaderboard(leaderID);
-		s.submitTo(l, new Score.SubmitToCB() {
-			@Override public void onSuccess(boolean newHighScore) {
-				StoreMyData.this.mGame.setResult(Activity.RESULT_OK);
-				//getGame().finish();
-			}
+		try {
+			Score s = new Score((long)value, Enviroment.toTime(value));
+			Leaderboard l = new Leaderboard(leaderID);
+			s.submitTo(l, new Score.SubmitToCB() {
+				@Override public void onSuccess(boolean newHighScore) {
+					StoreMyData.this.mGame.setResult(Activity.RESULT_OK);
+				}
+				
+				@Override public void onFailure(String exceptionMessage) {
+					StoreMyData.this.mGame.setResult(Activity.RESULT_CANCELED);
+				}
+			});
+		} catch (Exception e) {
 			
-			@Override public void onFailure(String exceptionMessage) {
-				StoreMyData.this.mGame.setResult(Activity.RESULT_CANCELED);
-				//getGame().finish();
-			}
-		});
+		}
 	}
 	
 	private void unlockObj(final String objID) {
-		new Achievement(objID).unlock(new Achievement.UnlockCB () {
-			@Override
-			public void onSuccess(boolean newUnlock) {
-				StoreMyData.this.setDBValue(objID, false);
-				StoreMyData.this.mGame.setResult(Activity.RESULT_OK);
-				//MyClass.this.finish();
-			}
-
-			@Override public void onFailure(String exceptionMessage) {
-				StoreMyData.this.mGame.setResult(Activity.RESULT_CANCELED);
-				//MyClass.this.finish();
-			}
-		});
+		try {
+			new Achievement(objID).unlock(new Achievement.UnlockCB () {
+				@Override
+				public void onSuccess(boolean newUnlock) {
+					StoreMyData.this.setDBValue(objID, false);
+					StoreMyData.this.mGame.setResult(Activity.RESULT_OK);
+				}
+				
+				@Override public void onFailure(String exceptionMessage) {
+					StoreMyData.this.mGame.setResult(Activity.RESULT_CANCELED);
+				}
+			});
+		} catch (Exception e) {
+			
+		}
 	}
 	
 	public void createScoreLayer() {
