@@ -64,13 +64,17 @@ public class StoreMyData {
 		this.mScoreDb = this.mGame.getSharedPreferences("BrainGameData", Context.MODE_PRIVATE);
 		this.mScoreDbEditor = this.mScoreDb.edit();
 		
-		Map<String, Object> options = new HashMap<String, Object>();
-        options.put(OpenFeintSettings.SettingCloudStorageCompressionStrategy, OpenFeintSettings.CloudStorageCompressionStrategyDefault);
-        // use the below line to set orientation
-        options.put(OpenFeintSettings.RequestedOrientation, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        OpenFeintSettings settings = new OpenFeintSettings("BrainGameLite", "65oDEKQO5acTLj6ql9hfA", "oKqSm3PcDNxSVbJiUi5X7NLqfgLP02Z7QkCmxf0", "294813", options);
-        
-        OpenFeint.initialize(this.mGame, settings, new OpenFeintDelegate() { });
+		try {
+			Map<String, Object> options = new HashMap<String, Object>();
+			options.put(OpenFeintSettings.SettingCloudStorageCompressionStrategy, OpenFeintSettings.CloudStorageCompressionStrategyDefault);
+			// use the below line to set orientation
+			options.put(OpenFeintSettings.RequestedOrientation, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+			OpenFeintSettings settings = new OpenFeintSettings("BrainGameLite", "65oDEKQO5acTLj6ql9hfA", "oKqSm3PcDNxSVbJiUi5X7NLqfgLP02Z7QkCmxf0", "294813", options);
+			
+			OpenFeint.initialize(this.mGame, settings, new OpenFeintDelegate() { });
+		} catch (Exception e) {
+			
+		}
 	}
 	
 	public void reInitVariables() {

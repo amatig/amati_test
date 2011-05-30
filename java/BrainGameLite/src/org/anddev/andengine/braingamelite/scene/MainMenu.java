@@ -17,10 +17,10 @@ import org.anddev.andengine.braingamelite.singleton.Resource;
 import org.anddev.andengine.braingamelite.util.MyChangeableText;
 import org.anddev.andengine.braingamelite.util.MySound;
 import org.anddev.andengine.entity.IEntity;
+import org.anddev.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
 import org.anddev.andengine.entity.modifier.SequenceEntityModifier;
-import org.anddev.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.sprite.Sprite;
@@ -132,7 +132,11 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 		} else if ((int)item.getY() == 422 + 70) {
 			Enviroment.instance().setScene(new Start());
 		} else if ((int)item.getY() == 422 + 140) {
-			Dashboard.open();
+			try {
+				Dashboard.open();
+			} catch (Exception e) {
+			
+			}
 		}
 	}
 	
