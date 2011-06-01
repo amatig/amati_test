@@ -30,6 +30,7 @@ import org.anddev.andengine.entity.modifier.ScaleModifier;
 import org.anddev.andengine.entity.modifier.SequenceEntityModifier;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.Text;
+import org.anddev.andengine.util.MathUtils;
 import org.anddev.andengine.util.modifier.IModifier;
 
 public class MemShuffle extends MyScene {
@@ -73,7 +74,7 @@ public class MemShuffle extends MyScene {
     	if (aListValue == null) {
 			this.mListValue = new LinkedList<Integer>();
 			while (this.mListValue.size() < this.mRemain) {
-				Integer pos = new Integer(Enviroment.random(0, this.mNum - 1));			
+				Integer pos = new Integer(MathUtils.random(0, this.mNum - 1));			
 				if (!this.mListValue.contains(pos))
 					this.mListValue.add(pos); // per non far ripetere un random dei pallini
 			}
@@ -112,7 +113,7 @@ public class MemShuffle extends MyScene {
 			this.mListShuffleB = new LinkedList<Integer>();
 			
 			for (int i = 0; i < this.mNum + 1; i++) {
-				int pos = Enviroment.random(0, this.mNum - 1);
+				int pos = MathUtils.random(0, this.mNum - 1);
 				int next_pos = near(pos);
 				this.mListShuffleA.add(listElem.get(pos));
 				this.mListShuffleB.add(listElem.get(next_pos));
@@ -203,7 +204,7 @@ public class MemShuffle extends MyScene {
 			if (pos != i && Math.abs(x1 - x2) <= 1 && Math.abs(y1 - y2) <= 1)
 				temp.add(new Integer(i));
 		}
-		int rand = Enviroment.random(0, temp.size() - 1);
+		int rand = MathUtils.random(0, temp.size() - 1);
 		return temp.get(rand).intValue();
 	}
 	

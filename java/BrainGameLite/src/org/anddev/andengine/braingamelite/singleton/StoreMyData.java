@@ -17,6 +17,7 @@ import java.util.Map;
 
 import org.anddev.andengine.braingamelite.BrainGameLite;
 import org.anddev.andengine.braingamelite.layer.ScoreLayer;
+import org.anddev.andengine.util.TimeUtils;
 
 import android.app.Activity;
 import android.content.Context;
@@ -165,7 +166,7 @@ public class StoreMyData {
 	
 	private void submitScore(String leaderID, int value) {
 		try {
-			Score s = new Score((long)value, Enviroment.toTime(value));
+			Score s = new Score((long)value, TimeUtils.formatSeconds(value));
 			Leaderboard l = new Leaderboard(leaderID);
 			s.submitTo(l, new Score.SubmitToCB() {
 				@Override public void onSuccess(boolean newHighScore) {

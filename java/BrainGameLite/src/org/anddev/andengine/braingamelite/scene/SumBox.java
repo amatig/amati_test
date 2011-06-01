@@ -25,6 +25,7 @@ import org.anddev.andengine.extension.physics.box2d.PhysicsConnector;
 import org.anddev.andengine.extension.physics.box2d.PhysicsFactory;
 import org.anddev.andengine.extension.physics.box2d.PhysicsWorld;
 import org.anddev.andengine.extension.physics.box2d.util.Vector2Pool;
+import org.anddev.andengine.util.MathUtils;
 
 import android.hardware.SensorManager;
 
@@ -73,7 +74,7 @@ public class SumBox extends MyScene {
     		this.mListValue = new LinkedList<Integer>();
     		
     		for (int i = 1; i <= this.mNum; i++) {
-    			int value = Enviroment.random(1, 9); // numeri da 1 a 9
+    			int value = MathUtils.random(1, 9); // numeri da 1 a 9
     			this.mListValue.add(new Integer(value));
     			this.mSumListValue.add(new Integer(value));
     		}
@@ -86,9 +87,9 @@ public class SumBox extends MyScene {
     	
     	if (aSum == 0) {
     		LinkedList<Integer> temp = new LinkedList<Integer>(); // for sum
-    		int to_remove = Enviroment.random(1, this.mNum - 3);
+    		int to_remove = MathUtils.random(1, this.mNum - 3);
     		while (temp.size() < (this.mListValue.size() - to_remove)) {
-    			Integer index = new Integer(Enviroment.random(0, this.mListValue.size() - 1));
+    			Integer index = new Integer(MathUtils.random(0, this.mListValue.size() - 1));
     			if (!temp.contains(index))
     				temp.add(index);
     		}

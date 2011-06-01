@@ -32,6 +32,7 @@ import org.anddev.andengine.entity.text.Text;
 import org.anddev.andengine.extension.physics.box2d.PhysicsConnector;
 import org.anddev.andengine.extension.physics.box2d.PhysicsFactory;
 import org.anddev.andengine.extension.physics.box2d.PhysicsWorld;
+import org.anddev.andengine.util.MathUtils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -92,17 +93,17 @@ public class CountDown extends MyScene {
     			double value = 0.0;
     			double real_value = 0.0;
     			if (Enviroment.instance().getDifficult() == 2) {
-    				double value1 = (double)Enviroment.random(1, 9); // numeri da 1 a 9
+    				double value1 = (double)MathUtils.random(1, 9); // numeri da 1 a 9
     				double value2 = 0.0;
     				while (value2 == 0.0 || value2 == value1)
-    					value2 = (double)Enviroment.random(1, 9); // numeri da 1 a 9
+    					value2 = (double)MathUtils.random(1, 9); // numeri da 1 a 9
     				value = value1 + value2 * 0.1;
     				real_value = value1 / value2;
     			} else {
-    				value = (double)Enviroment.random(0, 99); // numeri da 0, 99
+    				value = (double)MathUtils.random(0, 99); // numeri da 0, 99
     				real_value = value;
     			}
-    			int sign = Enviroment.random(0, 2);
+    			int sign = MathUtils.random(0, 2);
     			if (sign == 1) {
     				value *= -1.0;
     				real_value *= -1.0;
@@ -143,12 +144,12 @@ public class CountDown extends MyScene {
 	}
 	
 	private void addBalloon(double value, int pos) {
-		Sprite ball = new Sprite(Enviroment.random(80, 120), 100 + (pos + 1) * 50, Resource.instance().texBalloon);
+		Sprite ball = new Sprite(MathUtils.random(80, 120), 100 + (pos + 1) * 50, Resource.instance().texBalloon);
 		
 		float[][] color = Resource.instance().getColor();;
 		ball.setColor(color[pos][0], color[pos][1], color[pos][2]);
     	float verso = 1f;
-    	if (Enviroment.random(0, 1) == 1)
+    	if (MathUtils.random(0, 1) == 1)
     		verso = -1.0f;
     	ball.registerEntityModifier(
 				new LoopEntityModifier(
@@ -157,7 +158,7 @@ public class CountDown extends MyScene {
 						null,
 						new SequenceEntityModifier(
 								new RotationModifier(
-										20f + Enviroment.random(0, 20), 
+										20f + MathUtils.random(0, 20), 
 										0f, 
 										360f * verso)
 						)
@@ -199,11 +200,11 @@ public class CountDown extends MyScene {
 		label.setScale(size);
 		ball.attachChild(label);
 		
-		ball.setScale((float)Enviroment.random(45, 100) / 100f);
+		ball.setScale((float)MathUtils.random(45, 100) / 100f);
 		
     	FixtureDef objectFixtureDef = PhysicsFactory.createFixtureDef(1, 0.5f, 0f);
     	Body bodyBox = PhysicsFactory.createCircleBody(this.mPhysicsWorld, ball, BodyType.DynamicBody, objectFixtureDef);
-    	bodyBox.applyLinearImpulse(new Vector2(Enviroment.random(0, 1) * verso, -5), bodyBox.getPosition()); // spinta per animare
+    	bodyBox.applyLinearImpulse(new Vector2(MathUtils.random(0, 1) * verso, -5), bodyBox.getPosition()); // spinta per animare
     	
     	this.mPhysicsWorld.registerPhysicsConnector(new PhysicsConnector(ball, bodyBox, true, true)); // false update la rotazione
     	

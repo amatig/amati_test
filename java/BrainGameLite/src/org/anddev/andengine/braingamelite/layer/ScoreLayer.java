@@ -19,6 +19,7 @@ import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
 import org.anddev.andengine.entity.sprite.Sprite;
+import org.anddev.andengine.util.TimeUtils;
 
 public class ScoreLayer extends Layer {
 	private static int SPACE = 45;
@@ -56,7 +57,7 @@ public class ScoreLayer extends Layer {
 	
 	public void updateTime() {
 		this.mTime += 1;
-		this.mTimeText.setText(Enviroment.toTime(this.mTime));
+		this.mTimeText.setText(TimeUtils.formatSeconds(this.mTime));
 	}
 	
 }

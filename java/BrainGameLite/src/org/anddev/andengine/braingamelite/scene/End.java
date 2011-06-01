@@ -26,6 +26,7 @@ import org.anddev.andengine.entity.scene.Scene.IOnSceneTouchListener;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.Text;
 import org.anddev.andengine.input.touch.TouchEvent;
+import org.anddev.andengine.util.TimeUtils;
 
 public class End extends Scene implements IOnSceneTouchListener {
 	
@@ -121,7 +122,7 @@ public class End extends Scene implements IOnSceneTouchListener {
     	// ADD SCORE
     	StoreMyData.instance().addScore(1, StoreMyData.instance().getTimeP1());
     	
-    	String time1 = Enviroment.toTime(StoreMyData.instance().getTimeP1());
+    	String time1 = TimeUtils.formatSeconds(StoreMyData.instance().getTimeP1());
     	Text timeP1 = new Text(leftx, 254 + adjust1, Resource.instance().fontTimeP1, time1);
     	Text errorP1 = new Text(leftx, 324 + adjust1, Resource.instance().fontErrorP1, Integer.toString(StoreMyData.instance().getErrorP1()) + " Err");
     	
@@ -148,7 +149,7 @@ public class End extends Scene implements IOnSceneTouchListener {
     		// ADD SCORE
     		StoreMyData.instance().addScore(2, StoreMyData.instance().getTimeP2());
     		
-    		String time2 = Enviroment.toTime(StoreMyData.instance().getTimeP2());
+    		String time2 = TimeUtils.formatSeconds(StoreMyData.instance().getTimeP2());
         	Text timeP2 = new Text(leftx, 475 + adjust2, Resource.instance().fontTimeP2, time2);
         	Text errorP2 = new Text(leftx, 545 + adjust2, Resource.instance().fontErrorP2, Integer.toString(StoreMyData.instance().getErrorP2()) + " Err");
         	

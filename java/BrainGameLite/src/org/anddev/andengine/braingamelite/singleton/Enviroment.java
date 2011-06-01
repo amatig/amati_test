@@ -25,6 +25,7 @@ import android.app.Service;
 import android.media.AudioManager;
 
 public class Enviroment {
+	
 	public static final int CAMERA_WIDTH = 480;
     public static final int CAMERA_HEIGHT = 720;
     
@@ -35,16 +36,16 @@ public class Enviroment {
 	
 	// mini game vars
 	private int[] mMiniGameScene;
-	private int mCurrenteMiniGame = -1;
 	public static int NUMMINIGAME = 10;
 	
+	private int mCurrenteMiniGame = -1;
+	// seting global
+	private int mDifficult = 0;  // 0 Easy 1 Normal 2 Hard
+	private int mDifficultStart = 0;
 	// player vars
 	private int mCurrentPlayer = 1;
 	private int mNumPlayers = 1;
 	
-	// seting global
-	private int mDifficult = 0;  // 0 Easy 1 Normal 2 Hard
-	private int mDifficultStart = 0;
 	private boolean mAudio = true;
 	private boolean mVibro = true;
 	
@@ -59,22 +60,6 @@ public class Enviroment {
 		if (mInstance == null) 
 			mInstance = new Enviroment();
 		return mInstance;
-	}
-	
-	public static int random(int min, int max) {
-		int range = max - min + 1;
-    	int value = (int)(range * Math.random()) + min;
-    	return value;
-	}
-	
-	public static String toTime(int time) {
-		String m = Integer.toString((int)(time / 60));
-		if (m.length() < 2)
-			m = "0" + m;
-		String s = Integer.toString(time % 60);
-		if (s.length() < 2)
-			s = "0" + s;
-		return m + ":" + s;
 	}
 	
 	public void initVariables(BrainGameLite game) {
