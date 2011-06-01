@@ -1,14 +1,12 @@
 package org.prova;
 
 import org.anddev.andengine.engine.Engine;
-import org.anddev.andengine.engine.camera.Camera;
-import org.anddev.andengine.engine.options.EngineOptions;
 import org.anddev.andengine.engine.options.EngineOptions.ScreenOrientation;
-import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.anddev.andengine.entity.scene.Scene;
-import org.anddev.andengine.extra.ExtGameActivity;
+import org.anddev.andengine.extra.Enviroment;
+import org.anddev.andengine.extra.ExtraGameActivity;
 
-public class Prova extends ExtGameActivity {
+public class Prova extends ExtraGameActivity {
 	
 	private static int WIDTH = 480;
 	private static int HEIGHT = 720;
@@ -21,11 +19,7 @@ public class Prova extends ExtGameActivity {
 
 	@Override
 	public Engine onLoadEngine() {
-		Camera camera = new Camera(0, 0, WIDTH, HEIGHT);
-		EngineOptions engineOptions = new EngineOptions(true, ScreenOrientation.PORTRAIT, new RatioResolutionPolicy(WIDTH, HEIGHT), camera);
-		engineOptions.setNeedsSound(true);
-		engineOptions.getTouchOptions().setRunOnUpdateThread(true);
-		return new Engine(engineOptions);
+	    return Enviroment.createEngine(ScreenOrientation.PORTRAIT, WIDTH, HEIGHT, true);
 	}
 
 	@Override

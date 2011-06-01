@@ -4,16 +4,16 @@ import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.primitive.Rectangle;
 import org.anddev.andengine.extra.Enviroment;
-import org.anddev.andengine.extra.ExtScene;
+import org.anddev.andengine.extra.ExtraScene;
 import org.anddev.andengine.input.touch.TouchEvent;
 
-public class Scene1 extends ExtScene {
+public class Scene1 extends ExtraScene {
 
 	@Override
 	public void createScene() {
 		Rectangle rec = new Rectangle(0, 0, Enviroment.getInstance().getScreenWidth(), Enviroment.getInstance().getScreenHeight());
 		rec.setColor(1f, 0f, 0f);
-		getFirstChild().attachChild(rec);
+		getChild(ExtraScene.BACKGROUND_LAYER).attachChild(rec);
 	}
 
 	@Override
