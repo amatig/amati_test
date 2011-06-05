@@ -9,13 +9,17 @@ import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.modifier.MoveYModifier;
 import org.anddev.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
+import org.anddev.andengine.entity.scene.menu.MenuScene;
+import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.Text;
+import org.anddev.andengine.extra.Enviroment;
 import org.anddev.andengine.extra.ExtraScene;
 import org.anddev.andengine.extra.Resource;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
+import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.anddev.andengine.util.MathUtils;
 import org.anddev.andengine.util.modifier.IModifier;
 
@@ -29,33 +33,37 @@ public class Game extends ExtraScene {
 	
 	private TextureRegion mHole;
 	private TextureRegion mHoleFront;
-	private TextureRegion mWorm;
-	private TextureRegion mBird1;
-	private TextureRegion mBird2;
+	private TiledTextureRegion mWorm1;
+	private TiledTextureRegion mBird1;
+	private TiledTextureRegion mBird2;
 	private TextureRegion mShadow;
-	private TextureRegion mClickColor;
 	
-	private Sprite mSpriteBird1;
-	private Sprite mSpriteBird2;
+	private AnimatedSprite mSpriteBird1;
+	private AnimatedSprite mSpriteBird2;
 	
 	private Font mFont1;
+	
+	private GameMenu mMenu;
 	
 	@Override
 	public void createScene() {
 		setBackground(new ColorBackground(0.603921569f, 0.909803922f, 0.337254902f));
     	
-		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 20, 1, Color.WHITE, Color.BLACK);
+		this.mMenu = new GameMenu();
 		
-		this.mClickColor = Resource.getTexture(64, 64, "color");
+		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 20, 2, Color.WHITE, Color.BLACK);
+		
 		this.mShadow = Resource.getTexture(64, 32, "shadow");
-		this.mBird1 = Resource.getTexture(64, 64, "bird1");
-		this.mBird2 = Resource.getTexture(64, 64, "bird2");
-		this.mWorm = Resource.getTexture(64, 64, "worm");
+		this.mBird1 = Resource.getTexture(128, 64, "bird1", 2, 1);
+		this.mBird2 = Resource.getTexture(128, 64, "bird2", 2, 1);
+		this.mWorm1 = Resource.getTexture(128, 64, "worm1", 2, 1);
 		this.mHole = Resource.getTexture(128, 128, "hole_back");
 		this.mHoleFront = Resource.getTexture(128, 128, "hole");
 		
-		this.mSpriteBird1 = new Sprite(0, -21, this.mBird1);
-		this.mSpriteBird2 = new Sprite(0, -21, this.mBird2);
+		this.mSpriteBird1 = new AnimatedSprite(0, -21, this.mBird1);
+		this.mSpriteBird2 = new AnimatedSprite(0, -21, this.mBird2);
+		this.mSpriteBird1.animate(6000);
+		this.mSpriteBird2.animate(6000);
 		
 		this.mColor = new float[6][3];
     	this.mColor[0][0] = 1.0f; this.mColor[0][1] = 0.3f; this.mColor[0][2] = 0.3f;
@@ -76,7 +84,7 @@ public class Game extends ExtraScene {
     	
     	// create scene
 		int space_x = 33;
-		int space_y = 45;
+		int space_y = 43;
 		
 		for (int i = 0; i < 40; i++) {
 			int x = i % 4;
@@ -90,9 +98,7 @@ public class Game extends ExtraScene {
 			if (x == 0) {
 				Text num = new Text(h.getX() - 23, h.getY() - 11, this.mFont1, Integer.toString(10 - y));
 				getChild(ExtraScene.EXTRA_GAME_LAYER).attachChild(num);
-			}
-			
-			if (x == 3) {
+			} else if (x == 3) {
 				Entity pos = new Entity();
 				pos.setPosition(h.getX() + 109, h.getY() - 8);
 				pos.attachChild(new Sprite(0, 0, this.mShadow));
@@ -103,35 +109,24 @@ public class Game extends ExtraScene {
 			}
 		}
 		
-		int adjust = 28;
-		int space = 73; 
-		int pos_y = 665;
+		int adjust = -15;
+		int space = 81; 
+		int pos_y = 695;
 		
-		Sprite color1 = new Sprite(adjust + 0 * space, pos_y, this.mClickColor);
-		color1.setColor(this.mColor[0][0], this.mColor[0][1], this.mColor[0][2]);
-		registerTouchArea(color1);
-		Sprite color2 = new Sprite(adjust + 1 * space, pos_y, this.mClickColor);
-		color2.setColor(this.mColor[1][0], this.mColor[1][1], this.mColor[1][2]);
-		registerTouchArea(color2);
-		Sprite color3 = new Sprite(adjust + 2 * space, pos_y, this.mClickColor);
-		color3.setColor(this.mColor[2][0], this.mColor[2][1], this.mColor[2][2]);
-		registerTouchArea(color3);
-		Sprite color4 = new Sprite(adjust + 3 * space, pos_y, this.mClickColor);
-		color4.setColor(this.mColor[3][0], this.mColor[3][1], this.mColor[3][2]);
-		registerTouchArea(color4);
-		Sprite color5 = new Sprite(adjust + 4 * space, pos_y, this.mClickColor);
-		color5.setColor(this.mColor[4][0], this.mColor[4][1], this.mColor[4][2]);
-		registerTouchArea(color5);
-		Sprite color6 = new Sprite(adjust + 5 * space, pos_y, this.mClickColor);
-		color6.setColor(this.mColor[5][0], this.mColor[5][1], this.mColor[5][2]);
-		registerTouchArea(color6);
-		
-		getChild(ExtraScene.GAME_LAYER).attachChild(color1);
-		getChild(ExtraScene.GAME_LAYER).attachChild(color2);
-		getChild(ExtraScene.GAME_LAYER).attachChild(color3);
-		getChild(ExtraScene.GAME_LAYER).attachChild(color4);
-		getChild(ExtraScene.GAME_LAYER).attachChild(color5);
-		getChild(ExtraScene.GAME_LAYER).attachChild(color6);
+		for (int i = 0; i < 6; i++) {
+			Sprite h = new Sprite(adjust + i * space, pos_y, this.mHole);
+			h.attachChild(new Entity());
+			Sprite hf = new Sprite(0, 0, this.mHoleFront);
+			h.attachChild(hf);
+			
+			AnimatedSprite color = new AnimatedSprite(27, -34, this.mWorm1);
+			color.animate(3000);
+			color.setColor(this.mColor[i][0], this.mColor[i][1], this.mColor[i][2]);
+			registerTouchArea(color);
+			
+			h.getFirstChild().attachChild(color);
+			getChild(ExtraScene.GAME_LAYER).attachChild(h);
+		}
 		
 		this.mCount = 44;
 	}
@@ -150,37 +145,79 @@ public class Game extends ExtraScene {
 	
 	@Override
 	public void manageAreaTouch(ITouchArea pTouchArea) {
+		setOnAreaTouchListener(null);
+		unregisterTouchArea(pTouchArea);
+		
 		if (this.mCount == 4) {
-			return;
+			Enviroment.getInstance().setScene(new Game());
 		}
 		
 		if (this.mCount % 4 == 0)
 			this.mCount -= 8;
 		
-		IEntity color = (IEntity) pTouchArea;
-		IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(this.mCount);
+		final IEntity color = (IEntity) pTouchArea;
 		
-		Sprite w = new Sprite(27, 10, this.mWorm);
-		w.setColor(color.getRed(), color.getGreen(), color.getBlue());
-		h.getFirstChild().attachChild(w);
-		w.registerEntityModifier(new MoveYModifier(0.3f, w.getY(), w.getY() - 44f));
-		
-		this.mCount += 1;
-		checkRow(this.mCount);
+		color.registerEntityModifier(
+				new MoveYModifier(0.3f, color.getY(), color.getY() + 44f, new IEntityModifierListener() {
+					@Override
+					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+						Game.this.pop(color);
+					}
+				})
+		);
 	}
 	
+	private void pop(final IEntity color){
+		registerUpdateHandler(new TimerHandler(0.6f, false, new ITimerCallback() {
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(Game.this.mCount);
+				
+				AnimatedSprite w = new AnimatedSprite(27, 10, Game.this.mWorm1);
+				w.animate(3000);
+				w.setColor(color.getRed(), color.getGreen(), color.getBlue());
+				h.getFirstChild().attachChild(w);
+				
+				Game.this.mCount += 1;
+				checkRow(Game.this.mCount);
+				
+				w.registerEntityModifier(new MoveYModifier(0.3f, w.getY(), w.getY() - 44f, new IEntityModifierListener() {
+					@Override
+					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+						Game.this.setOnAreaTouchListener(Game.this);
+						Game.this.pop2(color);
+					}
+				}));
+			}
+		}));
+	}
+	
+	private void pop2(final IEntity color) {
+		registerUpdateHandler(new TimerHandler(0.6f, false, new ITimerCallback() {
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				color.registerEntityModifier(new MoveYModifier(0.3f, color.getY(), color.getY() - 44f, new IEntityModifierListener() {
+					@Override
+					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+						Game.this.registerTouchArea((ITouchArea) color);
+					}
+				}));	
+			}
+		}));
+	}
+
 	private void checkRow(int num) {
 		if (num % 4 == 0) {
 			IEntity pos = getChild(ExtraScene.EXTRA_GAME_LAYER).getChild(num / 2 - 1);
 			
 			// check delle soluzioni
-			boolean check[] = new boolean[4];
-			check[0] = false;
-			check[1] = false;
-			check[2] = false;
-			check[3] = false;
+			boolean check1[] = new boolean[4];
+			check1[0] = false;
+			check1[1] = false;
+			check1[2] = false;
+			check1[3] = false;
 			
-			LinkedList<Sprite> slotPos = new LinkedList<Sprite>();
+			LinkedList<IEntity> slotPos = new LinkedList<IEntity>();
 			
 			for (int i = 0; i < 4; i++) {
 				IEntity w = getChild(ExtraScene.GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
@@ -190,23 +227,31 @@ public class Game extends ExtraScene {
 				
 				if (w.getRed() == r && w.getGreen() == g && w.getBlue() == b) {
 					slotPos.add(0, this.mSpriteBird2);
-					check[i] = true;
+					check1[i] = true;
 				}
 			}
 			
+			// check delle soluzioni
+			boolean check2[] = new boolean[4];
+			check2[0] = check1[0];
+			check2[1] = check1[1];
+			check2[2] = check1[2];
+			check2[3] = check1[3];
+			
 			for (int i = 0; i < 4; i++) {
-				if (check[i] == true) continue;
+				if (check1[i] == true) continue;
 				IEntity w = getChild(ExtraScene.GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
 				
 				for (int j = 0; j < 4; j++) {
-					if (check[j] == true) continue;
+					if (check2[j] == true) continue;
 					
 					float r = this.mColor[this.mListValue.get(j).intValue()][0];
 					float g = this.mColor[this.mListValue.get(j).intValue()][1];
 					float b = this.mColor[this.mListValue.get(j).intValue()][2];
-					if ((w.getRed() == r && w.getGreen() == g && w.getBlue() == b) && (check[j] == false)) {
+					if ((w.getRed() == r && w.getGreen() == g && w.getBlue() == b) && (check2[j] == false)) {
 						slotPos.add(this.mSpriteBird1);
-						check[j] = true;
+						check2[j] = true;
+						break;
 					}
 				}
 			}
@@ -226,5 +271,10 @@ public class Game extends ExtraScene {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	@Override
+	public MenuScene createMenu() {
+		return this.mMenu;
+	}
+	
 }
