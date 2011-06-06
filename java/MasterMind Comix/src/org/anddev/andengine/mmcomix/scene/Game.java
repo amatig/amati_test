@@ -222,7 +222,7 @@ public class Game extends ExtraScene {
 				if (w.getRed() == r && w.getGreen() == g && w.getBlue() == b) {
 					slotPos.add(0, this.mSpriteBird2);
 					check1[i] = true;
-					finish = (finish & check1[i]);
+					finish = (finish && check1[i]);
 				}
 			}
 			if (finish)
