@@ -163,27 +163,24 @@ public class Game extends ExtraScene {
 		registerUpdateHandler(new TimerHandler(0.3f, false, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
-				if (Game.this.mCount == 3) {
-					// Enviroment.getInstance().nextScene();
-				} else {
-					IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(Game.this.mCount);
-					
-					AnimatedSprite w = new AnimatedSprite(27, 10, Game.this.mWorm1);
-					w.animate(3000);
-					w.setColor(color.getRed(), color.getGreen(), color.getBlue());
-					h.getFirstChild().attachChild(w);
-					
-					Game.this.mCount += 1;
-					checkRow(Game.this.mCount);
-					
-					w.registerEntityModifier(new MoveYModifier(0.3f, w.getY(), w.getY() - 44f, new IEntityModifierListener() {
-						@Override
-						public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+				IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(Game.this.mCount);
+				
+				AnimatedSprite w = new AnimatedSprite(27, 10, Game.this.mWorm1);
+				w.animate(3000);
+				w.setColor(color.getRed(), color.getGreen(), color.getBlue());
+				h.getFirstChild().attachChild(w);
+				
+				Game.this.mCount += 1;
+				checkRow(Game.this.mCount);
+				
+				w.registerEntityModifier(new MoveYModifier(0.3f, w.getY(), w.getY() - 44f, new IEntityModifierListener() {
+					@Override
+					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+						if (Game.this.mCount != 4)
 							Game.this.setOnAreaTouchListener(Game.this);
-							Game.this.pop2(color);
-						}
-					}));
-				}
+						Game.this.pop2(color);
+					}
+				}));
 			}
 		}));
 	}
@@ -215,6 +212,7 @@ public class Game extends ExtraScene {
 			
 			LinkedList<IEntity> slotPos = new LinkedList<IEntity>();
 			
+			boolean finish = true;
 			for (int i = 0; i < 4; i++) {
 				IEntity w = getChild(ExtraScene.GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
 				float r = this.mColor[this.mListValue.get(i).intValue()][0];
@@ -224,8 +222,11 @@ public class Game extends ExtraScene {
 				if (w.getRed() == r && w.getGreen() == g && w.getBlue() == b) {
 					slotPos.add(0, this.mSpriteBird2);
 					check1[i] = true;
+					finish = (finish & check1[i]);
 				}
 			}
+			if (finish)
+				setOnAreaTouchListener(null);
 			
 			// check delle soluzioni
 			boolean check2[] = new boolean[4];
