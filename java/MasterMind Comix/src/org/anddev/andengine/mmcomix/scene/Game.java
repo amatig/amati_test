@@ -168,7 +168,7 @@ public class Game extends ExtraScene {
 	}
 	
 	private void pop(final IEntity color){
-		registerUpdateHandler(new TimerHandler(0.6f, false, new ITimerCallback() {
+		registerUpdateHandler(new TimerHandler(0.3f, false, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(Game.this.mCount);
@@ -193,7 +193,7 @@ public class Game extends ExtraScene {
 	}
 	
 	private void pop2(final IEntity color) {
-		registerUpdateHandler(new TimerHandler(0.6f, false, new ITimerCallback() {
+		registerUpdateHandler(new TimerHandler(0.3f, false, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				color.registerEntityModifier(new MoveYModifier(0.3f, color.getY(), color.getY() - 44f, new IEntityModifierListener() {
