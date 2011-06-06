@@ -3,6 +3,7 @@ package org.prova;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.primitive.Rectangle;
+import org.anddev.andengine.entity.scene.menu.MenuScene;
 import org.anddev.andengine.extra.Enviroment;
 import org.anddev.andengine.extra.ExtraScene;
 import org.anddev.andengine.input.touch.TouchEvent;
@@ -40,6 +41,12 @@ public class Scene1 extends ExtraScene {
 				Enviroment.getInstance().nextScene();
 			}
 		}));		
+	}
+
+	@Override
+	public MenuScene createMenu() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

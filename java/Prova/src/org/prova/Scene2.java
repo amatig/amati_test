@@ -1,6 +1,7 @@
 package org.prova;
 
 import org.anddev.andengine.entity.primitive.Rectangle;
+import org.anddev.andengine.entity.scene.menu.MenuScene;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.extra.Enviroment;
 import org.anddev.andengine.extra.ExtraScene;
@@ -48,6 +49,12 @@ public class Scene2 extends ExtraScene {
 	public void startScene() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public MenuScene createMenu() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

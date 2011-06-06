@@ -5,7 +5,7 @@ import org.anddev.andengine.engine.options.EngineOptions.ScreenOrientation;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.extra.Enviroment;
 import org.anddev.andengine.extra.ExtraGameActivity;
-import org.anddev.andengine.mmcomix.scene.Game;
+import org.anddev.andengine.mmcomix.scene.MainMenu;
 
 public class MasterMindComix extends ExtraGameActivity {
 
@@ -20,7 +20,7 @@ public class MasterMindComix extends ExtraGameActivity {
 
 	@Override
 	public Engine onLoadEngine() {
-		return Enviroment.createEngine(ScreenOrientation.PORTRAIT, WIDTH, HEIGHT, true);
+		return Enviroment.createEngine(ScreenOrientation.PORTRAIT, WIDTH, HEIGHT, false);
 	}
 
 	@Override
@@ -31,7 +31,7 @@ public class MasterMindComix extends ExtraGameActivity {
 
 	@Override
 	public Scene onLoadScene() {
-		return new Game();
+		return new MainMenu();
 	}
     
 }

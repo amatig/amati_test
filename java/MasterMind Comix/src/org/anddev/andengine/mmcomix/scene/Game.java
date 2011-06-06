@@ -43,13 +43,11 @@ public class Game extends ExtraScene {
 	
 	private Font mFont1;
 	
-	private GameMenu mMenu;
+	private GameMenu mMenu = null;
 	
 	@Override
 	public void createScene() {
 		setBackground(new ColorBackground(0.603921569f, 0.909803922f, 0.337254902f));
-    	
-		this.mMenu = new GameMenu();
 		
 		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 20, 2, Color.WHITE, Color.BLACK);
 		
@@ -133,24 +131,18 @@ public class Game extends ExtraScene {
 	
 	@Override
 	public void startScene() {
-		// TODO Auto-generated method stub
-		
+		this.mMenu = new GameMenu();
 	}
 	
 	@Override
 	public void endScene() {
-		// TODO Auto-generated method stub
-		
+		Enviroment.getInstance().setScene(new Game());
 	}
 	
 	@Override
 	public void manageAreaTouch(ITouchArea pTouchArea) {
 		setOnAreaTouchListener(null);
 		unregisterTouchArea(pTouchArea);
-		
-		if (this.mCount == 4) {
-			Enviroment.getInstance().setScene(new Game());
-		}
 		
 		if (this.mCount % 4 == 0)
 			this.mCount -= 8;
@@ -171,23 +163,27 @@ public class Game extends ExtraScene {
 		registerUpdateHandler(new TimerHandler(0.3f, false, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
-				IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(Game.this.mCount);
-				
-				AnimatedSprite w = new AnimatedSprite(27, 10, Game.this.mWorm1);
-				w.animate(3000);
-				w.setColor(color.getRed(), color.getGreen(), color.getBlue());
-				h.getFirstChild().attachChild(w);
-				
-				Game.this.mCount += 1;
-				checkRow(Game.this.mCount);
-				
-				w.registerEntityModifier(new MoveYModifier(0.3f, w.getY(), w.getY() - 44f, new IEntityModifierListener() {
-					@Override
-					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-						Game.this.setOnAreaTouchListener(Game.this);
-						Game.this.pop2(color);
-					}
-				}));
+				if (Game.this.mCount == 3) {
+					// Enviroment.getInstance().nextScene();
+				} else {
+					IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(Game.this.mCount);
+					
+					AnimatedSprite w = new AnimatedSprite(27, 10, Game.this.mWorm1);
+					w.animate(3000);
+					w.setColor(color.getRed(), color.getGreen(), color.getBlue());
+					h.getFirstChild().attachChild(w);
+					
+					Game.this.mCount += 1;
+					checkRow(Game.this.mCount);
+					
+					w.registerEntityModifier(new MoveYModifier(0.3f, w.getY(), w.getY() - 44f, new IEntityModifierListener() {
+						@Override
+						public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
+							Game.this.setOnAreaTouchListener(Game.this);
+							Game.this.pop2(color);
+						}
+					}));
+				}
 			}
 		}));
 	}
