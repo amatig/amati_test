@@ -7,6 +7,7 @@ import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.modifier.MoveYModifier;
+import org.anddev.andengine.entity.modifier.ScaleModifier;
 import org.anddev.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
 import org.anddev.andengine.entity.scene.menu.MenuScene;
@@ -21,8 +22,13 @@ import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.anddev.andengine.util.MathUtils;
+import org.anddev.andengine.util.TimeUtils;
 import org.anddev.andengine.util.modifier.IModifier;
 
+import com.openfeint.api.resource.Leaderboard;
+import com.openfeint.api.resource.Score;
+
+import android.app.Activity;
 import android.graphics.Color;
 
 public class Game extends ExtraScene {
@@ -33,23 +39,42 @@ public class Game extends ExtraScene {
 	
 	private TextureRegion mHole;
 	private TextureRegion mHoleFront;
+	private TextureRegion mShadow;
 	private TiledTextureRegion mWorm1;
 	private TiledTextureRegion mBird1;
 	private TiledTextureRegion mBird2;
-	private TextureRegion mShadow;
 	
 	private AnimatedSprite mSpriteBird1;
 	private AnimatedSprite mSpriteBird2;
 	
 	private Font mFont1;
+	private Font mFont2;
+	
+	private Text mYouWin;
+	private Text mYouLose;
 	
 	private GameMenu mMenu = null;
+	
+	private int mTime = 0;
 	
 	@Override
 	public void createScene() {
 		setBackground(new ColorBackground(0.603921569f, 0.909803922f, 0.337254902f));
 		
+		registerUpdateHandler(new TimerHandler(1f, true, new ITimerCallback() {
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
+				Game.this.mTime++;
+			}
+		}));
+		
 		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 20, 2, Color.WHITE, Color.BLACK);
+		this.mFont2 = Resource.getFont(512, 512, "akaDylan Plain", 68, 4, Color.WHITE, Color.BLACK);
+		
+		this.mYouWin = new Text(0, 0, this.mFont2, "You Win!");
+		this.mYouWin.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - this.mYouWin.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - this.mYouWin.getHeightScaled() / 2);
+		this.mYouLose = new Text(0, 0, this.mFont2, "You Lose!");
+		this.mYouLose.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - this.mYouLose.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - this.mYouLose.getHeightScaled() / 2);
 		
 		this.mShadow = Resource.getTexture(64, 32, "shadow");
 		this.mBird1 = Resource.getTexture(128, 64, "bird1", 2, 1);
@@ -78,8 +103,8 @@ public class Game extends ExtraScene {
     	/*this.mListValue.add(new Integer(4));
     	this.mListValue.add(new Integer(1));
     	this.mListValue.add(new Integer(2));
-    	this.mListValue.add(new Integer(4));*/
-    	
+    	this.mListValue.add(new Integer(4));
+    	*/
     	// create scene
 		int space_x = 33;
 		int space_y = 43;
@@ -171,13 +196,18 @@ public class Game extends ExtraScene {
 				h.getFirstChild().attachChild(w);
 				
 				Game.this.mCount += 1;
-				checkRow(Game.this.mCount);
+				final boolean result = checkRow(Game.this.mCount);
 				
 				w.registerEntityModifier(new MoveYModifier(0.3f, w.getY(), w.getY() - 44f, new IEntityModifierListener() {
 					@Override
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
-						if (Game.this.mCount != 4)
-							Game.this.setOnAreaTouchListener(Game.this);
+						if (!result)
+							if (Game.this.mCount != 4)
+								Game.this.setOnAreaTouchListener(Game.this);
+							else
+								Game.this.lose();
+						else
+							Game.this.win();
 						Game.this.pop2(color);
 					}
 				}));
@@ -198,8 +228,35 @@ public class Game extends ExtraScene {
 			}
 		}));
 	}
-
-	private void checkRow(int num) {
+	
+	private void win() {
+		this.mYouWin.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
+		getChild(ExtraScene.SCORE_LAYER).attachChild(this.mYouWin);
+		
+		try {
+			Score s = new Score((long)this.mTime, TimeUtils.formatSeconds(this.mTime ));
+			Leaderboard l = new Leaderboard("771276");
+			s.submitTo(l, new Score.SubmitToCB() {
+				@Override public void onSuccess(boolean newHighScore) {
+					((Activity) Enviroment.getInstance().getContext()).setResult(Activity.RESULT_OK);
+				}
+				
+				@Override public void onFailure(String exceptionMessage) {
+					((Activity) Enviroment.getInstance().getContext()).setResult(Activity.RESULT_CANCELED);
+				}
+			});
+		} catch (Exception e) {
+			
+		}
+	}
+	
+	private void lose() {
+		this.mYouLose.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
+		getChild(ExtraScene.SCORE_LAYER).attachChild(this.mYouLose);
+	}
+	
+	private boolean checkRow(int num) {
+		boolean result = false;
 		if (num % 4 == 0) {
 			IEntity pos = getChild(ExtraScene.EXTRA_GAME_LAYER).getChild(num / 2 - 1);
 			
@@ -212,7 +269,7 @@ public class Game extends ExtraScene {
 			
 			LinkedList<IEntity> slotPos = new LinkedList<IEntity>();
 			
-			boolean finish = true;
+			int finish = 0;
 			for (int i = 0; i < 4; i++) {
 				IEntity w = getChild(ExtraScene.GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
 				float r = this.mColor[this.mListValue.get(i).intValue()][0];
@@ -222,33 +279,34 @@ public class Game extends ExtraScene {
 				if (w.getRed() == r && w.getGreen() == g && w.getBlue() == b) {
 					slotPos.add(0, this.mSpriteBird2);
 					check1[i] = true;
-					finish = (finish && check1[i]);
+					finish++;
 				}
 			}
-			if (finish)
-				setOnAreaTouchListener(null);
-			
-			// check delle soluzioni
-			boolean check2[] = new boolean[4];
-			check2[0] = check1[0];
-			check2[1] = check1[1];
-			check2[2] = check1[2];
-			check2[3] = check1[3];
-			
-			for (int i = 0; i < 4; i++) {
-				if (check1[i] == true) continue;
-				IEntity w = getChild(ExtraScene.GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
+			if (finish >= 4)
+				result = true;
+			else {
+				// check delle soluzioni
+				boolean check2[] = new boolean[4];
+				check2[0] = check1[0];
+				check2[1] = check1[1];
+				check2[2] = check1[2];
+				check2[3] = check1[3];
 				
-				for (int j = 0; j < 4; j++) {
-					if (check2[j] == true) continue;
+				for (int i = 0; i < 4; i++) {
+					if (check1[i] == true) continue;
+					IEntity w = getChild(ExtraScene.GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
 					
-					float r = this.mColor[this.mListValue.get(j).intValue()][0];
-					float g = this.mColor[this.mListValue.get(j).intValue()][1];
-					float b = this.mColor[this.mListValue.get(j).intValue()][2];
-					if ((w.getRed() == r && w.getGreen() == g && w.getBlue() == b) && (check2[j] == false)) {
-						slotPos.add(this.mSpriteBird1);
-						check2[j] = true;
-						break;
+					for (int j = 0; j < 4; j++) {
+						if (check2[j] == true) continue;
+						
+						float r = this.mColor[this.mListValue.get(j).intValue()][0];
+						float g = this.mColor[this.mListValue.get(j).intValue()][1];
+						float b = this.mColor[this.mListValue.get(j).intValue()][2];
+						if ((w.getRed() == r && w.getGreen() == g && w.getBlue() == b) && (check2[j] == false)) {
+							slotPos.add(this.mSpriteBird1);
+							check2[j] = true;
+							break;
+						}
 					}
 				}
 			}
@@ -261,6 +319,7 @@ public class Game extends ExtraScene {
 				}
 			}
 		}
+		return result;
 	}
 	
 	@Override

@@ -23,11 +23,11 @@ public class GameMenu extends ExtraMenu {
 	public GameMenu() {
 		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 48, 3, Color.WHITE, Color.BLACK);
 		
-		IMenuItem newMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MENU_NEW, this.mFont1, "NEW GAME"), 1f, 0.7f, 0.7f, 1.0f, 1.0f, 0.6f);
+		IMenuItem newMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MENU_NEW, this.mFont1, "NEW GAME"), 1f, 0.7f, 0.7f, 1.0f, 1.0f, 1.0f);
 		newMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		addMenuItem(newMenuItem);
 		
-		IMenuItem quitMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MENU_EXIT, this.mFont1, "EXIT"), 1f, 0.7f, 0.7f, 1.0f, 1.0f, 0.6f);
+		IMenuItem quitMenuItem = new ColorMenuItemDecorator(new TextMenuItem(MENU_EXIT, this.mFont1, "EXIT"), 1f, 0.7f, 0.7f, 1.0f, 1.0f, 1.0f);
 		quitMenuItem.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 		addMenuItem(quitMenuItem);
 		
