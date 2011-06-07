@@ -26,8 +26,11 @@ import android.net.Uri;
 public class MainMenu extends ExtraScene {
 	
 	private Font fontMainMenu;
+	
 	private TextureRegion mBack;
 	private TextureRegion mTitle;
+	
+	private int mIndex;
 	
 	@Override
 	public MenuScene createMenu() {
@@ -61,16 +64,16 @@ public class MainMenu extends ExtraScene {
 		
 		this.fontMainMenu = Resource.getFont(512, 512, "akaDylan Plain", 44, 3, Color.WHITE, Color.BLACK);
 		
-		int y = 385;
+		this.mIndex = 382;
 		
     	Text play = new Text(0, 0, this.fontMainMenu, "PLAY");
-    	play.setPosition(x - play.getWidthScaled() / 2, y);
+    	play.setPosition(x - play.getWidthScaled() / 2, this.mIndex);
     	
     	Text score = new Text(0, 0, this.fontMainMenu, "SCORE");
-    	score.setPosition(x - score.getWidthScaled() / 2, y + 90);
+    	score.setPosition(x - score.getWidthScaled() / 2, this.mIndex + 90);
     	
     	Text more = new Text(0, 0, this.fontMainMenu, "MORE GAMES");
-    	more.setPosition(x - more.getWidthScaled() / 2, y + 180);
+    	more.setPosition(x - more.getWidthScaled() / 2, this.mIndex + 180);
     	
     	getChild(ExtraScene.GAME_LAYER).attachChild(play);
     	getChild(ExtraScene.GAME_LAYER).attachChild(score);
@@ -107,14 +110,14 @@ public class MainMenu extends ExtraScene {
 
 	private void execute(ITouchArea pTouchArea) {
 		Text item = (Text) pTouchArea;
-		if ((int) item.getY() == 385) {
+		if ((int) item.getY() == this.mIndex) {
 			Enviroment.getInstance().nextScene();
-		} else if ((int) item.getY() == 475) {
+		} else if ((int) item.getY() == this.mIndex + 90) {
 			try {
 				Dashboard.open();
 			} catch (Exception e) {
 			}
-		} else if ((int) item.getY() == 565) {
+		} else if ((int) item.getY() == this.mIndex + 180) {
 			try{
 				Enviroment.getInstance().getContext().startActivity(new Intent (Intent.ACTION_VIEW, Uri.parse("market://details?id=org.anddev.andengine.braingame")));
 			} catch (ActivityNotFoundException e) {

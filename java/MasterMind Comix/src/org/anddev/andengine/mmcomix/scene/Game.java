@@ -40,6 +40,8 @@ public class Game extends ExtraScene {
 	private TextureRegion mHole;
 	private TextureRegion mHoleFront;
 	private TextureRegion mShadow;
+	private TextureRegion mDialog;
+	private TextureRegion mBall;
 	private TiledTextureRegion mWorm1;
 	private TiledTextureRegion mBird1;
 	private TiledTextureRegion mBird2;
@@ -69,14 +71,16 @@ public class Game extends ExtraScene {
 		}));
 		
 		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 20, 2, Color.WHITE, Color.BLACK);
-		this.mFont2 = Resource.getFont(512, 512, "akaDylan Plain", 68, 4, Color.WHITE, Color.BLACK);
+		this.mFont2 = Resource.getFont(512, 512, "akaDylan Plain", 58, 4, Color.WHITE, Color.BLACK);
 		
 		this.mYouWin = new Text(0, 0, this.mFont2, "You Win!");
-		this.mYouWin.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - this.mYouWin.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - this.mYouWin.getHeightScaled() / 2);
+		this.mYouWin.setColor(1.0f, 1.0f, 0.7f);
 		this.mYouLose = new Text(0, 0, this.mFont2, "You Lose!");
-		this.mYouLose.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - this.mYouLose.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - this.mYouLose.getHeightScaled() / 2);
+		this.mYouLose.setColor(1.0f, 1.0f, 0.7f);
+		this.mDialog = Resource.getTexture(512, 256, "dialog");
+		this.mBall = Resource.getTexture(64, 64, "ball");
 		
-		this.mShadow = Resource.getTexture(64, 32, "shadow");
+		this.mShadow = Resource.getTexture(128, 128, "nest");
 		this.mBird1 = Resource.getTexture(128, 64, "bird1", 2, 1);
 		this.mBird2 = Resource.getTexture(128, 64, "bird2", 2, 1);
 		this.mWorm1 = Resource.getTexture(128, 64, "worm1", 2, 1);
@@ -122,12 +126,20 @@ public class Game extends ExtraScene {
 				Text num = new Text(h.getX() - 23, h.getY() - 11, this.mFont1, Integer.toString(10 - y));
 				getChild(ExtraScene.EXTRA_GAME_LAYER).attachChild(num);
 			} else if (x == 3) {
-				Entity pos = new Entity();
-				pos.setPosition(h.getX() + 109, h.getY() - 8);
-				pos.attachChild(new Sprite(0, 0, this.mShadow));
-				pos.attachChild(new Sprite(40, 0, this.mShadow));
-				pos.attachChild(new Sprite(0, 20, this.mShadow));
-				pos.attachChild(new Sprite(40, 20, this.mShadow));
+				Sprite pos = new Sprite(0, 0, this.mShadow);
+				pos.setPosition(h.getX() + 109, h.getY() - 30);
+				Entity p1 = new Entity();
+				Entity p2 = new Entity();
+				Entity p3 = new Entity();
+				Entity p4 = new Entity();
+				p1.setPosition(12, 15);
+				p2.setPosition(48, 15);
+				p3.setPosition(12, 35);
+				p4.setPosition(48, 35);
+				pos.attachChild(p1);
+				pos.attachChild(p2);
+				pos.attachChild(p3);
+				pos.attachChild(p4);
 				getChild(ExtraScene.EXTRA_GAME_LAYER).attachChild(pos);
 			}
 		}
@@ -175,7 +187,7 @@ public class Game extends ExtraScene {
 		final IEntity color = (IEntity) pTouchArea;
 		
 		color.registerEntityModifier(
-				new MoveYModifier(0.3f, color.getY(), color.getY() + 44f, new IEntityModifierListener() {
+				new MoveYModifier(0.1f, color.getY(), color.getY() + 44f, new IEntityModifierListener() {
 					@Override
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 						Game.this.pop(color);
@@ -198,25 +210,26 @@ public class Game extends ExtraScene {
 				Game.this.mCount += 1;
 				final boolean result = checkRow(Game.this.mCount);
 				
-				w.registerEntityModifier(new MoveYModifier(0.3f, w.getY(), w.getY() - 44f, new IEntityModifierListener() {
+				w.registerEntityModifier(new MoveYModifier(0.1f, w.getY(), w.getY() - 44f, new IEntityModifierListener() {
 					@Override
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 						if (!result)
 							if (Game.this.mCount != 4)
 								Game.this.setOnAreaTouchListener(Game.this);
 							else
-								Game.this.lose();
+								Game.this.dialog("love");
 						else
-							Game.this.win();
-						Game.this.pop2(color);
+							Game.this.dialog("win");
+						
+						Game.this.unpop(color);
 					}
 				}));
 			}
 		}));
 	}
 	
-	private void pop2(final IEntity color) {
-		registerUpdateHandler(new TimerHandler(0.3f, false, new ITimerCallback() {
+	private void unpop(final IEntity color) {
+		registerUpdateHandler(new TimerHandler(0.1f, false, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				color.registerEntityModifier(new MoveYModifier(0.3f, color.getY(), color.getY() - 44f, new IEntityModifierListener() {
@@ -229,30 +242,46 @@ public class Game extends ExtraScene {
 		}));
 	}
 	
-	private void win() {
-		this.mYouWin.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
-		getChild(ExtraScene.SCORE_LAYER).attachChild(this.mYouWin);
+	private void dialog(final String result) {
+		Sprite dialog = new Sprite(0, 0, this.mDialog);
+		dialog.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - dialog.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - dialog.getHeightScaled() / 2);
+		getChild(ExtraScene.SCORE_LAYER).attachChild(dialog);
 		
-		try {
-			Score s = new Score((long)this.mTime, TimeUtils.formatSeconds(this.mTime ));
-			Leaderboard l = new Leaderboard("771276");
-			s.submitTo(l, new Score.SubmitToCB() {
-				@Override public void onSuccess(boolean newHighScore) {
-					((Activity) Enviroment.getInstance().getContext()).setResult(Activity.RESULT_OK);
-				}
-				
-				@Override public void onFailure(String exceptionMessage) {
-					((Activity) Enviroment.getInstance().getContext()).setResult(Activity.RESULT_CANCELED);
-				}
-			});
-		} catch (Exception e) {
+		if (result.equals("win")) {
+			this.mYouWin.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
+			this.mYouWin.setPosition(dialog.getWidthScaled() / 2 - this.mYouWin.getWidthScaled() / 2, 35);
+			dialog.attachChild(this.mYouWin);
 			
+			try {
+				Score s = new Score((long)this.mTime, TimeUtils.formatSeconds(this.mTime ));
+				Leaderboard l = new Leaderboard("771276");
+				s.submitTo(l, new Score.SubmitToCB() {
+					@Override public void onSuccess(boolean newHighScore) {
+						((Activity) Enviroment.getInstance().getContext()).setResult(Activity.RESULT_OK);
+					}
+					
+					@Override public void onFailure(String exceptionMessage) {
+						((Activity) Enviroment.getInstance().getContext()).setResult(Activity.RESULT_CANCELED);
+					}
+				});
+			} catch (Exception e) {
+				
+			}
+		} else {
+			this.mYouLose.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
+			this.mYouLose.setPosition(dialog.getWidthScaled() / 2 - this.mYouLose.getWidthScaled() / 2, 35);
+			dialog.attachChild(this.mYouLose);
 		}
-	}
-	
-	private void lose() {
-		this.mYouLose.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
-		getChild(ExtraScene.SCORE_LAYER).attachChild(this.mYouLose);
+		
+		for (int i = 0; i < 4; i++) {
+			float r = this.mColor[this.mListValue.get(i).intValue()][0];
+			float g = this.mColor[this.mListValue.get(i).intValue()][1];
+			float b = this.mColor[this.mListValue.get(i).intValue()][2];
+			Sprite ball = new Sprite(85 + i * 80, 138, this.mBall);
+			ball.setColor(r, g, b);
+			ball.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
+			dialog.attachChild(ball);
+		}
 	}
 	
 	private boolean checkRow(int num) {
