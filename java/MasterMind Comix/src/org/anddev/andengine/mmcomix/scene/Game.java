@@ -43,6 +43,11 @@ public class Game extends ExtraScene {
 	private TextureRegion mDialog;
 	private TextureRegion mBall;
 	private TiledTextureRegion mWorm1;
+	private TiledTextureRegion mWorm2;
+	private TiledTextureRegion mWorm3;
+	private TiledTextureRegion mWorm4;
+	private TiledTextureRegion mWorm5;
+	private TiledTextureRegion mWorm6;
 	private TiledTextureRegion mBird1;
 	private TiledTextureRegion mBird2;
 	
@@ -70,7 +75,7 @@ public class Game extends ExtraScene {
 			}
 		}));
 		
-		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 20, 2, Color.WHITE, Color.BLACK);
+		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 21, 2, Color.WHITE, Color.BLACK);
 		this.mFont2 = Resource.getFont(512, 512, "akaDylan Plain", 58, 4, Color.WHITE, Color.BLACK);
 		
 		this.mYouWin = new Text(0, 0, this.mFont2, "You Win!");
@@ -80,10 +85,16 @@ public class Game extends ExtraScene {
 		this.mDialog = Resource.getTexture(512, 256, "dialog");
 		this.mBall = Resource.getTexture(64, 64, "ball");
 		
+		this.mWorm1 = Resource.getTexture(128, 64, "worm1", 2, 1);
+		this.mWorm2 = Resource.getTexture(128, 64, "worm2", 2, 1);
+		this.mWorm3 = Resource.getTexture(128, 64, "worm3", 2, 1);
+		this.mWorm4 = Resource.getTexture(128, 64, "worm4", 2, 1);
+		this.mWorm5 = Resource.getTexture(128, 64, "worm5", 2, 1);
+		this.mWorm6 = Resource.getTexture(128, 64, "worm6", 2, 1);
+		
 		this.mShadow = Resource.getTexture(128, 128, "nest");
 		this.mBird1 = Resource.getTexture(128, 64, "bird1", 2, 1);
 		this.mBird2 = Resource.getTexture(128, 64, "bird2", 2, 1);
-		this.mWorm1 = Resource.getTexture(128, 64, "worm1", 2, 1);
 		this.mHole = Resource.getTexture(128, 128, "hole_back");
 		this.mHoleFront = Resource.getTexture(128, 128, "hole");
 		
@@ -154,7 +165,19 @@ public class Game extends ExtraScene {
 			Sprite hf = new Sprite(0, 0, this.mHoleFront);
 			h.attachChild(hf);
 			
-			AnimatedSprite color = new AnimatedSprite(27, -34, this.mWorm1);
+			AnimatedSprite color = null;
+			if (i == 0)
+				color = new AnimatedSprite(27, -34, this.mWorm1);
+			else if (i == 1)
+				color = new AnimatedSprite(27, -34, this.mWorm2);
+			else if (i == 2)
+				color = new AnimatedSprite(27, -34, this.mWorm3);
+			else if (i == 3)
+				color = new AnimatedSprite(27, -34, this.mWorm4);
+			else if (i == 5)
+				color = new AnimatedSprite(27, -34, this.mWorm6);
+			else
+				color = new AnimatedSprite(27, -34, this.mWorm5);
 			color.animate(3000);
 			color.setColor(this.mColor[i][0], this.mColor[i][1], this.mColor[i][2]);
 			registerTouchArea(color);
@@ -202,7 +225,7 @@ public class Game extends ExtraScene {
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(Game.this.mCount);
 				
-				AnimatedSprite w = new AnimatedSprite(27, 10, Game.this.mWorm1);
+				AnimatedSprite w = new AnimatedSprite(27, 10, ((AnimatedSprite) color).getTextureRegion());
 				w.animate(3000);
 				w.setColor(color.getRed(), color.getGreen(), color.getBlue());
 				h.getFirstChild().attachChild(w);

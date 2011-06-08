@@ -62,7 +62,7 @@ public class MainMenu extends ExtraScene {
 		);
 		getChild(ExtraScene.GAME_LAYER).attachChild(title);
 		
-		this.fontMainMenu = Resource.getFont(512, 512, "akaDylan Plain", 44, 3, Color.WHITE, Color.BLACK);
+		this.fontMainMenu = Resource.getFont(512, 512, "akaDylan Plain", 43, 3, Color.WHITE, Color.BLACK);
 		
 		this.mIndex = 382;
 		
