@@ -267,6 +267,7 @@ public class Game extends ExtraScene {
 	
 	private void dialog(final String result) {
 		Sprite dialog = new Sprite(0, 0, this.mDialog);
+		dialog.setAlpha(0.9f);
 		dialog.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - dialog.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - dialog.getHeightScaled() / 2);
 		getChild(ExtraScene.SCORE_LAYER).attachChild(dialog);
 		
