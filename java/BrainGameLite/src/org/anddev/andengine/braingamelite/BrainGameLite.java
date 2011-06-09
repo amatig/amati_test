@@ -27,14 +27,28 @@ import org.anddev.andengine.engine.options.EngineOptions.ScreenOrientation;
 import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.SplashScene;
-import org.anddev.andengine.ui.activity.BaseGameActivity;
+import org.anddev.andengine.ui.activity.LayoutGameActivity;
 
 import android.view.KeyEvent;
 
-public class BrainGameLite extends BaseGameActivity {
+public class BrainGameLite extends LayoutGameActivity {
 	
+	@Override
+    protected int getLayoutID() {
+		return R.layout.main;
+    }
+	
+    @Override
+    protected int getRenderSurfaceViewID() {
+    	return R.id.xmllayoutexample_rendersurfaceview;
+    }
+    
 	public void onLoadComplete() {
+		// in layout is presente ads:loadAdOnCreate="true" non serve il codice sotto
 		
+		//AdView adView = (AdView) this.findViewById(R.id.adView);
+		//AdRequest adRequest = new AdRequest();
+	    //adView.loadAd(adRequest);
 	}
 	
 	public Engine onLoadEngine() {

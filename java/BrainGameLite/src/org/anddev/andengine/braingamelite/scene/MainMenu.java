@@ -14,6 +14,7 @@ package org.anddev.andengine.braingamelite.scene;
 
 import org.anddev.andengine.braingamelite.singleton.Enviroment;
 import org.anddev.andengine.braingamelite.singleton.Resource;
+import org.anddev.andengine.braingamelite.singleton.StoreMyData;
 import org.anddev.andengine.braingamelite.util.MyChangeableText;
 import org.anddev.andengine.braingamelite.util.MySound;
 import org.anddev.andengine.entity.IEntity;
@@ -39,6 +40,7 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 	public MainMenu() {
 		super(1);
 		Enviroment.instance().reInitVariables(); // init vars
+		StoreMyData.instance().reInitVariables();
 		
 		this.mDone = Resource.instance().getSound("ok");
 		int x = Enviroment.CAMERA_WIDTH / 2;
@@ -58,7 +60,7 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 				)
 		);
 		
-    	int y = 422;
+    	int y = 375;
     	
     	MyChangeableText diff = new MyChangeableText(0, 0, Resource.instance().fontMainMenu, "EASY", 6);
     	diff.setPosition(x - diff.getWidthScaled() / 2, y);
@@ -115,7 +117,7 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 	
 	private void manageTouch(ITouchArea pTouchArea) {
 		MyChangeableText item = (MyChangeableText) pTouchArea;
-		if ((int)item.getY() == 422) {
+		if ((int)item.getY() == 375) {
 			Enviroment.instance().toggleDifficult();
 			if (Enviroment.instance().getDifficult() == 0)
 				item.setText("EASY");
@@ -124,14 +126,14 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 			else
 				item.setText("HARD");
 			item.setPosition(Enviroment.CAMERA_WIDTH / 2 - item.getWidthScaled() / 2, item.getY());
-		} else if ((int)item.getY() == 422 + 210) {
+		} else if ((int)item.getY() == 375 + 210) {
 			try{
 				Enviroment.instance().getGame().startActivity(new Intent (Intent.ACTION_VIEW, Uri.parse("market://details?id=org.anddev.andengine.braingame")));
 			} catch (ActivityNotFoundException e) {
 			}
-		} else if ((int)item.getY() == 422 + 70) {
+		} else if ((int)item.getY() == 375 + 70) {
 			Enviroment.instance().setScene(new Start());
-		} else if ((int)item.getY() == 422 + 140) {
+		} else if ((int)item.getY() == 375 + 140) {
 			try {
 				Dashboard.open();
 			} catch (Exception e) {

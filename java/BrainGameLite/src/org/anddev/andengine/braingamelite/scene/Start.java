@@ -68,15 +68,15 @@ public class Start extends Scene implements IOnSceneTouchListener {
 		);
     	getLastChild().attachChild(eyes);
     	
-    	Sprite info = new Sprite(180, 555, Resource.instance().texInfo);
+    	Sprite info = new Sprite(180, 535, Resource.instance().texInfo);
     	info.registerEntityModifier(
 				new LoopEntityModifier(
 						null, 
 						-1, 
 						null,
 						new SequenceEntityModifier(
-								new ScaleModifier(0.5f, 1.1f, 1.2f),
-								new ScaleModifier(0.5f, 1.2f, 1.1f)
+								new ScaleModifier(0.5f, 0.8f, 0.9f),
+								new ScaleModifier(0.5f, 0.9f, 0.8f)
 						)
 				)
 		);

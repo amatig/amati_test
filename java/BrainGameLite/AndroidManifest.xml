@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-      android:versionName="1.3.3" android:versionCode="16" package="org.anddev.andengine.braingamelite">
+      android:versionName="1.3.4" android:versionCode="17" package="org.anddev.andengine.braingamelite">
 
 <uses-permission android:name="android.permission.VIBRATE" />
 <uses-permission android:name="android.permission.INTERNET" />
@@ -33,6 +33,9 @@
               android:label="NativeBrowser"
               android:configChanges="orientation|keyboardHidden"
               android:theme="@android:style/Theme.NoTitleBar"/>
-              
+		
+        <activity android:name="com.google.ads.AdActivity"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
+            android:configChanges="keyboard|keyboardHidden|orientation"/>
     </application>
 </manifest>

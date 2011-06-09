@@ -31,7 +31,6 @@ public class MyScene extends Scene implements IOnAreaTouchListener  {
 	
 	public MyScene() {
 		super(0);
-		
 		this.mGame = Enviroment.instance().getGame();
 		
 		attachChild(new Layer());
