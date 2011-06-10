@@ -60,7 +60,7 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 				)
 		);
 		
-    	int y = 375;
+    	int y = 383;
     	
     	MyChangeableText diff = new MyChangeableText(0, 0, Resource.instance().fontMainMenu, "EASY", 6);
     	diff.setPosition(x - diff.getWidthScaled() / 2, y);
@@ -117,7 +117,7 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 	
 	private void manageTouch(ITouchArea pTouchArea) {
 		MyChangeableText item = (MyChangeableText) pTouchArea;
-		if ((int)item.getY() == 375) {
+		if ((int)item.getY() == 383) {
 			Enviroment.instance().toggleDifficult();
 			if (Enviroment.instance().getDifficult() == 0)
 				item.setText("EASY");
@@ -126,14 +126,14 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 			else
 				item.setText("HARD");
 			item.setPosition(Enviroment.CAMERA_WIDTH / 2 - item.getWidthScaled() / 2, item.getY());
-		} else if ((int)item.getY() == 375 + 210) {
+		} else if ((int)item.getY() == 383 + 210) {
 			try{
 				Enviroment.instance().getGame().startActivity(new Intent (Intent.ACTION_VIEW, Uri.parse("market://details?id=org.anddev.andengine.braingame")));
 			} catch (ActivityNotFoundException e) {
 			}
-		} else if ((int)item.getY() == 375 + 70) {
+		} else if ((int)item.getY() == 383 + 70) {
 			Enviroment.instance().setScene(new Start());
-		} else if ((int)item.getY() == 375 + 140) {
+		} else if ((int)item.getY() == 383 + 140) {
 			try {
 				Dashboard.open();
 			} catch (Exception e) {
