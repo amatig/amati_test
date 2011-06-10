@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="org.anddev.andengine.mmcomix"
-      android:versionName="1.0.6" android:versionCode="7">
+      android:versionName="1.0.7" android:versionCode="8">
     <uses-sdk android:minSdkVersion="7" />
 
 	<uses-permission android:name="android.permission.INTERNET" />
@@ -33,6 +33,9 @@
               android:label="NativeBrowser"
               android:configChanges="orientation|keyboardHidden"
               android:theme="@android:style/Theme.NoTitleBar"/>
-              
+		
+		<activity android:name="com.google.ads.AdActivity"
+			android:theme="@android:style/Theme.NoTitleBar.Fullscreen" 
+            android:configChanges="keyboard|keyboardHidden|orientation"/>
     </application>
 </manifest>

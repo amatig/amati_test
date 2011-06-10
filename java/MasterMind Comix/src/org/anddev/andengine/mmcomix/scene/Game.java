@@ -56,6 +56,7 @@ public class Game extends ExtraScene {
 	
 	private Font mFont1;
 	private Font mFont2;
+	private Font mFont3;
 	
 	private Text mYouWin;
 	private Text mYouLose;
@@ -77,6 +78,7 @@ public class Game extends ExtraScene {
 		
 		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 21, 2, Color.WHITE, Color.BLACK);
 		this.mFont2 = Resource.getFont(512, 512, "akaDylan Plain", 58, 4, Color.WHITE, Color.BLACK);
+		this.mFont3 = Resource.getFont(512, 512, "akaDylan Plain", 25, 2, Color.WHITE, Color.BLACK);
 		
 		this.mYouWin = new Text(0, 0, this.mFont2, "You Win!");
 		this.mYouWin.setColor(1.0f, 1.0f, 0.7f);
@@ -122,9 +124,9 @@ public class Game extends ExtraScene {
     	*/
     	// create scene
 		int space_x = 33;
-		int space_y = 43;
+		int space_y = 108;
 		
-		for (int i = 0; i < 40; i++) {
+		for (int i = 0; i < 36; i++) {
 			int x = i % 4;
 			int y = (int)(i / 4);
 			Sprite h = new Sprite(space_x + x * 80, space_y + y * 64, this.mHole);
@@ -134,7 +136,7 @@ public class Game extends ExtraScene {
 			getChild(ExtraScene.GAME_LAYER).attachChild(h);
 			
 			if (x == 0) {
-				Text num = new Text(h.getX() - 23, h.getY() - 11, this.mFont1, Integer.toString(10 - y));
+				Text num = new Text(h.getX() - 23, h.getY() - 11, this.mFont1, Integer.toString(9 - y));
 				getChild(ExtraScene.EXTRA_GAME_LAYER).attachChild(num);
 			} else if (x == 3) {
 				Sprite pos = new Sprite(0, 0, this.mShadow);
@@ -186,7 +188,7 @@ public class Game extends ExtraScene {
 			getChild(ExtraScene.GAME_LAYER).attachChild(h);
 		}
 		
-		this.mCount = 44;
+		this.mCount = 40;
 	}
 	
 	@Override
@@ -271,9 +273,15 @@ public class Game extends ExtraScene {
 		dialog.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - dialog.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - dialog.getHeightScaled() / 2);
 		getChild(ExtraScene.SCORE_LAYER).attachChild(dialog);
 		
+		Text time = new Text(0, 0, this.mFont3, TimeUtils.formatSeconds(this.mTime));
+		time.setColor(1.0f, 0.7f, 0.7f);
+		time.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
+		time.setPosition(dialog.getWidthScaled() / 2 - time.getWidthScaled() / 2, 107);
+		dialog.attachChild(time);
+		
 		if (result.equals("win")) {
 			this.mYouWin.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
-			this.mYouWin.setPosition(dialog.getWidthScaled() / 2 - this.mYouWin.getWidthScaled() / 2, 35);
+			this.mYouWin.setPosition(dialog.getWidthScaled() / 2 - this.mYouWin.getWidthScaled() / 2, 25);
 			dialog.attachChild(this.mYouWin);
 			
 			try {
@@ -293,7 +301,7 @@ public class Game extends ExtraScene {
 			}
 		} else {
 			this.mYouLose.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
-			this.mYouLose.setPosition(dialog.getWidthScaled() / 2 - this.mYouLose.getWidthScaled() / 2, 35);
+			this.mYouLose.setPosition(dialog.getWidthScaled() / 2 - this.mYouLose.getWidthScaled() / 2, 25);
 			dialog.attachChild(this.mYouLose);
 		}
 		
@@ -301,7 +309,7 @@ public class Game extends ExtraScene {
 			float r = this.mColor[this.mListValue.get(i).intValue()][0];
 			float g = this.mColor[this.mListValue.get(i).intValue()][1];
 			float b = this.mColor[this.mListValue.get(i).intValue()][2];
-			Sprite ball = new Sprite(85 + i * 80, 138, this.mBall);
+			Sprite ball = new Sprite(85 + i * 80, 150, this.mBall);
 			ball.setColor(r, g, b);
 			ball.registerEntityModifier(new ScaleModifier(0.3f, 0f, 1.0f));
 			dialog.attachChild(ball);

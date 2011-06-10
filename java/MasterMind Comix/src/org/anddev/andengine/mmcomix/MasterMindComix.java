@@ -64,5 +64,15 @@ public class MasterMindComix extends ExtraGameActivity {
         }));
 		return splashScene;
 	}
+
+	@Override
+	protected int getLayoutID() {
+		return R.layout.main;
+	}
+
+	@Override
+	protected int getRenderSurfaceViewID() {
+		return R.id.xmllayoutexample_rendersurfaceview;
+	}
     
 }
