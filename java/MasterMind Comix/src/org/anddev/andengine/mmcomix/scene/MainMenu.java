@@ -48,7 +48,7 @@ public class MainMenu extends ExtraScene {
 		
 		this.mTitle = Resource.getTexture(512, 256, "title");
 		Sprite title = new Sprite(0, 0, this.mTitle);
-		title.setPosition(x - title.getWidthScaled() / 2, 93);
+		title.setPosition(x - title.getWidthScaled() / 2, 92);
 		title.registerEntityModifier(
 				new LoopEntityModifier(
 						null, 

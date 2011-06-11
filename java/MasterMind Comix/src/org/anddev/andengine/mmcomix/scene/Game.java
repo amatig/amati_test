@@ -13,6 +13,7 @@ import org.anddev.andengine.entity.scene.background.ColorBackground;
 import org.anddev.andengine.entity.scene.menu.MenuScene;
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.entity.sprite.Sprite;
+import org.anddev.andengine.entity.text.ChangeableText;
 import org.anddev.andengine.entity.text.Text;
 import org.anddev.andengine.extra.Enviroment;
 import org.anddev.andengine.extra.ExtraScene;
@@ -69,16 +70,22 @@ public class Game extends ExtraScene {
 	public void createScene() {
 		setBackground(new ColorBackground(0.603921569f, 0.909803922f, 0.337254902f));
 		
+		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 21, 2, Color.WHITE, Color.BLACK);
+		this.mFont2 = Resource.getFont(512, 512, "akaDylan Plain", 58, 4, Color.WHITE, Color.BLACK);
+		this.mFont3 = Resource.getFont(512, 512, "akaDylan Plain", 25, 2, Color.WHITE, Color.BLACK);
+		
+		final ChangeableText time = new ChangeableText(54, 38, this.mFont3, TimeUtils.formatSeconds(this.mTime), 5);
+		time.setColor(1.0f, 0.7f, 0.7f);
+		time.setScale(1.1f);
+		getChild(SCORE_LAYER).attachChild(time);
+		
 		registerUpdateHandler(new TimerHandler(1f, true, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
 				Game.this.mTime++;
+				time.setText(TimeUtils.formatSeconds(Game.this.mTime));
 			}
 		}));
-		
-		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 21, 2, Color.WHITE, Color.BLACK);
-		this.mFont2 = Resource.getFont(512, 512, "akaDylan Plain", 58, 4, Color.WHITE, Color.BLACK);
-		this.mFont3 = Resource.getFont(512, 512, "akaDylan Plain", 25, 2, Color.WHITE, Color.BLACK);
 		
 		this.mYouWin = new Text(0, 0, this.mFont2, "You Win!");
 		this.mYouWin.setColor(1.0f, 1.0f, 0.7f);
