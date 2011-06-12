@@ -36,7 +36,7 @@ public class Game extends ExtraScene {
 	
 	private LinkedList<Integer> mListValue;
 	private float mColor[][];
-	private int mCount;
+	private int mCount = 40;
 	
 	private TextureRegion mHole;
 	private TextureRegion mHoleFront;
@@ -194,8 +194,6 @@ public class Game extends ExtraScene {
 			h.getFirstChild().attachChild(color);
 			getChild(ExtraScene.GAME_LAYER).attachChild(h);
 		}
-		
-		this.mCount = 40;
 	}
 	
 	@Override
