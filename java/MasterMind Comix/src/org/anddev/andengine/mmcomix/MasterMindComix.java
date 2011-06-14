@@ -45,7 +45,7 @@ public class MasterMindComix extends ExtraGameActivity {
 
 	@Override
 	public Engine onLoadEngine() {
-		return Enviroment.createEngine(ScreenOrientation.PORTRAIT, WIDTH, HEIGHT, false);
+		return Enviroment.createEngine(ScreenOrientation.PORTRAIT, WIDTH, HEIGHT, false, false);
 	}
 
 	@Override
