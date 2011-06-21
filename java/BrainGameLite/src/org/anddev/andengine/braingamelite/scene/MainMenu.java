@@ -17,6 +17,7 @@ import org.anddev.andengine.braingamelite.singleton.Resource;
 import org.anddev.andengine.braingamelite.singleton.StoreMyData;
 import org.anddev.andengine.braingamelite.util.MyChangeableText;
 import org.anddev.andengine.braingamelite.util.MySound;
+import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
@@ -38,7 +39,8 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 	private MySound mDone;
 	
 	public MainMenu() {
-		super(1);
+		super();
+		attachChild(new Entity());
 		Enviroment.instance().reInitVariables(); // init vars
 		StoreMyData.instance().reInitVariables();
 		
@@ -105,6 +107,11 @@ public class MainMenu extends Scene implements IOnAreaTouchListener {
 								public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 									item.setColor(1.0f, 1.0f, 0.6f);
 									MainMenu.this.manageTouch(pTouchArea);
+								}
+								
+								@Override
+								public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+									
 								}
 							},
 							new ScaleModifier(0.1f, 1f, 1.3f),

@@ -17,6 +17,7 @@ import org.anddev.andengine.braingamelite.singleton.Resource;
 import org.anddev.andengine.braingamelite.singleton.StoreMyData;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
+import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
 import org.anddev.andengine.entity.modifier.MoveXModifier;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
@@ -31,7 +32,8 @@ import org.anddev.andengine.util.TimeUtils;
 public class End extends Scene implements IOnSceneTouchListener {
 	
 	public End() {
-		super(1);
+		super();
+		attachChild(new Entity());
 		int leftx = 57;
 		
 		Sprite back = new Sprite(0, 0, Resource.instance().texBack2);

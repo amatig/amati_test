@@ -185,6 +185,11 @@ public class MemShuffle extends MyScene {
 									pItem.setScale(1f);
 									MemShuffle.this.mFinish = true;
 								}
+
+								@Override
+								public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+									
+								}
 							},
 							new ScaleModifier(0.2f, 1f, 1.2f),
 							new ScaleModifier(0.2f, 1.2f, 1f)
@@ -222,6 +227,11 @@ public class MemShuffle extends MyScene {
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 						pItem.setPosition(x2, y2);
 					}
+					
+					@Override
+					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+						
+					}
 				},
 				new MoveXModifier(0.3f, x1, x2),
 				new MoveYModifier(0.3f, y1, y2)
@@ -231,6 +241,11 @@ public class MemShuffle extends MyScene {
 					@Override
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 						pItem.setPosition(x1, y1);
+					}
+					
+					@Override
+					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+						
 					}
 				},
 				new MoveXModifier(0.3f, x2, x1),

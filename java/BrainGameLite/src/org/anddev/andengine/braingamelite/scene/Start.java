@@ -19,6 +19,7 @@ import org.anddev.andengine.braingamelite.util.MyChangeableText;
 import org.anddev.andengine.braingamelite.util.MySound;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
+import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
 import org.anddev.andengine.entity.modifier.MoveXModifier;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
@@ -35,7 +36,8 @@ public class Start extends Scene implements IOnSceneTouchListener {
 	private MySound mBeep;
 	
 	public Start() {
-		super(1);
+		super();
+		attachChild(new Entity());
 		StoreMyData.instance().createScoreLayer(); // create new score
 		
 		this.mBeep = Resource.instance().getSound("beep");

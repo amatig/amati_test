@@ -16,15 +16,15 @@ import org.anddev.andengine.braingamelite.singleton.Enviroment;
 import org.anddev.andengine.braingamelite.util.MyScene;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
+import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.IEntity;
-import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.entity.modifier.AlphaModifier;
 import org.anddev.andengine.entity.modifier.IEntityModifier.IEntityModifierListener;
 import org.anddev.andengine.entity.primitive.Rectangle;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.util.modifier.IModifier;
 
-public class FadeLayer extends Layer {
+public class FadeLayer extends Entity {
 	private Rectangle mScreenBlack;
 	
 	public FadeLayer() {
@@ -53,6 +53,11 @@ public class FadeLayer extends Layer {
 								FadeLayer.this.hide();
 								((MyScene)Enviroment.instance().getScene()).start();
 							}
+
+							@Override
+							public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+								
+							}
 						})
 				);
 			}
@@ -72,6 +77,11 @@ public class FadeLayer extends Layer {
 									Enviroment.instance().setScene(scene);
 								else
 									Enviroment.instance().nextScene();
+							}
+							
+							@Override
+							public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+								
 							}
 						})
 				);

@@ -20,7 +20,8 @@ import org.anddev.andengine.braingamelite.singleton.Resource;
 import org.anddev.andengine.braingamelite.singleton.StoreMyData;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
-import org.anddev.andengine.entity.layer.Layer;
+import org.anddev.andengine.entity.Entity;
+import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
 import org.anddev.andengine.entity.sprite.Sprite;
@@ -30,12 +31,12 @@ public class MyScene extends Scene implements IOnAreaTouchListener  {
 	protected BrainGameLite mGame;
 	
 	public MyScene() {
-		super(0);
+		super();
 		this.mGame = Enviroment.instance().getGame();
 		
-		attachChild(new Layer());
-		attachChild(new Layer());
-		attachChild(new Layer());
+		attachChild(new Entity());
+		attachChild(new Entity());
+		attachChild(new Entity());
 		attachChild(StoreMyData.instance().getScoreLayer());
 		attachChild(new FadeLayer());
 		
@@ -58,16 +59,16 @@ public class MyScene extends Scene implements IOnAreaTouchListener  {
 		
 	}
 	
-	public Layer getBackgroundLayer() {
-		return (Layer) this.getChild(0);
+	public IEntity getBackgroundLayer() {
+		return (IEntity) this.getChild(0);
 	}
 	
-	public Layer getGameLayer() {
-		return (Layer) this.getChild(1);
+	public IEntity getGameLayer() {
+		return (IEntity) this.getChild(1);
 	}
 	
-	public Layer getExtraGameLayer() {
-		return (Layer) this.getChild(2);
+	public IEntity getExtraGameLayer() {
+		return (IEntity) this.getChild(2);
 	}
 	
 	public ScoreLayer getScoreLayer() {

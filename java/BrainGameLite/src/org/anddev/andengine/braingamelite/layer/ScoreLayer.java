@@ -15,13 +15,13 @@ package org.anddev.andengine.braingamelite.layer;
 import org.anddev.andengine.braingamelite.singleton.Enviroment;
 import org.anddev.andengine.braingamelite.singleton.Resource;
 import org.anddev.andengine.braingamelite.util.MyChangeableText;
+import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.IEntity;
-import org.anddev.andengine.entity.layer.Layer;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.util.TimeUtils;
 
-public class ScoreLayer extends Layer {
+public class ScoreLayer extends Entity {
 	private static int SPACE = 45;
 	private int mStep = 0;
 	
