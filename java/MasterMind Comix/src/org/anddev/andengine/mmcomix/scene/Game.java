@@ -77,7 +77,7 @@ public class Game extends ExtraScene {
 		final ChangeableText time = new ChangeableText(54, 38, this.mFont3, TimeUtils.formatSeconds(this.mTime), 5);
 		time.setColor(1.0f, 0.7f, 0.7f);
 		time.setScale(1.1f);
-		getChild(SCORE_LAYER).attachChild(time);
+		getChild(GUI_LAYER).attachChild(time);
 		
 		registerUpdateHandler(new TimerHandler(1f, true, new ITimerCallback() {
 			@Override
@@ -140,11 +140,11 @@ public class Game extends ExtraScene {
 			h.attachChild(new Entity());
 			Sprite hf = new Sprite(0, 0, this.mHoleFront);
 			h.attachChild(hf);
-			getChild(ExtraScene.GAME_LAYER).attachChild(h);
+			getChild(GAME_LAYER).attachChild(h);
 			
 			if (x == 0) {
 				Text num = new Text(h.getX() - 23, h.getY() - 11, this.mFont1, Integer.toString(9 - y));
-				getChild(ExtraScene.EXTRA_GAME_LAYER).attachChild(num);
+				getChild(EXTRA_GAME_LAYER).attachChild(num);
 			} else if (x == 3) {
 				Sprite pos = new Sprite(0, 0, this.mShadow);
 				pos.setPosition(h.getX() + 109, h.getY() - 30);
@@ -160,7 +160,7 @@ public class Game extends ExtraScene {
 				pos.attachChild(p2);
 				pos.attachChild(p3);
 				pos.attachChild(p4);
-				getChild(ExtraScene.EXTRA_GAME_LAYER).attachChild(pos);
+				getChild(EXTRA_GAME_LAYER).attachChild(pos);
 			}
 		}
 		
@@ -192,7 +192,7 @@ public class Game extends ExtraScene {
 			registerTouchArea(color);
 			
 			h.getFirstChild().attachChild(color);
-			getChild(ExtraScene.GAME_LAYER).attachChild(h);
+			getChild(GAME_LAYER).attachChild(h);
 		}
 	}
 	
@@ -222,6 +222,11 @@ public class Game extends ExtraScene {
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 						Game.this.pop(color);
 					}
+
+					@Override
+					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+						
+					}
 				})
 		);
 	}
@@ -230,7 +235,7 @@ public class Game extends ExtraScene {
 		registerUpdateHandler(new TimerHandler(0.3f, false, new ITimerCallback() {
 			@Override
 			public void onTimePassed(TimerHandler pTimerHandler) {
-				IEntity h = getChild(ExtraScene.GAME_LAYER).getChild(Game.this.mCount);
+				IEntity h = getChild(GAME_LAYER).getChild(Game.this.mCount);
 				
 				AnimatedSprite w = new AnimatedSprite(27, 10, ((AnimatedSprite) color).getTextureRegion());
 				w.animate(3000);
@@ -253,6 +258,11 @@ public class Game extends ExtraScene {
 						
 						Game.this.unpop(color);
 					}
+
+					@Override
+					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+						
+					}
 				}));
 			}
 		}));
@@ -267,6 +277,11 @@ public class Game extends ExtraScene {
 					public void onModifierFinished(IModifier<IEntity> pModifier, IEntity pItem) {
 						Game.this.registerTouchArea((ITouchArea) color);
 					}
+
+					@Override
+					public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+						
+					}
 				}));	
 			}
 		}));
@@ -276,7 +291,7 @@ public class Game extends ExtraScene {
 		Sprite dialog = new Sprite(0, 0, this.mDialog);
 		dialog.setAlpha(0.9f);
 		dialog.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - dialog.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - dialog.getHeightScaled() / 2);
-		getChild(ExtraScene.SCORE_LAYER).attachChild(dialog);
+		getChild(GUI_LAYER).attachChild(dialog);
 		
 		Text time = new Text(0, 0, this.mFont3, TimeUtils.formatSeconds(this.mTime));
 		time.setColor(1.0f, 0.7f, 0.7f);
@@ -324,7 +339,7 @@ public class Game extends ExtraScene {
 	private boolean checkRow(int num) {
 		boolean result = false;
 		if (num % 4 == 0) {
-			IEntity pos = getChild(ExtraScene.EXTRA_GAME_LAYER).getChild(num / 2 - 1);
+			IEntity pos = getChild(EXTRA_GAME_LAYER).getChild(num / 2 - 1);
 			
 			// check delle soluzioni
 			boolean check1[] = new boolean[4];
@@ -337,7 +352,7 @@ public class Game extends ExtraScene {
 			
 			int finish = 0;
 			for (int i = 0; i < 4; i++) {
-				IEntity w = getChild(ExtraScene.GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
+				IEntity w = getChild(GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
 				float r = this.mColor[this.mListValue.get(i).intValue()][0];
 				float g = this.mColor[this.mListValue.get(i).intValue()][1];
 				float b = this.mColor[this.mListValue.get(i).intValue()][2];
@@ -360,7 +375,7 @@ public class Game extends ExtraScene {
 				
 				for (int i = 0; i < 4; i++) {
 					if (check1[i] == true) continue;
-					IEntity w = getChild(ExtraScene.GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
+					IEntity w = getChild(GAME_LAYER).getChild(num - 4 + i).getFirstChild().getFirstChild();
 					
 					for (int j = 0; j < 4; j++) {
 						if (check2[j] == true) continue;

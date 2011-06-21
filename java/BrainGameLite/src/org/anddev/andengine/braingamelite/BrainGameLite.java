@@ -89,11 +89,11 @@ public class BrainGameLite extends LayoutGameActivity {
 	public boolean onKeyDown(final int pKeyCode, final KeyEvent pEvent) {	
 		if (pKeyCode == KeyEvent.KEYCODE_MENU && pEvent.getAction() == KeyEvent.ACTION_DOWN) {
 			if (this.mEngine.getScene().hasChildScene()) {
-				((MyScene)Enviroment.instance().getScene()).getFadeLayer().getFirstChild().setAlpha(0f);
+				((MyScene) Enviroment.instance().getScene()).getFadeLayer().getFirstChild().setAlpha(0f);
 				this.mEngine.getScene().back();
 			} else {
 				if (this.mEngine.getScene() instanceof MyScene) {
-					((MyScene)Enviroment.instance().getScene()).getFadeLayer().getFirstChild().setAlpha(0.6f);
+					((MyScene) Enviroment.instance().getScene()).getFadeLayer().getFirstChild().setAlpha(0.6f);
 					this.mEngine.getScene().setChildScene(new GameMenu(), false, true, true);
 				}
 			}

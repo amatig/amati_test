@@ -102,6 +102,11 @@ public class MainMenu extends ExtraScene {
 								item.setColor(1.0f, 1.0f, 1.0f);
 								MainMenu.this.execute(pTouchArea);
 							}
+
+							@Override
+							public void onModifierStarted(IModifier<IEntity> pModifier, IEntity pItem) {
+								
+							}
 						},
 						new ScaleModifier(0.1f, 1f, 1.3f),
 						new ScaleModifier(0.1f, 1.3f, 1f)
