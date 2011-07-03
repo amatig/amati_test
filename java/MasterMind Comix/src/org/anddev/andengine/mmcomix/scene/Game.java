@@ -2,6 +2,9 @@ package org.anddev.andengine.mmcomix.scene;
 
 import java.util.LinkedList;
 
+import org.amatidev.scene.AdScene;
+import org.amatidev.util.AdEnviroment;
+import org.amatidev.util.AdResourceLoader;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.Entity;
@@ -15,9 +18,6 @@ import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.ChangeableText;
 import org.anddev.andengine.entity.text.Text;
-import org.anddev.andengine.extra.Enviroment;
-import org.anddev.andengine.extra.ExtraScene;
-import org.anddev.andengine.extra.Resource;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
@@ -32,7 +32,7 @@ import com.openfeint.api.resource.Score;
 import android.app.Activity;
 import android.graphics.Color;
 
-public class Game extends ExtraScene {
+public class Game extends AdScene {
 	
 	private LinkedList<Integer> mListValue;
 	private float mColor[][];
@@ -70,9 +70,9 @@ public class Game extends ExtraScene {
 	public void createScene() {
 		setBackground(new ColorBackground(0.603921569f, 0.909803922f, 0.337254902f));
 		
-		this.mFont1 = Resource.getFont(512, 512, "akaDylan Plain", 21, 2, Color.WHITE, Color.BLACK);
-		this.mFont2 = Resource.getFont(512, 512, "akaDylan Plain", 58, 4, Color.WHITE, Color.BLACK);
-		this.mFont3 = Resource.getFont(512, 512, "akaDylan Plain", 25, 2, Color.WHITE, Color.BLACK);
+		this.mFont1 = AdResourceLoader.getFont(512, 512, "akaDylan Plain", 21, 2, Color.WHITE, Color.BLACK);
+		this.mFont2 = AdResourceLoader.getFont(512, 512, "akaDylan Plain", 58, 4, Color.WHITE, Color.BLACK);
+		this.mFont3 = AdResourceLoader.getFont(512, 512, "akaDylan Plain", 25, 2, Color.WHITE, Color.BLACK);
 		
 		final ChangeableText time = new ChangeableText(54, 38, this.mFont3, TimeUtils.formatSeconds(this.mTime), 5);
 		time.setColor(1.0f, 0.7f, 0.7f);
@@ -91,21 +91,21 @@ public class Game extends ExtraScene {
 		this.mYouWin.setColor(1.0f, 1.0f, 0.7f);
 		this.mYouLose = new Text(0, 0, this.mFont2, "You Lose!");
 		this.mYouLose.setColor(1.0f, 1.0f, 0.7f);
-		this.mDialog = Resource.getTexture(512, 256, "dialog");
-		this.mBall = Resource.getTexture(64, 64, "ball");
+		this.mDialog = AdResourceLoader.getTexture(512, 256, "dialog");
+		this.mBall = AdResourceLoader.getTexture(64, 64, "ball");
 		
-		this.mWorm1 = Resource.getTexture(128, 64, "worm1", 2, 1);
-		this.mWorm2 = Resource.getTexture(128, 64, "worm2", 2, 1);
-		this.mWorm3 = Resource.getTexture(128, 64, "worm3", 2, 1);
-		this.mWorm4 = Resource.getTexture(128, 64, "worm4", 2, 1);
-		this.mWorm5 = Resource.getTexture(128, 64, "worm5", 2, 1);
-		this.mWorm6 = Resource.getTexture(128, 64, "worm6", 2, 1);
+		this.mWorm1 = AdResourceLoader.getTexture(128, 64, "worm1", 2, 1);
+		this.mWorm2 = AdResourceLoader.getTexture(128, 64, "worm2", 2, 1);
+		this.mWorm3 = AdResourceLoader.getTexture(128, 64, "worm3", 2, 1);
+		this.mWorm4 = AdResourceLoader.getTexture(128, 64, "worm4", 2, 1);
+		this.mWorm5 = AdResourceLoader.getTexture(128, 64, "worm5", 2, 1);
+		this.mWorm6 = AdResourceLoader.getTexture(128, 64, "worm6", 2, 1);
 		
-		this.mShadow = Resource.getTexture(128, 128, "nest");
-		this.mBird1 = Resource.getTexture(128, 64, "bird1", 2, 1);
-		this.mBird2 = Resource.getTexture(128, 64, "bird2", 2, 1);
-		this.mHole = Resource.getTexture(128, 128, "hole_back");
-		this.mHoleFront = Resource.getTexture(128, 128, "hole");
+		this.mShadow = AdResourceLoader.getTexture(128, 128, "nest");
+		this.mBird1 = AdResourceLoader.getTexture(128, 64, "bird1", 2, 1);
+		this.mBird2 = AdResourceLoader.getTexture(128, 64, "bird2", 2, 1);
+		this.mHole = AdResourceLoader.getTexture(128, 128, "hole_back");
+		this.mHoleFront = AdResourceLoader.getTexture(128, 128, "hole");
 		
 		this.mSpriteBird1 = new AnimatedSprite(0, -21, this.mBird1);
 		this.mSpriteBird2 = new AnimatedSprite(0, -21, this.mBird2);
@@ -203,7 +203,7 @@ public class Game extends ExtraScene {
 	
 	@Override
 	public void endScene() {
-		Enviroment.getInstance().setScene(new Game());
+		AdEnviroment.getInstance().setScene(new Game());
 	}
 	
 	@Override
@@ -290,7 +290,7 @@ public class Game extends ExtraScene {
 	private void dialog(final String result) {
 		Sprite dialog = new Sprite(0, 0, this.mDialog);
 		dialog.setAlpha(0.9f);
-		dialog.setPosition(Enviroment.getInstance().getScreenWidth() / 2 - dialog.getWidthScaled() / 2, Enviroment.getInstance().getScreenHeight() / 2 - dialog.getHeightScaled() / 2);
+		dialog.setPosition(AdEnviroment.getInstance().getScreenWidth() / 2 - dialog.getWidthScaled() / 2, AdEnviroment.getInstance().getScreenHeight() / 2 - dialog.getHeightScaled() / 2);
 		getChild(GUI_LAYER).attachChild(dialog);
 		
 		Text time = new Text(0, 0, this.mFont3, TimeUtils.formatSeconds(this.mTime));
@@ -309,11 +309,11 @@ public class Game extends ExtraScene {
 				Leaderboard l = new Leaderboard("771276");
 				s.submitTo(l, new Score.SubmitToCB() {
 					@Override public void onSuccess(boolean newHighScore) {
-						((Activity) Enviroment.getInstance().getContext()).setResult(Activity.RESULT_OK);
+						((Activity) AdEnviroment.getInstance().getContext()).setResult(Activity.RESULT_OK);
 					}
 					
 					@Override public void onFailure(String exceptionMessage) {
-						((Activity) Enviroment.getInstance().getContext()).setResult(Activity.RESULT_CANCELED);
+						((Activity) AdEnviroment.getInstance().getContext()).setResult(Activity.RESULT_CANCELED);
 					}
 				});
 			} catch (Exception e) {

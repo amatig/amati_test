@@ -3,15 +3,15 @@ package org.anddev.andengine.mmcomix;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.amatidev.activity.AdGameActivity;
+import org.amatidev.util.AdEnviroment;
+import org.amatidev.util.AdResourceLoader;
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.engine.options.EngineOptions.ScreenOrientation;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.SplashScene;
-import org.anddev.andengine.extra.Enviroment;
-import org.anddev.andengine.extra.ExtraGameActivity;
-import org.anddev.andengine.extra.Resource;
 import org.anddev.andengine.mmcomix.scene.MainMenu;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 
@@ -21,7 +21,7 @@ import com.openfeint.api.OpenFeint;
 import com.openfeint.api.OpenFeintDelegate;
 import com.openfeint.api.OpenFeintSettings;
 
-public class MasterMindComix extends ExtraGameActivity {
+public class MasterMindComix extends AdGameActivity {
 
 	private static int WIDTH = 480;
 	private static int HEIGHT = 720;
@@ -45,12 +45,12 @@ public class MasterMindComix extends ExtraGameActivity {
 
 	@Override
 	public Engine onLoadEngine() {
-		return Enviroment.createEngine(ScreenOrientation.PORTRAIT, WIDTH, HEIGHT, false, false);
+		return AdEnviroment.createEngine(ScreenOrientation.PORTRAIT, WIDTH, HEIGHT, false, false);
 	}
 
 	@Override
 	public void onLoadResources() {
-		this.mSplash = Resource.getTexture(512, 1024, "splash");
+		this.mSplash = AdResourceLoader.getTexture(512, 1024, "splash");
 	}
 
 	@Override

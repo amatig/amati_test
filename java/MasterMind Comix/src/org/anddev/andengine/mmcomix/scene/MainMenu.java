@@ -1,5 +1,8 @@
 package org.anddev.andengine.mmcomix.scene;
 
+import org.amatidev.scene.AdScene;
+import org.amatidev.util.AdEnviroment;
+import org.amatidev.util.AdResourceLoader;
 import org.anddev.andengine.entity.IEntity;
 import org.anddev.andengine.entity.modifier.LoopEntityModifier;
 import org.anddev.andengine.entity.modifier.ScaleModifier;
@@ -8,9 +11,6 @@ import org.anddev.andengine.entity.modifier.IEntityModifier.IEntityModifierListe
 import org.anddev.andengine.entity.scene.menu.MenuScene;
 import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.Text;
-import org.anddev.andengine.extra.Enviroment;
-import org.anddev.andengine.extra.ExtraScene;
-import org.anddev.andengine.extra.Resource;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.font.Font;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
@@ -23,7 +23,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 
-public class MainMenu extends ExtraScene {
+public class MainMenu extends AdScene {
 	
 	private Font fontMainMenu;
 	
@@ -40,13 +40,13 @@ public class MainMenu extends ExtraScene {
 
 	@Override
 	public void createScene() {
-		this.mBack = Resource.getTexture(512, 1024, "back");
+		this.mBack = AdResourceLoader.getTexture(512, 1024, "back");
 		Sprite back = new Sprite(0, 0, this.mBack);
-		getChild(ExtraScene.GAME_LAYER).attachChild(back);
+		getChild(AdScene.GAME_LAYER).attachChild(back);
 		
-		int x = Enviroment.getInstance().getScreenWidth() / 2;
+		int x = AdEnviroment.getInstance().getScreenWidth() / 2;
 		
-		this.mTitle = Resource.getTexture(512, 256, "title");
+		this.mTitle = AdResourceLoader.getTexture(512, 256, "title");
 		Sprite title = new Sprite(0, 0, this.mTitle);
 		title.setPosition(x - title.getWidthScaled() / 2, 92);
 		title.registerEntityModifier(
@@ -60,9 +60,9 @@ public class MainMenu extends ExtraScene {
 						)
 				)
 		);
-		getChild(ExtraScene.GAME_LAYER).attachChild(title);
+		getChild(AdScene.GAME_LAYER).attachChild(title);
 		
-		this.fontMainMenu = Resource.getFont(512, 512, "akaDylan Plain", 43, 3, Color.WHITE, Color.BLACK);
+		this.fontMainMenu = AdResourceLoader.getFont(512, 512, "akaDylan Plain", 43, 3, Color.WHITE, Color.BLACK);
 		
 		this.mIndex = 382;
 		
@@ -75,9 +75,9 @@ public class MainMenu extends ExtraScene {
     	Text more = new Text(0, 0, this.fontMainMenu, "MORE GAMES");
     	more.setPosition(x - more.getWidthScaled() / 2, this.mIndex + 180);
     	
-    	getChild(ExtraScene.GAME_LAYER).attachChild(play);
-    	getChild(ExtraScene.GAME_LAYER).attachChild(score);
-    	getChild(ExtraScene.GAME_LAYER).attachChild(more);
+    	getChild(AdScene.GAME_LAYER).attachChild(play);
+    	getChild(AdScene.GAME_LAYER).attachChild(score);
+    	getChild(AdScene.GAME_LAYER).attachChild(more);
     	
     	registerTouchArea(play);
     	registerTouchArea(score);
@@ -86,7 +86,7 @@ public class MainMenu extends ExtraScene {
 
 	@Override
 	public void endScene() {
-		Enviroment.getInstance().setScene(new Game());
+		AdEnviroment.getInstance().setScene(new HowToPlay());
 	}
 
 	@Override
@@ -116,7 +116,7 @@ public class MainMenu extends ExtraScene {
 	private void execute(ITouchArea pTouchArea) {
 		Text item = (Text) pTouchArea;
 		if ((int) item.getY() == this.mIndex) {
-			Enviroment.getInstance().nextScene();
+			AdEnviroment.getInstance().nextScene();
 		} else if ((int) item.getY() == this.mIndex + 90) {
 			try {
 				Dashboard.open();
@@ -124,7 +124,7 @@ public class MainMenu extends ExtraScene {
 			}
 		} else if ((int) item.getY() == this.mIndex + 180) {
 			try{
-				Enviroment.getInstance().getContext().startActivity(new Intent (Intent.ACTION_VIEW, Uri.parse("market://details?id=org.anddev.andengine.braingame")));
+				AdEnviroment.getInstance().getContext().startActivity(new Intent (Intent.ACTION_VIEW, Uri.parse("market://details?id=org.anddev.andengine.braingame")));
 			} catch (ActivityNotFoundException e) {
 			}
 		}
