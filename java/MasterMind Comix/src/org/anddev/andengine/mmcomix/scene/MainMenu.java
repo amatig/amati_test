@@ -124,7 +124,7 @@ public class MainMenu extends AdScene {
 			}
 		} else if ((int) item.getY() == this.mIndex + 180) {
 			try{
-				AdEnviroment.getInstance().getContext().startActivity(new Intent (Intent.ACTION_VIEW, Uri.parse("market://details?id=org.anddev.andengine.braingame")));
+				AdEnviroment.getInstance().getContext().startActivity(new Intent (Intent.ACTION_VIEW, Uri.parse("market://details?id=org.anddev.andengine.braingamelite")));
 			} catch (ActivityNotFoundException e) {
 			}
 		}
