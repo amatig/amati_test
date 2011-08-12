@@ -1,0 +1,44 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Portale Sport</title>
+    <meta name="description" content="Portale per organizzare gratuitamente partite tra amici per ogni genere di sport" />
+    <meta name="keywords" content="calcio, calcetto, calcetto a 5, calcetto a 7, amici, social, tennis, basket, palla a volo, palla a canestro, volley, soccer, organizzare, partite, partitelle, partita, partitella, campo, campi, campetto, tornei, torneo, sfida, sfide, coppa, coppe, medaglie, giocatori, atleti, giocatore, atleta, statistiche, portale, web, facebook, sport, allenamento, forum" />
+    
+    <link rel="stylesheet" href="/static/css/base.css" type="text/css" />
+    {% block mycss %}{% endblock %}
+
+    <script src="/static/js/jquery.min.js" type="text/javascript"></script>
+    {% block myjs %}{% endblock %}
+  </head>
+
+  <body>
+    <div class="header">
+      <span>Portale Sport</span>
+    </div>
+    <div class="content">
+      <div class="left">
+	<div class="profile">
+	  <img src="/static/profile/{{ user.username }}.jpg" />
+	  <span>{{ user.get_full_name }}</span>
+	</div>
+	<a href="/"><span class="link">Pagina Principale</span></a>
+	<a href="/add/partita/"><span class="link">Partite</span></a>
+	<a href="#"><span class="link">Attivita'</span></a>
+	<a href="#"><span class="link">Classifiche</span></a>
+	<a href="#"><span class="link">Forum</span></a>
+	<a href="#"><span class="link">Messaggi</span></a>
+	<a href="#"><span class="link">Strutture</span></a>
+	<a href="#"><span class="link">Chi Siamo</span></a>
+      </div>
+      <div class="center">{% block content %}{% endblock %}</div>
+      <div class="right">
+	dsadsa
+      </div>
+    </div>
+    <div class="footer">
+    </div>
+  </body>
+
+</html>

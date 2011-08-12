@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+
+<h1>{{ title }}</h1>
+
+<form method="POST" action=".">
+  {% csrf_token %}
+  {% for field in form %}
+  <div class="field">{{ field.label_tag }}{{ field }}{{ field.errors }}</div>
+  {% endfor %}
+  <div class="buttons">
+    <input class="btn_full" type="submit" value="Invia" />
+    <input type="reset" value="Cancella" />
+  </div>
+</form>
+
+{% endblock %}
