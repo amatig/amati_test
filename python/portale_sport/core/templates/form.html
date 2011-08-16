@@ -1,6 +1,15 @@
 {% extends "base.html" %}
 {% load i18n %}
 
+{% block script %}
+<script type="text/javascript">
+  $(function() {
+  $("#id_giorno").datepicker({dateFormat:"yy-mm-dd"});
+  $("#id_ora").timepicker({});
+  });
+</script>
+{% endblock %}
+
 {% block content %}
 
 <h1>{{ title }}</h1>
