@@ -58,7 +58,8 @@
 ----------------------------------*/
 .ui-widget { font-family: Arial, sans-serif; font-size: small; }
 .ui-widget .ui-widget { font-size: 1em; }
-.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Arial, sans-serif; font-size: 13px; height:26px; line-height:19px; margin:11px 6px 11px 0px; min-width:54px; padding:0 8px; }
+.ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button { font-family: Arial, sans-serif; font-size: 11px; }
+button { height:29px; line-height:23px; margin:11px 6px 11px 0px; min-width:54px; padding:0 8px; }
 .ui-widget-content { border: 1px solid #dfd9c3; background: #fdfdfd url(images/ui-bg_flat_100_fdfdfd_40x100.png) 50% 50% repeat-x; color: #444; }
 .ui-widget-content a { color: #444; }
 .ui-widget-header { border: 1px solid #d4ccb0; background: #ffff99 url(images/ui-bg_gloss-wave_100_ffff99_500x100.png) 50% 50% repeat-x; color: #444; font-weight: bold; }
@@ -497,8 +498,18 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  *
  * http://docs.jquery.com/UI/Datepicker#theming
  */
+
+.ui-timepicker-div dl {
+    margin:0 0 5px 4px;
+}
+
+.ui-timepicker-div dd {
+    margin:0 5px 0 55px;
+}
+
 .ui-timepicker-div dt {
-    margin: 4px;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .ui-datepicker { width: 17em; padding: .2em .2em 0; display: none; }
@@ -518,7 +529,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
 .ui-datepicker table {width: 100%; font-size: .9em; border-collapse: collapse; margin:0 0 .4em; }
 .ui-datepicker th { padding: .7em .3em; text-align: center; font-weight: bold; border: 0;  }
 .ui-datepicker td { border: 0; padding: 1px; }
-.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .2em; text-align: center; text-decoration: none; }
+.ui-datepicker td span, .ui-datepicker td a { display: block; padding: .4em; text-align: center; text-decoration: none; }
 .ui-datepicker .ui-datepicker-buttonpane { background-image: none; margin: .7em 0 0 0; padding:0 .2em; border-left: 0; border-right: 0; border-bottom: 0; }
 .ui-datepicker .ui-datepicker-buttonpane button { float: right; margin: .5em .2em .4em; cursor: pointer; padding: .2em .6em .3em .6em; width:auto; overflow:visible; }
 .ui-datepicker .ui-datepicker-buttonpane button.ui-datepicker-current { float:left; }

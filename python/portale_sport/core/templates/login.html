@@ -1,0 +1,25 @@
+<form id="login_form" method="POST" action="/accounts/login/">
+  {% csrf_token %}
+  <input type="hidden" id="next" name="next" value="{{ next }}" />
+  
+  <div class="err" style="display:none;">{{ err1 }}</div>
+  <table>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.username.label }}</td>
+      <td class="valx">
+        {{ form.username }}
+        {{ form.username.errors }}
+      </td>
+    </tr>
+    <tr class="fieldWrapper">
+      <td class="labelx">{{ form.passwd.label }}</td>
+      <td class="valx">
+        {{ form.passwd }}
+        {{ form.passwd.errors }}
+        {% if err2 %}<ul class="errorlist"><li>Username or password wrong.</li></ul>{% endif %}
+      </td>
+    </tr>
+  </table>
+  <input type="submit" value="Login" />
+  
+</form>

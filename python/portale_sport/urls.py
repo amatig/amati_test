@@ -7,7 +7,10 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'core.views.index.home'),
-    url(r'^add/partita/$', 'core.views.index.partita'),
+    url(r'^accounts/login/*$', 'core.views.auth.login_view'),
+    url(r'^logout/*$', 'core.views.auth.logout_view'),
+    url(r'^list/partita/$', 'core.views.index.list_partita'),
+    url(r'^add/partita/$', 'core.views.index.add_partita'),
     # url(r'^portale_sport/', include('portale_sport.foo.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

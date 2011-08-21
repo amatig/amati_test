@@ -17,7 +17,7 @@
 <form method="POST" action=".">
   {% csrf_token %}
   {% for field in form %}
-  <div class="field">{{ field.label_tag }}{{ field }}{{ field.errors }}</div>
+  <div class="field {% if field.errors %}error{% endif %}">{{ field.label_tag }}{{ field }}{{ field.errors }}</div>
   {% endfor %}
   <div class="buttons">
     <input class="btn_full" type="submit" value="Invia" />

@@ -9,6 +9,18 @@ body {
     overflow-y:scroll;
 }
 
+/* List */
+
+.listelem {
+    width:100%;
+}
+
+.elem {
+    border:1px solid black;
+    margin-bottom:15px;
+    padding:15px;
+}
+
 /* Form */
 
 .field label {
@@ -23,6 +35,21 @@ body {
     font-weight:bold;
 }
 
+.field.error input, .field.error select, textarea { 
+    border:2px solid #ff5555;
+    border-radius:2px;
+}
+
+.field.error input:focus, .field.error select:focus, textarea:focus { 
+    border:2px solid #ff0000;
+    border-radius:2px;
+}
+
+.field.error input:hover, .field.error select:hover, textarea:hover { 
+    border:2px solid #ff0000;
+    border-radius:2px;
+}
+
 .buttons {
     margin-top:15px;
 }
@@ -33,11 +60,11 @@ body {
 
 /* Layout */
 
-.header {
+.header {   
     background-color:#16bd00;
     border-bottom:1px solid #dcdcdc;
     border-bottom:1px solid rgba(0, 0, 0, 0.1);
-    width:100%;
+    margin:0;
     padding:10px 0 10px 23px;
 }
 
@@ -50,7 +77,7 @@ body {
 .content {
     margin-left:auto;
     margin-right:auto;
-    width:100%;
+    width:95%;
 }
 
 .left {
@@ -79,20 +106,41 @@ body {
 }
 
 .footer {
-    width:100%;
+
 }
 
 .profile {
-    margin:0px 0px 20px 11px;
+    float:left;
+    width:100%;
+    margin:0px 0px 32px 11px;
 }
 
-.profile img {
-    vertical-align:middle;
+.profile .pavatar {
+    float:left;
     margin-right:10px;
 }
 
-.profile span {
-    
+.profile .puser {
+    float:left;
+    padding-top:1px
+}
+
+.username {
+    font-weight:bold;
+    font-size:17px;
+}
+
+.profile .puser a {
+    display:block;
+    margin:3px;
+    text-decoration:none !important;
+    outline:none !important;
+    color:#444;
+}
+
+.profile .puser a:hover {
+    color:#444;
+    text-decoration:underline !important;
 }
 
 /* Widget */
@@ -118,6 +166,8 @@ a {
 }
 
 a .link {
+    width:87%;
+    float:left;
     display:block;
     padding:10px;
     background:none;
@@ -126,7 +176,7 @@ a .link {
 }
 
 a .link:hover {
-    background:#ffff99;
+    background:#ffffbb;
     color:#444;
 }
 
@@ -140,7 +190,6 @@ select,input[type='button'],input[type='reset'],input[type='submit'] {
     border:1px solid rgba(0, 0, 0, 0.1);
     border-radius:2px;
     color:#666;
-    cursor:pointer;
     font-size:11px;
     font-weight:bold;
     height:29px;
