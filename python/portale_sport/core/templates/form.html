@@ -1,14 +1,5 @@
 {% extends "base.html" %}
 
-{% block script %}
-
-$(function() {
-$("#id_giorno").datepicker({dateFormat:"yy-mm-dd"});
-$("#id_ora").timepicker({});
-});
-
-{% endblock %}
-
 {% block content %}
 
 <h1>{{ title }}</h1>

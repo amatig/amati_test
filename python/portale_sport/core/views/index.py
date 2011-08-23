@@ -3,7 +3,8 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response
 from django.contrib.auth.decorators import login_required
 
-from core.models.partita import *
+from core.models.partita import Partita
+from core.forms.partita_form import PartitaForm
 
 @login_required
 def home(request):

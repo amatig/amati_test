@@ -1,5 +1,4 @@
 from django.db import models
-from django.forms import ModelForm
 from sport import Sport
 from struttura import Struttura
 
@@ -15,8 +14,3 @@ class Partita(models.Model):
     class Meta:
         app_label = "core"
         verbose_name_plural = "Partita"
-
-
-class PartitaForm(ModelForm):
-    class Meta:
-        model = Partita

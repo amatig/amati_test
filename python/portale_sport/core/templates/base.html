@@ -20,6 +20,12 @@
     {% block myjs %}{% endblock %}
     
     <script type="text/javascript">
+      $(document).ready(function() {
+          $(".title_tooltip").tipTip();
+          $("#id_giorno").datepicker({dateFormat:"yy-mm-dd"});
+          $("#id_ora").timepicker({});
+      });
+      
       {% block script %}{% endblock %}
     </script>
   </head>
