@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from core.forms.login_form import LoginForm
 from django.contrib.auth.forms import UserCreationForm
 
-def login(request):
+def login_view(request):
     err = False
     if request.method == "POST":
         next = request.POST["next"]
@@ -23,7 +23,7 @@ def login(request):
         form = LoginForm()
     return render_to_response("login.html", {"form": form, "next": next, "err": err}, RequestContext(request))
 
-def logout(request):
+def logout_view(request):
     logout(request)
     return HttpResponseRedirect("/")
 

@@ -7,9 +7,9 @@ admin.autodiscover()
 urlpatterns = patterns('',
     # Examples:
     url(r'^$', 'core.views.index.home'),
-    url(r'^accounts/login/*$', 'core.views.auth.login'),
-    url(r'^accounts/logout/*$', 'core.views.auth.logout'),
-    url(r'^accounts/register/*$', 'core.views.auth.register'),
+    url(r'^accounts/login/*$', 'core.views.auth.login_view'),
+    url(r'^accounts/logout/$', 'core.views.auth.logout_view'),
+    url(r'^accounts/register/$', 'core.views.auth.register'),
     url(r'^list/partita/$', 'core.views.index.list_partita'),
     url(r'^add/partita/$', 'core.views.index.add_partita'),
     # url(r'^portale_sport/', include('portale_sport.foo.urls')),
