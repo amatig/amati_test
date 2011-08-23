@@ -99,10 +99,10 @@
 @media screen and (-webkit-min-device-pixel-ratio:0) {	
 	#tiptip_content {
 		padding: 7px 8px 7px 8px;
-		background-color: rgba(30,30,30,1);
+		background-color: rgba(30,30,30,0.93);
 	}
 	#tiptip_holder.tip_bottom #tiptip_arrow_inner { 
-		border-bottom-color: rgba(30,30,30,1);
+		border-bottom-color: rgba(30,30,30,0.93);
 	}
 	#tiptip_holder.tip_top #tiptip_arrow_inner { 
 		border-top-color: rgba(20,20,20,0.92);
