@@ -6,8 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from core.forms.login_form import LoginForm
 
 def login_view(request):
-    err1 = False
-    err2 = False
+    err = False
     if request.method == "POST":
         next = request.POST["next"]
         form = LoginForm(request.POST)
@@ -17,14 +16,11 @@ def login_view(request):
                 login(request, user)
                 return HttpResponseRedirect(next)
             else:
-                err1 = True
-                err2 = True
-        else:
-            err1 = True
+                err = True
     else:
         next = request.GET["next"]
         form = LoginForm()
-    return render_to_response("login.html", {"form": form, "next": next, "err1": err1, "err2": err2}, RequestContext(request))
+    return render_to_response("login.html", {"form": form, "next": next, "err": err}, RequestContext(request))
 
 def logout_view(request):
     logout(request)

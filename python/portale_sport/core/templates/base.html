@@ -1,8 +1,10 @@
+{% load profile %}
+
 <!DOCTYPE HTML>
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Portale Sport</title>
+    <title>foolimpik</title>
     <meta name="description" content="Portale per organizzare gratuitamente partite tra amici per ogni genere di sport" />
     <meta name="keywords" content="calcio, calcetto, calcetto a 5, calcetto a 7, amici, social, tennis, basket, palla a volo, palla a canestro, volley, soccer, organizzare, partite, partitelle, partita, partitella, campo, campi, campetto, tornei, torneo, sfida, sfide, coppa, coppe, medaglie, giocatori, atleti, giocatore, atleta, statistiche, portale, web, facebook, sport, allenamento, forum" />
     
@@ -27,19 +29,11 @@
 
   <body>
     <div class="header">
-      <span>Portale Sport</span>
+      <span>foolimpik</span>
     </div>
     <div class="content">
       <div class="left">
-	<div class="profile">
-	  <div class="pavatar">
-	    <img src="/static/profile/{{ user.username }}.jpg" alt="avatar" width="48" height="48" />
-	  </div>
-	  <div class="puser">
-	    <a href="/profile/{{ user.username }}/"><span class="username">{{ user.first_name }}</span></a>
-	    <a href="/logout/"><span>Logout</span></a>
-	  </div>
-	</div>
+	{% user_profile %}
 	<a href="/"><span class="link" title="Torna alla home page<br/>del portale">Pagina Principale</span></a>
 	<a href="/add/partita/"><span class="link" title="Crea una nuova partita<br/>o vedi quelle gia' create">Partite</span></a>
 	<a href="#"><span class="link" title="">Attivita'</span></a>
