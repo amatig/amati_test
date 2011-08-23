@@ -26,13 +26,10 @@
 
 #tiptip_content {
         cursor:pointer;
-	font-size: 12px;
+	font-size: 11px;
 	color: #fff;
-	text-shadow: 0 0 2px #000;
+	font-weight: bold;
 	padding: 4px 8px;
-	background-color: rgb(25,25,25);
-	background-color: rgba(25,25,25,0.92);
-	background-image: -webkit-gradient(linear, 100% 100%, 100% 100%, from(transparent), to(#555));
 	border-radius: 2px;
 	-webkit-border-radius: 2px;
 	-moz-border-radius: 2px;
@@ -101,11 +98,11 @@
 /* Webkit Hacks  */
 @media screen and (-webkit-min-device-pixel-ratio:0) {	
 	#tiptip_content {
-		padding: 4px 8px 5px 8px;
-		background-color: rgba(45,45,45,0.88);
+		padding: 7px 8px 7px 8px;
+		background-color: rgba(30,30,30,1);
 	}
 	#tiptip_holder.tip_bottom #tiptip_arrow_inner { 
-		border-bottom-color: rgba(45,45,45,0.88);
+		border-bottom-color: rgba(30,30,30,1);
 	}
 	#tiptip_holder.tip_top #tiptip_arrow_inner { 
 		border-top-color: rgba(20,20,20,0.92);
