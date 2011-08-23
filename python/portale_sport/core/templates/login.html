@@ -6,11 +6,13 @@
   {% csrf_token %}
   <input type="hidden" id="next" name="next" value="{{ next }}" />
   
-  <div class="field {% if form.username.errors %}error{% endif %}">{{ form.username.label_tag }}{{ form.username }}{{ form.username.errors }}</div>
-  <div class="field {% if form.passwd.errors %}error{% endif %}">{{ form.passwd.label_tag }}{{ form.passwd }}{{ form.passwd.errors }}</div>
+  <div class="field {% if form.username.errors %}error{% else %}{% if err%}error{% endif %}{% endif %}">{{ form.username.label_tag }}{{ form.username }}{{ form.username.errors }}</div>
+  <div class="field {% if form.passwd.errors %}error{% else %}{% if err%}error{% endif %}{% endif %}">{{ form.passwd.label_tag }}{{ form.passwd }}{{ form.passwd.errors }}</div>
   
   {% if err %}
-  <p>Username e password non corrispondono o sono errati..</p>
+  <div class="field">
+    <ul class="errorlist"><li>Username e password non corrispondono o sono errati.</li></ul>
+  </div>
   {% endif %}
   
   <div class="buttons">

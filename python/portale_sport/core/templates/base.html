@@ -20,11 +20,8 @@
     {% block myjs %}{% endblock %}
     
     <script type="text/javascript">
-      $(function(){
-      $(".link").tipTip();
-      });
+      {% block script %}{% endblock %}
     </script>
-    {% block script %}{% endblock %}
   </head>
 
   <body>
@@ -34,14 +31,18 @@
     <div class="content">
       <div class="left">
 	{% user_profile %}
-	<a href="/"><span class="link" title="Torna alla home page<br/>del portale">Pagina Principale</span></a>
-	<a href="/add/partita/"><span class="link" title="Crea una nuova partita<br/>o vedi quelle gia' create">Partite</span></a>
-	<a href="#"><span class="link" title="">Attivita'</span></a>
-	<a href="#"><span class="link" title="">Classifiche</span></a>
-	<a href="#"><span class="link" title="">Forum</span></a>
-	<a href="#"><span class="link" title="">Messaggi</span></a>
-	<a href="#"><span class="link" title="">Strutture</span></a>
-	<a href="#"><span class="link" title="">Chi Siamo</span></a>
+	<a href="/"><span class="link">Pagina Principale</span></a>
+	
+	{% if user.is_authenticated %}
+	<a href="/add/partita/"><span class="link">Partite</span></a>
+	{% endif %}
+	<a href="#"><span class="link">Classifiche</span></a>
+	<a href="#"><span class="link">Forum</span></a>
+	{% if user.is_authenticated %}
+	<a href="#"><span class="link">Messaggi</span></a>
+	<a href="#"><span class="link">Strutture</span></a>
+	{% endif %}
+	<a href="#"><span class="link">Chi Siamo</span></a>
       </div>
       <div class="center">{% block content %}{% endblock %}</div>
       <div class="right">

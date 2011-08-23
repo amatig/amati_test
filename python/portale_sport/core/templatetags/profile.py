@@ -8,8 +8,12 @@ class ProfileNode(template.Node):
         pass
     
     def render(self, context):
-        t = template.loader.get_template("profile.html")
-        return t.render(template.Context(context, autoescape = context.autoescape))
+        user = context["user"]
+        if user.is_authenticated():
+            t = template.loader.get_template("profile.html")
+            return t.render(template.Context(context, autoescape = context.autoescape))
+        else:
+            return ""
 
 
 def user_profile(parser, token):

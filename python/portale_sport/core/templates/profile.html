@@ -1,9 +1,15 @@
+<script type="text/javascript">
+$(function(){
+$(".link_profile").tipTip();
+});
+</script>
+
 <div class="profile">
   <div class="pavatar">
     <img src="/static/profile/{{ user.username }}.jpg" alt="avatar" width="48" height="48" />
   </div>
   <div class="puser">
-    <a href="/profile/{{ user.username }}/"><span class="username">{{ user.first_name }}</span></a>
-    <a href="/logout/"><span>Logout</span></a>
+    <a class="link_profile" href="/profile/{{ user.username }}/" title="Clicca per visualizzare<br/>il profilo utente"><span class="username">{{ user.first_name }}</span></a>
+    <a href="/logout/"><span>Esci</span></a>
   </div>
 </div>
