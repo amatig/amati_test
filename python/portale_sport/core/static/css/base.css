@@ -130,19 +130,6 @@ body {
     font-size:17px;
 }
 
-.profile .puser a {
-    display:block;
-    margin:3px;
-    text-decoration:none !important;
-    outline:none !important;
-    color:#444;
-}
-
-.profile .puser a:hover {
-    color:#444;
-    text-decoration:underline !important;
-}
-
 /* Widget */
 
 h1 {
@@ -162,10 +149,24 @@ li {
 
 a {
     text-decoration:none !important;
-    outline:none !important;
+    outline:none;
+    color:#444;
 }
 
-a .link {
+.link:hover {
+    color:#444;
+    text-decoration:underline !important;
+}
+
+.profile .puser a {
+    display:block;
+    margin:3px;
+    text-decoration:none;
+    outline:none;
+    color:#444;
+}
+
+.link_menu {
     width:87%;
     float:left;
     display:block;
@@ -175,7 +176,9 @@ a .link {
     font-weight:bold;
 }
 
-a .link:hover {
+.link_menu:hover {
+    text-decoration:none !important;
+    outline:none !important;
     background:#ffffbb;
     color:#444;
 }

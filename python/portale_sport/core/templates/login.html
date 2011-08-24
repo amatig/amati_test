@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<h1>Accesso al Sito</h1>
+<h1>Accesso al sito</h1>
 
 <form method="POST" action="/accounts/login/">
   {% csrf_token %}
@@ -13,10 +13,11 @@
   
   {% if err %}
   <div class="field">
-    <ul class="errorlist"><li>Username e password non corrispondono o sono errati.</li></ul>
+    <ul class="errorlist"><li>Nome utente e password non corrispondono o sono errati.</li></ul>
   </div>
   {% endif %}
   
+  <div><p>Non sei ancora registrato? <a class="link" href="/accounts/register/"><span>clicca qui</span></a></p></div>
   <div class="buttons">
     <input class="btn_full" type="submit" value="Login" />
     <input type="reset" value="Cancella" />

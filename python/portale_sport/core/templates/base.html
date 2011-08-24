@@ -37,18 +37,18 @@
     <div class="content">
       <div class="left">
 	{% user_profile %}
-	<a href="/"><span class="link">Pagina Principale</span></a>
+	<a href="/"><span class="link_menu">Pagina principale</span></a>
 	
 	{% if user.is_authenticated %}
-	<a href="/add/partita/"><span class="link">Partite</span></a>
+	<a href="/add/partita/"><span class="link_menu">Partite</span></a>
 	{% endif %}
-	<a href="#"><span class="link">Classifiche</span></a>
-	<a href="#"><span class="link">Forum</span></a>
+	<a href="#"><span class="link_menu">Classifiche</span></a>
+	<a href="#"><span class="link_menu">Forum</span></a>
 	{% if user.is_authenticated %}
-	<a href="#"><span class="link">Messaggi</span></a>
-	<a href="#"><span class="link">Strutture</span></a>
+	<a href="#"><span class="link_menu">Messaggi</span></a>
+	<a href="#"><span class="link_menu">Strutture</span></a>
 	{% endif %}
-	<a href="#"><span class="link">Chi Siamo</span></a>
+	<a href="#"><span class="link_menu">Chi siamo</span></a>
       </div>
       <div class="center">{% block content %}{% endblock %}</div>
       <div class="right">

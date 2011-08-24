@@ -4,7 +4,7 @@ from django.shortcuts import render_to_response
 from django.contrib.auth import authenticate, login, logout
 
 from core.forms.login_form import LoginForm
-from django.contrib.auth.forms import UserCreationForm
+from core.forms.register_form import RegisterForm
 
 def login_view(request):
     err = False
@@ -28,13 +28,13 @@ def logout_view(request):
     return HttpResponseRedirect("/")
 
 def register(request):
-    pageContext = {"title": "Nuovo Utente"}
+    pageContext = {"title": "Nuovo utente"}
     if request.method == "POST":
-        form = UserCreationForm(request.POST)
+        form = RegisterForm(request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect("/")
     else:
-        form = UserCreationForm()
+        form = RegisterForm()
     pageContext.update({"form": form})
     return render_to_response("form.html", pageContext, RequestContext(request))
