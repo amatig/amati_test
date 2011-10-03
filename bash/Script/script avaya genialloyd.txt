@@ -1,0 +1,459 @@
+/* NCPREV1_Application */
+/*
+23/11/10	pbradely		initial version
+26/11/10	pbradley Avaya	Add logic to handle skillset out of service
+06/12/10	guidali	Delco		add msg007 for short wait
+04/02/11	guidali Delco		queue to internal skillset */
+
+ASSIGN NCPREV1									TO	skillset_cv
+ASSIGN NCPREV1									TO	internal_skillset_cv
+ASSIGN EXPECTED WAIT TIME internal_skillset_cv	TO	ewt_skillset_cv
+ASSIGN 5										TO	skillset_priority_cv
+ASSIGN 50										TO	ewt_threshold_cv
+ASSIGN 2										TO	mondial_flag_cv
+ASSIGN 2										TO	visiant_flag_cv
+ASSIGN 2										TO	transcom_flag_cv
+ASSIGN 99										TO	mondial_ewt_cv
+ASSIGN 99										TO	visiant_ewt_cv
+ASSIGN 99										TO	transcom_ewt_cv
+
+
+/*	IF skillset is out of service do not include GL local in routing decision
+	force expected wait above 360 seconds */
+	
+IF OUT OF SERVICE internal_skillset_cv	THEN
+		ASSIGN 400	TO	ewt_skillset_cv
+END IF
+
+
+/* HDX Section -  Get wait time threshold and ewt values from database */
+
+/* Get GL threshold for NPREV1 outsource (180) */
+
+ASSIGN 1			TO	SQLNO_cv
+ASSIGN "DEFAULT"	TO SQLRESP_cv
+SEND REQUEST AppID_gv SQLNO_cv, skillset_cv
+GET RESPONSE AppID_gv SQLRESP_cv, ewt_threshold_cv
+
+/* HDX Debugging */
+/*
+WHERE SQLRESP_cv EQUALS
+	VALUE "FAILURE" : 	LOG "Unable to access Host"
+	VALUE "NODATA" : 	LOG "No data available from Host"
+	VALUE "SUCCESS" : 	LOG "SUCCESS 1"		
+	VALUE "DEFAULT" :	LOG "DEFAULT"
+END WHERE
+*/
+
+/* Get Mondial Outsource Flag */
+
+ASSIGN 2			TO	SQLNO_cv
+ASSIGN "MONDIAL"	TO	outsourcer_cv
+SEND REQUEST AppID_gv SQLNO_cv, outsourcer_cv
+GET RESPONSE AppID_gv SQLRESP_cv, mondial_flag_cv
+
+/* HDX Debugging */
+/*
+WHERE SQLRESP_cv EQUALS
+	VALUE "FAILURE" : 	LOG "Unable to access Host"
+	VALUE "NODATA" : 	LOG "No data available from Host"
+	VALUE "SUCCESS" : 	LOG "SUCCESS 2"		
+	VALUE "DEFAULT" :	LOG "DEFAULT"
+END WHERE
+*/
+
+/* Get Mondial EWT  */
+
+ASSIGN 3			TO	SQLNO_cv
+SEND REQUEST AppID_gv SQLNO_cv, skillset_cv
+GET RESPONSE AppID_gv SQLRESP_cv, mondial_ewt_cv
+
+/* HDX Debugging */
+/*
+WHERE SQLRESP_cv EQUALS
+	VALUE "FAILURE" : 	LOG "Unable to access Host"
+	VALUE "NODATA" : 	LOG "No data available from Host"
+	VALUE "SUCCESS" : 	LOG "SUCCESS 3"		
+	VALUE "DEFAULT" :	LOG "DEFAULT"
+END WHERE
+*/
+
+/* Get Visiant Outsource Flag */
+
+ASSIGN 2			TO	SQLNO_cv
+ASSIGN "VISIANT"	TO	outsourcer_cv
+SEND REQUEST AppID_gv SQLNO_cv, outsourcer_cv
+GET RESPONSE AppID_gv SQLRESP_cv, visiant_flag_cv
+
+/* HDX Debugging */
+
+/*
+WHERE SQLRESP_cv EQUALS
+	VALUE "FAILURE" : 	LOG "Unable to access Host"
+	VALUE "NODATA" : 	LOG "No data available from Host"
+	VALUE "SUCCESS" : 	LOG "SUCCESS 2"		
+	VALUE "DEFAULT" :	LOG "DEFAULT"
+END WHERE
+*/
+
+/* Get Visiant EWT */
+
+ASSIGN 4			TO	SQLNO_cv
+SEND REQUEST AppID_gv SQLNO_cv, skillset_cv
+GET RESPONSE AppID_gv SQLRESP_cv, visiant_ewt_cv
+
+/* HDX Debugging */
+/*
+WHERE SQLRESP_cv EQUALS
+	VALUE "FAILURE" : 	LOG "Unable to access Host"
+	VALUE "NODATA" : 	LOG "No data available from Host"
+	VALUE "SUCCESS" : 	LOG "SUCCESS 4"		
+	VALUE "DEFAULT" :	LOG "DEFAULT"
+END WHERE
+*/
+
+
+/* Get Transcom Outsource Flag */
+
+ASSIGN 2			TO	SQLNO_cv
+ASSIGN "TRANSCOM"	TO	outsourcer_cv
+SEND REQUEST AppID_gv SQLNO_cv, outsourcer_cv
+GET RESPONSE AppID_gv SQLRESP_cv, transcom_flag_cv
+
+/* HDX Debugging */
+
+/*
+WHERE SQLRESP_cv EQUALS
+	VALUE "FAILURE" : 	LOG "Unable to access Host"
+	VALUE "NODATA" : 	LOG "No data available from Host"
+	VALUE "SUCCESS" : 	LOG "SUCCESS 2"		
+	VALUE "DEFAULT" :	LOG "DEFAULT"
+END WHERE
+*/
+
+/* Get Transcom EWT */
+
+ASSIGN 5			TO	SQLNO_cv
+SEND REQUEST AppID_gv SQLNO_cv, skillset_cv
+GET RESPONSE AppID_gv SQLRESP_cv, transcom_ewt_cv
+
+/* HDX Debugging */
+/*
+WHERE SQLRESP_cv EQUALS
+	VALUE "FAILURE" : 	LOG "Unable to access Host"
+	VALUE "NODATA" : 	LOG "No data available from Host"
+	VALUE "SUCCESS" : 	LOG "SUCCESS 4"		
+	VALUE "DEFAULT" :	LOG "DEFAULT"
+END WHERE
+*/
+
+
+/* Temporary ASSIGNs  for testing */
+/*ASSIGN 185				TO	ewt_threshold_cv*/
+/*ASSIGN 181				TO	ewt_skillset_cv*/
+/*ASSIGN 0					TO	mondial_flag_cv*/
+/*ASSIGN 0					TO	visiant_flag_cv*/
+/*ASSIGN 0					TO	transcom_flag_cv*/
+/*ASSIGN 100				TO	mondial_ewt_cv */
+/*ASSIGN 400				TO	visiant_ewt_cv */
+/*ASSIGN 100				TO	transcom_ewt_cv */
+
+
+/* End of test ASSIGN section */
+
+IF (ewt_skillset_cv < ewt_threshold_cv) THEN
+   	
+	EXECUTE SCRIPT Secondary_Type_1
+	
+END IF
+
+****************************************************************************************************************************
+
+SECTION mondial_check  /* HDX - Check Mondial Availability and expected wait time  */
+
+IF (mondial_flag_cv =1)	  AND
+   (transcom_flag_cv =1)  THEN
+	
+	IF (mondial_ewt_cv > ewt_threshold_cv)	AND
+	   (transcom_ewt_cv > ewt_threshold_cv)	THEN
+	   	
+		EXECUTE compare_all
+		
+	ELSE
+
+		IF (mondial_ewt_cv <= transcom_ewt_cv)	THEN
+		   	
+			EXECUTE mondial_outsource
+			
+		ELSE
+			
+			EXECUTE transcom_outsource
+			
+		END IF
+		
+	END IF
+	
+END IF
+
+SECTION compare_all
+
+IF (mondial_flag_cv = 0)	AND
+   (transcom_flag_cv = 0)	AND
+   (visiant_flag_cv = 0)	THEN
+   	
+   	EXECUTE	SCRIPT Secondary_Type_1
+	
+END IF
+
+IF (mondial_flag_cv = 1)	AND
+   (transcom_flag_cv = 1)	AND
+   (visiant_flag_cv = 1)	THEN
+	
+	IF (mondial_ewt_cv > 360)	AND
+	   (transcom_ewt_cv > 360)	AND
+	   (visiant_ewt_cv > 360)	AND
+	   (ewt_skillset_cv > 360)	THEN
+		
+		GIVE RAN msg001		/* disconnect call when all ewt > 360 */
+		WAIT 2
+		DISCONNECT
+		
+	END IF
+	
+	IF (mondial_ewt_cv <= ewt_skillset_cv)	AND
+	   (mondial_ewt_cv <= transcom_ewt_cv)	AND
+	   (mondial_ewt_cv <= visiant_ewt_cv)	THEN
+		
+		EXECUTE mondial_outsource
+	
+	END IF
+	
+	IF (transcom_ewt_cv <= ewt_skillset_cv)	AND
+	   (transcom_ewt_cv <= mondial_ewt_cv)	AND
+	   (transcom_ewt_cv <= visiant_ewt_cv)	THEN
+		
+		EXECUTE transcom_outsource
+		
+	END IF
+	
+	IF (visiant_ewt_cv <= ewt_skillset_cv)	AND
+	   (visiant_ewt_cv <= mondial_ewt_cv)	AND
+	   (visiant_ewt_cv <= transcom_ewt_cv)	THEN
+		
+		EXECUTE visiant_outsource
+		
+	END IF
+	
+	EXECUTE SCRIPT Secondary_Type_1
+	
+END IF
+
+IF (mondial_flag_cv = 1)	AND
+   (transcom_flag_cv = 1)	AND
+   (visiant_flag_cv = 0)	THEN
+	
+	IF (mondial_ewt_cv > 360)	AND
+	   (transcom_ewt_cv > 360)	AND
+	   (ewt_skillset_cv > 360)	THEN
+		
+		GIVE RAN msg001		/* disconnect call when all ewt > 360 */
+		WAIT 2
+		DISCONNECT
+		
+	END IF
+	
+	IF (mondial_ewt_cv <= ewt_skillset_cv)	AND
+	   (mondial_ewt_cv <= transcom_ewt_cv)	THEN
+		
+		EXECUTE mondial_outsource
+	
+	END IF
+	
+	IF (transcom_ewt_cv <= ewt_skillset_cv)	AND
+	   (transcom_ewt_cv <= mondial_ewt_cv)	THEN
+		
+		EXECUTE transcom_outsource
+		
+	END IF
+		
+	EXECUTE SCRIPT Secondary_Type_1
+	
+END IF
+
+IF (mondial_flag_cv = 1)	AND
+   (transcom_flag_cv = 0)	AND
+   (visiant_flag_cv = 1)	THEN
+	
+	IF (mondial_ewt_cv > 360)	AND
+	   (visiant_ewt_cv > 360)	AND
+	   (ewt_skillset_cv > 360)	THEN
+		
+		GIVE RAN msg001		/* disconnect call when all ewt > 360 */
+		WAIT 2
+		DISCONNECT
+		
+	END IF
+	
+	IF (mondial_ewt_cv <= ewt_skillset_cv)	AND
+	   (mondial_ewt_cv <= visiant_ewt_cv)	THEN
+		
+		EXECUTE mondial_outsource
+	
+	END IF
+	
+	IF (visiant_ewt_cv <= ewt_skillset_cv)	AND
+	   (visiant_ewt_cv <= mondial_ewt_cv)	THEN
+		
+		EXECUTE visiant_outsource
+		
+	END IF
+	
+	EXECUTE SCRIPT Secondary_Type_1
+	
+END IF
+
+IF (mondial_flag_cv = 1)	AND
+   (transcom_flag_cv = 0)	AND
+   (visiant_flag_cv = 0)	THEN
+	
+	IF (mondial_ewt_cv > 360)	AND
+	   (ewt_skillset_cv > 360)	THEN
+		
+		GIVE RAN msg001		/* disconnect call when all ewt > 360 */
+		WAIT 2
+		DISCONNECT
+		
+	END IF
+	
+	IF (mondial_ewt_cv <= ewt_skillset_cv) THEN
+		
+		EXECUTE mondial_outsource
+	
+	END IF
+	
+	EXECUTE SCRIPT Secondary_Type_1
+	
+END IF
+
+IF (mondial_flag_cv = 0)	AND
+   (transcom_flag_cv = 1)	AND
+   (visiant_flag_cv = 1)	THEN
+	
+	IF (transcom_ewt_cv > 360)	AND
+	   (visiant_ewt_cv > 360)	AND
+	   (ewt_skillset_cv > 360)	THEN
+		
+		GIVE RAN msg001		/* disconnect call when all ewt > 360 */
+		WAIT 2
+		DISCONNECT
+		
+	END IF
+	
+	IF (transcom_ewt_cv <= ewt_skillset_cv)	AND
+	   (transcom_ewt_cv <= visiant_ewt_cv)	THEN
+		
+		EXECUTE transcom_outsource
+		
+	END IF
+	
+	IF (visiant_ewt_cv <= ewt_skillset_cv)	AND
+	   (visiant_ewt_cv <= transcom_ewt_cv)	THEN
+		
+		EXECUTE visiant_outsource
+		
+	END IF
+	
+	EXECUTE SCRIPT Secondary_Type_1
+	
+END IF
+
+IF (mondial_flag_cv = 0)	AND
+   (transcom_flag_cv = 1)	AND
+   (visiant_flag_cv = 0)	THEN
+	
+	IF (transcom_ewt_cv > 360)	AND
+	   (ewt_skillset_cv > 360)	THEN
+		
+		GIVE RAN msg001		/* disconnect call when all ewt > 360 */
+		WAIT 2
+		DISCONNECT
+		
+	END IF
+	
+	IF (transcom_ewt_cv <= ewt_skillset_cv)	THEN
+		
+		EXECUTE transcom_outsource
+		
+	END IF
+	
+	EXECUTE SCRIPT Secondary_Type_1
+	
+END IF
+
+IF (mondial_flag_cv = 0)	AND
+   (transcom_flag_cv = 0)	AND
+   (visiant_flag_cv = 1)	THEN
+	
+	IF (visiant_ewt_cv > 360)	AND
+	   (ewt_skillset_cv > 360)	THEN
+		
+		GIVE RAN msg001		/* disconnect call when all ewt > 360 */
+		WAIT 2
+		DISCONNECT
+		
+	END IF
+	
+	IF (visiant_ewt_cv <= ewt_skillset_cv)	THEN
+		
+		EXECUTE visiant_outsource
+		
+	END IF
+	
+	EXECUTE SCRIPT Secondary_Type_1
+	
+END IF
+
+******************************************************************************************************************
+SECTION mondial_outsource	/* Mondial section  */
+
+GIVE RAN msg003 /* Privacy announcement before routing to mondial */
+
+IF mondial_ewt_cv > 180	THEN
+	GIVE RAN msg002  /* Long Wait */
+ELSE
+	GIVE RAN msg007 /* short wait */
+END IF	
+
+/*GIVE RAN msg005		********  Testing  *********/
+ROUTE CALL URI "sip:9482101@mnzsesicls01.genialloyd.it"
+
+
+SECTION visiant_outsource	/* Visiant section when ewt < 180 */
+
+GIVE RAN msg003 /* Privacy announcement before routing to Visiant */
+
+IF visiant_ewt_cv > 180	THEN
+	GIVE RAN msg002  /* Long Wait */
+ELSE
+	GIVE RAN msg007 /* short wait */
+END IF
+
+/*GIVE RAN msg006		********  Testing  *********/
+ROUTE CALL URI "sip:9482111@mnzsesicls01.genialloyd.it"
+
+
+SECTION transcom_outsource	/* transcom section when ewt < 180 */
+
+GIVE RAN msg003 /* Privacy announcement before routing to transcom */
+
+IF transcom_ewt_cv > 180	THEN
+	GIVE RAN msg002  /* Long Wait */
+ELSE
+	GIVE RAN msg007 /* short wait */
+END IF
+
+/*GIVE RAN msg006		********  Testing  *********/
+ROUTE CALL URI "sip:9482xxxx@mnzsesicls01.genialloyd.it"
+/* END OF SCRIPT */
+
+

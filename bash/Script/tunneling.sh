@@ -1,0 +1,1 @@
+ssh -L 2000:calvino.freenode.net:6667 admin@192.168.64.3 -N

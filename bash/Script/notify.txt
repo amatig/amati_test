@@ -1,0 +1,17 @@
+MESSAGE $user$@$dsthost$;transport=udp SIP/2.0
+From: sip:sipsak@$srchost$:1036;tag=38473
+To: $user$@$dsthost$
+Call-ID: 12345678@test
+CSeq: 59620 MESSAGE
+Max-Forwards: 70
+Contact: <$user$@$dsthost$;transport=udp>
+Subject: buttons
+Content-Type: application/x-buttons
+Content-Length: 20
+
+k=p3
+x=ext
+n=*88
+
+k=3
+c=off

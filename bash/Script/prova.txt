@@ -1,0 +1,18 @@
+NOTIFY sip:$user$@$dsthost$ SIP/2.0
+Via: SIP/2.0/UDP $dsthost$;rport;branch=z9hG4bKpH2DtBDcDtg0N
+Max-Forwards: 70
+From: <sip:$user$@$dsthost$>;tag=Dy3c6Q1y15v5S
+To: <sip:$user$@$dsthost$>
+Call-ID: 129d1446-0063-122c-15aa-001a923f6a0f
+CSeq: 104766492 NOTIFY
+Contact: <sip:mod_sofia@$dsthost$:5060>
+User-Agent: FreeSWITCH-mod_sofia/1.0.trunk-9578:9586
+Allow: INVITE, ACK, BYE, CANCEL, OPTIONS, PRACK, MESSAGE, SUBSCRIBE, NOTIFY, REFER, UPDATE, REGISTER, INFO, PUBLISH
+Supported: 100rel, timer, precondition, path, replaces
+Event: dialog
+Allow-Events: talk, presence, dialog, call-info, sla, include-session-description, presence.winfo, message-summary
+Subscription-State: terminated;timeout
+Content-Type: application/simple-message-summary
+Content-Length: 2
+
+ok

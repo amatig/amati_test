@@ -1,0 +1,1 @@
+sudo mount -t cifs //DELCOSR1/REPORT remote/ -o user=FASTDATATEL\\amagio

@@ -1,0 +1,1 @@
+sipsak -G -H amati.delcospa.net -s sip:500@amati.delcospa.net -f prova.txt
