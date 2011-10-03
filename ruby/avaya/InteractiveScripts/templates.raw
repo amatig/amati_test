@@ -1,0 +1,566 @@
+list reg e 2000[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2000 [0m8[23;0H[0;7m [79b[1G[0m[2;0H [79b[1G[3;1H[0J7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G2000         [15G9620     [25GIP_Phone  [37Gy[40G192.168.65.183                         
+[15G1  [25G3.101S[40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+busyout sta 2000[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mbusyout station 2000                 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00024   [13GDIG-IP-S[31G2000         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+rel sta 2000[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mrelease station 2000 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00024   [13GDIG-IP-S[31G2000         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G2002         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.136                         
+[15G1  [25G3.1000[40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+busyout sta 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mbusyout station 2002                 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00020   [13GDIG-IP-S[31G2002         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<
+
+
+
+
+
+
+
+
+7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G3605         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.233                         
+[15G1  [25G2.830 [40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m[2;0H [79b[1G[3;1H[0J7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G2002         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.136                         
+[15G1  [25G3.1000[40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+busyout sta 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mbusyout station 2002                 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00020   [13GDIG-IP-S[31G2002         [50GABORT          [67G1010  
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+rel sta 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mrelease station 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00020   [13GDIG-IP-S[31G2002         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G3605         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.233                         
+[15G1  [25G2.830 [40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+busyout sta 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mbusyout station 3605                 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00010   [13GDIG-IP-S[31G3605         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+rel sta 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mrelease station 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00010   [13GDIG-IP-S[31G3605         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G3605         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.233                         
+[15G1  [25G2.830 [40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G2002         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.136                         
+[15G1  [25G3.1000[40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2000[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2000 [0m8[23;0H[0;7m [79b[1G[0m[2;0H [79b[1G[3;1H[0J7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G2000         [15G9620     [25GIP_Phone  [37Gy[40G192.168.65.183                         
+[15G1  [25G3.101S[40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+busyout sta 2000[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mbusyout station 2000                 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00024   [13GDIG-IP-S[31G2000         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+rel sta 2000
+
+
+
+
+
+
+
+
+[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mrelease station 2000 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00024   [13GDIG-IP-S[31G2000         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<
+
+
+
+
+
+
+
+
+7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: list reg e 2002
+
+
+
+
+
+
+
+
+list reg e 2000[1;1H<7[1;1H[0;7mlist registered-ip-stations ext 2000 [0m87[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mNo records match the specified query options[0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G2002         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.136                         
+[15G1  [25G3.1000[40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+busyout sta 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mbusyout station 2002                 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00020   [13GDIG-IP-S[31G2002         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+rel sta 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mrelease station 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00020   [13GDIG-IP-S[31G2002         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G3605         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.233                         
+[15G1  [25G2.830 [40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+busyout sta 3605[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mbusyout station 3605                 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00010   [13GDIG-IP-S[31G3605         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+rel sta 3605
+
+
+
+
+
+
+
+
+[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mrelease station 3605 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[30GCOMMAND RESULTS
+
+[3GPort      Maintenance Name  Alt. Name          Result           Error Code
+
+[3GS00010   [13GDIG-IP-S[31G3605         [50GPASS           [67G      
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[2;0H [79b[1G[3;1H[0J[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H<7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m87[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mNo records match the specified query options[0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
+list reg e 2002[23;0H[0;7m [79b[1G[0m7[1;0H[0;7m [79b[1G[0m8[1;1H[24;0H [79b[1G7[1;1H[0;7mlist registered-ip-stations ext 2002 [0m8[23;0H[0;7m [79b[1G[0m7[1;65H[0;7m       Page   1[0m8[3;1H[29GREGISTERED IP STATIONS
+
+[1GStation Ext   Set Type/ Prod ID/   TCP Station IP Address/
+[1Gor Orig Port  Net Rgn   Release    Skt Gatekeeper IP Address
+[1G------------- --------- ---------- --- ---------------------------------------
+[1G2002         [15G4610     [25GIP_Phone  [37Gy[40G192.168.65.136                         
+[15G1  [25G3.1000[40G192.168.65.108                         
+7[23;0H[0;7m [79b[1G[0m[23;0H[0;7m[0;7mCommand successfully completed[0m8<7[1;65H[0;7m                [0m8[24;1H [79b[1GCommand: 
+
+
+
+
+
+
+
+
