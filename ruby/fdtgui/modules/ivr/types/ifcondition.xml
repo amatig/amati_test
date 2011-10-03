@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>IfCondition</type>
+  <section>Logic Functions</section>
+  <description>Condizione Vero/Falso</description>
+  <style>
+    <image>IfCondition.png</image>
+    <width>78</width>
+    <height>64</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="Operand1" type="adv_choice" value="resource_var_reserv_value" />
+    <attr name="Operation" type="choice" value="logic_operations" />
+    <attr name="Operand2" type="adv_choice" value="resource_var_reserv_value" />
+  </edit>
+  <connections>
+    <connector type="OnConditionTrue" optional="false" index="0" color="#48ef54" />
+    <connector type="OnConditionFalse" optional="false" index="1" color="#e32424" />
+  </connections>
+</node>

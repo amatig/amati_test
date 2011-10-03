@@ -1,0 +1,19 @@
+creare un widget con la gui nella cartella widgets tipo "prova.ui"
+creare una cartella con lo stresso nome in modules e dentro un file "prova.rb"
+
+es.
+
+module Prova
+
+  def my_init(window)
+    b1 = findChild(Qt::PushButton, "pushButton")
+    Qt::Object.connect(b1, SIGNAL(:clicked), Qt::Application.instance) { prova }
+  end
+
+  def prova()
+    puts "provaaaa"
+  end
+
+end
+
+dove pushButton e' il nome dell'oggetto nella widget grafica

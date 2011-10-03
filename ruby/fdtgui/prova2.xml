@@ -1,30 +1,46 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<items>
-  <Block Layout='3' Name='Start' ID='1300099188_3793890' Left='1313' Description='Inizio Applicazione' Top='2352' Type='BEGIN'>
-    <Statistics/>
-    <Connections>
-      <Connector ID='OnContinue' NextBlock='1300099250_1429370' index='0'/>
-    </Connections>
-  </Block>
-  <Block Name='End' ID='1300099188_440776' Left='1664' Description='Fine Applicazione' Top='2450' Type='END'>
-    <Statistics/>
-    <Connections/>
-  </Block>
-  <Block ClearDigit='false' OnChoice2='false' SelectionTimeout='0' OnChoice3='false' Layout='#&lt;Qt::Variant:0x7fb5a079b6e0&gt;' OnChoice4='false' Name='Prova' OnChoice5='true' OnChoicePound='false' OnChoice6='true' OnChoice7='false' ID='1300099240_1349791' OnChoice8='true' OnChoice9='false' Left='1475' Description='Menu&apos; di Selezione' OnChoiceStar='false' OnChoice0='false' PlayMessage='dsdadsa' OnChoice1='false' Top='2379' Type='MENUSELECTION'>
-    <Statistics/>
-    <Connections>
-      <Connector ID='OnChoiceTimeout' NextBlock='1300099188_440776' index='13'/>
-      <Connector ID='OnChoice5' NextBlock='1300099188_440776' index='4'/>
-      <Connector ID='OnChoice6' NextBlock='1300099188_440776' index='5'/>
-      <Connector ID='OnChoiceInvalid' NextBlock='1300099188_440776' index='12'/>
-      <Connector ID='OnChoice8' NextBlock='' index='7'/>
-    </Connections>
-  </Block>
-  <Block ClearDigit='false' Layout='#&lt;Qt::Variant:0x7fb5a08dad30&gt;' Name='dsadsa' ID='1300099250_1429370' OnDigit='true' Left='1371' Description='Riproduzione Messaggio' PlayMessage='dsads' Top='2685' Type='PLAYMESSAGE'>
-    <Statistics/>
-    <Connections>
-      <Connector ID='OnDigit' NextBlock='1300099188_440776' index='1'/>
-      <Connector ID='OnFinish' NextBlock='1300099240_1349791' index='0'/>
-    </Connections>
-  </Block>
-</items>
+<DocumentHeader>
+  <Project ExportType='/opt/build/etc/sipxpbx' RemoteIP='' RemotePasswd='' RemoteUser=''>
+    <ApplicationList>
+      <Application Name='Nuova Applicazione' ID='13122736306565703' Description=''>
+        <FlowBlocks>
+          <Block Layout='' Name='Begin' ID='13122736306362914' Left='1303' Description='Inizio Applicazione' Top='2219' Type='BEGIN'>
+            <Statistics/>
+            <Connections>
+              <Connector ID='OnContinue' NextBlock='1312273640499806' index='0'/>
+            </Connections>
+          </Block>
+          <Block Name='End' ID='13122736304548954' Left='1649' Description='Fine Applicazione' Top='2351' Type='END'>
+            <Statistics/>
+            <Connections/>
+          </Block>
+          <Block Layout='0' Name='dsadsa' ID='1312273640499806' DateProfile='' Result='' Left='1419' Description='Controllo Date Speciali' Top='2397' Type='DATECONDITION'>
+            <Statistics/>
+            <Connections>
+              <Connector ID='OnHolidayDate' NextBlock='13122736304548954' index='1'/>
+              <Connector ID='OnWorkDate' NextBlock='13122736304548954' index='0'/>
+            </Connections>
+          </Block>
+        </FlowBlocks>
+      </Application>
+    </ApplicationList>
+    <ResouceList>
+      <VariableList>
+        <ApplicationVariableList/>
+        <ReservedVariableList>
+          <Variable Name='reservedAgent' DefaultValue='' ID='reservedAgent' Description='Porta IVR' Type='STRING'/>
+          <Variable Name='reservedCalledParty' DefaultValue='' ID='reservedCalledParty' Description='Numero chiamato' Type='STRING'/>
+          <Variable Name='reservedNow' DefaultValue='' ID='reservedNow' Description='Data ed Ora corrente' Type='STRING'/>
+          <Variable Name='reservedCLI' DefaultValue='' ID='reservedCLI' Description='Numero del Chiamante' Type='STRING'/>
+          <Variable Name='reservedLanguage' DefaultValue='' ID='reservedLanguage' Description='Lingua corrente' Type='STRING'/>
+          <Variable Name='reservedLine' DefaultValue='' ID='reservedLine' Description='Linea IVR' Type='STRING'/>
+        </ReservedVariableList>
+      </VariableList>
+      <TimeProfileList/>
+      <DateProfileList/>
+      <MessageFolderList>
+        <MessageFolder ID='13122736295891757'/>
+      </MessageFolderList>
+    </ResouceList>
+  </Project>
+</DocumentHeader>

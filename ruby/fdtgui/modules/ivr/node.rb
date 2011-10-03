@@ -10,18 +10,18 @@ class FdtNode < Qt::GraphicsItem
   
   def dialog(label)
     state = InputDialog::getItems(MyGraphicsView.instance, 
-                                  "#{label} #{@type}", 
+                                  label, 
                                   @memstorage)
     internal_checkChilds if state
     return state
   end
   
   def inputDialog()
-    return dialog("Add")
+    return dialog("Add node")
   end
   
   def editDialog()
-    state = dialog("Edit")
+    state = dialog("Edit #{@memstorage['Name'].value}")
     if state
       update # aggiorna dentro il nodo
       internal_fixPosChilds
@@ -34,11 +34,19 @@ class FdtNode < Qt::GraphicsItem
     Qt::Object.connect(a2, SIGNAL(:triggered), Qt::Application.instance) {
       editDialog # il nodo si updata graficamente da solo
     }
-    a3 = popMenu.addAction("Delete node")
-    Qt::Object.connect(a3, SIGNAL(:triggered), Qt::Application.instance) {
-      delete
-      @graph.scene.update # forza
-    }
+    if (@type != "Begin" and @type != "End")
+      a3 = popMenu.addAction("Delete node")
+      Qt::Object.connect(a3, SIGNAL(:triggered), Qt::Application.instance) {
+        nametemp = @memstorage['Name'].value
+        ret = Qt::MessageBox.warning(@graph, "Alert", 
+                                     "Sicuro di voler cancellare il nodo \'#{nametemp}\'?", 
+                                     Qt::MessageBox::Yes, Qt::MessageBox::No)
+        if ret == Qt::MessageBox::Yes
+          delete
+          @graph.scene.update # forza
+        end
+      }
+    end
   end
   
   def internal_setGraphInfo(x = nil, y = nil)
@@ -46,10 +54,13 @@ class FdtNode < Qt::GraphicsItem
     
     begin
       @image = Qt::Image.new
-      @image.load("images/#{@raw_image}")
+      @image.load("#{$abs_path}/images/#{@raw_image}")
+      if @image.width == 0
+        @image.load("#{$abs_path}/images/Child") # default
+      end
     rescue
-      @image = nil
     end
+    
     @x = -@width / 2
     @y = -@height / 2
     
@@ -59,12 +70,13 @@ class FdtNode < Qt::GraphicsItem
     setZValue(FdtNode.getZfront)
     
     if x == nil
-      x = (55...580).to_a
-      y = (50...450).to_a
+      x = (155...480).to_a
+      y = (150...350).to_a
       x = x[rand(x.length)] + @graph.horizontalScrollBar.value
       y = y[rand(y.length)] + @graph.verticalScrollBar.value
     end
     setPos(x, y)
+    setToolTip(@memstorage["Name"].value)
     @graph.scene.addItem(self)
     
     # figli fissi key == al type nei raw_childs
@@ -77,7 +89,7 @@ class FdtNode < Qt::GraphicsItem
   
   def internal_checkChild(name)
     widget = @memstorage[name]
-    if (widget and widget.class == Connector and widget.changed)
+    if (widget and (widget.class == Connector or widget.class == Dynamconnector) and widget.changed)
       if widget.value == true
         internal_addChild(name)
         widget.changed = false
@@ -97,8 +109,13 @@ class FdtNode < Qt::GraphicsItem
   end
   
   def internal_addChild(name)
-    index = @raw_childs[name][1]
-    color = @raw_childs[name][2]
+    begin
+      index = @raw_childs[name][1]
+      color = @raw_childs[name][2]
+    rescue
+      index = @childs.length + 2
+      color = "#79bee5"
+    end
     ch = FdtChildNode.getInstance(name, index, color)
     ch.setMove(false)
     @childs[name] = ch
@@ -177,16 +194,16 @@ class FdtNode < Qt::GraphicsItem
     # Text
     if @memstorage["Description"]
       text = @memstorage["Description"].value
-      fix = text.length
-      fix += 13 if fix > 20
+      fix = (text.length * 6.3 / 2) - (@width / 2)
       if type == "Child"
         textRect = Qt::RectF.new(@x + 8, @y + 5, @width - 7, @height - 7)
       else
-        textRect = Qt::RectF.new(@x - fix, @y + 63, 200, 15)
+        textRect = Qt::RectF.new(@x - fix, @height - 25, 200, 15)
       end
       font = painter.font
+      font.family = "Monospace"
       # font.setBold(true)
-      font.setPointSize(9)
+      font.setPointSize(8)
       painter.setFont(font)
       painter.setPen(Qt::black)
       painter.drawText(textRect, text)
@@ -249,7 +266,7 @@ class FdtNode < Qt::GraphicsItem
 end
 
 class FdtChildNode < FdtNode
-  attr_accessor :raw_image, :index, :color
+  attr_reader :index, :color
   
   def getContextualMenu(popMenu)
     if canJoin?
@@ -272,8 +289,8 @@ class FdtMouseNode < Qt::GraphicsItem
   
   def initialize
     super
-    @width = 20
-    @height = 20
+    @width = 10
+    @height = 10
   end
   
   def addEdge(edge)

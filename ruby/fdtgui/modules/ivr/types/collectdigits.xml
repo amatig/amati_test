@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>CollectDigits</type>
+  <section>Voice Functions</section>
+  <description>Acquisizione Cifre</description>
+  <style>
+    <image>CollectDigits.png</image>
+    <width>74</width>
+    <height>66</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="PlayMessage" type="choice" value="resource_wav" />
+    <attr name="CollectType" type="choice" value="digits_acquire" />
+    <attr name="ClearDigits" type="bool" />
+    <attr name="SelectionTimeout" type="int" not_null="true" value="10" />
+    <attr name="MinDigits" type="int" not_null="true" value="3" />
+    <attr name="MaxDigits" type="int" not_null="true" value="10"  />
+    <attr name="TermDigit" type="digit" not_null="true" value="#" />
+    <attr name="Variable" type="adv_choice" value="resource_var" />
+    <attr name="Iterations" type="int" not_null="true" value="1"  />
+  </edit>
+  <connections>
+    <connector type="OnFinish" optional="false" index="0" color="#48ef54" />
+    <connector type="OnError" optional="false" index="1" color="#e32424" />
+    <connector type="OnTimeout" optional="false" index="2" color="#fbf200" />
+  </connections>
+</node>

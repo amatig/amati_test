@@ -5,7 +5,7 @@
   <style>
     <image>Begin.png</image>
     <width>74</width>
-    <height>58</height>
+    <height>60</height>
   </style>
   <properties>
     <edges>none</edges> <!-- none, one, more -->
@@ -13,6 +13,6 @@
   <edit>
   </edit>
   <connections>
-    <connector type="OnContinue" optional="false" color="#79bee5" />
+    <connector type="OnContinue" optional="false" index="0" color="#79bee5" />
   </connections>
 </node>

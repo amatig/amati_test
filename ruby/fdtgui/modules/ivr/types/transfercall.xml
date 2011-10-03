@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>TransferCall</type>
+  <section>Call Functions</section>
+  <description>Trasferimento di Chiamata</description>
+  <style>
+    <image>TransferCall.png</image>
+    <width>74</width>
+    <height>59</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="TransferTimeout" type="int" not_null="true" value="10" />
+    <attr name="TransferType" type="choice" value="transfer" />
+    <attr name="Destination" type="adv_choice" value="resource_var_value" />
+  </edit>
+  <connections>
+    <connector type="OnError" optional="false" index="0" color="#e32424" />
+    <connector type="OnTimeout" optional="true" index="1" color="#fbf200" />
+  </connections>
+</node>

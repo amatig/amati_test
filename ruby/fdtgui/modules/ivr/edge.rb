@@ -46,8 +46,11 @@ class FdtEdge < Qt::GraphicsItem
   def getContextualMenu(popMenu)
     a4 = popMenu.addAction("Delete line")
     Qt::Object.connect(a4, SIGNAL(:triggered), Qt::Application.instance) {
-      delete
-      @graph.scene.update # forza
+      ret = Qt::MessageBox.warning(@graph, "Alert", "Sicuro di voler cancellare la linea?", Qt::MessageBox::Yes, Qt::MessageBox::No)
+      if ret == Qt::MessageBox::Yes
+        delete
+        @graph.scene.update # forza
+      end
     }
   end
   
@@ -61,7 +64,7 @@ class FdtEdge < Qt::GraphicsItem
     
     prepareGeometryChange
     
-    if length > 80
+    if length > 25
       x = @dest.width / 1.4 # distanza dal centro
       y = @dest.height / 1.3
       edgeOffset = Qt::PointF.new(line.dx * x / length, line.dy * y / length)

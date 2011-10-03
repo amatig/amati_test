@@ -6,18 +6,18 @@
   <style>
     <image>Message.png</image>
     <width>74</width>
-    <height>58</height>
+    <height>60</height>
   </style>
   <properties>
     <edges>none</edges> <!-- none, one, more -->
   </properties>
   <edit>
     <attr name="PlayMessage" type="choice" value="resource_wav" />
-    <attr name="ClearDigit" type="bool" />
-    <group name="StopOnDigit" type="simple" />
+    <attr name="ClearDigits" type="bool" />
+    <group name="StopCondition" type="simple" />
   </edit>
   <connections>
     <connector type="OnFinish" optional="false" index="0" color="#48ef54" />
-    <connector type="OnDigit" optional="true" group="StopOnDigit" index="1" color="#fbf200" />
+    <connector type="OnDigit" slabel="StopOnDigit" optional="true" group="StopCondition" index="1" color="#fbf200" />
   </connections>
 </node>

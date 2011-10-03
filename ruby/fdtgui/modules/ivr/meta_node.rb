@@ -14,18 +14,43 @@ class FdtNode
     type = xmlnode.attributes["Type"]
     f = new(id, type.downcase)
     clip = ClipBoard.instance
+    
+    values_list = []
+    
     f.memstorage.each do | key, value |
-      f.memstorage[key] = xmlnode.attributes[key]
+      temp_attr = xmlnode.attributes[value.slabel]
+      f.memstorage[key] = temp_attr if temp_attr
+      if f.memstorage[key].class == Valuelist
+        values_list << key
+      end
     end
+    
     f.internal_checkChilds
     
     f.internal_setGraphInfo(xmlnode.attributes["Top"].to_i,
                             xmlnode.attributes["Left"].to_i)
     
+    values_list.each do |vl|
+      REXML::XPath.each(xmlnode, "#{vl}/Value") do |cvl|
+        f.memstorage[vl].value << "On" + cvl.attributes["Text"]
+      end
+    end
+    
     REXML::XPath.each(xmlnode, "*/Connector") do |conn|
       unless f.childs.key?(conn.attributes["ID"])
-        f.memstorage[conn.attributes["ID"]] = true
-        f.checkChild(conn.attributes["ID"])
+        begin
+          f.memstorage[conn.attributes["ID"]] = true
+        rescue
+          # per i figli dinamici non ci sono definizioni nel
+          # memstorage
+          f.memstorage.add_entity(conn.attributes["ID"], 
+                                  conn.attributes["ID"], 
+                                  "Dynamconnector", 
+                                  false, 
+                                  true)
+          f.memstorage[conn.attributes["ID"]].changed = true
+        end
+        f.internal_checkChild(conn.attributes["ID"])
       end
       if conn.attributes["NextBlock"] != ""
         ch = f.childs[conn.attributes["ID"]]
@@ -61,10 +86,10 @@ class FdtNode
   
   def load_metadata()
     @memstorage = MemStorage.new
-    @memstorage.add_entity("Name", "Text", true)
-    @memstorage.add_entity("Description", "Memo", false)
+    @memstorage.add_entity("Name", "Name", "Text", true)
+    @memstorage.add_entity("Description", "Description", "Memo", false)
     
-    file = File.new "modules/ivr/types/#{@type.downcase}.xml"
+    file = File.new "#{$abs_path}/modules/ivr/types/#{@type.downcase}.xml"
     doc = REXML::Document.new(file)
     
     @type = REXML::XPath.first(doc, "//type").text
@@ -76,7 +101,8 @@ class FdtNode
     @line_mode = REXML::XPath.first(doc, "//properties//edges").text
     REXML::XPath.each(doc, "//edit/*") do |e|
       if e.name == "attr"
-        @memstorage.add_entity(e.attributes["name"], 
+        @memstorage.add_entity(e.attributes["name"],
+                               e.attributes["slabel"] ? e.attributes["slabel"] : e.attributes["name"],
                                e.attributes["type"], 
                                e.attributes["not_null"] == "true",
                                e.attributes["value"])
@@ -90,24 +116,30 @@ class FdtNode
       @raw_childs[c.attributes["type"]] = [c.attributes["optional"] != "true",
                                            c.attributes["index"].to_i,
                                            c.attributes["color"]]
+      
       if c.attributes["optional"] == "true"
+        slabel = c.attributes["slabel"] ? c.attributes["slabel"] : c.attributes["type"]
         if c.attributes["group"]
           @memstorage.add_entity(c.attributes["type"], 
+                                 slabel,
                                  "Connector", 
                                  c.attributes["not_null"] == "true", 
                                  false, 
                                  c.attributes["group"])
         else
           @memstorage.add_entity(c.attributes["type"], 
+                                 slabel,
                                  "Connector", 
                                  c.attributes["not_null"] == "true")
         end
       end
     end
     if @raw_childs.length > 0
-      @memstorage.add_entity("Layout", "Choice", 
+      @memstorage.add_entity("Layout", 
+                             "Layout",
+                             "Choice", 
                              false, 
-                             [["Bottom", "0"], ["Left", "1"], ["Top", "2"], ["Right", "3"]])
+                             "position")
     end
     # fix nome di base
     if (@type == "Begin" or @type == "End")
@@ -119,8 +151,8 @@ class FdtNode
   def serialize()
     node = REXML::Element.new "Block"
     node.attributes["Type"] = @type.upcase
-    node.attributes["Top"] = x.to_i
-    node.attributes["Left"] = y.to_i
+    node.attributes["Top"] = pos.x.to_i
+    node.attributes["Left"] = pos.y.to_i
     node.attributes["ID"] = @id
     node.attributes["Name"] = @memstorage["Name"].value
     begin
@@ -129,10 +161,45 @@ class FdtNode
       node.attributes["Description"] = ""
     end
     @memstorage.each do | key, value |
-      begin
-        node.attributes[key] = @memstorage[key].value
-      rescue
-        node.attributes[key] = ""
+      if value.class == Dynamconnector
+        next
+      elsif value.class == Valuelist
+        values = REXML::Element.new key
+        node.add(values)
+        value.value.each do |elem|
+          val = REXML::Element.new "Value"
+          val.attributes["Text"] = elem[2..-1]
+          values.add(val)
+        end
+      else
+        begin
+          valid = true
+          begin
+            type_val = value.choice
+            valid = false
+            myList = []
+            if type_val == "resource_wav"
+              myList = ProjectEnv.instance.getResourceWav
+            elsif type_val == "resource_timeprofile"
+              myList = ProjectEnv.instance.getResourceTimeProfile
+            else
+              valid = true
+            end
+            myList.each {|item|
+              if item[1] == value.value
+                valid = true
+              end
+            }
+          rescue
+          end
+          if valid 
+            node.attributes[value.slabel] = value.value
+          else
+            node.attributes[value.slabel] = ""
+          end
+        rescue
+          node.attributes[value.slabel] = ""
+        end
       end
     end
     stats = REXML::Element.new "Statistics"
@@ -174,16 +241,21 @@ class FdtChildNode < FdtNode
   
   def self.getInstance(type, index, color)
     f = new(generate_id, "Child")
-    f.raw_image = type
-    f.index = index
-    f.color = color ? color : "#000"
+    f.extraData(type, index, color ? color : "#000")
     f.internal_setGraphInfo
     return f
   end
   
+  def extraData(type, index, color)
+    @memstorage["Name"] = type
+    @raw_image = type
+    @index = index
+    @color = color
+  end
+  
   def load_metadata()
     @memstorage = MemStorage.new
-    @memstorage.add_entity("Name", "Text", false)
+    @memstorage.add_entity("Name", "Name", "Text", false)
     
     @raw_image = "Child"
     @width = 25

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>DateCondition</type>
+  <section>Logic Functions</section>
+  <description>Controllo Date Speciali</description>
+  <style>
+    <image>DateCondition.png</image>
+    <width>74</width>
+    <height>59</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="DateProfile" type="choice" value="resource_dateprofile" />
+    <attr name="Result" type="adv_choice" value="resource_var" />
+  </edit>
+  <connections>
+    <connector type="OnWorkDate" optional="false" index="0" color="#48ef54" />
+    <connector type="OnHolidayDate" optional="false" index="1" color="#fbf200" />
+  </connections>
+</node>

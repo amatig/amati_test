@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>VariableOperation</type>
+  <section>Data Integration</section>
+  <description>Operazioni su Variabile</description>
+  <style>
+    <image>VariableOperation.png</image>
+    <width>74</width>
+    <height>59</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="Variable" type="adv_choice" value="resource_var" />
+    <attr name="Operation" type="choice" value="math_operations" />
+    <attr name="Parameter" type="adv_choice" value="resource_var_reserv_value" />
+    <attr name="Filler" type="text" />
+    <attr name="Position" type="adv_choice" value="resource_var_value" />
+    <attr name="Length" type="adv_choice" value="resource_var_value" />
+  </edit>
+  <connections>
+    <connector type="OnFinish" optional="false" index="0" color="#48ef54" />
+  </connections>
+</node>

@@ -1,0 +1,77 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<DocumentHeader>
+  <Project ExportType='/opt/build/etc/sipxpbx' RemoteIP='' RemotePasswd='' RemoteUser=''>
+    <ApplicationList>
+      <Application Name='Nuova Applicazione' ID='13116920172685900' Description=''>
+        <FlowBlocks>
+          <Block Layout='' Name='Begin' ID='13116920173862235' Left='1265' Description='Inizio Applicazione' Top='2513' Type='BEGIN'>
+            <Statistics/>
+            <Connections>
+              <Connector ID='OnContinue' NextBlock='1311692076595479' index='0'/>
+            </Connections>
+          </Block>
+          <Block Name='End' ID='13116920173854034' Left='1679' Description='Fine Applicazione' Top='2709' Type='END'>
+            <Statistics/>
+            <Connections/>
+          </Block>
+          <Block Layout='0' Name='sda' ID='1311692076595479' DateProfile='DateProfile§§13116920341828295' Result='ApplicationVariable§§13116920244927966' Left='1372' Description='Controllo Date Speciali' Top='2711' Type='DATECONDITION'>
+            <Statistics/>
+            <Connections>
+              <Connector ID='OnHolidayDate' NextBlock='13116920173854034' index='1'/>
+              <Connector ID='OnWorkDate' NextBlock='13116920965821171' index='0'/>
+            </Connections>
+          </Block>
+          <Block ClearDigits='false' Layout='0' Name='dsdsqw' StopOnDigit='false' ID='13116920965821171' Left='1638' Description='Messaggio di Festivita&apos;' PlayMessage='ApplicationVariable§§13116920244927966' Top='2313' Type='PLAYVARIABLE'>
+            <Statistics/>
+            <Connections>
+              <Connector ID='OnFinish' NextBlock='13116920173854034' index='0'/>
+            </Connections>
+          </Block>
+          <Block Layout='0' Name='pdas' ID='13116943497656394' Result='ApplicationVariable§§13116920244927966' Left='1370' TimeProfile='TimeProfile§§13116920554740410' Description='Controllo Orario' Top='2277' Type='TIMECONDITION'>
+            <Statistics/>
+            <Connections>
+              <Connector ID='OnWorkOffTime' NextBlock='13116920173854034' index='1'/>
+              <Connector ID='OnWorkTime' NextBlock='13116920965821171' index='0'/>
+            </Connections>
+          </Block>
+        </FlowBlocks>
+      </Application>
+    </ApplicationList>
+    <ResouceList>
+      <VariableList>
+        <ApplicationVariableList>
+          <Variable Name='festa' DefaultValue='' ID='13116920244927966' Description='' Type='STRING'/>
+        </ApplicationVariableList>
+        <ReservedVariableList>
+          <Variable Name='reservedAgent' DefaultValue='' ID='reservedAgent' Description='Porta IVR' Type='STRING'/>
+          <Variable Name='reservedCalledParty' DefaultValue='' ID='reservedCalledParty' Description='Numero chiamato' Type='STRING'/>
+          <Variable Name='reservedNow' DefaultValue='' ID='reservedNow' Description='Data ed Ora corrente' Type='STRING'/>
+          <Variable Name='reservedCLI' DefaultValue='' ID='reservedCLI' Description='Numero del Chiamante' Type='STRING'/>
+          <Variable Name='reservedLanguage' DefaultValue='' ID='reservedLanguage' Description='Lingua corrente' Type='STRING'/>
+          <Variable Name='reservedLine' DefaultValue='' ID='reservedLine' Description='Linea IVR' Type='STRING'/>
+        </ReservedVariableList>
+      </VariableList>
+      <TimeProfileList>
+        <TimeProfile Name='orari' ID='13116920554740410' Description=''>
+          <TimeProfileDetail Name='xxx' FromTime='01:00:00' ID='13116920594058251' Day='ME' ToTime='22:00:00' Description=''/>
+        </TimeProfile>
+      </TimeProfileList>
+      <DateProfileList>
+        <DateProfile Name='feste' ID='13116920341828295' Description=''>
+          <DateProfileDetail FromDay='1' FromMonth='8' Name='natale' ToDay='2' ID='13116920643245487' ToMonth='8' Description=''/>
+          <DateProfileDetail FromDay='1' FromMonth='10' Name='pasqua' ToDay='2' ID='13116920697537265' ToMonth='11' Description=''/>
+        </DateProfile>
+      </DateProfileList>
+      <MessageFolderList>
+        <MessageFolder ID='13116920164532732'>
+          <Message Name='dsada' FileDeploy='/opt/build/share/www/doc/message-ivr/zzzout.wav' ID='13118658308991667' FileDefault='/home/amati/zzzout.wav' Description=''/>
+          <Message Name='dsada' FileDeploy='/opt/build/share/www/doc/message-ivr/FrogL9pF_3_Aura_6___Roger_Jones_V1.ppt' ID='13119518001582552' FileDefault='/home/amati/Scaricati/FrogL9pF_3_Aura_6___Roger_Jones_V1.ppt' Description=''/>
+          <Message Name='natale' FileDeploy='/opt/build/share/www/doc/message-ivr/welcome.wav' ID='1311692574550869' FileDefault='/opt/build/share/www/doc/stdprompts/welcome.wav' Description=''/>
+          <Message Name='dsad' FileDeploy='/opt/build/share/www/doc/message-ivr/polizia.wav' ID='13118658158219438' FileDefault='/home/amati/polizia.wav' Description=''/>
+          <Message Name='dsad' FileDeploy='/opt/build/share/www/doc/message-ivr/configuration.tar.gz' ID='13119518326836380' FileDefault='/home/amati/Scaricati/configuration.tar.gz' Description=''/>
+          <Message Name='xxx' FileDeploy='/opt/build/share/www/doc/message-ivr/1000.wav' ID='13117525408832055' FileDefault='/opt/build/share/www/doc/stdprompts/1000.wav' Description=''/>
+        </MessageFolder>
+      </MessageFolderList>
+    </ResouceList>
+  </Project>
+</DocumentHeader>

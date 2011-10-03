@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>Recognize</type>
+  <section>Voice Functions</section>
+  <description>Riconoscimento Vocale</description>
+  <style>
+    <image>Recognize.png</image>
+    <width>74</width>
+    <height>59</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="PlayMessage" type="choice" value="resource_wav" />
+    <attr name="Variable" type="adv_choice" value="resource_var" />
+    <attr name="ClearDigits" type="bool" />
+    <attr name="Timeout" type="int" not_null="true" value="10" />
+    <attr name="BargeInType" type="choice" value="status" />
+    <attr name="GrammarType" type="choice" value="grammar" />
+    <attr name="Grammar" type="text" not_null="false" />
+    <attr name="MinItems" type="int" not_null="true" value="4" />
+    <attr name="MaxItems" type="int" not_null="true" value="10"  />
+    <group name="StopCondition" type="simple" />
+  </edit>
+  <connections>
+    <connector type="OnFinish" optional="false" index="0" color="#48ef54" />
+    <connector type="OnTimeout" optional="false" index="1" color="#fbf200" />
+    <connector type="OnUnrecognized" optional="false" index="2" color="#ef6b23" />
+    <connector type="OnDigit" slabel="StopOnDigit" optional="true" group="StopCondition" index="3" color="#fbf200" />
+    <connector type="OnError" optional="false" index="4" color="#e32424" />
+  </connections>
+</node>

@@ -10,6 +10,10 @@ class MemStorage
     return @linear.key?(key)
   end
   
+  def keys
+    return @linear.keys
+  end
+  
   def [](key)
     return @linear[key]
   end
@@ -24,7 +28,7 @@ class MemStorage
   
   def add_group(name, type)
     const = Kernel.const_get(type.capitalize)
-    @grouped[name.capitalize] = const.new
+    @grouped[name] = const.new
   end
   
   def get_group(name)
@@ -39,19 +43,20 @@ class MemStorage
     return @grouped.each
   end
   
-  def add_entity(key, type, not_null = false, value = nil, group = nil)
+  def add_entity(key, slabel, type, not_null = false, value = nil, group = nil)
     if not @linear.key?(key)
       begin
         const = Kernel.const_get(type.capitalize)
         elem = const.new(value, not_null)
+        elem.slabel = slabel
       rescue Exception => e
         raise TypeError, "Unsupported type: #{type.capitalize} - details: #{e}"
       end
       group = "Ungrouped" if (group == nil)
-      unless @grouped.key?(group.capitalize)
-        raise TypeError, "Unsupported group: #{group.capitalize}"
+      unless @grouped.key?(group)
+        raise TypeError, "Unsupported group: #{group}"
       end
-      @grouped[group.capitalize][key] = elem
+      @grouped[group][key] = elem
       @linear[key] = elem
     end
   end

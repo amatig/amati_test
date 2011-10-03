@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>SwitchCondition</type>
+  <section>Logic Functions</section>
+  <description>Condizione Multipla</description>
+  <style>
+    <image>SwitchCondition.png</image>
+    <width>78</width>
+    <height>64</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="Variable" type="adv_choice" value="resource_var_reserv" />
+    <attr name="Values" type="valuelist" />
+  </edit>
+  <connections>
+    <connector type="OnDefault" optional="false" index="0" color="#ef6b23" />
+  </connections>
+</node>

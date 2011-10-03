@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<node>
+  <type>PlayVariable</type>
+  <section>Voice Functions</section>
+  <description>Messaggio di Festivita'</description>
+  <style>
+    <image>Message2.png</image>
+    <width>74</width>
+    <height>60</height>
+  </style>
+  <properties>
+    <edges>none</edges> <!-- none, one, more -->
+  </properties>
+  <edit>
+    <attr name="PlayMessage" type="adv_choice" value="resource_var" />
+    <attr name="ClearDigits" type="bool" />
+    <group name="StopCondition" type="simple" />
+  </edit>
+  <connections>
+    <connector type="OnFinish" optional="false" index="0" color="#48ef54" />
+    <connector type="OnDigit" slabel="StopOnDigit" optional="true" group="StopCondition" index="1" color="#fbf200" />
+  </connections>
+</node>
