@@ -23,6 +23,8 @@ public class HowToPlay extends AdScene {
 		this.mBack = AdResourceLoader.getTexture(512, 1024, "back2");
 		Sprite back = new Sprite(0, 0, this.mBack);
 		getChild(AdScene.GAME_LAYER).attachChild(back);
+		
+		setOnSceneTouchListener(this);
 	}
 
 	@Override
@@ -37,12 +39,24 @@ public class HowToPlay extends AdScene {
 	}
 
 	@Override
-	public void manageSceneTouch(TouchEvent pSceneTouchEvent) {
+	public void startScene() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void downSceneTouch(TouchEvent pSceneTouchEvent) {
 		AdEnviroment.getInstance().nextScene();
 	}
 
 	@Override
-	public void startScene() {
+	public void moveSceneTouch(TouchEvent pSceneTouchEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void upSceneTouch(TouchEvent pSceneTouchEvent) {
 		// TODO Auto-generated method stub
 		
 	}

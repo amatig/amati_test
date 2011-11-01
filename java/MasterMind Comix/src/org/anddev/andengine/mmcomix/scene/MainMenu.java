@@ -129,15 +129,27 @@ public class MainMenu extends AdScene {
 			}
 		}
 	}
-	
+
 	@Override
-	public void manageSceneTouch(TouchEvent pSceneTouchEvent) {
+	public void startScene() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void startScene() {
+	public void downSceneTouch(TouchEvent pSceneTouchEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void moveSceneTouch(TouchEvent pSceneTouchEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void upSceneTouch(TouchEvent pSceneTouchEvent) {
 		// TODO Auto-generated method stub
 		
 	}

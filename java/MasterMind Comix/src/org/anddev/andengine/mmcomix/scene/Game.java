@@ -404,14 +404,26 @@ public class Game extends AdScene {
 	}
 	
 	@Override
-	public void manageSceneTouch(TouchEvent pSceneTouchEvent) {
+	public MenuScene createMenu() {
+		return this.mMenu;
+	}
+
+	@Override
+	public void downSceneTouch(TouchEvent pSceneTouchEvent) {
 		// TODO Auto-generated method stub
 		
 	}
-	
+
 	@Override
-	public MenuScene createMenu() {
-		return this.mMenu;
+	public void moveSceneTouch(TouchEvent pSceneTouchEvent) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void upSceneTouch(TouchEvent pSceneTouchEvent) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
