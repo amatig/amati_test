@@ -18,17 +18,31 @@ function createScroller(imageMap) {
 	function init() {
 		for (var i = 0; i < 3 ; i++) {
 			viewArray[i] = Titanium.UI.createView();
-			var containerView = Titanium.UI.createImageView({
+			var containerViewLeft = Titanium.UI.createImageView({
 				width: 768, 
 				height: 1024
 			});
-			viewArray[i].add(containerView);
+			var containerViewRight = Titanium.UI.createImageView({
+				//backgroundColor: 'red',
+				visible: false,
+				width: 768, 
+				height: 1024
+			});
+			viewArray[i].add(containerViewRight);
+			viewArray[i].add(containerViewLeft);
 		}
 		scrollingView.views = viewArray;
 		
-		scrollingView.views[0].children[0].image = imageNameArray[0];
-		scrollingView.views[1].children[0].image = imageNameArray[1];
-		scrollingView.views[2].children[0].image = imageNameArray[2];
+		try {
+			scrollingView.views[0].children[1].image = imageNameArray[0];
+			//scrollingView.views[0].children[0].image = imageNameArray[1];
+			scrollingView.views[1].children[1].image = imageNameArray[1];
+			//scrollingView.views[1].children[0].image = imageNameArray[3];
+			scrollingView.views[2].children[1].image = imageNameArray[2];
+			//scrollingView.views[2].children[0].image = imageNameArray[5];
+		} catch(e) {
+			Ti.API.error(e);
+		}
 		scrollingView.views[0].index = 1;
 		scrollingView.views[1].index = 2;
 		scrollingView.views[2].index = 3;
@@ -48,13 +62,13 @@ function createScroller(imageMap) {
 	  		viewArray[0] = scrollingView.views[1];
 	  		viewArray[1] = scrollingView.views[2];
 	  		//scrollingView.removeView(first);
-	  		first.children[0].image = imageNameArray[nextImageIndex]; // elimina affetto sfarfallio
+	  		first.children[1].image = imageNameArray[nextImageIndex]; // elimina affetto sfarfallio
 	  		viewArray[2] = first;
 	  		
 	  		scrollingView.views = viewArray;
 			scrollingView.currentPage = 1;
 			
-			first.children[0].image = imageNameArray[nextImageIndex + 1];
+			first.children[1].image = imageNameArray[nextImageIndex + 1];
 			
 			first.index = scrollingView.views[1].index + 1; // inc indice
 		} else if (e.currentPage == 0 && nextImageIndex > 1) {
@@ -65,25 +79,37 @@ function createScroller(imageMap) {
 	  		viewArray[1] = scrollingView.views[0];
 	  		viewArray[2] = scrollingView.views[1];
 	  		//scrollingView.removeView(first);
-	  		first.children[0].image=imageNameArray[nextImageIndex];
+	  		first.children[1].image=imageNameArray[nextImageIndex];
 	  		viewArray[0] = first;
 	  		
 	  		scrollingView.views = viewArray;
 	  		scrollingView.currentPage = 1;
 	  		
-	  		first.children[0].image = imageNameArray[nextImageIndex - 1];
-	  		
+	  		first.children[1].image = imageNameArray[nextImageIndex - 1];
+			
 			first.index = scrollingView.views[1].index - 1; // dec indice
 		}
 	}
 	
 	Ti.Gesture.addEventListener('orientationchange', function(e) {
 		if (e.orientation != 0) {
+			var half = 666;
+			
 			var tr_single = Titanium.UI.create2DMatrix();
 			if (e.orientation == 1 || e.orientation == 2) {
 				tr_single = tr_single.scale(1);
-				//scrollingView.views[scrollingView.currentPage].width = 768;
-				//scrollingView.views[scrollingView.currentPage].height = 1024;
+				
+				scrollingView.views[0].children[1].left = 0;
+				scrollingView.views[0].children[1].transform = tr_single;
+				scrollingView.views[1].children[1].left = 0;
+				scrollingView.views[1].children[1].transform = tr_single;
+				scrollingView.views[2].children[1].left = 0;
+				scrollingView.views[2].children[1].transform = tr_single;
+				
+				scrollingView.views[0].children[0].visible = false;
+				scrollingView.views[1].children[0].visible = false;
+				scrollingView.views[2].children[0].visible = false;
+				
 				scrollingView.views[0].children[0].left = 0;
 				scrollingView.views[0].children[0].transform = tr_single;
 				scrollingView.views[1].children[0].left = 0;
@@ -91,14 +117,24 @@ function createScroller(imageMap) {
 				scrollingView.views[2].children[0].left = 0;
 				scrollingView.views[2].children[0].transform = tr_single;
 			} else {
-				tr_single = tr_single.scale(1024 * 512 / 768 / 1000);
-				//scrollingView.views[scrollingView.currentPage].width = 1024;
-				//scrollingView.views[scrollingView.currentPage].height = 768;
-				scrollingView.views[0].children[0].left = 1024 * 512 / 768 / 2 - 463;
+				tr_single = tr_single.scale(half / 1000);
+				
+				scrollingView.views[0].children[0].visible = true;
+				scrollingView.views[1].children[0].visible = true;
+				scrollingView.views[2].children[0].visible = true;
+				
+				scrollingView.views[0].children[1].left = -half / 4 + 39;
+				scrollingView.views[0].children[1].transform = tr_single;
+				scrollingView.views[1].children[1].left = scrollingView.views[0].children[1].left;
+				scrollingView.views[1].children[1].transform = tr_single;
+				scrollingView.views[2].children[1].left = scrollingView.views[0].children[1].left;
+				scrollingView.views[2].children[1].transform = tr_single;
+				
+				scrollingView.views[0].children[0].left = half / 2 + 51;
 				scrollingView.views[0].children[0].transform = tr_single;
-				scrollingView.views[1].children[0].left = 1024 * 512 / 768 / 2 - 463;
+				scrollingView.views[1].children[0].left = scrollingView.views[0].children[0].left;
 				scrollingView.views[1].children[0].transform = tr_single;
-				scrollingView.views[2].children[0].left = 1024 * 512 / 768 / 2 - 463;
+				scrollingView.views[2].children[0].left = scrollingView.views[0].children[0].left;
 				scrollingView.views[2].children[0].transform = tr_single;
 			}
 		}
