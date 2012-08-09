@@ -1,30 +1,18 @@
 import java.io.File;
-import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Iterator;
 import java.util.List;
-
-import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
 import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.lib.IndexDiff;
 import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.lib.ObjectReader;
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.Tree;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
-import org.eclipse.jgit.treewalk.CanonicalTreeParser;
-import org.eclipse.jgit.treewalk.FileTreeIterator;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 
-/**
- * Show hot to open an exisiting repository.
- */
 public class Main {
 	
     public static void main(String [] args) {
@@ -59,6 +47,8 @@ public class Main {
 	        	ChangeType decodeOper = DiffEntry.ChangeType.valueOf(oper);
 	        	String origP = diff.getOldPath();
 	        	String destP = diff.getNewPath();
+	        	
+	        	// System.out.println(MessageFormat.format("{0} {1} {2}", oper, origP, destP));
 	        	
 	        	if (decodeOper == DiffEntry.ChangeType.ADD) {
 	        		System.out.println(MessageFormat.format("{0},{1}", "CP", destP));
