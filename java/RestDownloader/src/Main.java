@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.DiffEntry;
+import org.eclipse.jgit.diff.DiffEntry.ChangeType;
 import org.eclipse.jgit.diff.DiffFormatter;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.Constants;
@@ -27,8 +28,12 @@ import org.eclipse.jgit.util.io.DisabledOutputStream;
 public class Main {
 	
     public static void main(String [] args) {
-	    File gitWorkDir = new File("/Users/amatig/Code/git/amati_test/");
-	    File gitDir = new File(gitWorkDir, ".git");
+    	
+    	String strPath = "/Users/amatig/Code/git/amati_test/";
+    	String strCommit = "3d32c595a740ab70006cd13247377c57bea8eb9a";
+    	
+	    File gitWorkDir = new File(strPath);
+	    File gitDir = new File(gitWorkDir, Constants.DOT_GIT);
 	    try {
 	        FileRepositoryBuilder builder = new FileRepositoryBuilder();
 	        
@@ -41,8 +46,7 @@ public class Main {
 	        
 	        ObjectId head = repository.resolve(Constants.HEAD);
 	        RevCommit commit = rw.parseCommit(head);
-	        //RevCommit commit = rw.parseCommit(ObjectId.fromString("01443a0c47ae766671a1ab38535bd56901039fb9"));
-	        RevCommit parent = rw.parseCommit(ObjectId.fromString("3d32c595a740ab70006cd13247377c57bea8eb9a"));
+	        RevCommit parent = rw.parseCommit(ObjectId.fromString(strCommit));
 	        
 	        DiffFormatter df = new DiffFormatter(DisabledOutputStream.INSTANCE);
 	        df.setRepository(repository);
@@ -51,11 +55,31 @@ public class Main {
 	        
 	        List<DiffEntry> diffs = df.scan(parent.getTree(), commit.getTree());
 	        for (DiffEntry diff : diffs) {
-	            System.out.println(MessageFormat.format("{0} {1} {2}", diff.getChangeType().name(), diff.getOldPath(), diff.getNewPath()));
+	        	String oper = diff.getChangeType().name();
+	        	ChangeType decodeOper = DiffEntry.ChangeType.valueOf(oper);
+	        	String origP = diff.getOldPath();
+	        	String destP = diff.getNewPath();
+	        	
+	        	if (decodeOper == DiffEntry.ChangeType.ADD) {
+	        		System.out.println(MessageFormat.format("{0},{1}", "CP", destP));
+	        	} else if (decodeOper == DiffEntry.ChangeType.DELETE) {
+	        		System.out.println(MessageFormat.format("{0},{1}", "RM", origP));
+	        	} else if (decodeOper == DiffEntry.ChangeType.MODIFY) {
+	        		System.out.println(MessageFormat.format("{0},{1}", "CP", destP));
+	        	} else if (decodeOper == DiffEntry.ChangeType.RENAME) {
+	        		System.out.println(MessageFormat.format("{0},{1}", "RM", origP));
+	        		System.out.println(MessageFormat.format("{0},{1}", "CP", destP));
+	        	} else if (decodeOper == DiffEntry.ChangeType.COPY) {
+	        		
+	        	} else {
+	        		
+	        	}
 	        }
+	        
 	    } catch (Exception e) {
 	        
 	    }
+	    
     }
     
 }
