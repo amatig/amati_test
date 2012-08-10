@@ -86,7 +86,7 @@ public class Main {
 	        byte[] zip = zipFiles(gitWorkDir, files);
 	        FileOutputStream fos = new FileOutputStream("last.zip");
 	        fos.write(zip);
-	        //fos.flush();
+	        fos.flush();
 	        fos.close();
 	        
 	    } catch (Exception e) {
