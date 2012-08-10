@@ -17,3 +17,5 @@ install-sh
 *pyc
 .*
 *~
+build
+WebContent
