@@ -13,6 +13,6 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/Applications/eclipse/plugins/org.eclipse.jgit_1.3.0.201202151440-r.jar"/>
+	<classpathentry kind="lib" path="/Applications/eclipse/plugins/org.eclipse.jgit_2.0.0.201206130900-r.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
