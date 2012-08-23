@@ -48,18 +48,26 @@ for elem in result["channels"] do
 		end
 		
 		name = elem["name"]
-		url = elem["url"]
+		name = Iconv.conv("UTF8", "LATIN1", name).strip
+		url = elem["url"].strip
 		
-    	query = "INSERT INTO \"canali\" VALUES(#{_id},\"#{name}\",#{category},#{country},NULL,NULL,\"#{url}\",0,#{best});"
-    	db.execute query
+		unless url.match(/tvdream/i)
+			query = "SELECT * FROM \"canali\" WHERE url=\"#{url}\";"
+    		res2 = db.get_first_row query
+    		
+    		unless res2
+    			query = "INSERT INTO \"canali\" VALUES(#{_id},\"#{name}\",#{category},#{country},NULL,NULL,\"#{url}\",0,#{best});"
+    			db.execute query
+    		end
+    	end
     	_id += 1
     end
 end
 
-puts "0..45"
-p countries.sort
-puts "0..13"
-p categories.sort
+puts "Nazioni nuove?"
+puts countries.sort.length != 46
+puts "Categorie nuove?"
+puts categories.sort.length != 14
 
 map_countries = {
 	"0"  => ["Albania","Albania","阿尔巴尼亚"],

@@ -1,73 +1,37 @@
 require "rubygems"
 require "json"
 require "net/http"
-require "open-uri"
 require "sqlite3"
-
-url = "http://www.tvdream.mobi/app-andr/IT/channels.json"
-resp = Net::HTTP.get_response(URI.parse(url))
-data = resp.body
-
-result = JSON.parse(data)
-
-if result.has_key? "Error"
-   raise "web service error"
-end
 
 db = SQLite3::Database.new("git/myStream/assets/myStream.sqlite")
 
-_id = 0
-for elem in result["channels"] do
-	country = elem["country"].to_i
-	category = elem["categories"][0].to_i
+db.execute("SELECT * FROM canali") do |elem|
+	_id = elem[0]
+	name = elem[1].gsub("/", "-")
+	name = Iconv.conv("UTF8", "LATIN1", name).strip
 	
-	if category != "" and country != ""
-		name = elem["name"]
-		
-		row = db.get_first_row("SELECT logo FROM canali WHERE _id=#{_id} and titolo=\"#{name}\"")
-		if row[0] and row[0] != ""
-			_id += 1
-			next
-		end
-		
-		#puts _id
-		
-		logo = ""
+	unless FileTest::directory?("images")
+		Dir::mkdir("images")
+	end
+	filename = "images/#{name}.png"
+	
+	
+	if (not FileTest.exists?(filename)) and elem[5] != nil and elem[5] != ""
 		begin
-			result = {}
-			google_url = "https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=#{name} logo".gsub(" ", "%20")
-			puts google_url
-			
-			open(google_url) do |f|
-  				no = 1
-  				f.each do |line|
-  					#puts line
-    				result = JSON.parse(line)
-    				no += 1
-    				break if no > 1
-  				end
-			end
-			
-			logo = result["responseData"]["results"][0]["unescapedUrl"]
-			unless logo.match(/^http/)
-				logo = ""
-			end
-		rescue Exception => e
-			puts e
-			puts result
 			puts name
+			url = elem[5]
+			resp = Net::HTTP.get_response(URI.parse(url))
+			data = resp.body
 			
-			sleep 70
-		end
-		#puts logo
-		puts "ok"
-		
-    	query = "UPDATE canali SET logo=\"#{logo}\" WHERE _id=#{_id} and titolo=\"#{name}\";"
-    	db.execute query
-    	_id += 1
-    	
-    	sleep 1
-    end
+			File.open(filename, 'w') do |f2|  
+  				# use "\n" for two lines of text  
+  				f2.puts data 
+			end
+    	rescue Exception => e2
+    		puts "except #{e2}"
+    	end
+	end
+	
 end
 
 db.close
