@@ -6,6 +6,7 @@ require "sqlite3"
 url = "http://www.tvdream.mobi/app-andr/IT/channels.json"
 resp = Net::HTTP.get_response(URI.parse(url))
 data = resp.body
+data = Iconv.conv("UTF8", "LATIN1", data).gsub("\n","").gsub("\r","")
 
 result = JSON.parse(data)
 
@@ -77,7 +78,7 @@ map_countries = {
 	"4"  => ["Bulgaria","Bulgaria","保加利亚"],
 	"5"  => ["Canada","Canada","加拿大"],
 	"6"  => ["Cina","China","中国"],
-	"7"  => ["Corea","Korea","舞蹈病"],
+	"7"  => ["Corea","Korea","韩国"],
 	"8"  => ["Croazia","Croatia","克罗地亚"],
 	"9"  => ["Egitto","Egypt","埃及"],
 	"10" => ["Finlandia","Finland","芬兰"],
@@ -93,8 +94,8 @@ map_countries = {
 	"20" => ["Israele","Israel","以色列"],
 	"21" => ["Italia","Italy","意大利"],
 	"22" => ["Lettonia","Latvia","拉脱维亚"],
-	"23" => ["Macedonia","Macedonia","水果沙拉"],
-	"24" => ["Malta","Malta","砂浆"],
+	"23" => ["Macedonia","Macedonia","马其顿"],
+	"24" => ["Malta","Malta","马耳他"],
 	"25" => ["Messico","Mexico","墨西哥"],
 	"26" => ["Moldavia","Moldova","摩尔多瓦"],
 	"27" => ["Olanda","Holland","荷兰"],
@@ -126,20 +127,20 @@ for pk in 0..(map_countries.keys.length - 1) do
 end
 
 map_categories = {
-	"0"  => ["Eventi Live","Live Events",""],
-	"1"  => ["Intrattenimento","Entertainment",""],
-	"2"  => ["Notizie","News",""],
-	"3"  => ["Musica","Music",""],
-	"4"  => ["Sport","Sport",""],
-	"5"  => ["Generale","General",""],
-	"6"  => ["Regionali","Regional",""],
-	"7"  => ["Cinema","Cinema",""],
-	"8"  => ["Cartoni","Cartoons",""],
-	"9"  => ["Cultura & Religione","Culture & Religion",""],
-	"10" => ["Tecnologia","Technology",""],
-	"11" => ["Games","Games",""],
-	"12" => ["Meteo","Weather",""],
-	"13" => ["Fashion & Shopping","Fashion & Shopping",""],
+	"0"  => ["Eventi Live","Live Events","现场直播"],
+	"1"  => ["Intrattenimento","Entertainment","综艺娱乐"],
+	"2"  => ["Notizie","News","新闻"],
+	"3"  => ["Musica","Music","音乐"],
+	"4"  => ["Sport","Sport","运动"],
+	"5"  => ["Generale","General","综合新闻"],
+	"6"  => ["Regionali","Regional","地区频道"],
+	"7"  => ["Cinema","Cinema","电影"],
+	"8"  => ["Cartoni","Cartoons","卡通"],
+	"9"  => ["Cultura & Religione","Culture & Religion","文化与宗教"],
+	"10" => ["Tecnologia","Technology","科技"],
+	"11" => ["Games","Games","游戏"],
+	"12" => ["Meteo","Weather","天气"],
+	"13" => ["Fashion & Shopping","Fashion & Shopping","时尚与购物"],
 }
 
 for pk in 0..(map_categories.keys.length - 1) do

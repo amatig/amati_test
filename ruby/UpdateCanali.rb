@@ -6,6 +6,7 @@ require "sqlite3"
 url = "http://www.tvdream.mobi/app-andr/IT/channels.json"
 resp = Net::HTTP.get_response(URI.parse(url))
 data = resp.body
+data = Iconv.conv("UTF8", "LATIN1", data).gsub("\n","").gsub("\r","")
 
 result = JSON.parse(data)
 
