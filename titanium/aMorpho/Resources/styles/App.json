@@ -1,0 +1,31 @@
+{
+	"#parent": {
+		"backgroundColor": "#ebebeb"
+	},
+
+	"#header": {
+		"top": 0,
+		"height": 44,
+		"backgroundColor": "white"
+	},
+
+	"#section": {
+		"zIndex": 10,
+		"top": 44,
+		"bottom": 52,
+		"backgroundColor": "green",
+		"left": 20,
+		"right": 20
+	},
+
+	"#nav": {
+		"bottom": 0,
+		"height": 52,
+		"backgroundColor": "red"
+	},
+
+	".horizStretch": {
+		"left": 5,
+		"right": 5
+	}
+}

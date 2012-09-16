@@ -1,0 +1,7 @@
+<xml>
+	<Window id="parent">
+		<View id="header" class="horizStretch" />
+		<View id="section" class="horizStretch" />
+		<View id="nav" />
+	</Window>
+</xml>
