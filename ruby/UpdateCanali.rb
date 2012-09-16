@@ -19,6 +19,8 @@ db = SQLite3::Database.new("git/myStream/assets/myStream.sqlite")
 countries = []
 categories = []
 
+temp = []
+
 for elem in result["channels"] do
 	country = elem["country"].to_i
 	category = elem["categories"][0].to_i
@@ -36,29 +38,45 @@ for elem in result["channels"] do
 		name = Iconv.conv("UTF8", "LATIN1", name).strip	
 		url = elem["url"]
 		
+		temp.push(url)
+		
 		query = "SELECT * FROM \"canali\" WHERE titolo LIKE \"#{name}\";"
-    	res = db.get_first_row query
+    	check_name = db.get_first_row query
     	
     	query = "SELECT * FROM \"canali\" WHERE url=\"#{url}\";"
-    	res2 = db.get_first_row query
+    	check_url = db.get_first_row query
     	
-    	if (not url.match(/tvdream/i)) and category != 0
-    		unless res
-    			unless res2
-    				puts "insert #{name}"
-    				
+    	if (not url.match(/tvdream/i)) and !temp.include?(url) and category != 0
+    		unless check_url
+    			unless check_name
+    				puts "new channel #{name}"
     				query = "INSERT INTO \"canali\" (titolo,categoria_id,nazione_id,url,blocco,consigliato) VALUES(\"#{name}\",#{category},#{country},\"#{url}\",0,#{best});"
     				db.execute query
+    			else
+    				puts "update url #{name}"
+    				query = "UPDATE canali SET url=\"#{url}\" WHERE _id=#{check_name[0]};"
+    				b.execute query
     			end
     		else
-    			if url != res[6]
-    				puts "update url #{name}"
-    				query = "UPDATE canali SET url=\"#{url}\" WHERE _id=#{res[0]};"
-    				db.execute query
-    			end
+    			puts "update name #{name}"
+    			query = "UPDATE canali SET titolo=\"#{name}\" WHERE _id=#{check_url[0]};"
+    			db.execute query
     		end
+    	else
+    		#if category == 0
+    		#	puts "cat 0 -->> #{name}"
+    		#end
+    		#if url.match(/tvdream/i)
+    		#	puts "tvdream -->> #{name}"
+    		#end
     	end
     end
+end
+
+db.execute("SELECT * FROM canali") do |elem|
+	if !temp.include?(elem[6])
+		puts "to remove #{elem[0]} #{elem[1]}"
+	end
 end
 
 puts "Nazioni nuove?"
