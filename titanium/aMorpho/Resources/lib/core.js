@@ -49,11 +49,22 @@ libCore.prototype.createView = function(controller, name) {
 		attrs = attrs.extend(temp_attrs);
 
 		// CREATE VIEW
-		controller.views[node.getAttribute('id')] = eval('Ti.UI.create' + node.getNodeName())(attrs);
+		var view = eval('Ti.UI.create' + node.getNodeName())(attrs);
+		controller.views[node.getAttribute('id')] = view;
 		if (parent)
-			controller.views[parent.getAttribute('id')].add(controller.views[node.getAttribute('id')]);
+			controller.views[parent.getAttribute('id')].add(view);
 		else
-			controller.window = controller.views[node.getAttribute('id')];
+			controller.window = view;
+
+		// SET ATTRS
+		var mapAttrs = node.getAttributes();
+		for (var i = 0; i < mapAttrs.item.length; i++) {
+			var attr_name = mapAttrs.item(i).getName();
+			var attr_val = mapAttrs.item(i).getValue();
+			if (attr_name != 'id' && attr_name != 'class') {
+				eval('view.' + attr_name + '="' + L(attr_val) + '"');
+			}
+		}
 
 		var children = node.childNodes;
 		for (var i = 0; i < children.item.length; i++) {

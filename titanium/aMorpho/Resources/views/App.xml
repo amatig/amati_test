@@ -2,6 +2,8 @@
 	<Window id="parent">
 		<View id="header" class="horizStretch" />
 		<View id="section" class="horizStretch" />
-		<View id="nav" />
+		<View id="nav">
+			<Button id="#btn1" title="lbl_btn1" />
+		</View>
 	</Window>
 </xml>
