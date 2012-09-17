@@ -1,6 +1,5 @@
 Makefile
 configure
-config.*
 *.out
 depcomp
 *.log
