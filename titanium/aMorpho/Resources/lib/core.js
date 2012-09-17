@@ -27,13 +27,13 @@ libCore.prototype.createView = function(controller, name) {
 
 	var style = {};
 	// LOAD STYLE
-	var styleFile = Ti.Filesystem.getFile(App.Config.getConfigDir() + "styles/" + name + ".json");
+	var styleFile = Ti.Filesystem.getFile(App.Config.getConfigDir() + 'styles/' + name + '.json');
 	if (styleFile.exists())
 		style = JSON.parse(styleFile.read().text);
 	styleFile = null;
 
 	// LOAD XML
-	var xmlFile = Ti.Filesystem.getFile(App.Config.getConfigDir() + "views/" + name + ".xml");
+	var xmlFile = Ti.Filesystem.getFile(App.Config.getConfigDir() + 'views/' + name + '.xml');
 	if (xmlFile.exists()) {
 		var xml = Ti.XML.parseString(xmlFile.read().text);
 		var root = xml.documentElement.getElementsByTagName('Window').item(0);
@@ -49,7 +49,7 @@ libCore.prototype.createView = function(controller, name) {
 		attrs = attrs.extend(temp_attrs);
 
 		// CREATE VIEW
-		var view = eval('Ti.UI.create' + node.getNodeName())(attrs);
+		var view = Ti.UI['create' + node.getNodeName()](attrs);
 		controller.views[node.getAttribute('id')] = view;
 		if (parent)
 			controller.views[parent.getAttribute('id')].add(view);
@@ -62,7 +62,7 @@ libCore.prototype.createView = function(controller, name) {
 			var attr_name = mapAttrs.item(i).getName();
 			var attr_val = mapAttrs.item(i).getValue();
 			if (attr_name != 'id' && attr_name != 'class') {
-				eval('view.' + attr_name + '="' + L(attr_val) + '"');
+				view[attr_name] = L(attr_val);
 			}
 		}
 
