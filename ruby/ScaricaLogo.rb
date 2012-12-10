@@ -1,43 +1,10 @@
-require "rubygems"
-require "json"
-require "net/http"
-require "sqlite3"
-
-db = SQLite3::Database.new("git/myStream/assets/myStream.sqlite")
-
-db.execute("SELECT * FROM canali") do |elem|
-	_id = elem[0]
-	name = elem[1].gsub("/", "-")
-	name = Iconv.conv("UTF8", "LATIN1", name).strip
-	
-	unless FileTest::directory?("images_temp")
-		Dir::mkdir("images_temp")
-	end
-	unless FileTest::directory?("images")
-		Dir::mkdir("images")
-	end
-	filename = "images_temp/#{_id}"
-	
-	if (not FileTest.exists?(filename)) and elem[5] != nil and elem[5] != ""
-		begin
-			Thread.new do
-				puts "#{_id} #{name}"
-				url = elem[5]
-				resp = Net::HTTP.get_response(URI.parse(url))
-				data = resp.body
-				
-				File.open(filename, 'w') do |f2|  
-  					# use "\n" for two lines of text  
-  					f2.puts data 
-				end
-				
-				%x[convert -resize 100x100 -quality 75 -format PNG images_temp/#{_id} images/#{_id}.png]
-			end
-    	rescue Exception => e2
-    		puts "except #{e2}"
-    	end
-	end
-	
-end
-
-db.close
+// look
+-                               for (var z = 0; z < that.prices.length; z++) {
+-                                       var temp_store = tab1.data[0].rows[e.index].children[0].children[1].store;
+-                                       if (temp_store) {
+-                                               //App.Module.log.error('=====>>>> ' + JSON.stringify(temp_store));
+-                                               var price_store = App.Module.dataManager.getPrice(that.prices[z].materiale, temp_store.org_comm, temp_store.mercato, temp_store.tipo_cliente, temp_store.valuta);
+-                                               //App.Module.log.error('=====>>>> ' + price_store.valuta + ' ' + price_store.prezzo);
+-                                               that.prices[z].text = price_store.valuta + ' ' + price_store.prezzo;
+-                                       } else
+-                                               that.prices[z].text = '';
