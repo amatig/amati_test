@@ -162,13 +162,13 @@
         _imgArrow.image = [UIImage imageNamed:@"bubble.png"];
         _imgArrow.frame = CGRectMake(x + _messageLabel.frame.size.width - arrow_width - _cell_padding, _messageLabel.frame.size.height + _messageLabel.frame.origin.y, arrow_width, arrow_height);
         
-        _progressView.frame = CGRectMake(x + 5, 40, PIE_SIZE, PIE_SIZE);
+        _progressView.frame = CGRectMake(x + 3, _messageLabel.frame.origin.y + 3, PIE_SIZE, PIE_SIZE);
     } else {
         _img.frame = CGRectMake(_cell_padding, img_fix + _messageLabel.frame.size.height + _messageLabel.frame.origin.y - IMAGE_SIZE + arrow_height, IMAGE_SIZE, IMAGE_SIZE);
         _imgArrow.image = [UIImage imageNamed:@"bubble2.png"];
         _imgArrow.frame = CGRectMake(x + _cell_padding, _messageLabel.frame.size.height + _messageLabel.frame.origin.y, arrow_width, arrow_height);
         
-        _progressView.frame = CGRectMake(x + _messageLabel.frame.size.width - PIE_SIZE - 5, 40, PIE_SIZE, PIE_SIZE);
+        _progressView.frame = CGRectMake(x + _messageLabel.frame.size.width - PIE_SIZE - 3, _messageLabel.frame.origin.y + 3, PIE_SIZE, PIE_SIZE);
     }
     
     [self setStatus:status];
