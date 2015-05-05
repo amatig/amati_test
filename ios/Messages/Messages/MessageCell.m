@@ -97,6 +97,7 @@
         if (_progressView.alpha > 0) {
             [_progressView setIndeterminate:NO];
             [_progressView performAction:M13ProgressViewActionSuccess animated:YES];
+            
             [UIView animateWithDuration:0.5
                                   delay:1.0
                                 options: UIViewAnimationOptionLayoutSubviews
