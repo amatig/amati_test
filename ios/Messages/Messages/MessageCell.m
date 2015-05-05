@@ -11,7 +11,7 @@
 #import "RecentMessage.h"
 
 #define IMAGE_SIZE 50
-#define PIE_SIZE 15
+#define PIE_SIZE 12
 
 @interface MessageCell ()
 
@@ -63,11 +63,13 @@
         
         [self addSubview:_imgArrow];
         
+        [self addSubview:_messageLabel];
+        
         _progressView = [[M13ProgressViewPie alloc] initWithFrame:CGRectMake(0, 0, PIE_SIZE, PIE_SIZE)];
+        [_progressView setPrimaryColor:[UIColor whiteColor]];
+        [_progressView setSecondaryColor:[UIColor whiteColor]];
         _progressView.alpha = 0.0f;
         [self addSubview:_progressView];
-        
-        [self addSubview:_messageLabel];
         
         _img = [[UIImageView alloc] init];
         _img.clipsToBounds = YES;
@@ -160,13 +162,13 @@
         _imgArrow.image = [UIImage imageNamed:@"bubble.png"];
         _imgArrow.frame = CGRectMake(x + _messageLabel.frame.size.width - arrow_width - _cell_padding, _messageLabel.frame.size.height + _messageLabel.frame.origin.y, arrow_width, arrow_height);
         
-        _progressView.frame = CGRectMake(x, message_fix / 3.5 + IMAGE_SIZE + _messageLabel.frame.size.height + _messageLabel.frame.origin.y - IMAGE_SIZE, PIE_SIZE, PIE_SIZE);
+        _progressView.frame = CGRectMake(x + 5, 40, PIE_SIZE, PIE_SIZE);
     } else {
         _img.frame = CGRectMake(_cell_padding, img_fix + _messageLabel.frame.size.height + _messageLabel.frame.origin.y - IMAGE_SIZE + arrow_height, IMAGE_SIZE, IMAGE_SIZE);
         _imgArrow.image = [UIImage imageNamed:@"bubble2.png"];
         _imgArrow.frame = CGRectMake(x + _cell_padding, _messageLabel.frame.size.height + _messageLabel.frame.origin.y, arrow_width, arrow_height);
         
-        _progressView.frame = CGRectMake(x + _messageLabel.frame.size.width - PIE_SIZE, message_fix / 3.5 + IMAGE_SIZE + _messageLabel.frame.size.height + _messageLabel.frame.origin.y - IMAGE_SIZE, PIE_SIZE, PIE_SIZE);
+        _progressView.frame = CGRectMake(x + _messageLabel.frame.size.width - PIE_SIZE - 5, 40, PIE_SIZE, PIE_SIZE);
     }
     
     [self setStatus:status];
