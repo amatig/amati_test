@@ -1,48 +1,75 @@
-#!/usr/bin/python -O
+import json
+import jwt
+import time
 
-from threading import Thread
-import sys, socket, re, random, time
+from hyper import HTTPConnection
 
-class IrcBot(Thread):
-    delimeter = "\r\n";
-    
-    def __init__(self, nick, realname, server, port = 6667):
-        Thread.__init__(self)
-        self.nick = nick
-        self.realname = realname
-        self.server = server
-        self.port = port        
-        self.s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.s.connect((self.server, self.port))
-        self.send("USER %s %s bla :%s\r\nNICK %s" % (self.nick, 
-                                                     self.nick,
-                                                     self.realname,
-                                                     self.nick))
-        
-    def run(self):
-        time.sleep(2)
-        self.send("PRIVMSG game_master :ciao")
-        
-        while 1:
-            ricev = self.s.recv(1024)
-            if ricev.find("dormendo") != -1:
-                ricev
-                break
-        
-    def send(self, msg):
-        self.s.send(msg + self.delimeter)
+ALGORITHM = 'ES256'
 
-if __name__ == "__main__":
-    n = 4
-    c = []
-    t = time.time()
-    for i in xrange(n):
-        b = IrcBot("test_%d" % random.randint(0, 1000000),
-                   "test",
-                   "127.0.0.1")
-        b.start()
-        c.append(b)
-        
-    for e in c:
-        e.join()
-    print "Fine ", time.time() - t
+APNS_KEY_ID = 'Y82JEKCEK2'
+APNS_AUTH_KEY = './AuthKey_Y82JEKCEK2.p8'
+TEAM_ID = '4T9YA2N8L6'
+BUNDLE_ID = 'it.messagenet.lyber.voip'
+
+REGISTRATION_ID = '4cefe90d64284e58993193b6f58499d6ee2f9705a5a8bbd274b20371d82687d3'
+
+f = open(APNS_AUTH_KEY)
+secret = f.read()
+
+token = jwt.encode(
+    {
+        'iss': TEAM_ID,
+        'iat': time.time()
+    },
+    secret,
+    algorithm= ALGORITHM,
+    headers={
+        'alg': ALGORITHM,
+        'kid': APNS_KEY_ID,
+    }
+)
+
+path = '/3/device/{0}'.format(REGISTRATION_ID)
+
+request_headers = {
+    'apns-expiration': '0',
+    'apns-priority': '10',
+    'apns-topic': BUNDLE_ID,
+    'authorization': 'bearer {0}'.format(token.decode('ascii'))
+}
+
+# Open a connection the APNS server
+conn = HTTPConnection('api.development.push.apple.com:443')
+
+payload_data = { 
+    'aps': { 'event_type' : 'MESSAGE' }, 'text0' : 'Prova', 'lyber_id': '2904' 
+}
+payload = json.dumps(payload_data).encode('utf-8')
+
+# Send our request
+conn.request(
+    'POST', 
+    path, 
+    payload, 
+    headers=request_headers
+)
+resp = conn.get_response()
+print(resp.status)
+print(resp.read())
+
+# If we are sending multiple requests, use the same connection
+
+#payload_data = { 
+#    'aps': { 'alert' : 'You have no chance to survive. Make your time.' } 
+#}
+#payload = json.dumps(payload_data).encode('utf-8')
+
+#conn.request(
+#    'POST', 
+#    path, 
+#    payload, 
+#    headers=request_headers
+#)
+#resp = conn.get_response()
+#print(resp.status)
+#print(resp.read())
