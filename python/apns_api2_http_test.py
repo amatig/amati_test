@@ -6,12 +6,12 @@ from hyper import HTTPConnection
 
 ALGORITHM = 'ES256'
 
-APNS_KEY_ID = 'Y82JEKCEK2'
-APNS_AUTH_KEY = './AuthKey_Y82JEKCEK2.p8'
-TEAM_ID = '4T9YA2N8L6'
-BUNDLE_ID = 'it.messagenet.lyber.voip'
+APNS_KEY_ID = 'YYYY'
+APNS_AUTH_KEY = './AuthKey_YYYY.p8'
+TEAM_ID = 'XXXX'
+BUNDLE_ID = 'it.domain.appid(.voip)'
 
-REGISTRATION_ID = '4cefe90d64284e58993193b6f58499d6ee2f9705a5a8bbd274b20371d82687d3'
+REGISTRATION_ID = 'tokem_push'
 
 f = open(APNS_AUTH_KEY)
 secret = f.read()
